@@ -18,6 +18,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CorpoDocenteComponent } from './corpo-docente/corpo-docente.component';
 import { FooterComponent } from './footer/footer.component';
 import { ContatoComponent } from './contato/contato.component';
+import { NgxFlagPickerModule } from 'ngx-flag-picker';
 
 export function appInitializerFactory(authService: AuthService) {
   return () => authService.checkTheUserOnTheFirstLoad();
@@ -33,6 +34,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     HttpClientModule,
     SharedModule,
     AppRoutingModule,
+    NgxFlagPickerModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

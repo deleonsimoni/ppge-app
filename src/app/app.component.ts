@@ -28,8 +28,8 @@ export class AppComponent {
     public translate: TranslateService
   ) {
     this.registerSvgIcons();
-    translate.addLangs(['pt-br', 'es', 'us']);
-    translate.setDefaultLang('pt-br');
+    translate.addLangs(['br', 'es', 'us']);
+    translate.setDefaultLang('br');
   }
 
   translateLanguageTo(lang: string) {

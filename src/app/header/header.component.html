@@ -1,11 +1,13 @@
 <!-- ======= Header ======= -->
-<header id="header" class="header fixed-top" data-scrollto-offset="0">
+<header id="header" class="header fixed-top " style="margin-bottom: 1500px;" data-scrollto-offset="0">
 
 
   <div class="container-fluid d-flex align-items-center justify-content-between">
     <a class="logo d-flex align-items-center scrollto me-auto me-lg-0">
       <!-- Uncomment the line below if you also wish to use an image logo -->
-      <img src="../../assets/img/logo-ppge.png" alt="">
+      <ngx-flag-picker [showLabels]="true" [selectedCountryCode]="selectedCountryCode" [countryCodes]="countryCodes"
+        (changedCountryCode)="changeSelectedCountryCode($event)">
+      </ngx-flag-picker>
       <!--<h1>HeroBiz<span>.</span></h1>-->
     </a>
   </div>
@@ -144,3 +146,7 @@
 
   </div>
 </header><!-- End Header -->
+
+<section>
+
+</section>
