@@ -24,6 +24,8 @@
     "@angular/platform-browser": "^13.0.2",
     "@angular/platform-browser-dynamic": "^13.0.2",
     "@angular/router": "^13.0.2",
+    "@ngx-translate/core": "^14.0.0",
+    "@ngx-translate/http-loader": "^7.0.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.18.2",
     "bootstrap": "^4.1.3",

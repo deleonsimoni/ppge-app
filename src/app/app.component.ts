@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { TranslateService } from '@ngx-translate/core';
 
 import { merge, Observable } from 'rxjs';
 
@@ -23,9 +24,16 @@ export class AppComponent {
   constructor(
     private domSanitizer: DomSanitizer,
     private matIconRegistry: MatIconRegistry,
-    private authService: AuthService
+    private authService: AuthService,
+    public translate: TranslateService
   ) {
     this.registerSvgIcons();
+    translate.addLangs(['pt-br', 'es', 'us']);
+    translate.setDefaultLang('pt-br');
+  }
+
+  translateLanguageTo(lang: string) {
+    this.translate.use(lang);
   }
 
   registerSvgIcons() {
