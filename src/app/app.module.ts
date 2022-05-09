@@ -19,6 +19,7 @@ import { CorpoDocenteComponent } from './corpo-docente/corpo-docente.component';
 import { FooterComponent } from './footer/footer.component';
 import { ContatoComponent } from './contato/contato.component';
 import { NgxFlagPickerModule } from 'ngx-flag-picker';
+import { DummyComponent } from './dummy/dummy.component';
 
 export function appInitializerFactory(authService: AuthService) {
   return () => authService.checkTheUserOnTheFirstLoad();
@@ -43,7 +44,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       }
     }),
   ],
-  declarations: [AppComponent, HeaderComponent, HomeComponent, CorpoDocenteComponent, FooterComponent, ContatoComponent],
+  declarations: [AppComponent, HeaderComponent, HomeComponent, CorpoDocenteComponent, FooterComponent, ContatoComponent, DummyComponent],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
