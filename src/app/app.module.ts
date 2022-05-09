@@ -15,6 +15,9 @@ import { AuthService } from './shared/services';
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { CorpoDocenteComponent } from './corpo-docente/corpo-docente.component';
+import { FooterComponent } from './footer/footer.component';
+import { ContatoComponent } from './contato/contato.component';
 
 export function appInitializerFactory(authService: AuthService) {
   return () => authService.checkTheUserOnTheFirstLoad();
@@ -38,7 +41,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       }
     }),
   ],
-  declarations: [AppComponent, HeaderComponent, HomeComponent],
+  declarations: [AppComponent, HeaderComponent, HomeComponent, CorpoDocenteComponent, FooterComponent, ContatoComponent],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
