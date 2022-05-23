@@ -14,9 +14,10 @@
 
   <div class="container-fluid d-flex align-items-center justify-content-between">
 
-    <a style="cursor: pointer;" [routerLink]="''" class="logo d-flex align-items-center scrollto me-auto me-lg-0">
+    <a style="cursor: pointer;" [routerLink]="''"
+      class="logo d-flex align-items-center scrollto me-auto me-lg-0  nav-link scrollto">
       <!-- Uncomment the line below if you also wish to use an image logo -->
-      <img src="../../assets/img/logo-ppge.png" alt="">
+      <img src="../../assets/img/logo-ppge-final.png" alt="">
       <!--<h1>HeroBiz<span>.</span></h1>-->
     </a>
 
@@ -26,42 +27,42 @@
         <li class="dropdown"><a><span>{{'o.programa.horizontal' | translate}}</span> <i
               class="bi bi-chevron-down dropdown-indicator"></i></a>
           <ul>
-            <li><a class="active">{{'o.programa.horizontal' | translate}}</a></li>
-            <li><a>{{'historico' | translate}}</a></li>
-            <li><a>{{'objetivos' | translate}}</a></li>
+            <li><a class="active ">{{'o.programa.horizontal' | translate}}</a></li>
+            <li><a class="nav-link scrollto">{{'historico' | translate}}</a></li>
+            <li><a class="nav-link scrollto">{{'objetivos' | translate}}</a></li>
             <li class="dropdown"><a><span>{{'comissoes' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li><a>{{'comissao.deliberativa.funcoes' | translate}}</a></li>
-                <li><a>{{'comissao.gestao' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'comissao.deliberativa.funcoes' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'comissao.gestao' | translate}}</a></li>
               </ul>
             </li>
             <li class="dropdown"><a><span>{{'agenda' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li><a>{{'colegiado' | translate}}</a></li>
-                <li><a>{{'comissao.deliberativa' | translate}}</a></li>
-                <li><a>{{'comissao.gestao' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'colegiado' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'comissao.deliberativa' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'comissao.gestao' | translate}}</a></li>
               </ul>
             </li>
 
             <li class="dropdown"><a><span>{{'regulamentos.normas.conhecimento' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li><a>{{'regulamento.ppge' | translate}}</a></li>
-                <li><a>{{'regras.credenciamento' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'regulamento.ppge' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'regras.credenciamento' | translate}}</a></li>
               </ul>
             </li>
 
             <li class="dropdown"><a><span>{{'linhas.pesquisa' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li><a>{{'curriculo.ensino.diferenca' | translate}}</a></li>
-                <li><a>{{'formacao.docente.subjetividade' | translate}}</a></li>
-                <li><a>{{'politicas.instituicoes.educacionais' | translate}}</a></li>
-                <li><a>{{'historia.sujeitos.processos.educacionais' | translate}}</a></li>
-                <li><a>{{'inclusao.etica.interculturalidade' | translate}}</a></li>
-                <li><a>{{'estado.trabalho.movimentos.sociais' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'curriculo.ensino.diferenca' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'formacao.docente.subjetividade' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'politicas.instituicoes.educacionais' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'historia.sujeitos.processos.educacionais' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'inclusao.etica.interculturalidade' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'estado.trabalho.movimentos.sociais' | translate}}</a></li>
 
               </ul>
             </li>
@@ -69,17 +70,17 @@
             <li class="dropdown"><a><span>{{'cursos' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li><a>{{'mestrado' | translate}}</a></li>
-                <li><a>{{'doutorado' | translate}}</a></li>
-                <li><a>{{'ementario.disciplinhas' | translate}}</a></li>
-                <li><a>{{'oferta.horario.semestre.curso' | translate}}</a></li>
-                <li><a>{{'calendario.letivo' | translate}}</a></li>
-                <li><a>{{'matricula' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'mestrado' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'doutorado' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'ementario.disciplinhas' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'oferta.horario.semestre.curso' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'calendario.letivo' | translate}}</a></li>
+                <li><a class="nav-link scrollto">{{'matricula' | translate}}</a></li>
 
               </ul>
             </li>
 
-            <li><a [routerLink]="'contato'">{{'contatos' | translate}}</a></li>
+            <li><a class="nav-link scrollto" [routerLink]="'contato'">{{'contatos' | translate}}</a></li>
 
 
 
@@ -90,13 +91,13 @@
               class="bi bi-chevron-down dropdown-indicator"></i></a>
           <ul>
             <li>
-              <a [routerLink]="'corpo-docente/1'">{{'professores' | translate}}</a>
+              <a class="nav-link scrollto" [routerLink]="'corpo-docente/1'">{{'professores' | translate}}</a>
             </li>
             <li>
-              <a [routerLink]="'corpo-docente/2'">{{'pos.doutorado' | translate}}</a>
+              <a class="nav-link scrollto" [routerLink]="'corpo-docente/2'">{{'pos.doutorado' | translate}}</a>
             </li>
             <li>
-              <a>{{'normas.pos.doutorado' | translate}}</a>
+              <a class="nav-link scrollto">{{'normas.pos.doutorado' | translate}}</a>
             </li>
           </ul>
         </li>
@@ -116,19 +117,19 @@
               class="bi bi-chevron-down dropdown-indicator"></i></a>
           <ul>
             <li>
-              <a>{{'calendario' | translate}}</a>
+              <a class="nav-link scrollto">{{'calendario' | translate}}</a>
 
             </li>
             <li>
-              <a>{{'horario.periodo' | translate}}</a>
+              <a class="nav-link scrollto">{{'horario.periodo' | translate}}</a>
 
             </li>
             <li>
-              <a>{{'matricula' | translate}}</a>
+              <a class="nav-link scrollto">{{'matricula' | translate}}</a>
 
             </li>
             <li>
-              <a>{{'formulario' | translate}}</a>
+              <a class="nav-link scrollto">{{'formulario' | translate}}</a>
 
             </li>
           </ul>

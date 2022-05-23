@@ -5,11 +5,29 @@ import { AuthGuard } from './shared/guards';
 import { HomeComponent } from './home/home.component';
 import { CorpoDocenteComponent } from './corpo-docente/corpo-docente.component';
 import { ContatoComponent } from './contato/contato.component';
+import { Home2Component } from './home2/home2.component';
+import { Home3Component } from './home3/home3.component';
+import { DummyComponent } from './dummy/dummy.component';
 
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
+    //canActivate: [AuthGuard],
+  },
+  {
+    path: 'home2',
+    component: Home2Component,
+    //canActivate: [AuthGuard],
+  },
+  {
+    path: 'home3',
+    component: Home3Component,
+    //canActivate: [AuthGuard],
+  },
+  {
+    path: 'dummy',
+    component: DummyComponent,
     //canActivate: [AuthGuard],
   },
   {

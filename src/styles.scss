@@ -485,6 +485,7 @@ section {
     bottom: 0;
     transition: 0.3s;
     z-index: 9997;
+    color:white;
   }
 
   .navbar ul {
@@ -492,7 +493,7 @@ section {
     inset: 0;
     padding: 10px 0;
     margin: 0;
-    background: rgba(var(--color-secondary-rgb), 0.9);
+    background: var(--color-primary);
     overflow-y: auto;
     transition: 0.3s;
     z-index: 9998;

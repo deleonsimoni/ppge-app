@@ -20,6 +20,8 @@ import { FooterComponent } from './footer/footer.component';
 import { ContatoComponent } from './contato/contato.component';
 import { NgxFlagPickerModule } from 'ngx-flag-picker';
 import { DummyComponent } from './dummy/dummy.component';
+import { Home2Component } from './home2/home2.component';
+import { Home3Component } from './home3/home3.component';
 
 export function appInitializerFactory(authService: AuthService) {
   return () => authService.checkTheUserOnTheFirstLoad();
@@ -44,7 +46,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       }
     }),
   ],
-  declarations: [AppComponent, HeaderComponent, HomeComponent, CorpoDocenteComponent, FooterComponent, ContatoComponent, DummyComponent],
+  declarations: [AppComponent, HeaderComponent, HomeComponent, CorpoDocenteComponent, FooterComponent, ContatoComponent, DummyComponent, Home2Component, Home3Component],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
