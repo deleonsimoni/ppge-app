@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { AuthGuard } from './shared/guards';
-import { HomeComponent } from './home/home.component';
-import { CorpoDocenteComponent } from './corpo-docente/corpo-docente.component';
 import { ContatoComponent } from './contato/contato.component';
+import { CorpoDocenteComponent } from './corpo-docente/corpo-docente.component';
+import { DummyComponent } from './dummy/dummy.component';
+import { HistoricComponent } from './historic/historic.component';
+import { HomeComponent } from './home/home.component';
 import { Home2Component } from './home2/home2.component';
 import { Home3Component } from './home3/home3.component';
-import { DummyComponent } from './dummy/dummy.component';
+import { ObjectiveComponent } from './objective/objective.component';
+
 
 const routes: Routes = [
   {
@@ -34,6 +35,15 @@ const routes: Routes = [
     path: 'corpo-docente/:tipo',
     component: CorpoDocenteComponent,
     //canActivate: [AuthGuard],
+  },
+  {
+    path: 'historico',
+    component: HistoricComponent,
+    //canActivate: [AuthGuard],
+  },
+  {
+    path: 'objetivo',
+    component: ObjectiveComponent
   },
   {
     path: 'contato',

@@ -5,10 +5,10 @@ services:
     build: ./
     image: mean
     ports:
-      - 4040:4040
+      - 4050:4050
     environment:
       NODE_ENV: production
-      SERVER_PORT: 4040
+      SERVER_PORT: 4050
       JWT_SECRET: 0a6b944d-d2fb-46fc-a85e-0295c986cd9f
       MONGO_HOST: mongodb://mongo/mean
     restart: always
@@ -19,6 +19,8 @@ services:
     image: mongo:4.2
     volumes:
       - mongo_data:/data/db
+    ports:
+      - 27017:27017
 
 volumes:
   mongo_data:
