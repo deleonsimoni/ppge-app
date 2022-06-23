@@ -6,8 +6,10 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxFlagPickerModule } from 'ngx-flag-picker';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CommitteeModule } from './committee/committee.module';
 import { ContatoComponent } from './contato/contato.component';
 import { CorpoDocenteComponent } from './corpo-docente/corpo-docente.component';
+import { CoursesModule } from './courses/courses.module';
 import { DummyComponent } from './dummy/dummy.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
@@ -16,6 +18,9 @@ import { Home2Component } from './home2/home2.component';
 import { Home3Component } from './home3/home3.component';
 import { AuthHeaderInterceptor } from './interceptors/header.interceptor';
 import { CatchErrorInterceptor } from './interceptors/http-error.interceptor';
+import { RegulationModule } from './regulation/regulation.module';
+import { ResearchLineModule } from './research-line/research-line.module';
+import { ScheduleModule } from './schedule/schedule.module';
 import { AuthService } from './shared/services';
 import { SharedModule } from './shared/shared.module';
 
@@ -34,6 +39,11 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     SharedModule,
     AppRoutingModule,
     NgxFlagPickerModule,
+    CommitteeModule,
+    ScheduleModule,
+    RegulationModule,
+    ResearchLineModule,
+    CoursesModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

@@ -43,7 +43,8 @@ const routes: Routes = [
   },
   {
     path: 'objetivo',
-    component: ObjectiveComponent
+    component: ObjectiveComponent,
+    //canActivate: [AuthGuard],
   },
   {
     path: 'contato',
@@ -57,6 +58,26 @@ const routes: Routes = [
   {
     path: 'admin',
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+  },
+  {
+    path: 'comissoes',
+    loadChildren: () => import('./committee/committee.module').then(m => m.CommitteeModule),
+  },
+  {
+    path: 'agenda',
+    loadChildren: () => import('./schedule/schedule.module').then(m => m.ScheduleModule),
+  },
+  {
+    path: 'regulamentos',
+    loadChildren: () => import('./regulation/regulation.module').then(m => m.RegulationModule),
+  },
+  {
+    path: 'linhas-pesquisa',
+    loadChildren: () => import('./research-line/research-line.module').then(m => m.ResearchLineModule),
+  },
+  {
+    path: 'cursos',
+    loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule),
   },
 ];
 
