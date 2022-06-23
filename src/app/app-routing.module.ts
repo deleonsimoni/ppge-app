@@ -7,8 +7,10 @@ import { HistoricComponent } from './historic/historic.component';
 import { HomeComponent } from './home/home.component';
 import { Home2Component } from './home2/home2.component';
 import { Home3Component } from './home3/home3.component';
+import { FormularioComponent } from './informacoes-academica/formulario/formulario.component';
+import { MatriculaComponent } from './informacoes-academica/matricula/matricula.component';
 import { ObjectiveComponent } from './objective/objective.component';
-
+import { TeseDissertacaoComponent } from './tese-dissertacao/tese-dissertacao.component';
 
 const routes: Routes = [
   {
@@ -52,8 +54,35 @@ const routes: Routes = [
     //canActivate: [AuthGuard],
   },
   {
+    path: 'tese-dissertacao',
+    component: TeseDissertacaoComponent,
+    //canActivate: [AuthGuard],
+  },
+  {
+    path: 'matricula',
+    component: MatriculaComponent,
+    //canActivate: [AuthGuard],
+  },
+  {
+    path: 'formulario',
+    component: FormularioComponent,
+    //canActivate: [AuthGuard],
+  },
+  {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
+  },
+  {
+    path: 'tese-dissertacao',
+    loadChildren: () => import('./tese-dissertacao/tese-dissertacao.module').then(m => m.TeseDissertacaoModule),
+  },
+  {
+    path: 'matricula',
+    loadChildren: () => import('./informacoes-academica/matricula/matricula.module').then(m => m.MatriculaModule),
+  },
+  {
+    path: 'formulario',
+    loadChildren: () => import('./informacoes-academica/formulario/formulario.module').then(m => m.FormularioModule),
   },
   {
     path: 'admin',
