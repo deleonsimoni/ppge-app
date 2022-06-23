@@ -10,7 +10,12 @@ export class MatriculaComponent implements OnInit {
 
   matricula: any;
 
-  constructor(private matriculaService: MatriculaService) { }
+  constructor(private matriculaService: MatriculaService) {
+    window.scroll({
+      top: 0,
+      left: 0
+    })
+  }
 
   ngOnInit(): void {
     this.getMatricula();
@@ -19,7 +24,6 @@ export class MatriculaComponent implements OnInit {
   private getMatricula() {
     this.matriculaService.getMatricula().subscribe(arr => {
       this.matricula = arr;
-      console.log(arr);
     });
   }
 }

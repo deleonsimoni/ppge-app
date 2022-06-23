@@ -20,7 +20,6 @@ export class DissertacaoComponent implements OnInit {
   getAllDissertacaoAno(dataSelect: string) {
     this.checkAno = true;
     this.teseDissertacaoService.getTeseDissertacao(dataSelect, '2').subscribe(arr => {
-      console.log(arr);
       this.dissertacoes = arr;
     });
   }

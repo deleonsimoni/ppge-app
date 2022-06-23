@@ -1,8 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
-
-const formulario = require("./formulario.json");
+import { info as formulario } from './formulario';
 
 @Injectable({
     providedIn: "root"
@@ -13,7 +12,7 @@ const formulario = require("./formulario.json");
       private http: HttpClient
     ) { }
   
-    public getMatricula(): Observable<any> {
+    public getFormulario(): Observable<any> {
         return of(formulario);
     }
 }

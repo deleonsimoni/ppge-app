@@ -1,8 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
-
-const matricula = require("./matricula.json");
+import { info as matricula } from "./matricula";
 
 @Injectable({
     providedIn: "root"

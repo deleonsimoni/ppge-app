@@ -10,7 +10,12 @@ export class TeseDissertacaoComponent implements OnInit {
 
   public datas: any[] | undefined;
 
-  constructor(private teseDissertacaoService: TeseDissertacaoService) { }
+  constructor(private teseDissertacaoService: TeseDissertacaoService) {
+    window.scroll({
+      top: 0,
+      left: 0
+    })
+  }
 
   ngOnInit(): void {
     this.getTeseDissertacao();
