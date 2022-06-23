@@ -22,6 +22,11 @@ import { NgxFlagPickerModule } from 'ngx-flag-picker';
 import { DummyComponent } from './dummy/dummy.component';
 import { Home2Component } from './home2/home2.component';
 import { Home3Component } from './home3/home3.component';
+import { TeseDissertacaoModule } from './tese-dissertacao/tese-dissertacao.module';
+import { MatriculaModule } from './informacoes-academica/matricula/matricula.module';
+import { FormularioModule } from './informacoes-academica/formulario/formulario.module';
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 
 export function appInitializerFactory(authService: AuthService) {
   return () => authService.checkTheUserOnTheFirstLoad();
@@ -37,7 +42,12 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     HttpClientModule,
     SharedModule,
     AppRoutingModule,
+    TeseDissertacaoModule,
+    MatriculaModule,
+    FormularioModule,
     NgxFlagPickerModule,
+    CommonModule,
+    BrowserModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

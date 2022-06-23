@@ -1,0 +1,46 @@
+<div class="card card-body" *ngIf="!checkAno">
+  <div class="text-left">
+    <h2>Teses</h2>
+  </div>
+    <div class="text-center">
+        <div *ngFor="let t of datas.data">
+          <button class="btn btn-primary butAno" (click)="getAllTeseAno(t.ano)">
+            Defendidas em {{t.ano}}
+          </button>
+        </div>
+    </div>
+</div>
+<div class="card card-body" *ngIf="checkAno">
+  <div class="text-left">
+    <h2>Teses</h2>
+  </div>
+  <div class="text-center">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">nº</th>
+        <th scope="col">Autor</th>
+        <th scope="col">Titulo</th>
+        <th scope="col">Data/Sala</th>
+        <th scope="col">Banca</th>
+        <th scope="col">Ingresso</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let t of teses.tese; let i= index">
+        <th scope="row">{{ i+1 }}</th>
+        <th scope="row">{{ t.autor }}</th>
+        <th scope="row">
+          <a [href]="t.linkTitulo" class="link-primary">
+            {{ t.titulo }}
+          </a>
+        </th>
+        <th scope="row">{{ t.dataSala }}</th>
+        <th scope="row">{{ t.banca }}</th>
+        <th scope="row">{{ t.ingresso }}</th>
+      </tr>
+      </tbody>
+    </table>
+    <button class="text-right btn btn-success" (click)="checkAno = false">Voltar</button>
+  </div>
+</div>
