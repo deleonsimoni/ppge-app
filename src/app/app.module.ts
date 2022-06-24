@@ -18,6 +18,7 @@ import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { Home2Component } from './home2/home2.component';
 import { Home3Component } from './home3/home3.component';
+import { CalendarioModule } from './informacoes-academica/calendario/calendario.module';
 import { FormularioModule } from './informacoes-academica/formulario/formulario.module';
 import { MatriculaModule } from './informacoes-academica/matricula/matricula.module';
 import { AuthHeaderInterceptor } from './interceptors/header.interceptor';
@@ -45,6 +46,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     TeseDissertacaoModule,
     MatriculaModule,
+    CalendarioModule,
     FormularioModule,
     NgxFlagPickerModule,
     CommitteeModule,

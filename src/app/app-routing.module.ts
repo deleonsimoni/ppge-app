@@ -7,6 +7,7 @@ import { HistoricComponent } from './historic/historic.component';
 import { HomeComponent } from './home/home.component';
 import { Home2Component } from './home2/home2.component';
 import { Home3Component } from './home3/home3.component';
+import { CalendarioComponent } from './informacoes-academica/calendario/calendario.component';
 import { FormularioComponent } from './informacoes-academica/formulario/formulario.component';
 import { MatriculaComponent } from './informacoes-academica/matricula/matricula.component';
 import { ObjectiveComponent } from './objective/objective.component';
@@ -64,6 +65,11 @@ const routes: Routes = [
     //canActivate: [AuthGuard],
   },
   {
+    path: 'calendario',
+    component: CalendarioComponent,
+    //canActivate: [AuthGuard],
+  },
+  {
     path: 'formulario',
     component: FormularioComponent,
     //canActivate: [AuthGuard],
@@ -79,6 +85,10 @@ const routes: Routes = [
   {
     path: 'matricula',
     loadChildren: () => import('./informacoes-academica/matricula/matricula.module').then(m => m.MatriculaModule),
+  },
+  {
+    path: 'calendario',
+    loadChildren: () => import('./informacoes-academica/calendario/calendario.module').then(m => m.CalendarioModule),
   },
   {
     path: 'formulario',
