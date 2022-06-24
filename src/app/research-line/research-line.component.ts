@@ -16,12 +16,18 @@ export class ResearchLineComponent implements OnInit {
   constructor(
     private researchLineService: ResearchLineService,
     private router: ActivatedRoute
-  ) { }
+  ) {
+    window.scroll({
+      top: 0,
+      left: 0
+    })
+  }
 
   ngOnInit(): void {
     this.router.params.subscribe(routeParams => {
       this.researchLineType = routeParams.researchLineType;
       this.getCommitteeService(this.researchLineType);
+      window.scroll({ top: 0, left: 0 });
     })
   }
 

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { HistoricService } from './historic.service';
 
 @Component({
   selector: 'app-historic',
   templateUrl: './historic.component.html',
-  styleUrls: ['./historic.component.scss']
+  styleUrls: ['./historic.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class HistoricComponent implements OnInit {
 

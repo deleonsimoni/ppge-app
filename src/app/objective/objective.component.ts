@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ObjectiveService } from './objective.service';
 
 @Component({
   selector: 'app-objective',
   templateUrl: './objective.component.html',
-  styleUrls: ['./objective.component.scss']
+  styleUrls: ['./objective.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ObjectiveComponent implements OnInit {
 

@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RegulationService } from './regulation.service';
 
 @Component({
   selector: 'app-regulation',
   templateUrl: './regulation.component.html',
-  styleUrls: ['./regulation.component.scss']
+  styleUrls: ['./regulation.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class RegulationComponent implements OnInit {
 
@@ -15,12 +16,18 @@ export class RegulationComponent implements OnInit {
   constructor(
     private regulationService: RegulationService,
     private router: ActivatedRoute
-  ) { }
+  ) {
+    window.scroll({
+      top: 0,
+      left: 0
+    })
+  }
 
   ngOnInit(): void {
     this.router.params.subscribe(routeParams => {
       this.regulationType = routeParams.regulationType;
       this.getCommitteeService(this.regulationType);
+      window.scroll({ top: 0, left: 0 });
     })
   }
 
