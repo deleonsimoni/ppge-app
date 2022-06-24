@@ -9,6 +9,7 @@ import { Home2Component } from './home2/home2.component';
 import { Home3Component } from './home3/home3.component';
 import { CalendarioComponent } from './informacoes-academica/calendario/calendario.component';
 import { FormularioComponent } from './informacoes-academica/formulario/formulario.component';
+import { HorarioPeriodoComponent } from './informacoes-academica/horario-periodo/horario-periodo.component';
 import { MatriculaComponent } from './informacoes-academica/matricula/matricula.component';
 import { ObjectiveComponent } from './objective/objective.component';
 import { TeseDissertacaoComponent } from './tese-dissertacao/tese-dissertacao.component';
@@ -75,6 +76,11 @@ const routes: Routes = [
     //canActivate: [AuthGuard],
   },
   {
+    path: 'horario-periodo',
+    component: HorarioPeriodoComponent,
+    //canActivate: [AuthGuard],
+  },
+  {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
   },
@@ -117,6 +123,10 @@ const routes: Routes = [
   {
     path: 'cursos',
     loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule),
+  },
+  {
+    path: 'horario-periodo',
+    loadChildren: () => import('./informacoes-academica/horario-periodo/horario-periodo.module').then(m => m.HorarioPeriodoModule),
   },
 ];
 

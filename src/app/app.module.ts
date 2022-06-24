@@ -20,6 +20,7 @@ import { Home2Component } from './home2/home2.component';
 import { Home3Component } from './home3/home3.component';
 import { CalendarioModule } from './informacoes-academica/calendario/calendario.module';
 import { FormularioModule } from './informacoes-academica/formulario/formulario.module';
+import { HorarioPeriodoModule } from './informacoes-academica/horario-periodo/horario-periodo.module';
 import { MatriculaModule } from './informacoes-academica/matricula/matricula.module';
 import { AuthHeaderInterceptor } from './interceptors/header.interceptor';
 import { CatchErrorInterceptor } from './interceptors/http-error.interceptor';
@@ -47,6 +48,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     TeseDissertacaoModule,
     MatriculaModule,
     CalendarioModule,
+    HorarioPeriodoModule,
     FormularioModule,
     NgxFlagPickerModule,
     CommitteeModule,
