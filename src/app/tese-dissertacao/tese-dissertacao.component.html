@@ -1,34 +1,28 @@
-<div class="container d-flex flex-column justify-content-center align-items-center text-center position-relative"
-    data-aos="zoom-out">
-    <div id="accordionExample">
-        <div class="container" data-aos="zoom-out">
-            <div class="col-lg-12 col-md-12 wid content justify-content-center order-last order-md-first row">
-                <div class="col-md-6 pad">
-                    <div id="headingOne">
-                        <button class="btn but" type="button" data-toggle="collapse" data-target="#collapseOne"
-                            aria-expanded="true" aria-controls="collapseOne">
-                            Teses
-                        </button>
-                    </div>
-                </div>
-                <div class="col-md-6 pad">
-                    <div id="headingTwo">
-                        <button class="btn but collapsed" type="button" data-toggle="collapse"
-                            data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Dissertações
-                        </button>
-                    </div>
-                </div>
-                <div class="pad-down">
-                    <div id="collapseOne" class="collapse show " aria-labelledby="headingOne"
-                        data-parent="#accordionExample">
+<section id="about" class="about">
+    <div class="container" data-aos="fade-up">
+        <div class="row text-center" data-aos="fade-up" data-aos-delay="200">
+
+            <div class="col-lg-7">
+                <h3 class="pt-0 pt-lg-5">Selecione o tipo de texto academico e seu periodo para visualização.</h3>
+
+                <!-- Tabs -->
+                <ul class="nav nav-pills mb-3">
+                    <li><a class="nav-link active" data-bs-toggle="pill" href="#tab1">Teses</a></li>
+                    <li><a class="nav-link" data-bs-toggle="pill" href="#tab2">Dissertações</a></li>
+                </ul><!-- End Tabs -->
+
+                <!-- Tab Content -->
+                <div class="tab-content">
+
+                    <div class="tab-pane fade show active" id="tab1">
                         <app-tese [datas]="datas"></app-tese>
-                    </div>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    </div><!-- End Tab 1 Content -->
+
+                    <div class="tab-pane fade show" id="tab2">
                         <app-dissertacao [datas]="datas"></app-dissertacao>
-                    </div>
+                    </div><!-- End Tab 2 Content -->
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section><!-- End About Section -->

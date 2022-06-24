@@ -1,19 +1,11 @@
-<div class="card card-body" *ngIf="!checkAno">
-  <div class="text-left">
-    <h2>Teses</h2>
+<div *ngIf="!checkAno">
+  <div *ngFor="let t of datas.data" class="d-flex align-items-center mt-4" (click)="getAllTeseAno(t.ano)" >
+    <i class="bi bi-check2"></i>
+    <h4>Defendidas em {{t.ano}}</h4>
   </div>
-    <div class="text-center">
-        <div *ngFor="let t of datas.data">
-          <button class="btn btn-primary butAno" (click)="getAllTeseAno(t.ano)">
-            Defendidas em {{t.ano}}
-          </button>
-        </div>
-    </div>
 </div>
-<div class="card card-body" *ngIf="checkAno">
-  <div class="text-left">
-    <h2>Teses</h2>
-  </div>
+
+<div class="card-body" *ngIf="checkAno">
   <div class="text-center">
     <table class="table table-striped">
       <thead>
@@ -41,6 +33,6 @@
       </tr>
       </tbody>
     </table>
-    <button class="text-right btn btn-success" (click)="checkAno = false">Voltar</button>
+    <h4 (click)="checkAno = false">Para voltar as datas clique <i>aqui</i></h4>
   </div>
 </div>

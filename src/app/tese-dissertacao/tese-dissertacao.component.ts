@@ -3,8 +3,7 @@ import { TeseDissertacaoService } from './tese-dissertacao.service';
 
 @Component({
   selector: 'app-tese-dissertacao',
-  templateUrl: './tese-dissertacao.component.html',
-  styleUrls: ['./tese-dissertacao.component.scss']
+  templateUrl: './tese-dissertacao.component.html'
 })
 export class TeseDissertacaoComponent implements OnInit {
 
