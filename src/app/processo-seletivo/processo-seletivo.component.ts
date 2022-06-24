@@ -1,10 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { ProcessoSeletivoService } from "./processo-seletivo.service";
 
 @Component({
     selector: 'app-processo-seletivo',
     templateUrl: './processo-seletivo.component.html',
-    styleUrls: ['./processo-seletivo.component.scss']
+    styleUrls: ['./processo-seletivo.component.scss'],
+    encapsulation: ViewEncapsulation.None
   })
   export class ProcessoSeletivoComponent implements OnInit {
 

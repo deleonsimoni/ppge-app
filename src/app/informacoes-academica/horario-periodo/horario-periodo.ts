@@ -1,5 +1,5 @@
 export const info =  {
-    textTitle: "Horário do Período",
+    textTitle: "Horário do período",
     urlImage: "",
     textBody: `
     <p>

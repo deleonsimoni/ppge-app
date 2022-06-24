@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ContatoComponent } from './contato/contato.component';
 import { CorpoDocenteComponent } from './corpo-docente/corpo-docente.component';
+import { NormaPosGraduacaoComponent } from './corpo-docente/normas-pos-graduacao/normas-pos-graduacao.component';
 import { DummyComponent } from './dummy/dummy.component';
 import { HistoricComponent } from './historic/historic.component';
 import { HomeComponent } from './home/home.component';
@@ -87,6 +88,11 @@ const routes: Routes = [
     //canActivate: [AuthGuard],
   },
   {
+    path: 'norma-pos-graduacao',
+    component: NormaPosGraduacaoComponent,
+    //canActivate: [AuthGuard],
+  },
+  {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
   },
@@ -137,6 +143,10 @@ const routes: Routes = [
   {
     path: 'processo-seletivo',
     loadChildren: () => import('./processo-seletivo/processo-seletivo.module').then(m => m.ProcessoSeletivoModule),
+  },
+  {
+    path: 'norma-pos-graduacao',
+    loadChildren: () => import('./corpo-docente/normas-pos-graduacao/normas-pos-graduacao.module').then(m => m.NormaPosGraduacaoModule),
   },
 ];
 

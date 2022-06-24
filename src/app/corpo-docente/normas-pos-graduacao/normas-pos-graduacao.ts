@@ -1,5 +1,5 @@
 export const info =  {
-    textTitle: "Processos Seletivos",
+    textTitle: "Normas para Pós-Graduação",
     urlImage: "",
     textBody: `
     <h3>

@@ -1,10 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { CalendarioService } from "./calendario.service";
 
 @Component({
     selector: 'app-calendario',
     templateUrl: './calendario.component.html',
-    styleUrls: ['./calendario.component.scss']
+    styleUrls: ['./calendario.component.scss'],
+    encapsulation: ViewEncapsulation.None
   })
   export class CalendarioComponent implements OnInit {
 

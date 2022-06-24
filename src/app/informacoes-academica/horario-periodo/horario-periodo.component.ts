@@ -1,10 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { HorarioPeriodoService } from "./horario-periodo.service";
 
 @Component({
     selector: 'app-horario-periodo',
     templateUrl: './horario-periodo.component.html',
-    styleUrls: ['./horario-periodo.component.scss']
+    styleUrls: ['./horario-periodo.component.scss'],
+    encapsulation: ViewEncapsulation.None
   })
   export class HorarioPeriodoComponent implements OnInit {
   

@@ -1,5 +1,5 @@
 export const info =  {
-  textTitle: "matricula",
+  textTitle: "Matrícula",
   urlImage: "",
   textBody: `
   <div>
