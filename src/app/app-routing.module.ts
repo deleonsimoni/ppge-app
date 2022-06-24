@@ -12,6 +12,7 @@ import { FormularioComponent } from './informacoes-academica/formulario/formular
 import { HorarioPeriodoComponent } from './informacoes-academica/horario-periodo/horario-periodo.component';
 import { MatriculaComponent } from './informacoes-academica/matricula/matricula.component';
 import { ObjectiveComponent } from './objective/objective.component';
+import { ProcessoSeletivoComponent } from './processo-seletivo/processo-seletivo.component';
 import { TeseDissertacaoComponent } from './tese-dissertacao/tese-dissertacao.component';
 
 const routes: Routes = [
@@ -81,6 +82,11 @@ const routes: Routes = [
     //canActivate: [AuthGuard],
   },
   {
+    path: 'processo-seletivo',
+    component: ProcessoSeletivoComponent,
+    //canActivate: [AuthGuard],
+  },
+  {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
   },
@@ -127,6 +133,10 @@ const routes: Routes = [
   {
     path: 'horario-periodo',
     loadChildren: () => import('./informacoes-academica/horario-periodo/horario-periodo.module').then(m => m.HorarioPeriodoModule),
+  },
+  {
+    path: 'processo-seletivo',
+    loadChildren: () => import('./processo-seletivo/processo-seletivo.module').then(m => m.ProcessoSeletivoModule),
   },
 ];
 
