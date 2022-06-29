@@ -31,6 +31,7 @@
               "src/assets/vendor/glightbox/css/glightbox.min.css",
               "src/assets/vendor/swiper/swiper-bundle.min.css",
               "src/assets/css/variables.css",
+              "node_modules/flag-icon-css/css/flag-icons.min.css",
               "src/styles.scss"
             ],
             "scripts": [

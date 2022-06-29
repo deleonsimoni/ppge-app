@@ -5,8 +5,8 @@
   <div class="container-fluid d-flex align-items-center justify-content-between">
     <a class="logo d-flex align-items-center scrollto me-auto me-lg-0">
       <!-- Uncomment the line below if you also wish to use an image logo -->
-      <ngx-flag-picker [showLabels]="true" [selectedCountryCode]="selectedCountryCode" [countryCodes]="countryCodes"
-        (changedCountryCode)="changeSelectedCountryCode($event)">
+      <ngx-flag-picker [selectedCountryCode]="selectedCountryCode" [countryCodes]="countryCodes" [showArrow]="false"
+        [showFlags]="true" (changedCountryCode)="changeSelectedCountryCode($event)">
       </ngx-flag-picker>
       <!--<h1>HeroBiz<span>.</span></h1>-->
     </a>
