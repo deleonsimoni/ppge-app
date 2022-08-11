@@ -16,8 +16,6 @@ import { DummyComponent } from './dummy/dummy.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
-import { Home2Component } from './home2/home2.component';
-import { Home3Component } from './home3/home3.component';
 import { CalendarioModule } from './informacoes-academica/calendario/calendario.module';
 import { FormularioModule } from './informacoes-academica/formulario/formulario.module';
 import { HorarioPeriodoModule } from './informacoes-academica/horario-periodo/horario-periodo.module';
@@ -30,6 +28,9 @@ import { ScheduleModule } from './schedule/schedule.module';
 import { AuthService } from './shared/services';
 import { SharedModule } from './shared/shared.module';
 import { TeseDissertacaoModule } from './tese-dissertacao/tese-dissertacao.module';
+import { InscricaoComponent } from './inscricao/inscricao.component';
+import { ToastrModule } from 'ngx-toastr';
+import { ModalTermoUsoComponent } from './modals/modal-termo-uso/modal-termo-uso.component';
 
 export function appInitializerFactory(authService: AuthService) {
   return () => authService.checkTheUserOnTheFirstLoad();
@@ -51,6 +52,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     HorarioPeriodoModule,
     FormularioModule,
     NgxFlagPickerModule,
+    ToastrModule.forRoot(),
     CommitteeModule,
     ScheduleModule,
     RegulationModule,
@@ -66,7 +68,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       }
     }),
   ],
-  declarations: [AppComponent, HeaderComponent, HomeComponent, CorpoDocenteComponent, FooterComponent, ContatoComponent, DummyComponent, Home2Component, Home3Component],
+  declarations: [AppComponent, HeaderComponent, HomeComponent, CorpoDocenteComponent, FooterComponent, ContatoComponent, DummyComponent, InscricaoComponent, ModalTermoUsoComponent],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

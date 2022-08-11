@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Home2Component } from './home2.component';
+import { ModalTermoUsoComponent } from './modal-termo-uso.component';
 
-describe('Home2Component', () => {
-  let component: Home2Component;
-  let fixture: ComponentFixture<Home2Component>;
+describe('ModalTermoUsoComponent', () => {
+  let component: ModalTermoUsoComponent;
+  let fixture: ComponentFixture<ModalTermoUsoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ Home2Component ]
+      declarations: [ ModalTermoUsoComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(Home2Component);
+    fixture = TestBed.createComponent(ModalTermoUsoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

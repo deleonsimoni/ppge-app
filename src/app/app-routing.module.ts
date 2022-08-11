@@ -6,12 +6,11 @@ import { NormaPosGraduacaoComponent } from './corpo-docente/normas-pos-graduacao
 import { DummyComponent } from './dummy/dummy.component';
 import { HistoricComponent } from './historic/historic.component';
 import { HomeComponent } from './home/home.component';
-import { Home2Component } from './home2/home2.component';
-import { Home3Component } from './home3/home3.component';
 import { CalendarioComponent } from './informacoes-academica/calendario/calendario.component';
 import { FormularioComponent } from './informacoes-academica/formulario/formulario.component';
 import { HorarioPeriodoComponent } from './informacoes-academica/horario-periodo/horario-periodo.component';
 import { MatriculaComponent } from './informacoes-academica/matricula/matricula.component';
+import { InscricaoComponent } from './inscricao/inscricao.component';
 import { ObjectiveComponent } from './objective/objective.component';
 import { ProcessoSeletivoComponent } from './processo-seletivo/processo-seletivo.component';
 import { TeseDissertacaoComponent } from './tese-dissertacao/tese-dissertacao.component';
@@ -20,16 +19,6 @@ const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
-    //canActivate: [AuthGuard],
-  },
-  {
-    path: 'home2',
-    component: Home2Component,
-    //canActivate: [AuthGuard],
-  },
-  {
-    path: 'home3',
-    component: Home3Component,
     //canActivate: [AuthGuard],
   },
   {
@@ -90,6 +79,11 @@ const routes: Routes = [
   {
     path: 'norma-pos-graduacao',
     component: NormaPosGraduacaoComponent,
+    //canActivate: [AuthGuard],
+  },
+  {
+    path: 'inscricao',
+    component: InscricaoComponent,
     //canActivate: [AuthGuard],
   },
   {

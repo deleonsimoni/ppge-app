@@ -17,7 +17,7 @@ interface AuthResponse {
 export class AuthService {
   private user$ = new BehaviorSubject<User | null>(null);
 
-  constructor(private http: HttpClient, private tokenStorage: TokenStorage) {}
+  constructor(private http: HttpClient, private tokenStorage: TokenStorage) { }
 
   login(email: string, password: string): Observable<User> {
     return this.http
@@ -32,18 +32,10 @@ export class AuthService {
   }
 
   register(
-    fullname: string,
-    email: string,
-    password: string,
-    repeatPassword: string
+    form: any
   ): Observable<User> {
     return this.http
-      .post<AuthResponse>('/api/auth/register', {
-        fullname,
-        email,
-        password,
-        repeatPassword,
-      })
+      .post<AuthResponse>('/api/auth/register', form)
       .pipe(
         tap(({ token, user }) => {
           this.setUser(user);

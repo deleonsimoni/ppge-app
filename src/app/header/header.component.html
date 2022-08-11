@@ -1,17 +1,6 @@
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top " style="margin-bottom: 1500px;" data-scrollto-offset="0">
 
-
-  <div class="container-fluid d-flex align-items-center justify-content-between">
-    <a class="logo d-flex align-items-center scrollto me-auto me-lg-0">
-      <!-- Uncomment the line below if you also wish to use an image logo -->
-      <ngx-flag-picker [selectedCountryCode]="selectedCountryCode" [countryCodes]="countryCodes" [showArrow]="false"
-        [showFlags]="true" (changedCountryCode)="changeSelectedCountryCode($event)">
-      </ngx-flag-picker>
-      <!--<h1>HeroBiz<span>.</span></h1>-->
-    </a>
-  </div>
-
   <div class="container-fluid d-flex align-items-center justify-content-between">
 
     <a style="cursor: pointer;" [routerLink]="''"
@@ -94,6 +83,7 @@
             </li>
 
             <li><a class="nav-link scrollto" [routerLink]="'contato'">{{'contatos' | translate}}</a></li>
+            <li><a class="nav-link scrollto" [routerLink]="'inscricao'">Inscrição</a></li>
 
 
 
@@ -110,7 +100,8 @@
               <a class="nav-link scrollto" [routerLink]="'corpo-docente/2'">{{'pos.doutorado' | translate}}</a>
             </li>
             <li>
-              <a class="nav-link scrollto" [routerLink]="'norma-pos-graduacao'">{{'normas.pos.doutorado' | translate}}</a>
+              <a class="nav-link scrollto" [routerLink]="'norma-pos-graduacao'">{{'normas.pos.doutorado' |
+                translate}}</a>
             </li>
           </ul>
         </li>
@@ -120,11 +111,13 @@
         <li class="dropdown"><a><span>{{'teses.dissertacoes' | translate}}</span> <i
               class="bi bi-chevron-down dropdown-indicator"></i></a>
           <ul>
-            <li><a class="nav-link scrollto" [routerLink]="'tese-dissertacao'">{{'buscador.ano.orientador.palavras.titulo' | translate}}</a></li>
+            <li><a class="nav-link scrollto"
+                [routerLink]="'tese-dissertacao'">{{'buscador.ano.orientador.palavras.titulo' | translate}}</a></li>
           </ul>
         </li>
 
-        <li style="cursor: pointer;"><a [routerLink]="'processo-seletivo'">{{'processos.seletivos' | translate}}</a></li>
+        <li style="cursor: pointer;"><a [routerLink]="'processo-seletivo'">{{'processos.seletivos' | translate}}</a>
+        </li>
 
         <li class="dropdown megamenu"><a><span>{{'informacoes.academicas' | translate}}</span> <i
               class="bi bi-chevron-down dropdown-indicator"></i></a>
@@ -142,7 +135,7 @@
 
             </li>
             <li>
-              <a class="nav-link scrollto"[routerLink]="'formulario'">{{'formulario' | translate}}</a>
+              <a class="nav-link scrollto" [routerLink]="'formulario'">{{'formulario' | translate}}</a>
 
             </li>
           </ul>
@@ -154,8 +147,9 @@
     </nav><!-- .navbar -->
 
     <!--<a class="btn-getstarted scrollto" href="index.html#about">Get Started</a>-->
-    <a class="logo d-flex align-items-center scrollto me-auto me-lg-0"><img src="../../assets/img/minerva.png"
-        alt=""></a>
+    <ngx-flag-picker [selectedCountryCode]="selectedCountryCode" [countryCodes]="countryCodes" [showArrow]="true"
+      [showFlags]="true" (changedCountryCode)="changeSelectedCountryCode($event)">
+    </ngx-flag-picker>
 
 
   </div>
