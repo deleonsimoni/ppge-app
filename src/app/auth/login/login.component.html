@@ -1,45 +1,54 @@
-<mat-card class="example-card">
-  <mat-card-header>
-    <mat-card-title>Login</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <form class="example-form">
-      <table cellspacing="0">
-        <tr>
-          <td>
-            <mat-form-field>
-              <input
-                matInput
-                placeholder="Email"
-                [(ngModel)]="email"
-                name="email"
-                required
-              />
-            </mat-form-field>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <mat-form-field>
-              <input
-                matInput
-                placeholder="Password"
-                [(ngModel)]="password"
-                type="password"
-                name="password"
-                required
-              />
-            </mat-form-field>
-          </td>
-        </tr>
-      </table>
-    </form>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button (click)="login()" color="primary">Login</button>
-    <span
-      >Don't have an account ?
-      <a [routerLink]="['/auth/register']">register</a> here</span
-    >
-  </mat-card-actions>
-</mat-card>
+<main id="login" style="">
+  <div class="container login-content">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-sm-10 col-lg-6">
+        <div class="box">
+          <div class="section-header">
+            <h2>Login</h2>
+          </div>
+          <form [formGroup]="loginForm" (ngSubmit)="login()">
+            <div class="form-row justify-content-center">
+              <div class="form-group col-md-12">
+                <input type="text" name="email" class="form-control" id="email" placeholder="Email"
+                  formControlName="email" />
+                <div *ngIf="validate.email.errors" class="alert alert-danger">
+                  <div [hidden]="!validate.email.errors.required">
+                    Preencha o campo email
+                  </div>
+                  <div [hidden]="!validate.email.errors.pattern">
+                    Formato de email inválido
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-12">
+                <input type="password" name="senha" class="form-control" id="senha" placeholder="Senha"
+                  formControlName="password" />
+                <div *ngIf="validate.password.errors" class="alert alert-danger">
+                  <div [hidden]="!validate.password.errors.required">
+                    Preencha o campo senha
+                  </div>
+                  <div [hidden]="!validate.password.errors.minlength">
+                    A senha deve conter no mínimo 6 caracteres
+                  </div>
+                </div>
+              </div>
+              <!--<a [routerLink]="['/register']">Realizar Inscrição</a>
+              <a [routerLink]="['/esqueci-senha']">Esqueci minha senha</a>
+-->
+            </div>
+
+            <div class="row justify-content-center mb-2">
+              <button type="submit" mat-raised-button color="primary">
+                Entrar <mat-icon>badge</mat-icon>
+              </button>
+
+            </div>
+            <span>Não possui cadastro?
+              <a [routerLink]="['/auth/register']">registre-se</a> aqui</span>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main><!-- #eixos -->

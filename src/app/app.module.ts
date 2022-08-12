@@ -28,9 +28,9 @@ import { ScheduleModule } from './schedule/schedule.module';
 import { AuthService } from './shared/services';
 import { SharedModule } from './shared/shared.module';
 import { TeseDissertacaoModule } from './tese-dissertacao/tese-dissertacao.module';
-import { InscricaoComponent } from './inscricao/inscricao.component';
 import { ToastrModule } from 'ngx-toastr';
 import { ModalTermoUsoComponent } from './modals/modal-termo-uso/modal-termo-uso.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 export function appInitializerFactory(authService: AuthService) {
   return () => authService.checkTheUserOnTheFirstLoad();
@@ -59,6 +59,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     ResearchLineModule,
     CoursesModule,
     CommonModule,
+    AngularEditorModule,
     BrowserModule,
     TranslateModule.forRoot({
       loader: {
@@ -68,7 +69,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       }
     }),
   ],
-  declarations: [AppComponent, HeaderComponent, HomeComponent, CorpoDocenteComponent, FooterComponent, ContatoComponent, DummyComponent, InscricaoComponent, ModalTermoUsoComponent],
+  declarations: [AppComponent, HeaderComponent, HomeComponent, CorpoDocenteComponent, FooterComponent, ContatoComponent, DummyComponent, ModalTermoUsoComponent],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

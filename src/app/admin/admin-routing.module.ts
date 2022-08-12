@@ -3,15 +3,20 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AdminComponent } from './admin.component';
 import { OnlyAdminUsersGuard } from './admin-user-guard';
+import { HistoricoAdminComponent } from './historico-admin/historico-admin.component';
 
 const routes: Routes = [
   {
-    path: 'admin',
+    path: '',
     canActivate: [OnlyAdminUsersGuard],
+    component: AdminComponent,
     children: [
+
       {
-        path: '',
-        component: AdminComponent,
+        path: "", pathMatch: "full", redirectTo: "historico"
+      },
+      {
+        path: 'historico', component: HistoricoAdminComponent
       },
     ],
   },
@@ -21,4 +26,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class AdminRoutingModule {}
+export class AdminRoutingModule { }

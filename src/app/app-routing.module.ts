@@ -10,7 +10,6 @@ import { CalendarioComponent } from './informacoes-academica/calendario/calendar
 import { FormularioComponent } from './informacoes-academica/formulario/formulario.component';
 import { HorarioPeriodoComponent } from './informacoes-academica/horario-periodo/horario-periodo.component';
 import { MatriculaComponent } from './informacoes-academica/matricula/matricula.component';
-import { InscricaoComponent } from './inscricao/inscricao.component';
 import { ObjectiveComponent } from './objective/objective.component';
 import { ProcessoSeletivoComponent } from './processo-seletivo/processo-seletivo.component';
 import { TeseDissertacaoComponent } from './tese-dissertacao/tese-dissertacao.component';
@@ -81,11 +80,7 @@ const routes: Routes = [
     component: NormaPosGraduacaoComponent,
     //canActivate: [AuthGuard],
   },
-  {
-    path: 'inscricao',
-    component: InscricaoComponent,
-    //canActivate: [AuthGuard],
-  },
+
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),

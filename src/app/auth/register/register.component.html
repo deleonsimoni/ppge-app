@@ -1,0 +1,220 @@
+<!--==========================
+    Intro Section
+  ============================-->
+<main id="main" style="background-color: #fffff5;">
+
+    <div class="container" id="register">
+        <div class="form">
+            <form [formGroup]="registerForm" (ngSubmit)="register()" role="form" class="contactForm">
+                <div class="section-header">
+                </div>
+
+                <div class="section-header">
+                    <h2 mt-2>Dados Pessoais</h2>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <input type="text" name="name" class="form-control" id="name" placeholder="Nome Completo"
+                            data-rule="minlen:4" data-msg="Please enter at least 4 chars" formControlName="fullname" />
+                        <div class="validation"></div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="text" class="form-control" name="email" id="socialName"
+                            placeholder="Nome social (preencher APENAS se você for uma pessoa TRANGÊNERA)"
+                            formControlName="socialname" />
+                        <div class="validation"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Email"
+                            data-rule="email" data-msg="Please enter a valid email" formControlName="email" />
+                        <div class="validation"></div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="email" class="form-control" name="repeatEmail" id="repeatEmail"
+                            placeholder="Repita o email" data-rule="repeatEmail" data-msg="Please enter a valid email"
+                            formControlName="repeatEmail" />
+                        <div class="validation"></div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Senha"
+                            formControlName="password" />
+                        <div class="validation"></div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="password" class="form-control" name="cf-password" id="cf-password"
+                            placeholder="Confirmar senha" formControlName="cfPassword" />
+                        <div class="validation"></div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group col-md-6">
+                        <input type="text" name="cpf" class="form-control" id="cpf" placeholder="CPF"
+                            formControlName="cpf" mask="000.000.000-00" />
+                        <div class="validation"></div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="text" class="form-control" name="nacionalidade" id="nacionalidade"
+                            placeholder="Nacionalidade" formControlName="nacionalidade" />
+                        <div class="validation"></div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <input type="text" name="birth-date" class="form-control" id="birth-date"
+                            placeholder="Data de nascimento" formControlName="dataNiver" bsDatepicker
+                            [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD/MM/YYYY' }" autocomplete="false" />
+
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" name="telephone" class="form-control" id="telephone" placeholder="Telefone"
+                            formControlName="telefone" [dropSpecialCharacters]="true" mask="(00) 0000-0000" />
+                        <div class="validation"></div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control" name="cellphone" id="cellphone" placeholder="Celular"
+                            formControlName="celular" [dropSpecialCharacters]="true" mask="(00) 00000-0000" />
+                        <div class="validation"></div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group col-md-4">
+                        <input type="text" name="telephone" class="form-control" id="identidade"
+                            placeholder="Identidade" formControlName="rg" />
+                        <div class="validation"></div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control" name="rgEmissor" id="rgEmissor"
+                            placeholder="Órgão Emissor" formControlName="rgEmissor" />
+                        <div class="validation"></div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control" name="passaporte" id="passaporte"
+                            placeholder="Passaporte" formControlName="passaporte" />
+                        <div class="validation"></div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="form-row">
+
+                    <div class="form-group col-md-4">
+                        <input type="text" name="cor" class="form-control" id="cor" placeholder="Cor"
+                            formControlName="cor" />
+                        <div class="validation"></div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control" name="genero" id="genero" placeholder="Gênero"
+                            formControlName="genero" />
+                        <div class="validation"></div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control" name="deficiencia" id="deficiencia"
+                            placeholder="Possui alguma deficiência? Qual?" formControlName="deficiencia" />
+                        <div class="validation"></div>
+                    </div>
+                </div>
+
+
+                <div class="section-header">
+                    <h2 mt-2>Endereço</h2>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <input type="text" name="zip" class="form-control" id="zip" placeholder="Código postal"
+                            formControlName="cep" [dropSpecialCharacters]="true" mask="00000-000" />
+                        <div class="validation"></div>
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <input type="text" name="street" class="form-control" id="street" placeholder="Endereço"
+                            data-rule="minlen:4" data-msg="Please enter at least 4 chars" formControlName="endereco" />
+                        <div class="validation"></div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="text" class="form-control" name="city" id="city" placeholder="Bairro"
+                            data-rule="email" data-msg="Please enter a valid email" formControlName="bairro" />
+                        <div class="validation"></div>
+                    </div>
+
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <input type="text" name="district" class="form-control" id="district" placeholder="Cidade"
+                            data-rule="minlen:4" data-msg="Please enter at least 4 chars" formControlName="cidade" />
+                        <div class="validation"></div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+
+                        <select placeholder="Estado" formControlName="estado" class="form-control">
+                            <option *ngFor="let state of states" value={{state}}>
+                                {{state}}
+                            </option>
+                        </select>
+                        <div class="validation"></div>
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <h2 mt-2>Atuação</h2>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <input type="text" name="cargo" class="form-control" id="cargo"
+                            placeholder="Ocupação atual / Cargo" formControlName="cargo" />
+                        <div class="validation"></div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="text" name="empresa" class="form-control" id="empresa"
+                            placeholder="Instituição / Empresa" formControlName="empresa" />
+                        <div class="validation"></div>
+                    </div>
+
+                </div>
+
+
+
+
+
+                <div class="col-md-12 pt-4">
+                    <hr>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="id" id="termo" [value]="true"
+                            formControlName="icAcceptTerms" />
+                        <label class="form-check-label" for="termo">
+                            Li e concordo com o <a [routerLink]=""
+                                style="color:#0400ff;cursor:pointer;text-decoration: underline;"
+                                (click)="openRules()">termo de
+                                uso</a>
+                        </label>
+                    </div>
+                </div>
+                <div class="text-center pt-5">
+
+                    <div *ngIf="!carregando" class="text-center pt-5"><button class="m-4 btn btn-secondary"
+                            type="submit">Realizar Inscrição</button></div>
+                    <div *ngIf="carregando" class="text-center pt-5"><button><i
+                                class="fas fa-spinner fa-pulse"></i>Aguarde...</button></div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+</main>

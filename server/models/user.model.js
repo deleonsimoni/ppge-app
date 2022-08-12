@@ -16,6 +16,66 @@ const UserSchema = new mongoose.Schema(
         'Please enter a valid email',
       ],
     },
+    socialname: {
+      type: String
+    },
+    cpf: {
+      type: String,
+      required: true,
+    },
+    rg: {
+      type: String,
+      required: true,
+    },
+    rgEmissor: {
+      type: String,
+      required: true,
+    },
+    passaporte: {
+      type: String
+    },
+    dataNiver: {
+      type: Date,
+    },
+    nacionalidade: {
+      type: String
+    },
+    endereco: {
+      type: String
+    },
+    bairro: {
+      type: String
+    },
+    cep: {
+      type: String
+    },
+    cidade: {
+      type: String
+    },
+    estado: {
+      type: String
+    },
+    celular: {
+      type: String
+    },
+    telefone: {
+      type: String
+    },
+    cargo: {
+      type: String
+    },
+    empresa: {
+      type: String
+    },
+    deficiencia: {
+      type: String
+    },
+    cor: {
+      type: String
+    },
+    genero: {
+      type: String
+    },
     hashedPassword: {
       type: String,
       required: true,

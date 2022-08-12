@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InscricaoComponent } from './inscricao.component';
+import { HistoricoAdminComponent } from './historico-admin.component';
 
-describe('InscricaoComponent', () => {
-  let component: InscricaoComponent;
-  let fixture: ComponentFixture<InscricaoComponent>;
+describe('HistoricoAdminComponent', () => {
+  let component: HistoricoAdminComponent;
+  let fixture: ComponentFixture<HistoricoAdminComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InscricaoComponent ]
+      declarations: [ HistoricoAdminComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InscricaoComponent);
+    fixture = TestBed.createComponent(HistoricoAdminComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

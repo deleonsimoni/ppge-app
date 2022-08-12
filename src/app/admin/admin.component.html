@@ -1,1 +1,27 @@
-<h4>HELLO FROM ADMIN PAGE</h4>
+<main id="submission">
+    <div class="container submission-content">
+        <div class="row">
+            <div class="offset-md-1 col-md-10">
+                <div class="box">
+                    <div class="section-header">
+                        <h2>Painel Gerencial - PPGE</h2>
+                    </div>
+
+                    <div [ngClass]="{'section-header': menu.length > 1}">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item m-2" *ngFor="let item of menu">
+                                <button mat-raised-button color="accent" [routerLink]="[item.path]">
+                                    {{item.name}}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <router-outlet></router-outlet>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

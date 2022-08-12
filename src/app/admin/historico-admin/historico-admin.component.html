@@ -1,0 +1,47 @@
+<div class="container">
+    <div class="row justify-content-between">
+        <div class="section-header" mat-dialog-title>
+            <h2>Administrar - Quem Somos?</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+
+        <form role="form" class="reviewer" [formGroup]="form" (ngSubmit)="register()">
+
+
+            <div class="form-row justify-content-center">
+                <div class="conferencer-img">
+                    <img id="imageRender" height="100px" width="100px" src="../../assets/img/user.png" alt=""
+                        #imageRender>
+                    <button (click)="loadImage()"><i class="fas fa-camera"></i></button>
+                </div>
+            </div>
+
+
+            <div class="form-row justify-content-center">
+                <div class="form-group col-md-12">
+                    <input type="text" name="title" class="form-control" id="title" placeholder="Título"
+                        formControlName="title" />
+
+                </div>
+            </div>
+
+            <div class="form-row justify-content-center">
+                <div class="form-group col-md-12">
+
+                    <angular-editor [placeholder]="'Conteúdo...'" formControlName="content"></angular-editor>
+
+                </div>
+            </div>
+
+            <input type="file" class="custom-file-input" style="display: none;" accept="image/*" data-max-size="5048"
+                id="image" (change)="setImage($event.target.files)" #fileInput />
+
+            <div class="row justify-content-end m-4">
+                <button type="submit" mat-raised-button color="primary">
+                    Submeter
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
