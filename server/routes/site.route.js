@@ -8,14 +8,14 @@ const fileUpload = require('express-fileupload');
 const router = express.Router();
 module.exports = router;
 
-/* Hitorico */
+/* Historico */
 router.get('/historico', asyncHandler(getHistorico));
 
 router.post('/historico', [passport.authenticate('jwt', {
   session: false
 }), requireAdmin, fileUpload()], asyncHandler(insertHistorico));
 
-router.delete('/historico/:id', [passport.authenticate('jwt', {
+router.put('/historico/:id', [passport.authenticate('jwt', {
   session: false
 }), requireAdmin, fileUpload()], asyncHandler(updateHistorico));
 

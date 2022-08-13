@@ -19,18 +19,12 @@ const HistoricoSchema = new mongoose.Schema(
 
     imagePathS3: {
       type: String,
-      required: true,
     },
 
     createdAt: {
       type: Date,
       default: Date.now,
-    },
-    roles: [
-      {
-        type: String,
-      },
-    ],
+    }
   },
   {
     versionKey: false,
