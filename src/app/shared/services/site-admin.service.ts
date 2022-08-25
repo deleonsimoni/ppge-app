@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -16,21 +15,18 @@ export class SiteAdminService {
     return this.http.get(`/api/ppge/historico`);
   }
 
-  cadastrarHistorico(file: File, form: any) {
-    const formData: FormData = new FormData();
-    formData.append('fileArray', file, `${file.name}`);
-    formData.append('formulario', JSON.stringify(form));
-    return this.http.post(`/api/ppge/historico`, formData);
+  cadastrarHistorico(form: any) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    
+    return this.http.post(`/api/ppge/historico`, {formulario: form}, {headers});
   }
 
   deletarHistorico(form: any) {
     return this.http.delete(`/api/ppge/historico/${form._id}`);
   }
 
-  atualizarHistorico(file: File, form: any) {
-    const formData: FormData = new FormData();
-    formData.append('fileArray', file, `${file.name}`);
-    formData.append('formulario', JSON.stringify(form));
-    return this.http.put(`/api/ppge/historico`, formData);
+  atualizarHistorico(form: any) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.put(`/api/ppge/historico/${form._id}`, {formulario: form}, {headers});
   }
 }

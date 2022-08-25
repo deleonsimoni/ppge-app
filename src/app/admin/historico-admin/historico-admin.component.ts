@@ -1,12 +1,14 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-historico-admin',
   templateUrl: './historico-admin.component.html',
-  styleUrls: ['./historico-admin.component.scss']
+  styleUrls: ['./historico-admin.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class HistoricoAdminComponent implements OnInit {
 
@@ -16,6 +18,34 @@ export class HistoricoAdminComponent implements OnInit {
   @ViewChild('imageRender', { static: false }) imageRender: ElementRef;
   private image: FileList;
 
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: "15rem",
+    minHeight: "5rem",
+    placeholder: "Enter text here...",
+    translate: "no",
+    defaultParagraphSeparator: "p",
+    defaultFontName: "Arial",
+    toolbarHiddenButtons: [["bold"]],
+    sanitize: false,
+    customClasses: [
+      {
+        name: "quote",
+        class: "quote"
+      },
+      {
+        name: "redText",
+        class: "redText"
+      },
+      {
+        name: "titleText",
+        class: "titleText",
+        tag: "h1"
+      }
+    ]
+  };
+
   constructor(
     private builder: FormBuilder,
     private siteService: SiteAdminService,
@@ -24,7 +54,6 @@ export class HistoricoAdminComponent implements OnInit {
     this.form = this.builder.group({
       _id: [],
       title: [null, [Validators.required]],
-      subTitle: [null, [Validators.required]],
       content: [null, [Validators.required]],
       logo: [null, []],
       facebook: [null, []],
@@ -46,12 +75,13 @@ export class HistoricoAdminComponent implements OnInit {
   }
 
   public register() {
-
+    console.log("this.form", this.form);
+    
     if (this.form.valid) {
 
       if (this.form.value._id) {
 
-        this.siteService.atualizarHistorico(this.image[0], this.form.value)
+        this.siteService.atualizarHistorico(this.form.value)
           .subscribe((res: any) => {
             this.toastr.success('Histórico alterado com sucesso', 'Sucesso');
           }, (err: any) => {
@@ -60,7 +90,7 @@ export class HistoricoAdminComponent implements OnInit {
           });
 
       } else {
-        this.siteService.cadastrarHistorico(this.image[0], this.form.value)
+        this.siteService.cadastrarHistorico(this.form.value)
           .subscribe((res: any) => {
             this.toastr.success('Histórico cadastrado', 'Sucesso');
           }, (err: any) => {

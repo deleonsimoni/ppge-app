@@ -3,9 +3,11 @@ import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxFlagPickerModule } from 'ngx-flag-picker';
+import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommitteeModule } from './committee/committee.module';
@@ -22,15 +24,13 @@ import { HorarioPeriodoModule } from './informacoes-academica/horario-periodo/ho
 import { MatriculaModule } from './informacoes-academica/matricula/matricula.module';
 import { AuthHeaderInterceptor } from './interceptors/header.interceptor';
 import { CatchErrorInterceptor } from './interceptors/http-error.interceptor';
+import { ModalTermoUsoComponent } from './modals/modal-termo-uso/modal-termo-uso.component';
 import { RegulationModule } from './regulation/regulation.module';
 import { ResearchLineModule } from './research-line/research-line.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { AuthService } from './shared/services';
 import { SharedModule } from './shared/shared.module';
 import { TeseDissertacaoModule } from './tese-dissertacao/tese-dissertacao.module';
-import { ToastrModule } from 'ngx-toastr';
-import { ModalTermoUsoComponent } from './modals/modal-termo-uso/modal-termo-uso.component';
-import { AngularEditorModule } from '@kolkov/angular-editor';
 
 export function appInitializerFactory(authService: AuthService) {
   return () => authService.checkTheUserOnTheFirstLoad();

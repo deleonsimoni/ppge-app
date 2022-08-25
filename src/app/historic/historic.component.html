@@ -3,14 +3,14 @@
     <div class="container">
 
         <div class="section-header">
-            <h2>{{historicInfo.textTitle}}</h2>
+            <h2>{{historicInfo.title}}</h2>
         </div>
 
     </div>
 
     <div class="container">
 
-        <div class="text-body" [innerHtml]="historicInfo.textBody"></div>
+        <div class="text-body" [innerHtml]="historicInfo.content | sanitizer"></div>
 
     </div>
 </section>
