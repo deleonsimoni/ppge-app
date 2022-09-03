@@ -17,6 +17,7 @@ import { CoursesModule } from './courses/courses.module';
 import { DummyComponent } from './dummy/dummy.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
+import { HistoricModule } from './historic/historic.module';
 import { HomeComponent } from './home/home.component';
 import { CalendarioModule } from './informacoes-academica/calendario/calendario.module';
 import { FormularioModule } from './informacoes-academica/formulario/formulario.module';
@@ -68,6 +69,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
+    HistoricModule
   ],
   declarations: [AppComponent, HeaderComponent, HomeComponent, CorpoDocenteComponent, FooterComponent, ContatoComponent, DummyComponent, ModalTermoUsoComponent],
   providers: [

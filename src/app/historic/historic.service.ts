@@ -14,6 +14,6 @@ export class HistoricService {
   ) { }
 
   public getInfoHistoric(): Observable<any> {
-    return this.http.get(`/api/ppge/historico`);
+    return this.http.get(`/api/ppge/page/historico`);
   }
 }

@@ -1,0 +1,90 @@
+<div class="container">
+  <div class="row justify-content-between">
+      <div class="section-header" mat-dialog-title>
+          <h2>Administrar páginas.</h2>
+      </div>
+  </div>
+  <em class="fa fa-undo"></em>
+  <i class="fa-solid fa-address-card"></i>
+  <div class="row justify-content-center">
+
+      <form role="form" class="reviewer" [formGroup]="form" (ngSubmit)="register()">
+
+          <mat-form-field appearance="fill">
+            <mat-label>Selecione a Página</mat-label>
+            <mat-select formControlName="selectPage" (selectionChange)="getInfoPage()">
+              <mat-option value="historico">Histórico</mat-option>
+              <mat-option value="objetivo">Objetivos</mat-option>
+              <mat-optgroup label="Comissões">
+                <mat-option value="comissao_deliberativa">Comissão Deliberativa</mat-option>
+                <mat-option value="comissao_gestao">Comissão de Gestão</mat-option>
+              </mat-optgroup>
+              <mat-optgroup label="Agenda">
+                <mat-option value="agenda_colegiado">Colegiado</mat-option>
+                <mat-option value="agenda_comissao_deliberativa">Comissão Deliberativa</mat-option>
+                <mat-option value="agenda_comissao_gestao">Comissão de Gestão</mat-option>
+              </mat-optgroup>
+              <mat-optgroup label="Regulamentos e Normas de Credenciamento"> 
+                <mat-option value="regulamento_ppge">Regulamento do PPGE</mat-option>
+                <mat-option value="regras_credenciamento">Regras de Credenciamento</mat-option>
+              </mat-optgroup>
+              <mat-option value="linha_pesquisa">Linhas de pesquisa</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="ml-3 mb-5">
+            <mat-label>Selecione o Idioma</mat-label>
+            <mat-select formControlName="language" (selectionChange)="getInfoPage()">
+              <mat-option value="en-us"><span class="flag-icon flag-icon-us flag-icon-margin-right ng-star-inserted"></span> US</mat-option>
+              <mat-option value="es-es"><span class="flag-icon flag-icon-es flag-icon-margin-right ng-star-inserted"></span> ES</mat-option>
+              <mat-option value="pt-br"><span class="flag-icon flag-icon-br flag-icon-margin-right ng-star-inserted"></span> BR</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div class="form-row justify-content-center mb-3">
+            <div class="form-group col-md-12">
+              <button mat-raised-button color="accent">
+                  BOTAO
+              </button>
+              <button mat-raised-button color="accent">
+                  
+              </button>
+            </div>
+          </div>
+
+          <!-- <div class="form-row justify-content-center">
+              <div class="conferencer-img">
+                  <img id="imageRender" height="100px" width="100px" src="../../assets/img/user.png" alt=""
+                      #imageRender>
+                  <button (click)="loadImage()"><i class="fas fa-camera"></i></button>
+              </div>
+          </div> -->
+
+
+          <div class="form-row justify-content-center">
+              <div class="form-group col-md-12">
+                  <input type="text" name="title" class="form-control" id="title" placeholder="Título"
+                      formControlName="title" />
+
+              </div>
+          </div>
+
+          <div class="form-row justify-content-center">
+              <div class="form-group col-md-12">
+
+                  <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [(ngModel)]="content" [config]="editorConfig"></angular-editor>
+
+              </div>
+          </div>
+
+          <input type="file" class="custom-file-input" style="display: none;" accept="image/*" data-max-size="5048"
+              id="image" (change)="setImage($event.target.files)" #fileInput />
+
+          <div class="row justify-content-end m-4">
+              <button type="submit" mat-raised-button color="primary">
+                  Submeter
+              </button>
+          </div>
+      </form>
+  </div>
+</div>

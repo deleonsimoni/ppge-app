@@ -8,40 +8,39 @@ const fileUpload = require('express-fileupload');
 const router = express.Router();
 module.exports = router;
 
-/* Historico */
-router.get('/historico', asyncHandler(getHistorico));
+/* Page */
+router.get('/page/:selectedPage', asyncHandler(getPage));
 
-router.post('/historico', [passport.authenticate('jwt', {
+router.post('/page/:selectedPage', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], asyncHandler(insertHistorico));
+}), requireAdmin], asyncHandler(insertPage));
 
-router.put('/historico/:id', [passport.authenticate('jwt', {
+router.put('/page/:selectedPage/:id', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], asyncHandler(updateHistorico));
+}), requireAdmin], asyncHandler(updatePage));
 
-router.delete('/historico/:id', [passport.authenticate('jwt', {
+router.delete('/page/:selectedPage/:id', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], asyncHandler(deleteHistorico));
+}), requireAdmin], asyncHandler(deletePage));
 
-async function getHistorico(req, res) {
-  let response = await siteCtrl.getHistorico();
+async function getPage(req, res) {
+  let response = await siteCtrl.getPage(req);
   res.json(response);
 }
 
-async function insertHistorico(req, res) {
-  let response = await siteCtrl.insertHistorico(req, req.user._id);
+async function insertPage(req, res) {
+  let response = await siteCtrl.insertPage(req, req.user._id);
   res.json(response);
 }
 
-async function updateHistorico(req, res) {
-  let response = await siteCtrl.updateHistorico(req, req.user._id);
+async function updatePage(req, res) {
+  let response = await siteCtrl.updatePage(req, req.user._id);
   res.json(response);
 }
 
-async function deleteHistorico(req, res) {
-  let response = await siteCtrl.deleteHistorico(req.params.id);
+async function deletePage(req, res) {
+  let response = await siteCtrl.deletePage(req.params.selectedPage, req.params.id);
   res.json(response);
 }
 
-
-/* Fim Historico */ 
+/* Fim Page */

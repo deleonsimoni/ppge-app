@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const HistoricoSchema = new mongoose.Schema(
+const RegulamentoPpgeSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -37,4 +37,4 @@ const HistoricoSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Historico', HistoricoSchema);
+module.exports = mongoose.model('RegulamentoPpge', RegulamentoPpgeSchema);
