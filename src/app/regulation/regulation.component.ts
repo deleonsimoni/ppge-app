@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { RegulationService } from './regulation.service';
 
@@ -15,7 +16,8 @@ export class RegulationComponent implements OnInit {
 
   constructor(
     private regulationService: RegulationService,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private _sanitizer: DomSanitizer
   ) {
     window.scroll({
       top: 0,
@@ -33,6 +35,7 @@ export class RegulationComponent implements OnInit {
 
   private getCommitteeService(regulationType: number) {
     this.regulationService.getInfoRegulation(regulationType).subscribe(data => {
+      data.content = this._sanitizer.bypassSecurityTrustHtml(data.content);
       this.regulationInfo = data;
     });
   }

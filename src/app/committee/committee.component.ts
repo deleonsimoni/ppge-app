@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { CommitteeService } from './committee.service';
 
@@ -15,7 +16,8 @@ export class CommitteeComponent implements OnInit {
 
   constructor(
     private committeeService: CommitteeService,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private _sanitizer: DomSanitizer
   ) {
     window.scroll({
       top: 0,
@@ -33,6 +35,7 @@ export class CommitteeComponent implements OnInit {
 
   private getCommitteeService(committeeType: number) {
     this.committeeService.getInfoCommittee(committeeType).subscribe(data => {
+      data.content = this._sanitizer.bypassSecurityTrustHtml(data.content);
       this.committeeInfo = data;
     });
   }

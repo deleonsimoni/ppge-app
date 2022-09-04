@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 export class AdminComponent implements OnInit {
 
   public menu = [
-    { name: 'HISTÓRICO', path: '/admin/historico' },
+    { name: 'ADMINISTRAR PÁGINAS', path: '/admin/administrar-paginas' },
     { name: 'HISTÓRICO', path: '/admin/historico' },
 
 

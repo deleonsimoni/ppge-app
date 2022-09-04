@@ -5,12 +5,12 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-historico-admin',
-  templateUrl: './historico-admin.component.html',
-  styleUrls: ['./historico-admin.component.scss'],
+  selector: 'app-pages-admin',
+  templateUrl: './pages-admin.component.html',
+  styleUrls: ['./pages-admin.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class HistoricoAdminComponent implements OnInit {
+export class PagesAdminComponent implements OnInit {
 
   public form: FormGroup;
   carregando = false;
@@ -59,47 +59,59 @@ export class HistoricoAdminComponent implements OnInit {
       facebook: [null, []],
       youtube: [null, []],
       instagram: [null, []],
-      twitter: [null, []]
+      twitter: [null, []],
+
+      selectPage: ['historico', [Validators.required]],
+      language: ['pt-br', [Validators.required]],
     });
   }
 
   ngOnInit(): void {
-    this.siteService.listHistorico().subscribe((res: any) => {
+    
+    this.getInfoPage();
+    
+  }
+
+  getInfoPage() {
+    const pageSelected = this.form.value.selectPage;
+    const languageSelected = this.form.value.language;
+    this.siteService.listPage(pageSelected, languageSelected).subscribe((res: any) => {
       this.carregando = false;
       this.data = res;
-      this.form.patchValue(res[0]);
+      this.form.reset();
+      this.form.patchValue({...res, selectPage:pageSelected, language:languageSelected});
     }, err => {
       this.carregando = false;
-      this.toastr.error('Ocorreu um erro ao listar Histórico', 'Atenção: ');
-    });;
+      this.toastr.error(`Ocorreu um erro ao listar a página`, 'Atenção: ');
+    });
   }
 
   public register() {
-    console.log("this.form", this.form);
+    const pageSelected = this.form.value.selectPage;
     
     if (this.form.valid) {
 
       if (this.form.value._id) {
-
-        this.siteService.atualizarHistorico(this.form.value)
+        
+        this.siteService.atualizarPage(this.form.value, pageSelected)
           .subscribe((res: any) => {
-            this.toastr.success('Histórico alterado com sucesso', 'Sucesso');
+            this.toastr.success(`Página alterado com sucesso`, 'Sucesso');
           }, (err: any) => {
             this.toastr.error('Ocorreu um erro ao atualizar', 'Atenção: ');
-            console.log(err);
           });
 
       } else {
-        this.siteService.cadastrarHistorico(this.form.value)
+        this.siteService.cadastrarPage(this.form.value, pageSelected)
           .subscribe((res: any) => {
-            this.toastr.success('Histórico cadastrado', 'Sucesso');
+            this.getInfoPage();
+            this.toastr.success(`Página cadastrado`, 'Sucesso');
           }, (err: any) => {
             this.toastr.error('Ocorreu um erro ao cadastrar', 'Atenção: ');
-            console.log(err);
           });
       }
 
-    }
+    } else
+      this.toastr.error('Ocorreu um erro ao atualizar', 'Atenção: ');
   }
 
   public loadImage() {

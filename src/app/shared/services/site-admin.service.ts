@@ -1,36 +1,80 @@
-import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SiteAdminService {
+  private readonly URL_API_PPGE = '/api/ppge';
+  private readonly URL_HISTORICO = `${this.URL_API_PPGE}/historico`;
+  private readonly URL_OBJETIVOS = `${this.URL_API_PPGE}/objetivos`;
+  private readonly URL_PAGE = `${this.URL_API_PPGE}/page`;
 
   constructor(
     private http: HttpClient
   ) { }
 
-
-  listHistorico() {
-    return this.http.get(`/api/ppge/historico`);
+  /* Page */
+    
+  listPage(pageSelected: string, language: string, _idPage = null) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    let params = new HttpParams()
+      .set('language', language);
+    params = _idPage ? params.set('_id', _idPage) : params;
+    return this.http.get(`${this.URL_PAGE}/${pageSelected}`, {params});
   }
 
-  cadastrarHistorico(file: File, form: any) {
-    const formData: FormData = new FormData();
-    formData.append('fileArray', file, `${file.name}`);
-    formData.append('formulario', JSON.stringify(form));
-    return this.http.post(`/api/ppge/historico`, formData);
+  cadastrarPage(form: any, pageSelected: string) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.post(`${this.URL_PAGE}/${pageSelected}`, {formulario: form}, {headers});
+  }
+
+  deletarPage(form: any, pageSelected: string) {
+    return this.http.delete(`${this.URL_PAGE}/${pageSelected}/${form._id}`);
+  }
+
+  atualizarPage(form: any, pageSelected: string) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.put(`${this.URL_PAGE}/${pageSelected}/${form._id}`, {formulario: form}, {headers});
+  }
+  /* Fim Page */
+
+
+
+  /* Historico */
+  listHistorico() {
+    return this.http.get(`${this.URL_HISTORICO}`);
+  }
+
+  cadastrarHistorico(form: any) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.post(`${this.URL_HISTORICO}`, {formulario: form}, {headers});
   }
 
   deletarHistorico(form: any) {
-    return this.http.delete(`/api/ppge/historico/${form._id}`);
+    return this.http.delete(`${this.URL_HISTORICO}/${form._id}`);
   }
 
-  atualizarHistorico(file: File, form: any) {
-    const formData: FormData = new FormData();
-    formData.append('fileArray', file, `${file.name}`);
-    formData.append('formulario', JSON.stringify(form));
-    return this.http.put(`/api/ppge/historico`, formData);
+  atualizarHistorico(form: any) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.put(`${this.URL_HISTORICO}/${form._id}`, {formulario: form}, {headers});
   }
+  /* Fim Historico */
+
+  /* Objetivos */
+  testObjetivo = [{}];
+  listObjetivo() {
+    return this.http.get(`${this.URL_OBJETIVOS}`);
+  }
+
+  cadastrarObjetivo(form: any) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.post(`${this.URL_OBJETIVOS}`, {formulario: form}, {headers});
+  }
+
+  atualizarObjetivo(form: any) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.put(`${this.URL_OBJETIVOS}/${form._id}`, {formulario: form}, {headers});
+  }
+  /* Fim Objetivos */
 }
