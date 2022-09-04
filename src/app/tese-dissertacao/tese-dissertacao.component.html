@@ -5,6 +5,86 @@
             <div>
                 <h3 class="pt-0 pt-lg-5">Selecione o tipo de texto academico e seu periodo para visualização.</h3>
 
+                <div class="card">
+                    <form [formGroup]="filterForm">
+                        <div class="form-group card-body">
+                            <div class="row col-md-12">
+                                <span class="col-md-12 d-flex flex-row pt-0">PESQUISAR:</span>
+                                <div class="d-flex flex-row">
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" id="Radios1" name="tipoConsulta" value="option1" (click)="getTipo('dissertacao')">
+                                        <label class="form-check-label" for="Radios1">
+                                            Dissertações
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" id="Radios2" name="tipoConsulta" value="option2" (click)="getTipo('tese')">
+                                        <label class="form-check-label" for="Radios2">
+                                            Teses
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input type="radio" id="Radios3" name="tipoConsulta" value="option3" (click)="getTipo('ambas')">
+                                        <label class="form-check-label" for="Radios3">
+                                            Ambas
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row pt-lg-3 col-md-12" *ngIf="isTipoPresent">
+                                <div class="col-md-6">
+                                    <label class="d-flex flex-row" for="anoPublicacao">Ano de Publicação</label>
+                                    <select class="form-control" formControlName="anoPublicacaoFiltro"
+                                        id="anoPublicacao">
+                                        <option [ngValue]="anoPublicacaoFiltro" *ngFor="let anoOption of list.list">
+                                            {{anoOption.ano}}</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="d-flex flex-row" for="orientador">Orientador(a)</label>
+                                    <select class="form-control" formControlName="orientadorFiltro" id="orientador">
+                                        <option [ngValue]="orientadorFiltro"
+                                            *ngFor="let orientadorOption of list.list">
+                                            {{orientadorOption.autor}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row pt-lg-3 col-md-12" *ngIf="isTipoPresent">
+                                <div class="col-md-12">
+                                    <label class="d-flex flex-row" for="autor">Autor(a)</label>
+                                    <input type="text" class="form-control" id="autor" placeholder="Palavra-chave"
+                                        formControlName="autorFiltro">
+                                </div>
+                            </div>
+
+                            <div class="row pt-lg-3 col-md-12" *ngIf="isTipoPresent">
+                                <div class="col-md-12">
+                                    <label class="d-flex flex-row" for="titulo">Titulo</label>
+                                    <input type="text" class="form-control" id="titulo" placeholder="Palavra-chave"
+                                        formControlName="tituloFiltro">
+                                </div>
+                            </div>
+
+                            <div class="row pt-lg-3 col-md-12" *ngIf="isTipoPresent">
+                                <div class="col-md-12">
+                                    <label class="d-flex flex-row" for="resumo">Resumo</label>
+                                    <input type="text" class="form-control" id="resumo" placeholder="Palavra-chave"
+                                        formControlName="resumoFiltro">
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="isTipoPresent">
+                            <button id="filter" class="btn btn-primary" (click)="filter()"><span>Filtrar</span></button>
+                            <button id="filter" class="btn btn-primary" (click)="isTipoPresent = false"><span>limpar Filtro</span></button>
+                        </div>
+                    </form>
+                </div>
                 <!-- Tabs -->
                 <ul class="nav nav-pills mb-3">
                     <li><a class="nav-link active" data-bs-toggle="pill" href="#tab1">Teses</a></li>

@@ -16,10 +16,16 @@ const datas = require("./datas.json");
     ) { }
   
     public getTeseDissertacao(data: string, tipo: string): Observable<any> {
-      if(tipo === '1') {
-        return of(teses);
-      } else {
-        return of(dissertacoes);
+      switch (tipo) {
+        case '1':
+          console.log('entrou tese', teses);
+          return of(teses);
+        case '2':
+          console.log('entrou dissertacoes');
+          return of(dissertacoes);
+        case '3' : default:
+          console.log('entrou ambas');
+          return of(teses, dissertacoes);
       }
     }
 
