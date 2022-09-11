@@ -9,9 +9,11 @@ import { OnlyAdminUsersGuard } from './admin-user-guard';
 import { AdminComponent } from './admin.component';
 import { HistoricoAdminComponent } from './historico-admin/historico-admin.component';
 import { PagesAdminComponent } from './pages-admin/pages-admin.component';
+import { TeseDissertacaoAdminComponent } from './tese-dissertacao-admin/tese-dissertacao-admin.component';
+import { TeseOuDissertacaoComponent } from './tese-dissertacao-admin/tese-ou-dissertacao/tese-ou-dissertacao.component';
 
 @NgModule({
-  declarations: [AdminComponent, HistoricoAdminComponent, PagesAdminComponent],
+  declarations: [AdminComponent, HistoricoAdminComponent, PagesAdminComponent, TeseDissertacaoAdminComponent, TeseOuDissertacaoComponent],
   imports: [CommonModule, AdminRoutingModule, HttpClientModule, AngularEditorModule, SharedModule],
   providers: [OnlyAdminUsersGuard],
 })
