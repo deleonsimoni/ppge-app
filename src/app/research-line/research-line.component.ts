@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ResearchLineService } from './research-line.service';
 
@@ -10,12 +11,13 @@ import { ResearchLineService } from './research-line.service';
 })
 export class ResearchLineComponent implements OnInit {
 
-  public researchLineType = 1;
+  public researchLineType = '';
   public researchLineInfo: any = {};
 
   constructor(
     private researchLineService: ResearchLineService,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private _sanitizer: DomSanitizer
   ) {
     window.scroll({
       top: 0,
@@ -31,9 +33,18 @@ export class ResearchLineComponent implements OnInit {
     })
   }
 
-  private getCommitteeService(researchLineType: number) {
+  private getCommitteeService(researchLineType: string) {
+    console.log("researchLineType: ", typeof researchLineType);
+    
     this.researchLineService.getInfoResearchLine(researchLineType).subscribe(data => {
-      this.researchLineInfo = data;
+      console.log("DATA: ", data);
+      
+      if(data.length > 0) {
+        data[0].content = this._sanitizer.bypassSecurityTrustHtml(data[0].content);
+        this.researchLineInfo = data[0];
+      } else {
+        this.researchLineInfo = {title: "Página não encontrada!", content: "<h3>Verifique a url, ou tente acessá-la através do menu acima.</h3>"}
+      }
     });
   }
 

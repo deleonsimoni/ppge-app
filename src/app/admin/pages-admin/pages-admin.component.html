@@ -29,6 +29,7 @@
                 <mat-option value="regras_credenciamento">Regras de Credenciamento</mat-option>
               </mat-optgroup>
               <mat-option value="linha_pesquisa">Linhas de pesquisa</mat-option>
+              <mat-option value="cursos">Cursos</mat-option>
             </mat-select>
           </mat-form-field>
 
@@ -41,13 +42,13 @@
             </mat-select>
           </mat-form-field>
 
-          <div class="form-row justify-content-center mb-3">
+          <div *ngIf="expansivel" class="form-row justify-content-center mb-3">
             <div class="form-group col-md-12">
-              <button mat-raised-button color="accent">
-                  BOTAO
+              <button class="ml-2 mb-3" type="button" *ngFor="let item of dataExpansivel; let i = index" (click)="selecionarPagina(i)" mat-stroked-button [ngClass]="{'activate': i==data.index}" color="accent">
+                  {{ item.navTitle }} {{!item._id ? "(Novo*)" : ""}}
               </button>
-              <button mat-raised-button color="accent">
-                  
+              <button class="ml-2 mb-3" type="button" (click)="adicionarPagina()" mat-stroked-button color="accent">
+                <svg height="16px" width="24px" fill="#ff4081" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
               </button>
             </div>
           </div>
@@ -59,31 +60,47 @@
                   <button (click)="loadImage()"><i class="fas fa-camera"></i></button>
               </div>
           </div> -->
-
-
-          <div class="form-row justify-content-center">
+          
+          <div *ngIf="(!!dataExpansivel && dataExpansivel.length > 0) || !dataExpansivel">
+            <div *ngIf="expansivel" class="form-row justify-content-center">
               <div class="form-group col-md-12">
-                  <input type="text" name="title" class="form-control" id="title" placeholder="Título"
-                      formControlName="title" />
-
+                  <input type="text" name="navTitle" class="form-control" id="navTitle" placeholder="Título de Navegação"
+                      formControlName="navTitle" />
+                </div>
+            </div>
+  
+            <div class="form-row justify-content-center">
+                <div class="form-group col-md-12">
+                    <input type="text" name="title" class="form-control" id="title" placeholder="Título"
+                        formControlName="title" />
+  
+                </div>
+            </div>
+  
+            <div class="form-row justify-content-center">
+                <div class="form-group col-md-12">
+  
+                    <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [(ngModel)]="content" [config]="editorConfig"></angular-editor>
+  
+                </div>
+            </div>
+  
+            <input type="file" class="custom-file-input" style="display: none;" accept="image/*" data-max-size="5048"
+                id="image" (change)="setImage($event.target.files)" #fileInput />
+  
+            <div class="row justify-content-around m-4">
+              <div class="col-8">
+                <button class="w-100" type="submit" mat-raised-button color="primary">
+                    Submeter
+                </button>
               </div>
-          </div>
-
-          <div class="form-row justify-content-center">
-              <div class="form-group col-md-12">
-
-                  <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [(ngModel)]="content" [config]="editorConfig"></angular-editor>
-
+              <div *ngIf="expansivel" class="col-3">
+                <button (click)="excluirPaginaExpansivel()" class="w-100" type="button" mat-raised-button color="warn">
+                    Excluir
+                </button>
               </div>
-          </div>
+            </div>
 
-          <input type="file" class="custom-file-input" style="display: none;" accept="image/*" data-max-size="5048"
-              id="image" (change)="setImage($event.target.files)" #fileInput />
-
-          <div class="row justify-content-end m-4">
-              <button type="submit" mat-raised-button color="primary">
-                  Submeter
-              </button>
           </div>
       </form>
   </div>

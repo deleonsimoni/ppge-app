@@ -10,6 +10,7 @@ module.exports = router;
 
 /* Page */
 router.get('/page/:selectedPage', asyncHandler(getPage));
+router.get('/page/:selectedPage/headers', asyncHandler(getHeadersPage));
 
 router.post('/page/:selectedPage', [passport.authenticate('jwt', {
   session: false
@@ -28,6 +29,11 @@ async function getPage(req, res) {
   res.json(response);
 }
 
+async function getHeadersPage(req, res) {
+  let response = await siteCtrl.getHeadersPage(req);
+  res.json(response);
+}
+
 async function insertPage(req, res) {
   let response = await siteCtrl.insertPage(req, req.user._id);
   res.json(response);
@@ -39,7 +45,7 @@ async function updatePage(req, res) {
 }
 
 async function deletePage(req, res) {
-  let response = await siteCtrl.deletePage(req.params.selectedPage, req.params.id);
+  let response = await siteCtrl.deletePage(req, req.params.id);
   res.json(response);
 }
 

@@ -50,35 +50,14 @@
             <li class="dropdown"><a><span>{{'linhas.pesquisa' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li><a class="nav-link scrollto" [routerLink]="'linhas-pesquisa/1'">{{'curriculo.ensino.diferenca' |
-                    translate}}</a></li>
-                <li><a class="nav-link scrollto" [routerLink]="'linhas-pesquisa/2'">{{'formacao.docente.subjetividade' |
-                    translate}}</a></li>
-                <li><a class="nav-link scrollto"
-                    [routerLink]="'linhas-pesquisa/3'">{{'politicas.instituicoes.educacionais' | translate}}</a></li>
-                <li><a class="nav-link scrollto"
-                    [routerLink]="'linhas-pesquisa/4'">{{'historia.sujeitos.processos.educacionais' | translate}}</a>
-                </li>
-                <li><a class="nav-link scrollto"
-                    [routerLink]="'linhas-pesquisa/5'">{{'inclusao.etica.interculturalidade' | translate}}</a></li>
-                <li><a class="nav-link scrollto"
-                    [routerLink]="'linhas-pesquisa/6'">{{'estado.trabalho.movimentos.sociais' | translate}}</a></li>
-
+                <li *ngFor="let item of headerData.linha_pesquisa; let i = index"><a class="nav-link scrollto" [routerLink]="['linhas-pesquisa/', item._id]">{{ item.navTitle }}</a></li>
               </ul>
             </li>
 
             <li class="dropdown"><a><span>{{'cursos' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li><a class="nav-link scrollto" [routerLink]="'cursos/1'">{{'mestrado' | translate}}</a></li>
-                <li><a class="nav-link scrollto" [routerLink]="'cursos/2'">{{'doutorado' | translate}}</a></li>
-                <li><a class="nav-link scrollto" [routerLink]="'cursos/3'">{{'ementario.disciplinhas' | translate}}</a>
-                </li>
-                <li><a class="nav-link scrollto" [routerLink]="'cursos/4'">{{'oferta.horario.semestre.curso' |
-                    translate}}</a></li>
-                <li><a class="nav-link scrollto" [routerLink]="'cursos/5'">{{'calendario.letivo' | translate}}</a></li>
-                <li><a class="nav-link scrollto" [routerLink]="'cursos/6'">{{'matricula' | translate}}</a></li>
-
+                <li *ngFor="let item of headerData.cursos; let i = index"><a class="nav-link scrollto" [routerLink]="['cursos/', item._id]">{{ item.navTitle }}</a></li>
               </ul>
             </li>
 

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const LinhaPesquisaSchema = new mongoose.Schema(
+const CursosSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -42,4 +42,4 @@ const LinhaPesquisaSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('LinhaPesquisa', LinhaPesquisaSchema);
+module.exports = mongoose.model('Cursos', CursosSchema);

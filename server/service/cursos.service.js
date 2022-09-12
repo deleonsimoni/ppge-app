@@ -1,15 +1,15 @@
 const { default: mongoose } = require("mongoose");
-const LinhaPesquisaModel = require("../models/linha-pesquisa.model");
+const CursosModel = require("../models/cursos.model");
 
 module.exports = {
-  getLinhaPesquisa,
-  getHeadersLinhaPesquisa,
-  insertLinhaPesquisa,
-  updateLinhaPesquisa,
-  deleteLinhaPesquisa,
+  getCursos,
+  getHeadersCursos,
+  insertCursos,
+  updateCursos,
+  deleteCursos,
 };
 
-async function getLinhaPesquisa(req) {
+async function getCursos(req) {
   console.log('AAAAA: ', req.query)
   let whereClause = {};
   if(!!req.query.language) whereClause.language = req.query.language
@@ -17,28 +17,27 @@ async function getLinhaPesquisa(req) {
     if(!mongoose.Types.ObjectId.isValid(req.query._id)) return [];
     whereClause._id = req.query._id
   }
-  console.log("whereClause: ", whereClause);
-  return await LinhaPesquisaModel.find(whereClause)
+  return await CursosModel.find(whereClause)
     .sort({
       createAt: -1
     });
 }
 
-async function getHeadersLinhaPesquisa(req) {
+async function getHeadersCursos(req) {
   console.log('AAAAA: ', req.query)
   let whereClause = {};
   if(!!req.query.language) whereClause.language = req.query.language
-  return await LinhaPesquisaModel.find(whereClause, {navTitle: 1})
+  return await CursosModel.find(whereClause, {navTitle: 1})
     .sort({
       createAt: -1
     });
 }
 
-async function updateLinhaPesquisa(req, idUser) {
+async function updateCursos(req, idUser) {
 
   let form = req.body.formulario;
   form.user = idUser;
-  return await LinhaPesquisaModel.findOneAndUpdate({
+  return await CursosModel.findOneAndUpdate({
     _id: form._id
   },
     form, {
@@ -47,14 +46,14 @@ async function updateLinhaPesquisa(req, idUser) {
 
 }
 
-async function insertLinhaPesquisa(req, idUser) {
+async function insertCursos(req, idUser) {
   let form = req.body.formulario;
   form.user = idUser;
-  return await new LinhaPesquisaModel(form).save();
+  return await new CursosModel(form).save();
 }
 
-async function deleteLinhaPesquisa(id) {
-  return await LinhaPesquisaModel.findOneAndRemove({
+async function deleteCursos(id) {
+  return await CursosModel.findOneAndRemove({
     _id: id
   });
 }

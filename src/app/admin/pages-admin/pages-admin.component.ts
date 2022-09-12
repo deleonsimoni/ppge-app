@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { ToastrService } from 'ngx-toastr';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-pages-admin',
@@ -15,6 +16,8 @@ export class PagesAdminComponent implements OnInit {
   public form: FormGroup;
   carregando = false;
   data: any;
+  dataExpansivel: any = null;
+  expansivel: boolean = false;
   @ViewChild('imageRender', { static: false }) imageRender: ElementRef;
   private image: FileList;
 
@@ -53,6 +56,7 @@ export class PagesAdminComponent implements OnInit {
   ) {
     this.form = this.builder.group({
       _id: [],
+      navTitle: [null, []],
       title: [null, [Validators.required]],
       content: [null, [Validators.required]],
       logo: [null, []],
@@ -77,13 +81,44 @@ export class PagesAdminComponent implements OnInit {
     const languageSelected = this.form.value.language;
     this.siteService.listPage(pageSelected, languageSelected).subscribe((res: any) => {
       this.carregando = false;
-      this.data = res;
-      this.form.reset();
-      this.form.patchValue({...res, selectPage:pageSelected, language:languageSelected});
+      console.log("res.constructor.name: ", res.constructor.name);
+      if(res.constructor.name === "Array") {
+        this.expansivel = true;
+        this.dataExpansivel = res;
+        this.data = res[0];
+        if(this.data) this.data.index = 0;
+        this.form.reset();
+        this.form.patchValue({...res[0], selectPage:pageSelected, language:languageSelected});
+      } else {
+        this.expansivel = false;
+        this.dataExpansivel = null;
+        this.data = res;
+        this.form.reset();
+        this.form.patchValue({...res, selectPage:pageSelected, language:languageSelected});
+      }
     }, err => {
       this.carregando = false;
       this.toastr.error(`Ocorreu um erro ao listar a página`, 'Atenção: ');
     });
+  }
+
+  adicionarPagina() {
+    console.log("chamou");
+    const newPage = {navTitle: "Título menu"};
+    this.dataExpansivel.push(newPage);
+    this.selecionarPagina(this.dataExpansivel.length -1);
+  }
+
+  selecionarPagina(index) {
+    const pageSelected = this.form.value.selectPage;
+    const languageSelected = this.form.value.language;
+    this.form.reset();
+    this.form.patchValue({...this.dataExpansivel[index], selectPage:pageSelected, language:languageSelected});
+    this.data = this.dataExpansivel[index];
+    if(this.data) {
+      console.log("this.data: ", this.data);
+      this.data.index = index;
+    }
   }
 
   public register() {
@@ -111,7 +146,7 @@ export class PagesAdminComponent implements OnInit {
       }
 
     } else
-      this.toastr.error('Ocorreu um erro ao atualizar', 'Atenção: ');
+      this.toastr.error('Preencha corretamente o formulário!', 'Atenção: ');
   }
 
   public loadImage() {
@@ -127,6 +162,27 @@ export class PagesAdminComponent implements OnInit {
     reader.onloadend = (e) => { // function call once readAsDataUrl is completed
       this.imageRender.nativeElement.src = e.target['result']; // Set image in element
     };
+  }
+
+  public excluirPaginaExpansivel() {
+    const pageSelected = this.form.value.selectPage;
+    console.log("Excluir: ", this.data);
+    console.log("Excluir dataExpansivel: ", this.dataExpansivel[this.data.index]);
+    if(!!this.data._id) {
+      this.siteService.deletarPage(this.form.value, pageSelected)
+        .pipe(take(1))
+        .subscribe(() => {
+          this.toastr.success(`Página deletada`, 'Sucesso');
+          this.dataExpansivel.splice(this.data.index, 1);
+          this.selecionarPagina(0);
+        },
+        () => {
+          this.toastr.error('Ocorreu um erro ao deletar', 'Atenção: ');
+        });
+    } else {
+      this.dataExpansivel.splice(this.data.index, 1);
+      this.selecionarPagina(0);
+    }
   }
 
 }

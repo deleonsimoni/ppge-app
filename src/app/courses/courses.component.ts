@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { CoursesService } from './courses.service';
 
@@ -10,12 +11,13 @@ import { CoursesService } from './courses.service';
 })
 export class CoursesComponent implements OnInit {
 
-  public coursesType = 1;
+  public coursesType = '';
   public coursesInfo: any = {};
 
   constructor(
     private coursesService: CoursesService,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private _sanitizer: DomSanitizer
   ) {
     window.scroll({
       top: 0,
@@ -31,9 +33,15 @@ export class CoursesComponent implements OnInit {
     })
   }
 
-  private getCoursesService(coursesType: number) {
+  private getCoursesService(coursesType: string) {
     this.coursesService.getInfoCourses(coursesType).subscribe(data => {
-      this.coursesInfo = data;
+      
+      if(data.length > 0) {
+        data[0].content = this._sanitizer.bypassSecurityTrustHtml(data[0].content);
+        this.coursesInfo = data[0];
+      } else {
+        this.coursesInfo = {title: "Página não encontrada!", content: "<h3>Verifique a url, ou tente acessá-la através do menu acima.</h3>"}
+      }
     });
   }
 

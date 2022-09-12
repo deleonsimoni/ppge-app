@@ -8,18 +8,13 @@ const objetivoService = require('../service/objetivo.service');
 const regrasCredenciamentoService = require('../service/regras-credenciamento.service');
 const regulamentoPpgeService = require('../service/regulamento-ppge.service');
 const linhaPesquisaService = require('../service/linha_pesquisa.service');
+const cursosService = require('../service/cursos.service');
 const S3Uploader = require('./aws.controller');
-const HistoricoModel = require('../models/historico.model');
-const ObjetivosModel = require('../models/objetivos.model');
-const ComissaoDeliberativaModel = require('../models/comissao-deliberativa.model');
-const ComissaoGestaoModel = require('../models/comissao-gestao.model');
-const AgendaColegiadoModel = require('../models/agenda-colegiado.model');
-const AgendaComissaoDeliberativaModel = require('../models/agenda-comissao-deliberativa.model');
-const AgendaComissaoGestaoModel = require('../models/agenda-comissao-gestao.model');
 
 
 module.exports = {
   getPage,
+  getHeadersPage,
   insertPage,
   updatePage,
   deletePage,
@@ -82,9 +77,19 @@ const pagesFunctions = {
   },
   linha_pesquisa: {
     get: async (req) => await linhaPesquisaService.getLinhaPesquisa(req),
+    getHeaders: async (req) => await linhaPesquisaService.getHeadersLinhaPesquisa(req),
     update: async (req, idUser) => await linhaPesquisaService.updateLinhaPesquisa(req, idUser),
     insert: async (req, idUser) => await linhaPesquisaService.insertLinhaPesquisa(req, idUser),
     delete: async (id) => await linhaPesquisaService.deleteLinhaPesquisa(id),
+    
+  },
+  cursos: {
+    get: async (req) => await cursosService.getCursos(req),
+    getHeaders: async (req) => await cursosService.getHeadersCursos(req),
+    update: async (req, idUser) => await cursosService.updateCursos(req, idUser),
+    insert: async (req, idUser) => await cursosService.insertCursos(req, idUser),
+    delete: async (id) => await cursosService.deleteCursos(id),
+    
   },
 }
 
@@ -93,6 +98,10 @@ const pagesFunctions = {
 /* Page */
 async function getPage(req) {
   return pagesFunctions[req.params.selectedPage].get(req);
+}
+
+async function getHeadersPage(req) {
+  return pagesFunctions[req.params.selectedPage].getHeaders(req);
 }
 
 async function updatePage(req, idUser) {
