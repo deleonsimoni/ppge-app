@@ -8,11 +8,9 @@ module.exports = {
 };
 
 async function getHistorico(req) {
-  console.log('getHistorico: ', req.query._id);
   let whereClause = {};
   if(!!req.query.language) whereClause.language = req.query.language
   if(!!req.query._id) whereClause._id = req.query._id
-  console.log('getHistorico, whereClause: ', whereClause);
   return await HistoricoModel.findOne(whereClause)
     .sort({
       createAt: -1

@@ -34,11 +34,8 @@ export class ResearchLineComponent implements OnInit {
   }
 
   private getCommitteeService(researchLineType: string) {
-    console.log("researchLineType: ", typeof researchLineType);
     
     this.researchLineService.getInfoResearchLine(researchLineType).subscribe(data => {
-      console.log("DATA: ", data);
-      
       if(data.length > 0) {
         data[0].content = this._sanitizer.bypassSecurityTrustHtml(data[0].content);
         this.researchLineInfo = data[0];

@@ -75,7 +75,6 @@ export class HistoricoAdminComponent implements OnInit {
   }
 
   public register() {
-    console.log("this.form", this.form);
     
     if (this.form.valid) {
 

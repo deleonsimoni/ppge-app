@@ -81,7 +81,6 @@ export class PagesAdminComponent implements OnInit {
     const languageSelected = this.form.value.language;
     this.siteService.listPage(pageSelected, languageSelected).subscribe((res: any) => {
       this.carregando = false;
-      console.log("res.constructor.name: ", res.constructor.name);
       if(res.constructor.name === "Array") {
         this.expansivel = true;
         this.dataExpansivel = res;
@@ -103,7 +102,6 @@ export class PagesAdminComponent implements OnInit {
   }
 
   adicionarPagina() {
-    console.log("chamou");
     const newPage = {navTitle: "Título menu"};
     this.dataExpansivel.push(newPage);
     this.selecionarPagina(this.dataExpansivel.length -1);
@@ -116,7 +114,6 @@ export class PagesAdminComponent implements OnInit {
     this.form.patchValue({...this.dataExpansivel[index], selectPage:pageSelected, language:languageSelected});
     this.data = this.dataExpansivel[index];
     if(this.data) {
-      console.log("this.data: ", this.data);
       this.data.index = index;
     }
   }
@@ -166,8 +163,6 @@ export class PagesAdminComponent implements OnInit {
 
   public excluirPaginaExpansivel() {
     const pageSelected = this.form.value.selectPage;
-    console.log("Excluir: ", this.data);
-    console.log("Excluir dataExpansivel: ", this.dataExpansivel[this.data.index]);
     if(!!this.data._id) {
       this.siteService.deletarPage(this.form.value, pageSelected)
         .pipe(take(1))

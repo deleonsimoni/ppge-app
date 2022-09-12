@@ -10,14 +10,12 @@ module.exports = {
 };
 
 async function getLinhaPesquisa(req) {
-  console.log('AAAAA: ', req.query)
   let whereClause = {};
   if(!!req.query.language) whereClause.language = req.query.language
   if(!!req.query._id) {
     if(!mongoose.Types.ObjectId.isValid(req.query._id)) return [];
     whereClause._id = req.query._id
   }
-  console.log("whereClause: ", whereClause);
   return await LinhaPesquisaModel.find(whereClause)
     .sort({
       createAt: -1
@@ -25,7 +23,6 @@ async function getLinhaPesquisa(req) {
 }
 
 async function getHeadersLinhaPesquisa(req) {
-  console.log('AAAAA: ', req.query)
   let whereClause = {};
   if(!!req.query.language) whereClause.language = req.query.language
   return await LinhaPesquisaModel.find(whereClause, {navTitle: 1})

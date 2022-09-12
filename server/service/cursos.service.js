@@ -10,7 +10,6 @@ module.exports = {
 };
 
 async function getCursos(req) {
-  console.log('AAAAA: ', req.query)
   let whereClause = {};
   if(!!req.query.language) whereClause.language = req.query.language
   if(!!req.query._id) {
@@ -24,7 +23,6 @@ async function getCursos(req) {
 }
 
 async function getHeadersCursos(req) {
-  console.log('AAAAA: ', req.query)
   let whereClause = {};
   if(!!req.query.language) whereClause.language = req.query.language
   return await CursosModel.find(whereClause, {navTitle: 1})
