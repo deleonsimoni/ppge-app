@@ -70,8 +70,6 @@ export class TeseDissertacaoAdminComponent implements OnInit {
     this.siteService.listTeseDissertacao('1').subscribe((res: any) => {
       this.carregando = false;
       this.datas = res;
-      console.log(res);
-      //this.form.patchValue(res[0]);
     }, err => {
       this.carregando = false;
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
@@ -79,8 +77,6 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   }
 
   public register() {
-    console.log("this.form", this.form);
-
     if (this.form.valid) {
 
       if (this.form.value._id) {
@@ -114,8 +110,6 @@ export class TeseDissertacaoAdminComponent implements OnInit {
     this.siteService.listTeseDissertacao(tipo).subscribe((res: any) => {
       this.carregando = false;
       this.datas = res;
-      console.log(res);
-      //this.form.patchValue(res[0]);
     }, err => {
       this.carregando = false;
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
@@ -123,12 +117,11 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   }
 
   reciverFeedback(resposta) {
-    if(resposta.acao === 'atualizar') {
+    if (resposta.acao === 'atualizar') {
       this.getPerTipo(resposta.tipo);
-    } else if(resposta.acao === 'editar') {
+    } else if (resposta.acao === 'editar') {
       this.form.patchValue(resposta.obj);
     }
-    console.log('Foi emitido o evento  >>>> ', resposta);
   }
 
 }

@@ -10,7 +10,7 @@ import { ComfirmDeleteComponent } from "./confirm-delet.component";
     templateUrl: './tese-ou-dissertacao.component.html',
     styleUrls: ['./../tese-dissertacao-admin.component.scss'],
 })
-export class TeseOuDissertacaoComponent implements OnInit {
+export class TeseOuDissertacaoComponent {
     @Input()
     datas: any[];
 
@@ -20,12 +20,7 @@ export class TeseOuDissertacaoComponent implements OnInit {
         private siteService: SiteAdminService,
         private toastr: ToastrService,
         public dialog: MatDialog
-
     ) { }
-
-    ngOnInit(): void {
-        console.log(this.datas);
-    }
 
     apagarTitulo(id, nome, titulo, tipo) {
         const dialogRef = this.dialog.open(ComfirmDeleteComponent, {
@@ -36,7 +31,7 @@ export class TeseOuDissertacaoComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 this.siteService.deletarTeseDissertacao(id).subscribe((res: any) => {
-                    this.resposta.emit({"acao": "atualizar", "tipo": tipo})
+                    this.resposta.emit({ "acao": "atualizar", "tipo": tipo })
                 }, err => {
                     this.toastr.error('Ocorreu um erro ao apagar', 'Atenção: ');
                 });
@@ -45,6 +40,6 @@ export class TeseOuDissertacaoComponent implements OnInit {
     }
 
     editarTitulo(di) {
-        this.resposta.emit({"acao": "editar", obj: di});
+        this.resposta.emit({ "acao": "editar", obj: di });
     }
 }
