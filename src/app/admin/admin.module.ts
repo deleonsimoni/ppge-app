@@ -9,9 +9,10 @@ import { OnlyAdminUsersGuard } from './admin-user-guard';
 import { AdminComponent } from './admin.component';
 import { HistoricoAdminComponent } from './historico-admin/historico-admin.component';
 import { PagesAdminComponent } from './pages-admin/pages-admin.component';
+import { CorpoDocenteComponent } from './corpo-docente/corpo-docente.component';
 
 @NgModule({
-  declarations: [AdminComponent, HistoricoAdminComponent, PagesAdminComponent],
+  declarations: [AdminComponent, HistoricoAdminComponent, PagesAdminComponent, CorpoDocenteComponent],
   imports: [CommonModule, AdminRoutingModule, HttpClientModule, AngularEditorModule, SharedModule],
   providers: [OnlyAdminUsersGuard],
 })

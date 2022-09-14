@@ -10,63 +10,23 @@
         </div>
 
         <div class="row gy-5">
-
-            <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-in" data-aos-delay="200">
+            <div *ngFor="let profile of listProfile" class="col-xl-4 col-md-6 d-flex" data-aos="zoom-in" data-aos-delay="200">
                 <div class="team-member">
                     <div class="member-img">
                         <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
                     </div>
                     <div class="member-info">
                         <div class="social">
-                            <a href=""><i class="bi bi-twitter"></i></a>
-                            <a href=""><i class="bi bi-facebook"></i></a>
-                            <a href=""><i class="bi bi-instagram"></i></a>
-                            <a href=""><i class="bi bi-linkedin"></i></a>
+                            <a *ngIf="profile.twitter" href=""><i class="bi bi-twitter"></i></a>
+                            <a *ngIf="profile.facebook" href=""><i class="bi bi-facebook"></i></a>
+                            <a *ngIf="profile.instagram" href=""><i class="bi bi-instagram"></i></a>
+                            <a *ngIf="profile.linkedin" href=""><i class="bi bi-linkedin"></i></a>
                         </div>
-                        <h4 *ngIf="tipoDocente == 2">Thiago Ranniery</h4>
-                        <h4 *ngIf="tipoDocente == 1">João Zildo</h4>
+                        <h4>{{ profile.fullName }}</h4>
 
-                        <span>PhD em educação</span>
-                        <span>Linha de pesquisa: A sociedade </span>
+                        <span>{{ profile.academicFormation }}</span>
+                        <span>Linha de pesquisa: {{ profile.researchLine }} </span>
 
-                    </div>
-                </div>
-            </div><!-- End Team Member -->
-
-            <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-in" data-aos-delay="400">
-                <div class="team-member">
-                    <div class="member-img">
-                        <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                    </div>
-                    <div class="member-info">
-                        <div class="social">
-                            <a href=""><i class="bi bi-twitter"></i></a>
-                            <a href=""><i class="bi bi-facebook"></i></a>
-                            <a href=""><i class="bi bi-instagram"></i></a>
-                            <a href=""><i class="bi bi-linkedin"></i></a>
-                        </div>
-                        <h4>Marcela Educação</h4>
-                        <span>PhD em educação</span>
-                        <span>Linha de pesquisa: A sociedade </span>
-                    </div>
-                </div>
-            </div><!-- End Team Member -->
-
-            <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-in" data-aos-delay="600">
-                <div class="team-member">
-                    <div class="member-img">
-                        <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
-                    </div>
-                    <div class="member-info">
-                        <div class="social">
-                            <a href=""><i class="bi bi-twitter"></i></a>
-                            <a href=""><i class="bi bi-facebook"></i></a>
-                            <a href=""><i class="bi bi-instagram"></i></a>
-                            <a href=""><i class="bi bi-linkedin"></i></a>
-                        </div>
-                        <h4>Rodrigo Rosistolato</h4>
-                        <span>PhD em educação</span>
-                        <span>Linha de pesquisa: A sociedade </span>
                     </div>
                 </div>
             </div><!-- End Team Member -->

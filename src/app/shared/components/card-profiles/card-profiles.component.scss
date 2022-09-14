@@ -1,0 +1,76 @@
+@mixin text-properties($size, $weight, $mb) {
+  font-size: $size;
+  font-weight: $weight;
+  margin-bottom: $mb;
+}
+
+$main-class: ".profile-card";
+
+.profile-card {
+  padding: 16px;
+  box-shadow: 0px 0px 14px 2px #00000038;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+
+  &__image {
+    width: 100%;
+    border-radius: 4px;
+  }
+
+  &__action {
+    display: none;
+  }
+
+  &--blur-content {
+    filter: none;
+  }
+
+  &:hover {
+    #{$main-class} {
+      &__action {
+        display: block;
+        z-index: 999;
+        position: absolute;
+        background-color: #000c;
+        top: 0;
+        left: 12px;
+        height: 100%;
+        width: 100%;
+        border-radius: 4px;
+      }
+
+      &--blur-content {
+        filter: blur(2px);
+      }
+    }
+  }
+}
+
+.content-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  &__btn {
+    margin: 0px 6px;
+    font-size: 14px;
+  }
+}
+
+.profile-data {
+  &__group {
+    @include text-properties(12px, 700, 2px);
+  }
+
+  &__name {
+    @include text-properties(14px, 400,  2px);
+  }
+
+  &__email {
+    word-break: break-word;
+  }
+}
+

@@ -7,6 +7,7 @@ import { Injectable } from '@angular/core';
 export class SiteAdminService {
   private readonly URL_API_PPGE = '/api/ppge';
   private readonly URL_HISTORICO = `${this.URL_API_PPGE}/historico`;
+  private readonly URL_CORPO_DOCENTE = `${this.URL_API_PPGE}/corpo-docente`;
   private readonly URL_OBJETIVOS = `${this.URL_API_PPGE}/objetivos`;
   private readonly URL_PAGE = `${this.URL_API_PPGE}/page`;
 
@@ -77,4 +78,25 @@ export class SiteAdminService {
     return this.http.put(`${this.URL_OBJETIVOS}/${form._id}`, {formulario: form}, {headers});
   }
   /* Fim Objetivos */
+
+  /* Corpo Docente */
+  listCorpoDocente() {
+    return this.http.get(`${this.URL_CORPO_DOCENTE}`);
+  }
+
+  cadastrarCorpoDocente(form: any) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.post(`${this.URL_CORPO_DOCENTE}`, {formulario: form}, {headers});
+  }
+
+  atualizarCorpoDocente(form: any) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.put(`${this.URL_CORPO_DOCENTE}/${form._id}`, {formulario: form}, {headers});
+  }
+
+  deletarCorpoDocente(form: any) {
+    return this.http.delete(`${this.URL_CORPO_DOCENTE}/${form._id}`);
+  }
+
+  /* Fim Corpo Docente */
 }

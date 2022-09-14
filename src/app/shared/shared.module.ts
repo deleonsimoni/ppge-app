@@ -19,6 +19,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTreeModule } from '@angular/material/tree';
+import { ComponentsModule } from './components/components.module';
 
 @NgModule({
   exports: [
@@ -42,6 +43,7 @@ import { MatTreeModule } from '@angular/material/tree';
     MatExpansionModule,
     MatFormFieldModule,
     MatProgressBarModule,
+    ComponentsModule,
   ],
   declarations: [
   ],

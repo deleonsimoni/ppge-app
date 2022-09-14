@@ -10,7 +10,7 @@ const regulamentoPpgeService = require('../service/regulamento-ppge.service');
 const linhaPesquisaService = require('../service/linha_pesquisa.service');
 const cursosService = require('../service/cursos.service');
 const S3Uploader = require('./aws.controller');
-
+const CorpoDocenteModel = require('../models/corpo-docente.model');
 
 module.exports = {
   getPage,
@@ -18,6 +18,11 @@ module.exports = {
   insertPage,
   updatePage,
   deletePage,
+
+  getCorpoDocente,
+  insertCorpoDocente,
+  updateCorpoDocente,
+  deleteCorpoDocente,
 };
 
 const pagesFunctions = {
@@ -115,6 +120,42 @@ async function insertPage(req, idUser) {
 
 async function deletePage(req, id) {
   return pagesFunctions[req.params.selectedPage].delete(id);
+}
+/* Fim Page*/
+
+
+/* Corpo Docente */
+async function getCorpoDocente(req) {
+  let whereParam = {};
+  if(req.query.type) whereParam.type = req.query.type
+  return await CorpoDocenteModel.find(whereParam)
+    .sort({
+      createAt: -1
+    });
+}
+
+async function updateCorpoDocente(req, idUser) {
+
+  let form = req.body.formulario;
+  form.user = idUser;
+  return await CorpoDocenteModel.findOneAndUpdate({
+    _id: form._id
+  },
+    form, {
+    upsert: true
+  });
+}
+
+async function insertCorpoDocente(req, idUser) {
+  let form = req.body.formulario;
+  form.user = idUser;
+  return await new CorpoDocenteModel(form).save();
+}
+
+async function deleteCorpoDocente(id) {
+  return await CorpoDocenteModel.findOneAndRemove({
+    _id: id
+  });
 }
 /* Fim Page*/
 

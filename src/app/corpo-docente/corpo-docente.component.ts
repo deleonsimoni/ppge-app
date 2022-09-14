@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CorpoDocenteService } from './corpo-docente.service';
 
 @Component({
   selector: 'app-corpo-docente',
@@ -9,10 +10,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class CorpoDocenteComponent implements OnInit {
 
   tipoDocente = 1;
+  public listProfile: any = [];
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private corpoDocenteService: CorpoDocenteService,
   ) {
 
   }
@@ -20,8 +23,15 @@ export class CorpoDocenteComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(routeParams => {
       this.tipoDocente = routeParams.tipo;
+      this.getAllCorpoDocenteByTipo();
     });
+  }
 
+  getAllCorpoDocenteByTipo() {
+    this.corpoDocenteService.getCorpoDocente(this.tipoDocente)
+      .subscribe(data => {
+        this.listProfile = data;
+      })
   }
 
 }

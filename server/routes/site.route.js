@@ -50,3 +50,40 @@ async function deletePage(req, res) {
 }
 
 /* Fim Page */
+
+/* Corpo Docente */
+router.get('/corpo-docente', asyncHandler(getCorpoDocente));
+
+router.post('/corpo-docente', [passport.authenticate('jwt', {
+  session: false
+}), requireAdmin], asyncHandler(insertCorpoDocente));
+
+router.put('/corpo-docente/:id', [passport.authenticate('jwt', {
+  session: false
+}), requireAdmin], asyncHandler(updateCorpoDocente));
+
+router.delete('/corpo-docente/:id', [passport.authenticate('jwt', {
+  session: false
+}), requireAdmin], asyncHandler(deleteCorpoDocente));
+
+async function getCorpoDocente(req, res) {
+  let response = await siteCtrl.getCorpoDocente(req);
+  res.json(response);
+}
+
+async function insertCorpoDocente(req, res) {
+  let response = await siteCtrl.insertCorpoDocente(req, req.user._id);
+  res.json(response);
+}
+
+async function updateCorpoDocente(req, res) {
+  let response = await siteCtrl.updateCorpoDocente(req, req.user._id);
+  res.json(response);
+}
+
+async function deleteCorpoDocente(req, res) {
+  let response = await siteCtrl.deleteCorpoDocente(req.params.id);
+  res.json(response);
+}
+
+/* Fim Corpo Docente */
