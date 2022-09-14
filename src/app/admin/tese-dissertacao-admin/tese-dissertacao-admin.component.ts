@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tese-dissertacao-admin',
@@ -15,6 +16,8 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   public form: FormGroup;
   carregando = false;
   datas: any[];
+
+  eventSubscriber: Subscription;
 
   editorConfig: AngularEditorConfig = {
     editable: true,
@@ -47,7 +50,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   constructor(
     private builder: FormBuilder,
     private siteService: SiteAdminService,
-    private toastr: ToastrService,
+    private toastr: ToastrService
   ) {
     this.form = this.builder.group({
       _id: [],
@@ -81,26 +84,30 @@ export class TeseDissertacaoAdminComponent implements OnInit {
     if (this.form.valid) {
 
       if (this.form.value._id) {
-
-        // this.siteService.atualizarHistorico(this.form.value)
-        //   .subscribe((res: any) => {
-        //     this.toastr.success('Histórico alterado com sucesso', 'Sucesso');
-        //   }, (err: any) => {
-        //     this.toastr.error('Ocorreu um erro ao atualizar', 'Atenção: ');
-        //     console.log(err);
-        //   });
-
+        this.siteService.atualizarTeseDissertacao(this.form.value)
+          .subscribe((res: any) => {
+            this.toastr.success('Histórico alterado com sucesso', 'Sucesso');
+            this.getPerTipo(res.tipo);
+            this.limparForm();
+          }, (err: any) => {
+            this.toastr.error('Ocorreu um erro ao atualizar', 'Atenção: ');
+          });
       } else {
         this.siteService.cadastrarTeseDissertacao(this.form.value)
           .subscribe((res: any) => {
             this.toastr.success('Histórico cadastrado', 'Sucesso');
+            this.getPerTipo(res.tipo);
+            this.limparForm();
           }, (err: any) => {
             this.toastr.error('Ocorreu um erro ao cadastrar', 'Atenção: ');
-            console.log(err);
           });
       }
 
     }
+  }
+
+  limparForm() {
+    this.form.reset();
   }
 
   getPerTipo(tipo: string) {
@@ -114,4 +121,14 @@ export class TeseDissertacaoAdminComponent implements OnInit {
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
     });
   }
+
+  reciverFeedback(resposta) {
+    if(resposta.acao === 'atualizar') {
+      this.getPerTipo(resposta.tipo);
+    } else if(resposta.acao === 'editar') {
+      this.form.patchValue(resposta.obj);
+    }
+    console.log('Foi emitido o evento  >>>> ', resposta);
+  }
+
 }

@@ -11,9 +11,11 @@ import { HistoricoAdminComponent } from './historico-admin/historico-admin.compo
 import { PagesAdminComponent } from './pages-admin/pages-admin.component';
 import { TeseDissertacaoAdminComponent } from './tese-dissertacao-admin/tese-dissertacao-admin.component';
 import { TeseOuDissertacaoComponent } from './tese-dissertacao-admin/tese-ou-dissertacao/tese-ou-dissertacao.component';
+import { BreakStringPipe } from '@app/shared/pipes/stringPipe/break-string,pipe';
+import { ComfirmDeleteComponent } from './tese-dissertacao-admin/tese-ou-dissertacao/confirm-delet.component';
 
 @NgModule({
-  declarations: [AdminComponent, HistoricoAdminComponent, PagesAdminComponent, TeseDissertacaoAdminComponent, TeseOuDissertacaoComponent],
+  declarations: [AdminComponent, HistoricoAdminComponent, PagesAdminComponent, TeseDissertacaoAdminComponent, TeseOuDissertacaoComponent, BreakStringPipe, ComfirmDeleteComponent],
   imports: [CommonModule, AdminRoutingModule, HttpClientModule, AngularEditorModule, SharedModule],
   providers: [OnlyAdminUsersGuard],
 })

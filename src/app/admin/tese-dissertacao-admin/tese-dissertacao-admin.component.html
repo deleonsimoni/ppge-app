@@ -8,19 +8,25 @@
     <i class="fa-solid fa-address-card"></i>
     <div class="row justify-content-center">
 
-        <div class="col-md-6">
+        <div class="col-md-12">
             <form role="form" class="reviewer" [formGroup]="form" (ngSubmit)="register()">
                 <div class="form-row justify-content-center">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-2">
                         <select class="form-select" aria-label="Selecione o tipo do projeto:" formControlName="tipo">
                             <option value="1">Tese</option>
                             <option value="2">Dissertação</option>
                         </select>
                     </div>
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-5">
                         <input type="text" name="ano" class="form-control" id="ano" placeholder="Ano"
                             formControlName="ano" />
+                    </div>
+
+                    <div class="form-group col-md-5">
+                        <input type="text" name="ingresso" class="form-control" id="ingresso" placeholder="Ingresso"
+                            formControlName="ingresso" />
+
                     </div>
                 </div>
                 <div class="form-row justify-content-center">
@@ -53,13 +59,6 @@
                 </div>
                 <div class="form-row justify-content-center">
                     <div class="form-group col-md-12">
-                        <input type="text" name="ingresso" class="form-control" id="ingresso" placeholder="Ingresso"
-                            formControlName="ingresso" />
-
-                    </div>
-                </div>
-                <div class="form-row justify-content-center">
-                    <div class="form-group col-md-12">
                         <input type="text" name="linkTitulo" class="form-control" id="linkTitulo"
                             placeholder="Link do Título" formControlName="linkTitulo" />
 
@@ -73,7 +72,7 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-12">
             <section id="about" class="about">
                 <div class="container" data-aos="fade-up">
                     <div class="row text-center" data-aos="fade-up" data-aos-delay="200">
@@ -87,11 +86,11 @@
                         <div class="tab-content">
 
                             <div class="tab-pane fade show active" id="tab1">
-                                <app-tese-ou-dissertacao [datas]="datas"></app-tese-ou-dissertacao>
+                                <app-tese-ou-dissertacao [datas]="datas" (resposta)="reciverFeedback($event)"></app-tese-ou-dissertacao>
                             </div><!-- End Tab 1 Content -->
 
                             <div class="tab-pane fade show" id="tab2">
-                                <app-tese-ou-dissertacao [datas]="datas"></app-tese-ou-dissertacao>
+                                <app-tese-ou-dissertacao [datas]="datas" (resposta)="reciverFeedback($event)"></app-tese-ou-dissertacao>
                             </div><!-- End Tab 2 Content -->
                         </div>
                     </div>

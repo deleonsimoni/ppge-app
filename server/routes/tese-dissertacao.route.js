@@ -13,6 +13,10 @@ router.post('/tese-dissertacao', [passport.authenticate('jwt', {
     session: false
   }), requireAdmin], asyncHandler(insertTeseDissertacao));
 
+  router.put('/tese-dissertacao/:id', [passport.authenticate('jwt', {
+    session: false
+  }), requireAdmin], asyncHandler(updateTeseDissertacaoPage));
+
   router.delete('/tese-dissertacao/:id', [passport.authenticate('jwt', {
     session: false
   }), requireAdmin], asyncHandler(deleteTeseDissertacao));
@@ -20,6 +24,10 @@ router.post('/tese-dissertacao', [passport.authenticate('jwt', {
 async function insertTeseDissertacao(req, res) {
 let response = await teseDissertacaoCtrl.insertTeseDissertacao(req, req.user._id);
 res.json(response);
+}
+async function updateTeseDissertacaoPage(req, res) {
+  let response = await teseDissertacaoCtrl.updateTeseDissertacao(req, req.user._id);
+  res.json(response);
 }
 
 async function getAllTeseDissertacao(req, res) {

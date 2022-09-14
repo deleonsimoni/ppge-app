@@ -89,6 +89,11 @@ export class SiteAdminService {
     return this.http.post(`${this.URL_TESE_DISSERTACAO}`, {formulario: form}, {headers});
   }
 
+  atualizarTeseDissertacao(form: any) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.put(`${this.URL_TESE_DISSERTACAO}/${form._id}`, {formulario: form}, {headers});
+  }
+
   deletarTeseDissertacao(id: any) {
     return this.http.delete(`${this.URL_TESE_DISSERTACAO}/${id}`);
   }

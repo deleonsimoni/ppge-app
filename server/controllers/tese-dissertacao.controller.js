@@ -29,3 +29,7 @@ async function deleteTeseDissertacao(req, id) {
 async function getAllTeseDissertacao(tipo) {
   return functions.getPerTipo(tipo);
 }
+
+async function updateTeseDissertacao(req, idUser) {
+  return functions.update(req, idUser);
+}
