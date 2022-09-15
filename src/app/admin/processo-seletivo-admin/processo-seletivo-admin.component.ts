@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { SiteAdminService } from "@app/shared/services/site-admin.service";
 import { ToastrService } from "ngx-toastr";
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
     selector: 'app-processo-seletivo-admin',
@@ -12,6 +13,34 @@ import { ToastrService } from "ngx-toastr";
 export class ProcessoSeletivoAdminComponent implements OnInit {
     form: any;
 
+    editorConfig: AngularEditorConfig = {
+      editable: true,
+      spellcheck: true,
+      height: "15rem",
+      minHeight: "5rem",
+      placeholder: "Enter text here...",
+      translate: "no",
+      defaultParagraphSeparator: "p",
+      defaultFontName: "Arial",
+      toolbarHiddenButtons: [["bold"]],
+      sanitize: false,
+      customClasses: [
+        {
+          name: "quote",
+          class: "quote"
+        },
+        {
+          name: "redText",
+          class: "redText"
+        },
+        {
+          name: "titleText",
+          class: "titleText",
+          tag: "h1"
+        }
+      ]
+    };
+
     constructor(
         private builder: FormBuilder,
         private siteService: SiteAdminService,
@@ -19,11 +48,8 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
     ) {
         this.form = this.builder.group({
             _id: [],
-            pagina: ["tese/dissertacao", [Validators.required]],
             title: [null, [Validators.required]],
-            edital: [null, [Validators.required]],
-            formulario: [null, [Validators.required]],
-            complemento: [null, [Validators.required]],
+            content: [null, [Validators.required]]
         });
     }
 
