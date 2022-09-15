@@ -99,6 +99,8 @@ export class TeseDissertacaoAdminComponent implements OnInit {
           });
       }
 
+    } else {
+      this.toastr.error('Preencha corretamente o formulário!', 'Atenção: ');
     }
   }
 

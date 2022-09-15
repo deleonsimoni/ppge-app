@@ -13,9 +13,10 @@ import { TeseDissertacaoAdminComponent } from './tese-dissertacao-admin/tese-dis
 import { TeseOuDissertacaoComponent } from './tese-dissertacao-admin/tese-ou-dissertacao/tese-ou-dissertacao.component';
 import { BreakStringPipe } from '@app/shared/pipes/stringPipe/break-string,pipe';
 import { ComfirmDeleteComponent } from './tese-dissertacao-admin/tese-ou-dissertacao/confirm-delet.component';
+import { ProcessoSeletivoAdminComponent } from './processo-seletivo-admin/processo-seletivo-admin.component';
 
 @NgModule({
-  declarations: [AdminComponent, HistoricoAdminComponent, PagesAdminComponent, TeseDissertacaoAdminComponent, TeseOuDissertacaoComponent, BreakStringPipe, ComfirmDeleteComponent],
+  declarations: [AdminComponent, HistoricoAdminComponent, PagesAdminComponent, TeseDissertacaoAdminComponent, TeseOuDissertacaoComponent, BreakStringPipe, ComfirmDeleteComponent, ProcessoSeletivoAdminComponent],
   imports: [CommonModule, AdminRoutingModule, HttpClientModule, AngularEditorModule, SharedModule],
   providers: [OnlyAdminUsersGuard],
 })
