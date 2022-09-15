@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SiteAdminService } from '@app/shared/services/site-admin.service';
+import { ToastrService } from 'ngx-toastr';
 import { TeseDissertacaoService } from './tese-dissertacao.service';
 
 @Component({
@@ -14,20 +16,25 @@ export class TeseDissertacaoComponent implements OnInit {
   list: any[] | undefined;
   isTipoPresent: boolean | false;
   
-  public filterForm: FormGroup;
+  public form: FormGroup;
 
   constructor(
     private teseDissertacaoService: TeseDissertacaoService,
+    private siteService: SiteAdminService,
+    private toastr: ToastrService,
     private builder: FormBuilder
     ) {
-      this.filterForm = this.builder.group({
-        tipoFiltro: [null],
-        anoPublicacaoFiltro: [null],
-        orientadorFiltro: [null],
-        autorFiltro: [null],
-        tituloFiltro: [null],
-        resumoFiltro: [null]
+      this.form = this.builder.group({
+        tipo: [null],
+        ano: [null],
+        autor: [null],
+        titulo: [null],
+        dataSala: [null],
+        banca: [null],
+        ingresso: [null],
+        linkTitulo: [null],
       });
+
       window.scroll({
       top: 0,
       left: 0
@@ -47,35 +54,15 @@ export class TeseDissertacaoComponent implements OnInit {
 
   filter() {
     console.log('entrou aqui');
-    console.log(this.filterForm);
-  }
+    console.log(this.form);
+    
 
-  getTipo(tipo: string) {
-    switch(tipo) {
-      case 'dissertacao':
-        this.teseDissertacaoService.getTeseDissertacao('data', '2').subscribe(arr => {
-          this.list = arr;
-          this.isTipoPresent = true;
-        });
-        break;
-      case 'tese':
-        this.teseDissertacaoService.getTeseDissertacao('data', '1').subscribe(arr => {
-          this.list = arr;
-          this.isTipoPresent = true;
-        });
-        break;
-      case 'ambas':
-        this.teseDissertacaoService.getTeseDissertacao('data', '3').subscribe(arr => {
-          this.list = arr;
-          this.isTipoPresent = true;
-        });
-        break
-      default:
-        this.teseDissertacaoService.getTeseDissertacao('data', '3').subscribe(arr => {
-          this.list = arr;
-          this.isTipoPresent = true;
-        });
-        break;
-    }
+    this.siteService.getTeseDissertacao(this.form.value).subscribe((res: any) => {
+      this.datas = res;
+      console.log('resposta banco')
+;      console.log(res);
+    }, err => {
+      this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
+    });
   }
 }

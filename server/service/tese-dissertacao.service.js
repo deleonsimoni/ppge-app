@@ -4,7 +4,8 @@ module.exports = {
     insertTeseDissertacao,
     updateTeseDissertacao,
     deleteTeseDissertacao,
-    getAllTeseDissertacao
+    getAllTeseDissertacao,
+    getFillTeseDissertacao
 };
 
 async function insertTeseDissertacao(req, idUser) {
@@ -33,5 +34,14 @@ async function getAllTeseDissertacao(tipo) {
 async function deleteTeseDissertacao(id) {
     return await TeseDissertacaoModel.findOneAndRemove({
         _id: id
+    });
+}
+
+async function getFillTeseDissertacao(req) {
+    console.log('getDissertacao: ', req.query.autor);
+    let whereClause = {};
+    let form = req.body.formulario;
+    return await TeseDissertacaoModel.find({
+        form
     });
 }

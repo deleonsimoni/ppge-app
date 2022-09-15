@@ -9,6 +9,8 @@ module.exports = router;
 
 router.get('/tese-dissertacao/:tipo', asyncHandler(getAllTeseDissertacao));
 
+router.get('/tese-dissertacao/get-filter', asyncHandler(getFillTeseDissertacao));
+
 router.post('/tese-dissertacao', [passport.authenticate('jwt', {
     session: false
   }), requireAdmin], asyncHandler(insertTeseDissertacao));
@@ -33,6 +35,11 @@ async function updateTeseDissertacaoPage(req, res) {
 async function getAllTeseDissertacao(req, res) {
     let response = await teseDissertacaoCtrl.getAllTeseDissertacao(req.params.tipo);
     res.json(response);
+}
+
+async function getFillTeseDissertacao(req, res) {
+  let response = await teseDissertacaoCtrl.getFillTeseDissertacao(req);
+  res.json(response);
 }
 
 async function deleteTeseDissertacao(req, res) {
