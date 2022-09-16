@@ -9,7 +9,6 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { OnlyAdminUsersGuard } from './admin-user-guard';
 import { AdminComponent } from './admin.component';
 import { CorpoDocenteComponent } from './corpo-docente/corpo-docente.component';
-import { HistoricoAdminComponent } from './historico-admin/historico-admin.component';
 import { PagesAdminComponent } from './pages-admin/pages-admin.component';
 import { ProcessoSeletivoAdminComponent } from './processo-seletivo-admin/processo-seletivo-admin.component';
 import { TeseDissertacaoAdminComponent } from './tese-dissertacao-admin/tese-dissertacao-admin.component';
@@ -20,7 +19,7 @@ import { ViewHtmlProcessoSeletivoComponent } from './processo-seletivo-admin/mod
 import { ViewInscritosProcessoSeletivoComponent } from './processo-seletivo-admin/modal/view-inscritos-processo-seletivo.component';
 
 @NgModule({
-  declarations: [AdminComponent, HistoricoAdminComponent, PagesAdminComponent, TeseDissertacaoAdminComponent, TeseOuDissertacaoComponent, BreakStringPipe, ComfirmDeleteComponent, ProcessoSeletivoAdminComponent, CorpoDocenteComponent, ComfirmDeleteProcessoComponent, ViewHtmlProcessoSeletivoComponent, ViewInscritosProcessoSeletivoComponent],
+  declarations: [AdminComponent, PagesAdminComponent, TeseDissertacaoAdminComponent, TeseOuDissertacaoComponent, BreakStringPipe, ComfirmDeleteComponent, ProcessoSeletivoAdminComponent, CorpoDocenteComponent, ComfirmDeleteProcessoComponent, ViewHtmlProcessoSeletivoComponent, ViewInscritosProcessoSeletivoComponent],
   imports: [CommonModule, AdminRoutingModule, HttpClientModule, AngularEditorModule, SharedModule],
   providers: [OnlyAdminUsersGuard],
 })
