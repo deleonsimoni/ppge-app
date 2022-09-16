@@ -10,6 +10,7 @@ export class SiteAdminService {
   private readonly URL_CORPO_DOCENTE = `${this.URL_API_PPGE}/corpo-docente`;
   private readonly URL_OBJETIVOS = `${this.URL_API_PPGE}/objetivos`;
   private readonly URL_TESE_DISSERTACAO = '/api/projetos/tese-dissertacao';
+  private readonly URL_PROCESSO_SELETIVO = `${this.URL_API_PPGE}/processo-seletivo`;
   private readonly URL_PAGE = `${this.URL_API_PPGE}/page`;
 
   constructor(
@@ -124,4 +125,27 @@ export class SiteAdminService {
     return this.http.delete(`${this.URL_TESE_DISSERTACAO}/${id}`);
   }
   /* Fim Tese DISSERTACAO */
+  /* Processo Seletivo */
+  cadastrarProcessoSeletivo(form: any) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.post(`${this.URL_PROCESSO_SELETIVO}`, {formulario: form}, {headers});
+  }
+
+  listProcessoSeletivo() {
+    return this.http.get(this.URL_PROCESSO_SELETIVO);
+  }
+
+  deletarProcessoSeletivo(id: any) {
+    return this.http.delete(`${this.URL_PROCESSO_SELETIVO}/${id}`);
+  }
+
+  atualizarProcessoSeletivo(form: any) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/${form._id}`, {formulario: form}, {headers});
+  }
+
+  listProcessoSeletivoInscritos(id) {
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/${id}`);
+  }
+  /* Fim Processo Seletivo */
 }
