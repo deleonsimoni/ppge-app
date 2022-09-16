@@ -4,6 +4,7 @@ const asyncHandler = require('express-async-handler');
 const siteCtrl = require('../controllers/site.controller');
 const requireAdmin = require('../middleware/require-admin');
 const fileUpload = require('express-fileupload');
+const processoSeletivoRoutes = require('./processo-seletivo.route');
 
 const router = express.Router();
 module.exports = router;
@@ -87,3 +88,4 @@ async function deleteCorpoDocente(req, res) {
 }
 
 /* Fim Corpo Docente */
+router.use('/', processoSeletivoRoutes);
