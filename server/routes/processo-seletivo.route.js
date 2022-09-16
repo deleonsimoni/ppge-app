@@ -51,13 +51,13 @@ async function insertProcessoSeletivo(req, res) {
 }
 
 async function subscribeProcessoSeletivo(req, res) {
-  let response = await processoSeletivoCtrl.subscribeProcessoSeletivo(req.params.id, req.user._id);
-  res.json(response);
+  await processoSeletivoCtrl.subscribeProcessoSeletivo(req.params.id, req.user._id);
+  res.json({});
 }
 
 async function unsubscribeProcessoSeletivo(req, res) {
-  let response = await processoSeletivoCtrl.unsubscribeProcessoSeletivo(req.params.id, req.user._id);
-  res.json(response);
+  await processoSeletivoCtrl.unsubscribeProcessoSeletivo(req.params.id, req.user._id);
+  res.json({});
 }
 
 async function updateProcessoSeletivo(req, res) {
@@ -66,6 +66,6 @@ async function updateProcessoSeletivo(req, res) {
 }
 
 async function deleteProcessoSeletivo(req, res) {
-  let response = await processoSeletivoCtrl.deleteProcessoSeletivo(req, req.params.id);
-  res.json(response);
+  await processoSeletivoCtrl.deleteProcessoSeletivo(req.params.id);
+  res.json({});
 }

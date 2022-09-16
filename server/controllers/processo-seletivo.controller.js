@@ -24,7 +24,9 @@ async function getProcessoSeletivo(req) {
 }
 
 async function getInscritosByProcessoSelectivo(idProcessoSeletivo) {
-  return await ProcessoSeletivoModel.findOne({_id: idProcessoSeletivo}, {enrolled: 1})
+  return await ProcessoSeletivoModel
+    .findOne({_id: idProcessoSeletivo}, {enrolled: 1})
+    .populate({path: 'enrolled', select: 'fullname socialname'})
     .sort({
       createAt: -1
     });
