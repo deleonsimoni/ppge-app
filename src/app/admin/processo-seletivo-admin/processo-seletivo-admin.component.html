@@ -1,0 +1,44 @@
+<div class="container">
+    <div class="row justify-content-between">
+        <div class="section-header" mat-dialog-title>
+            <h2>Administrar - Processo Seletivo</h2>
+        </div>
+    </div>
+    <em class="fa fa-undo"></em>
+    <i class="fa-solid fa-address-card"></i>
+    <div class="row justify-content-center">
+
+        <div class="col-md-12">
+            <form role="form" class="reviewer" [formGroup]="form" (ngSubmit)="register()">
+                <div class="form-row justify-content-center">
+                    <div class="form-group col-md-12">
+                        <input type="text" name="titulo" class="form-control" id="titulo" placeholder="Título"
+                            formControlName="titulo" />
+
+                    </div>
+                </div>
+
+                <div class="form-row justify-content-center">
+                    <div class="form-group col-md-12">
+      
+                        <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [(ngModel)]="content" [config]="editorConfig"></angular-editor>
+      
+                    </div>
+                </div>
+                <div class="form-row justify-content-center">
+                    <div class="form-group col-md-12">
+                        <input type="text" name="linkEdital" class="form-control" id="linkEdital"
+                            placeholder="Link do Edital" formControlName="linkEdital" />
+
+                    </div>
+                </div>
+
+                <div class="row justify-content-end m-4">
+                    <button type="submit" mat-raised-button color="primary">
+                        Submeter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

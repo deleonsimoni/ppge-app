@@ -7,7 +7,7 @@
                         <h2>Painel Gerencial - PPGE</h2>
                     </div>
 
-                    <div [ngClass]="{'section-header': menu.length > 1}">
+                    <div [ngClass]="{'section-header': menu.length > 2}">
                         <ul class="nav nav-pills">
                             <li class="nav-item m-2" *ngFor="let item of menu">
                                 <button mat-raised-button color="accent" [routerLink]="[item.path]">

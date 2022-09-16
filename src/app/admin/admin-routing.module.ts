@@ -6,6 +6,8 @@ import { AdminComponent } from './admin.component';
 import { CorpoDocenteComponent } from './corpo-docente/corpo-docente.component';
 import { HistoricoAdminComponent } from './historico-admin/historico-admin.component';
 import { PagesAdminComponent } from './pages-admin/pages-admin.component';
+import { ProcessoSeletivoAdminComponent } from './processo-seletivo-admin/processo-seletivo-admin.component';
+import { TeseDissertacaoAdminComponent } from './tese-dissertacao-admin/tese-dissertacao-admin.component';
 
 const routes: Routes = [
   {
@@ -26,6 +28,12 @@ const routes: Routes = [
       {
         path: 'corpo-docente', component: CorpoDocenteComponent
       },
+      {
+        path: 'tese-dissertacao', component: TeseDissertacaoAdminComponent
+      },
+      {
+        path: 'processo-seletivo', component: ProcessoSeletivoAdminComponent
+      }
     ],
   },
 ];

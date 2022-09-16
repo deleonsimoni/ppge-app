@@ -9,6 +9,7 @@ export class SiteAdminService {
   private readonly URL_HISTORICO = `${this.URL_API_PPGE}/historico`;
   private readonly URL_CORPO_DOCENTE = `${this.URL_API_PPGE}/corpo-docente`;
   private readonly URL_OBJETIVOS = `${this.URL_API_PPGE}/objetivos`;
+  private readonly URL_TESE_DISSERTACAO = '/api/projetos/tese-dissertacao';
   private readonly URL_PAGE = `${this.URL_API_PPGE}/page`;
 
   constructor(
@@ -99,4 +100,28 @@ export class SiteAdminService {
   }
 
   /* Fim Corpo Docente */
+  /* Tese DISSERTACAO */
+  listTeseDissertacao(tipo: string) {
+    return this.http.get(`${this.URL_TESE_DISSERTACAO}/${tipo}`);
+  }
+
+  cadastrarTeseDissertacao(form: any) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.post(`${this.URL_TESE_DISSERTACAO}`, {formulario: form}, {headers});
+  }
+
+  atualizarTeseDissertacao(form: any) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.put(`${this.URL_TESE_DISSERTACAO}/${form._id}`, {formulario: form}, {headers});
+  }
+
+  getTeseDissertacao(form: any) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.put(`${this.URL_TESE_DISSERTACAO}/get-filter`, {formulario: form}, {headers});
+  }
+
+  deletarTeseDissertacao(id: any) {
+    return this.http.delete(`${this.URL_TESE_DISSERTACAO}/${id}`);
+  }
+  /* Fim Tese DISSERTACAO */
 }

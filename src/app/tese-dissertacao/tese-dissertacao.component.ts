@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SiteAdminService } from '@app/shared/services/site-admin.service';
+import { ToastrService } from 'ngx-toastr';
 import { TeseDissertacaoService } from './tese-dissertacao.service';
 
 @Component({
@@ -9,20 +12,57 @@ export class TeseDissertacaoComponent implements OnInit {
 
   public datas: any[] | undefined;
 
-  constructor(private teseDissertacaoService: TeseDissertacaoService) {
-    window.scroll({
+  // Filtros
+  list: any[] | undefined;
+  isTipoPresent: boolean | false;
+  
+  public form: FormGroup;
+
+  constructor(
+    private teseDissertacaoService: TeseDissertacaoService,
+    private siteService: SiteAdminService,
+    private toastr: ToastrService,
+    private builder: FormBuilder
+    ) {
+      this.form = this.builder.group({
+        tipo: [null],
+        ano: [null],
+        autor: [null],
+        titulo: [null],
+        dataSala: [null],
+        banca: [null],
+        ingresso: [null],
+        linkTitulo: [null],
+      });
+
+      window.scroll({
       top: 0,
       left: 0
     })
   }
 
   ngOnInit(): void {
+    this.isTipoPresent = false;
     this.getTeseDissertacao();
   }
 
   private getTeseDissertacao() {
     this.teseDissertacaoService.getDatasTeseDissertacao('1').subscribe(arr => {
       this.datas = arr;
+    });
+  }
+
+  filter() {
+    console.log('entrou aqui');
+    console.log(this.form);
+    
+
+    this.siteService.getTeseDissertacao(this.form.value).subscribe((res: any) => {
+      this.datas = res;
+      console.log('resposta banco')
+;      console.log(res);
+    }, err => {
+      this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
     });
   }
 }

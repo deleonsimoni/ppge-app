@@ -10,7 +10,8 @@ export class AdminComponent implements OnInit {
     { name: 'ADMINISTRAR PÁGINAS', path: '/admin/administrar-paginas' },
     { name: 'CORPO DOCENTE', path: '/admin/corpo-docente' },
     { name: 'HISTÓRICO', path: '/admin/historico' },
-
+    { name: 'Tese e Dissertação', path: '/admin/tese-dissertacao'},
+    { name: 'Processo Seletivo', path: '/admin/processo-seletivo'}
 
   ];
 

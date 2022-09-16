@@ -1,0 +1,31 @@
+<div class="card-body">
+    <div class="text-center">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Autor</th>
+                    <th scope="col">Titulo</th>
+                    <th scope="col">Data/Sala</th>
+                    <th scope="col">Banca</th>
+                    <th scope="col" style="width: 100px;">Ingresso</th>
+                    <th scope="col">Link</th>
+                    <th scope="col">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let di of datas; let i= index" style="font-size: 10px;">
+                    <th scope="row">{{ di.autor }}</th>
+                    <th scope="row">{{ di.titulo }}</th>
+                    <th scope="row">{{ di.dataSala }}</th>
+                    <th scope="row">{{ di.banca }}</th>
+                    <th scope="row">{{ di.ingresso }}</th>
+                    <th scope="row">{{ di.linkTitulo | breakString }}</th>
+                    <th scope="row">
+                        <span class="material-icons md-18 btn" (click)="apagarTitulo(di._id, di.autor, di.titulo, di.tipo)">delete</span>
+                        <span class="material-icons md-18 btn" (click)="editarTitulo(di)">edit_square</span>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

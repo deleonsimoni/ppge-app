@@ -5,6 +5,63 @@
             <div>
                 <h3 class="pt-0 pt-lg-5">Selecione o tipo de texto academico e seu periodo para visualização.</h3>
 
+                <div>
+                    <form role="form" class="reviewer" [formGroup]="form" (ngSubmit)="filter()">
+                        <span class="col-md-12 d-flex flex-row pt-0">PESQUISAR:</span>
+                        <div class="form-row justify-content-center">
+                            <div class="form-group col-md-2">
+                                <select class="form-select" aria-label="Selecione o tipo do projeto:" formControlName="tipo">
+                                    <option value="1">Tese</option>
+                                    <option value="2">Dissertação</option>
+                                </select>
+                            </div>
+        
+                            <div class="form-group col-md-5">
+                                <input type="text" name="ano" class="form-control" id="ano" placeholder="Ano"
+                                    formControlName="ano" />
+                            </div>
+        
+                            <div class="form-group col-md-5">
+                                <input type="text" name="ingresso" class="form-control" id="ingresso" placeholder="Ingresso"
+                                    formControlName="ingresso" />
+        
+                            </div>
+                        </div>
+                        <div class="form-row justify-content-center">
+                            <div class="form-group col-md-6">
+                                <input type="text" name="autor" class="form-control" id="autor" placeholder="Autor"
+                                    formControlName="autor" />
+        
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="text" name="titulo" class="form-control" id="titulo" placeholder="Título"
+                                    formControlName="titulo" />
+        
+                            </div>
+                        </div>
+                        <div class="form-row justify-content-center">
+                            <div class="form-group col-md-6">
+                                <input type="text" name="dataSala" class="form-control" id="dataSala" placeholder="Data e Sala"
+                                    formControlName="dataSala" />
+        
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="text" name="banca" class="form-control" id="banca" placeholder="Banca"
+                                    formControlName="banca" />
+        
+                            </div>
+                        </div>
+        
+                        <div class="row justify-content-center">
+                            <button type="submit" class="btn btn-primary col-md-2">
+                                Filtrar
+                            </button>
+                            <button (click)="isTipoPresent = false" class="btn btn-danger col-md-2">
+                                limpar Filtro
+                            </button>
+                        </div>
+                    </form>
+                </div>
                 <!-- Tabs -->
                 <ul class="nav nav-pills mb-3">
                     <li><a class="nav-link active" data-bs-toggle="pill" href="#tab1">Teses</a></li>
