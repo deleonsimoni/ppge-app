@@ -106,6 +106,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
 
   limparForm() {
     this.form.reset();
+    this.form.patchValue({pagina: 'tese/dissertacao'});
   }
 
   getPerTipo(tipo: string) {

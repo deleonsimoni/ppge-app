@@ -47,8 +47,9 @@ async function getFillTeseDissertacao(req) {
     if(!!req.query.dataSala) whereClause.dataSala = req.query.dataSala
     if(!!req.query.banca) whereClause.banca = req.query.banca
     if(!!req.query.ingresso) whereClause.ingresso = req.query.ingresso
-    let form = req.body.formulario;
-    return await TeseDissertacaoModel.findOne(whereClause)
+
+    console.log('query aqui ------>: ', whereClause);
+    return await TeseDissertacaoModel.find(whereClause)
     .sort({
       createAt: -1
     });

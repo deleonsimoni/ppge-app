@@ -38,6 +38,7 @@ async function getAllTeseDissertacao(req, res) {
 }
 
 async function getFillTeseDissertacao(req, res) {
+  console.log('entrou aqui na ');
   let response = await teseDissertacaoCtrl.getFillTeseDissertacao(req);
   res.json(response);
 }

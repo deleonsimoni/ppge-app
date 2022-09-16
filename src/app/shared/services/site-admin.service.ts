@@ -117,8 +117,16 @@ export class SiteAdminService {
   }
 
   getTeseDissertacao(form: any) {
-    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
-    return this.http.put(`${this.URL_TESE_DISSERTACAO}/get-filter`, {formulario: form}, {headers});
+    let params = new HttpParams()
+    .set('tipo', form.tipo)
+    .set('ano', form.ano)
+    .set('ingresso', form.ingresso)
+    .set('autor', form.autor)
+    .set('titulo', form.titulo)
+    .set('dataSala', form.dataSala)
+    .set('banca', form.banca)
+
+    return this.http.get(`${this.URL_TESE_DISSERTACAO}/get-filter`, {params});
   }
 
   deletarTeseDissertacao(id: any) {
