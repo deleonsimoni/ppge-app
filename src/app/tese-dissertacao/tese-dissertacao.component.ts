@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { ToastrService } from 'ngx-toastr';
-import { TeseDissertacaoService } from './tese-dissertacao.service';
 
 @Component({
   selector: 'app-tese-dissertacao',
@@ -10,7 +9,7 @@ import { TeseDissertacaoService } from './tese-dissertacao.service';
 })
 export class TeseDissertacaoComponent implements OnInit {
 
-  public datas: any[] | undefined;
+  public datas: any[];
 
   // Filtros
   list: any[] | undefined;
@@ -20,7 +19,6 @@ export class TeseDissertacaoComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
-    private teseDissertacaoService: TeseDissertacaoService,
     private siteService: SiteAdminService,
     private toastr: ToastrService,
     private builder: FormBuilder
@@ -44,12 +42,21 @@ export class TeseDissertacaoComponent implements OnInit {
 
   ngOnInit(): void {
     this.isTipoPresent = false;
-    this.getTeseDissertacao();
+    this.getTeseDissertacao('1');
   }
 
-  private getTeseDissertacao() {
-    this.teseDissertacaoService.getDatasTeseDissertacao('1').subscribe(arr => {
-      this.datas = arr;
+  private getTeseDissertacao(tipo) {
+    this.siteService.listTeseDissertacao(tipo).subscribe((res: any) => {
+      var data = new Array;
+      res.filter( r => {
+        data.push(r.ano);
+      });
+
+      this.datas = data.filter(function(este, i) {
+        return data.indexOf(este) === i;
+    });
+    }, err => {
+      this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
     });
   }
 

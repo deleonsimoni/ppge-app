@@ -129,6 +129,11 @@ export class SiteAdminService {
     return this.http.get(`${this.URL_TESE_DISSERTACAO}/get-filter/filter`, { params: params });
   }
 
+  getTeseDissertacaoData(ano: string, tipo: string) {
+    let params = new HttpParams().set('tipo', tipo).set('ano', ano);
+    return this.http.get(`${this.URL_TESE_DISSERTACAO}/get-filter/filter`, { params: params });
+  }
+
   deletarTeseDissertacao(id: any) {
     return this.http.delete(`${this.URL_TESE_DISSERTACAO}/${id}`);
   }

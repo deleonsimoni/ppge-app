@@ -1,7 +1,7 @@
 <div *ngIf="!checkAno">
-  <div *ngFor="let t of datas.data" class="d-flex align-items-center mt-4" (click)="getAllTeseAno(t.ano)" >
+  <div *ngFor="let t of datas" class="d-flex align-items-center mt-4" (click)="getAllTeseAno(t)" >
     <i class="bi bi-check2"></i>
-    <h4>Defendidas em {{t.ano}}</h4>
+    <h4>Defendidas em {{t}}</h4>
   </div>
 </div>
 
@@ -19,7 +19,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let t of teses.tese; let i= index">
+      <tr *ngFor="let t of teses; let i= index">
         <th scope="row">{{ i+1 }}</th>
         <th scope="row">{{ t.autor }}</th>
         <th scope="row">

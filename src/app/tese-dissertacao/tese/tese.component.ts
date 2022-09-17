@@ -1,28 +1,31 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { array } from 'joi';
-import { TeseDissertacaoService } from '../tese-dissertacao.service';
+import { Component, Input } from '@angular/core';
+import { SiteAdminService } from '@app/shared/services/site-admin.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-tese',
   templateUrl: './tese.component.html',
   styleUrls: ['./../tese-dissertacao.component.scss']
 })
-export class TeseComponent implements OnInit {
+export class TeseComponent {
 
   @Input()
-  datas: any[] | undefined;
+  datas: any[];
 
   checkAno: any | false;
   teses: any[] | undefined;
 
-  constructor(private teseDissertacaoService: TeseDissertacaoService) { }
+  constructor(
+    private siteService: SiteAdminService,
+    private toastr: ToastrService,
+  ) { }
 
-  ngOnInit(): void {}
-
-  getAllTeseAno(dataSelect: string) {
+  getAllTeseAno(ano) {
     this.checkAno = true;
-    this.teseDissertacaoService.getTeseDissertacao(dataSelect, '1').subscribe(arr => {
-      this.teses = arr;
+    this.siteService.getTeseDissertacaoData(ano, '1').subscribe((res: any) => {
+      this.teses = res;
+    }, err => {
+      this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
     });
   }
 }  
