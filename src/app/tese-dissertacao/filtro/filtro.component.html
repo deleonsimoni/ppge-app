@@ -1,0 +1,31 @@
+<div class="card-body">
+    <div class="text-center">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">tipo</th>
+                    <th scope="col">Autor</th>
+                    <th scope="col">Titulo</th>
+                    <th scope="col">Data/Sala</th>
+                    <th scope="col">Banca</th>
+                    <th scope="col">Ingresso</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let di of filtros">
+                    <th scope="row" *ngIf="di.tipo === '1'">Tese</th>
+                    <th scope="row" *ngIf="di.tipo === '2'">Dissertação</th>
+                    <th scope="row">{{ di.autor }}</th>
+                    <th scope="row">
+                        <a [href]="di.linkTitulo" class="link-primary">
+                            {{ di.titulo }}
+                        </a>
+                    </th>
+                    <th scope="row">{{ di.dataSala }}</th>
+                    <th scope="row">{{ di.banca }}</th>
+                    <th scope="row">{{ di.ingresso }}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

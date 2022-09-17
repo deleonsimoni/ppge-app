@@ -56,11 +56,14 @@
                             <button type="submit" class="btn btn-primary col-md-2">
                                 Filtrar
                             </button>
-                            <button (click)="isTipoPresent = false" class="btn btn-danger col-md-2">
+                            <button type="reset" (click)="filtros = null" class="btn btn-danger col-md-2">
                                 limpar Filtro
                             </button>
                         </div>
                     </form>
+                </div>
+                <div *ngIf="filtros">
+                    <app-filtro [filtros]="filtros"></app-filtro>
                 </div>
                 <!-- Tabs -->
                 <ul class="nav nav-pills mb-3">

@@ -38,18 +38,7 @@ async function deleteTeseDissertacao(id) {
 }
 
 async function getFillTeseDissertacao(req) {
-    console.log('getDissertacao: ', req.query.autor);
-    let whereClause = {};
-    if(!!req.query.tipo) whereClause.tipo = req.query.tipo
-    if(!!req.query.ano) whereClause.ano = req.query.ano
-    if(!!req.query.autor) whereClause.autor = req.query.autor
-    if(!!req.query.titulo) whereClause.titulo = req.query.titulo
-    if(!!req.query.dataSala) whereClause.dataSala = req.query.dataSala
-    if(!!req.query.banca) whereClause.banca = req.query.banca
-    if(!!req.query.ingresso) whereClause.ingresso = req.query.ingresso
-
-    console.log('query aqui ------>: ', whereClause);
-    return await TeseDissertacaoModel.find(whereClause)
+    return await TeseDissertacaoModel.find(req.query)
     .sort({
       createAt: -1
     });

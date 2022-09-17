@@ -117,16 +117,16 @@ export class SiteAdminService {
   }
 
   getTeseDissertacao(form: any) {
-    let params = new HttpParams()
-    .set('tipo', form.tipo)
-    .set('ano', form.ano)
-    .set('ingresso', form.ingresso)
-    .set('autor', form.autor)
-    .set('titulo', form.titulo)
-    .set('dataSala', form.dataSala)
-    .set('banca', form.banca)
+    let params = new HttpParams();
+    if(form.tipo) params = params.set('tipo', form.tipo)
+    if(form.ano) params = params.set('ano', form.ano)
+    if(form.ingresso) params = params.set('ingresso', form.ingresso)
+    if(form.autor) params = params.set('autor', form.autor)
+    if(form.titulo) params = params.set('titulo', form.titulo)
+    if(form.dataSala) params = params.set('dataSala', form.dataSala)
+    if(form.banca) params = params.set('banca', form.banca)
 
-    return this.http.get(`${this.URL_TESE_DISSERTACAO}/get-filter`, {params});
+    return this.http.get(`${this.URL_TESE_DISSERTACAO}/get-filter/filter`, { params: params });
   }
 
   deletarTeseDissertacao(id: any) {

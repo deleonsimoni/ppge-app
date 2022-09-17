@@ -15,6 +15,7 @@ export class TeseDissertacaoComponent implements OnInit {
   // Filtros
   list: any[] | undefined;
   isTipoPresent: boolean | false;
+  filtros: any | undefined;
   
   public form: FormGroup;
 
@@ -53,14 +54,8 @@ export class TeseDissertacaoComponent implements OnInit {
   }
 
   filter() {
-    console.log('entrou aqui');
-    console.log(this.form);
-    
-
     this.siteService.getTeseDissertacao(this.form.value).subscribe((res: any) => {
-      this.datas = res;
-      console.log('resposta banco')
-;      console.log(res);
+      this.filtros = res;
     }, err => {
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
     });
