@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, Validators } from "@angular/forms";
 import { MatDialog } from '@angular/material/dialog';
+import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { SiteAdminService } from "@app/shared/services/site-admin.service";
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { ToastrService } from "ngx-toastr";
@@ -177,6 +178,17 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
       });
     }, err => {
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
+    });
+  }
+
+  atualizarProcessoAtivo(event: MatSlideToggleChange, idProcesso) {
+    console.log("atualizarProcessoAtivoatualizarProcessoAtivo: ", event.checked, " : ", idProcesso);
+    this.siteService.atualizarProcessoAtivo(event.checked, idProcesso).subscribe(() => {
+      this.toastr.success('Visibilidade atualizada com sucesso.', 'Sucesso');
+    },
+    err => {
+      this.toastr.error('Ocorreu um erro ao atualizar a visibilidade.', 'Atenção: ');
+
     });
   }
 }

@@ -7,6 +7,11 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
       required: true
     },
 
+    isAtivo: {
+      type: Boolean,
+      default: true
+    },
+
     title: {
       type: String,
       required: true,

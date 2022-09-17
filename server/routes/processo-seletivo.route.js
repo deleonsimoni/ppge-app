@@ -22,6 +22,10 @@ router.post('/processo-seletivo', [passport.authenticate('jwt', {
   session: false
 }), requireAdmin], asyncHandler(insertProcessoSeletivo));
 
+router.post('/processo-seletivo/ativo/:id', [passport.authenticate('jwt', {
+  session: false
+}), requireAdmin], asyncHandler(atualizarProcessoSeletivoAtivo));
+
 router.post('/processo-seletivo/inscrever/:id', [passport.authenticate('jwt', {
   session: false
 }), requireLogin], asyncHandler(subscribeProcessoSeletivo));
@@ -57,6 +61,11 @@ async function getMinhaInscricoesProcessoSelectivo(req, res) {
 
 async function insertProcessoSeletivo(req, res) {
   let response = await processoSeletivoCtrl.insertProcessoSeletivo(req, req.user._id);
+  res.json(response);
+}
+
+async function atualizarProcessoSeletivoAtivo(req, res) {
+  let response = await processoSeletivoCtrl.atualizarProcessoSeletivoAtivo(req, req.params.id);
   res.json(response);
 }
 

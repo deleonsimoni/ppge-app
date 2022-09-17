@@ -160,5 +160,9 @@ export class SiteAdminService {
   listProcessoSeletivoInscritos(id) {
     return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/${id}`);
   }
+
+  atualizarProcessoAtivo(checked, id) {
+    return this.http.post(`${this.URL_PROCESSO_SELETIVO}/ativo/${id}`, {isAtivo: checked});
+  }
   /* Fim Processo Seletivo */
 }

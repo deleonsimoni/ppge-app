@@ -10,6 +10,7 @@ module.exports = {
   unsubscribeProcessoSeletivo,
   updateProcessoSeletivo,
   deleteProcessoSeletivo,
+  atualizarProcessoSeletivoAtivo,
 };
 
 
@@ -17,7 +18,9 @@ module.exports = {
 /* Processo Seletivo */
 
 async function getProcessoSeletivo(req) {
-  return await ProcessoSeletivoModel.find({}, {enrolled: 0})
+  let whereClause = {};
+  if(req.query.isAtivo != undefined) whereClause.isAtivo = req.query.isAtivo;
+  return await ProcessoSeletivoModel.find(whereClause, {enrolled: 0})
     .sort({
       createAt: -1
     });
@@ -48,12 +51,22 @@ async function insertProcessoSeletivo(req, idUser) {
   return await new ProcessoSeletivoModel(form).save();
 }
 
+async function atualizarProcessoSeletivoAtivo(req, idProcesso) {
+
+  let isAtivo = req.body.isAtivo;
+  return await ProcessoSeletivoModel.findOneAndUpdate(
+    {_id: idProcesso},
+    {isAtivo: !!isAtivo}, 
+    {upsert: false}
+  );
+}
+
 async function subscribeProcessoSeletivo(idProcessoSeletivo, idUser) {
   return await ProcessoSeletivoModel.findOneAndUpdate({
-    _id: idProcessoSeletivo
+    _id: idProcessoSeletivo, isAtivo: true
   },
   {$addToSet: {enrolled: idUser}}, 
-  {upsert: true}
+  {upsert: false}
   );
 }
 
@@ -62,7 +75,7 @@ async function unsubscribeProcessoSeletivo(idProcessoSeletivo, idUser) {
     _id: idProcessoSeletivo
   },
   {$pull: {enrolled: idUser}}, 
-  {upsert: true}
+  {upsert: false}
   );
 }
 

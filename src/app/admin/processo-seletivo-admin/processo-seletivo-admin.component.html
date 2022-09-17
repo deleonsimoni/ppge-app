@@ -57,6 +57,7 @@
                                     <tr>
                                         <th scope="col">Titulo</th>
                                         <th scope="col">Ações</th>
+                                        <th scope="col">Ativo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -67,6 +68,9 @@
                                             <span class="material-icons md-18 btn" (click)="editar(di)">edit_square</span>
                                             <span class="material-icons md-18 btn" (click)="visualizar(di.title, di.content)">preview</span>
                                             <span class="material-icons md-18 btn" (click)="inscritos(di._id, di.title)">group</span>
+                                        </th>
+                                        <th>
+                                            <mat-slide-toggle (change)="atualizarProcessoAtivo($event, di._id)" [checked]="di.isAtivo"></mat-slide-toggle>
                                         </th>
                                     </tr>
                                 </tbody>

@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
@@ -13,7 +13,8 @@ import { Observable } from "rxjs";
     ) { }
   
     public getProcessoSeletivo(): Observable<any> {
-      return this.http.get(`${this.URL_PROCESSO_SELETIVO}`);
+      let params = new HttpParams().set('isAtivo', true);
+      return this.http.get(`${this.URL_PROCESSO_SELETIVO}`, {params});
     }
 
     public inscreverProcessoSeletivo(idProcesso) {
