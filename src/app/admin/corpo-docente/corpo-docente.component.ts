@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
+import { ComfirmDeleteProcessoComponent } from '../processo-seletivo-admin/modal/confirm-delet-processo.component';
 import { TypeProfileEnum } from './corpo-docente.model';
 
 @Component({
@@ -20,6 +22,7 @@ export class CorpoDocenteComponent implements OnInit {
     private builder: FormBuilder,
     private siteAdminService: SiteAdminService,
     private toastr: ToastrService,
+    public dialog: MatDialog
   ) { 
     this.form = this.builder.group({
       _id: [],
@@ -76,17 +79,27 @@ export class CorpoDocenteComponent implements OnInit {
     this.alternarForm(true);
     this.form.patchValue({...profile})
   }
+  
 
   delete(profile: any, index: number) {
-    this.siteAdminService.deletarCorpoDocente(profile)
-      .pipe(take(1))
-      .subscribe(() => {
-        this.listProfile.splice(index, 1);
-        this.toastr.success(`Perfil deletado`, 'Sucesso');
-      },
-      () => {
-        this.toastr.error('Ocorreu um erro ao deletar', 'Atenção: ');
-      });
+    
+    const dialogRef = this.dialog.open(ComfirmDeleteProcessoComponent, {
+      width: '750px',
+      data: { title: profile.fullName }
+    });
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if(result) {
+        this.siteAdminService.deletarCorpoDocente(profile)
+          .pipe(take(1))
+          .subscribe(() => {
+            this.listProfile.splice(index, 1);
+            this.toastr.success(`Perfil deletado`, 'Sucesso');
+          },
+          () => {
+            this.toastr.error('Ocorreu um erro ao deletar', 'Atenção: ');
+          });
+      }
+    })
   }
 
   alternarForm(isForm) {

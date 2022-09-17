@@ -1,9 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
+import { ComfirmDeleteProcessoComponent } from '../processo-seletivo-admin/modal/confirm-delet-processo.component';
 
 @Component({
   selector: 'app-pages-admin',
@@ -53,6 +55,7 @@ export class PagesAdminComponent implements OnInit {
     private builder: FormBuilder,
     private siteService: SiteAdminService,
     private toastr: ToastrService,
+    public dialog: MatDialog
   ) {
     this.form = this.builder.group({
       _id: [],
@@ -163,21 +166,32 @@ export class PagesAdminComponent implements OnInit {
 
   public excluirPaginaExpansivel() {
     const pageSelected = this.form.value.selectPage;
-    if(!!this.data._id) {
-      this.siteService.deletarPage(this.form.value, pageSelected)
-        .pipe(take(1))
-        .subscribe(() => {
-          this.toastr.success(`Página deletada`, 'Sucesso');
+    
+    const dialogRef = this.dialog.open(ComfirmDeleteProcessoComponent, {
+      width: '750px',
+      data: { title: this.data.title }
+    });
+    
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if(result) {
+        if(!!this.data._id) {
+          this.siteService.deletarPage(this.form.value, pageSelected)
+            .pipe(take(1))
+            .subscribe(() => {
+              this.toastr.success(`Página deletada`, 'Sucesso');
+              this.dataExpansivel.splice(this.data.index, 1);
+              this.selecionarPagina(0);
+            },
+            () => {
+              this.toastr.error('Ocorreu um erro ao deletar', 'Atenção: ');
+            });
+        } else {
           this.dataExpansivel.splice(this.data.index, 1);
           this.selecionarPagina(0);
-        },
-        () => {
-          this.toastr.error('Ocorreu um erro ao deletar', 'Atenção: ');
-        });
-    } else {
-      this.dataExpansivel.splice(this.data.index, 1);
-      this.selecionarPagina(0);
-    }
+        }
+
+      }
+    });
   }
 
 }

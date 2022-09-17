@@ -7,8 +7,8 @@ import { Component, OnInit } from '@angular/core';
 export class AdminComponent implements OnInit {
 
   public menu = [
-    { name: 'ADMINISTRAR PÁGINAS', path: '/admin/administrar-paginas' },
-    { name: 'CORPO DOCENTE', path: '/admin/corpo-docente' },
+    { name: 'Administrar Páginas', path: '/admin/administrar-paginas' },
+    { name: 'Corpo Docente', path: '/admin/corpo-docente' },
     { name: 'Tese e Dissertação', path: '/admin/tese-dissertacao'},
     { name: 'Processo Seletivo', path: '/admin/processo-seletivo'}
 
