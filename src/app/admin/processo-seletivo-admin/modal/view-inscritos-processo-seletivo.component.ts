@@ -16,7 +16,6 @@ export class ViewInscritosProcessoSeletivoComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
   ngOnInit(): void {
-    console.log('socorro', this.data);
   }
   
   onNoClick(): void {

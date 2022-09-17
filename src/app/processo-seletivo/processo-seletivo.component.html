@@ -2,14 +2,28 @@
     <div class="container">
 
         <div class="section-header">
-            <h2>{{processoSeletivo.textTitle}}</h2>
+            <h2>Processos Seletivos</h2>
         </div>
 
     </div>
 
-    <div class="container">
+    <div *ngFor="let ps of processoSeletivo" class="container mb-5">
 
-        <div class="text-body" [innerHtml]="processoSeletivo.textBody"></div>
+        <div class="text-body">
+            <h3>{{ps.title}}</h3>
+            <div *ngFor="let content of ps.content">
+                <a  href="{{content.contentLink}}">{{content.contentTitle}}</a>
+            </div>
+
+            <button *ngIf="minhasInscricoes?.includes(ps._id); else btnInsc" class="mt-2" type="button" (click)="cancelarInscricao(ps._id)" mat-raised-button color="warn">
+                Cancelar inscrição
+            </button>
+            <ng-template #btnInsc>
+                <button class="mt-2" type="button" (click)="inscreverNoProcesso(ps._id)" mat-raised-button color="primary">
+                    Inscrever-se
+                </button>
+            </ng-template>
+        </div>
 
     </div>
 </section>

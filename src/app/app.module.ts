@@ -26,6 +26,7 @@ import { MatriculaModule } from './informacoes-academica/matricula/matricula.mod
 import { AuthHeaderInterceptor } from './interceptors/header.interceptor';
 import { CatchErrorInterceptor } from './interceptors/http-error.interceptor';
 import { ModalTermoUsoComponent } from './modals/modal-termo-uso/modal-termo-uso.component';
+import { ProcessoSeletivoModule } from './processo-seletivo/processo-seletivo.module';
 import { RegulationModule } from './regulation/regulation.module';
 import { ResearchLineModule } from './research-line/research-line.module';
 import { ScheduleModule } from './schedule/schedule.module';
@@ -62,6 +63,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     CommonModule,
     AngularEditorModule,
     BrowserModule,
+    ProcessoSeletivoModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

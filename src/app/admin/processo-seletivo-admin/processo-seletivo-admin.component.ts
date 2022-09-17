@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
-import { SiteAdminService } from "@app/shared/services/site-admin.service";
-import { ToastrService } from "ngx-toastr";
-import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { FormArray, FormBuilder, FormControl, Validators } from "@angular/forms";
 import { MatDialog } from '@angular/material/dialog';
+import { SiteAdminService } from "@app/shared/services/site-admin.service";
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { ToastrService } from "ngx-toastr";
 import { ComfirmDeleteProcessoComponent } from "./modal/confirm-delet-processo.component";
 import { ViewHtmlProcessoSeletivoComponent } from "./modal/view-html-processo-seletivo.component";
 import { ViewInscritosProcessoSeletivoComponent } from "./modal/view-inscritos-processo-seletivo.component";
@@ -55,16 +55,46 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
     this.form = this.builder.group({
       _id: [],
       title: [null, [Validators.required]],
-      content: [null, [Validators.required]]
+      content: new FormArray([]),
     });
   }
 
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
     this.getProcessoSeletivo();
+    this.addContentLine();
+  }
+
+  public initContentLine() {
+    return this.builder.group({
+      contentTitle: new FormControl('', Validators.required),
+      contentLink: new FormControl('', Validators.required),
+    });
+  }
+
+  public addContentLine(content = null) {
+    const control = <FormArray>this.form.controls['content'];
+    if(content != null) {
+      control.push(this.builder.group({
+        contentTitle: new FormControl(content.contentTitle, Validators.required),
+        contentLink: new FormControl(content.contentLink, Validators.required),
+      }));
+    } else {
+      control.push(this.initContentLine());
+    }
+    
+  }
+  public removeContentLine(index) {
+    const teste = <FormArray>this.form.controls['content'];
+    teste.removeAt(index);
+  }
+
+  get getFormContent() {
+    return this.form.controls['content']
   }
 
   public register() {
+    
     if (this.form.valid) {
       if (this.form.value._id) {
         this.siteService.atualizarProcessoSeletivo(this.form.value)
@@ -93,7 +123,6 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
 
   getProcessoSeletivo() {
     this.siteService.listProcessoSeletivo().subscribe((res: any) => {
-      console.log(res);
       this.datas = res;
     }, err => {
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
@@ -102,6 +131,9 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
 
   limparForm() {
     this.form.reset();
+    const formArray = <FormArray>this.form.controls['content'];
+    formArray.clear();
+    this.addContentLine();
   }
 
   apagar(id, title) {
@@ -123,6 +155,11 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
 
   editar(obj) {
     this.form.patchValue(obj);
+    const formArray = <FormArray>this.form.controls['content'];
+    formArray.clear();
+    obj.content.forEach(element => {
+      this.addContentLine(element)
+    });
   }
 
   visualizar(title, content) {
@@ -134,7 +171,6 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
 
   inscritos(id, title) {
     this.siteService.listProcessoSeletivoInscritos(id).subscribe((res: any) => {
-      console.log('aqui', res.enrolled);
       const dialogRef = this.dialog.open(ViewInscritosProcessoSeletivoComponent, {
         width: '750px',
         data: { title: title, users: res.enrolled }

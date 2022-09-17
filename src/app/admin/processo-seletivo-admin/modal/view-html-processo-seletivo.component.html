@@ -1,6 +1,11 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <div mat-dialog-content>
-  <div class="text-body" [innerHtml]="data.content"></div>
+  <div class="text-body">
+    
+    <div *ngFor="let content of data.content">
+      <a  href="{{content.contentLink}}">{{content.contentTitle}}</a>
+    </div>
+  </div>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">fechar</button>

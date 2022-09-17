@@ -5,6 +5,7 @@ module.exports = {
   getProcessoSeletivo,
   insertProcessoSeletivo,
   getInscritosByProcessoSelectivo,
+  getMinhaInscricoesProcessoSelectivo,
   subscribeProcessoSeletivo,
   unsubscribeProcessoSeletivo,
   updateProcessoSeletivo,
@@ -20,13 +21,21 @@ async function getProcessoSeletivo(req) {
     .sort({
       createAt: -1
     });
-
 }
 
 async function getInscritosByProcessoSelectivo(idProcessoSeletivo) {
   return await ProcessoSeletivoModel
     .findOne({_id: idProcessoSeletivo}, {enrolled: 1})
     .populate({path: 'enrolled', select: 'fullname socialname'})
+    .sort({
+      createAt: -1
+    });
+
+}
+
+async function getMinhaInscricoesProcessoSelectivo(idUser) {
+  return await ProcessoSeletivoModel
+    .find({enrolled: idUser}, {_id: 1})
     .sort({
       createAt: -1
     });

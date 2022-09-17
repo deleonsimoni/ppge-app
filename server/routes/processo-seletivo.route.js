@@ -14,6 +14,10 @@ router.get('/processo-seletivo/inscritos/:id', [passport.authenticate('jwt', {
   session: false
 }), requireAdmin], asyncHandler(getInscritosByProcessoSelectivo));
 
+router.get('/processo-seletivo/minha-inscricoes', [passport.authenticate('jwt', {
+  session: false
+}), requireLogin], asyncHandler(getMinhaInscricoesProcessoSelectivo));
+
 router.post('/processo-seletivo', [passport.authenticate('jwt', {
   session: false
 }), requireAdmin], asyncHandler(insertProcessoSeletivo));
@@ -41,6 +45,12 @@ async function getProcessoSeletivo(req, res) {
 
 async function getInscritosByProcessoSelectivo(req, res) {
   let response = await processoSeletivoCtrl.getInscritosByProcessoSelectivo(req.params.id);
+  res.json(response);
+
+}
+
+async function getMinhaInscricoesProcessoSelectivo(req, res) {
+  let response = await processoSeletivoCtrl.getMinhaInscricoesProcessoSelectivo(req.user._id);
   res.json(response);
 
 }

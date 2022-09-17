@@ -12,10 +12,16 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
       required: true,
     },
 
-    content: {
-      type: String,
-      required: true,
-    },
+    content: [
+      {
+        contentTitle: {
+          type: String,
+        },
+        contentLink: {
+          type: String,
+        }
+      }
+    ],
 
     enrolled: [
       {
