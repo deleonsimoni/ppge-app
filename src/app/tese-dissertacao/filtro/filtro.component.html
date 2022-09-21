@@ -1,10 +1,14 @@
 <div class="card-body">
     <div class="text-center">
+        <ul class="nav nav-pills mb-3">
+            <li *ngIf="filtros[0]?.tipo === '1'"><a class="nav-link active">Teses</a></li>
+            <li *ngIf="filtros[0]?.tipo === '2'"><a class="nav-link active">Dissertaões</a></li>
+        </ul>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th scope="col">tipo</th>
                     <th scope="col">Autor</th>
+                    <th scope="col">Ano</th>
                     <th scope="col">Titulo</th>
                     <th scope="col">Data/Sala</th>
                     <th scope="col">Banca</th>
@@ -13,9 +17,8 @@
             </thead>
             <tbody>
                 <tr *ngFor="let di of filtros">
-                    <th scope="row" *ngIf="di.tipo === '1'">Tese</th>
-                    <th scope="row" *ngIf="di.tipo === '2'">Dissertação</th>
                     <th scope="row">{{ di.autor }}</th>
+                    <th scope="row">{{ di.ano }}</th>
                     <th scope="row">
                         <a [href]="di.linkTitulo" class="link-primary">
                             {{ di.titulo }}

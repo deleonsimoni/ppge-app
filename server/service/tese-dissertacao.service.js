@@ -38,6 +38,12 @@ async function deleteTeseDissertacao(id) {
 }
 
 async function getFillTeseDissertacao(req) {
+    if(req.query.ano) req.query.ano = {$regex: req.query.ano, $options: 'i'}
+    if(req.query.ingresso) req.query.ingresso = {$regex: req.query.ingresso, $options: 'i'}
+    if(req.query.autor) req.query.autor = {$regex: req.query.autor, $options: 'i'}
+    if(req.query.titulo) req.query.titulo = {$regex: req.query.titulo, $options: 'i'}
+    if(req.query.dataSala) req.query.dataSala = {$regex: req.query.dataSala, $options: 'i'}
+    if(req.query.banca) req.query.banca = {$regex: req.query.banca, $options: 'i'}
     return await TeseDissertacaoModel.find(req.query)
     .sort({
       createAt: -1

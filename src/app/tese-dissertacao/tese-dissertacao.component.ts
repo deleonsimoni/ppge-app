@@ -24,7 +24,7 @@ export class TeseDissertacaoComponent implements OnInit {
     private builder: FormBuilder
     ) {
       this.form = this.builder.group({
-        tipo: [null],
+        tipo: ['1'],
         ano: [null],
         autor: [null],
         titulo: [null],
