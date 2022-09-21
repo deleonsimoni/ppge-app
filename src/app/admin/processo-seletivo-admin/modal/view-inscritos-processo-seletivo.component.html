@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <div mat-dialog-content>
-    <table class="table">
+    <table *ngIf="!flagShowInfoUser; else infoUserBlock" class="table">
         <thead>
             <tr>
                 <th scope="col">Nome inscrito</th>
@@ -10,11 +10,130 @@
         <tbody>
             <tr *ngFor="let di of data.users">
                 <th scope="row">{{ di.fullname}}</th>
-                <th scope="row"></th>
+                <th scope="row">
+                    <span class="material-icons md-18 btn" (click)="getUserInfo(di._id)">description</span>
+                </th>
             </tr>
         </tbody>
     </table>
+    <ng-template #infoUserBlock class="container">
+        <div class="row justify-content-end">
+            <div class="col-auto">
+                <button type="button" (click)="voltar()" mat-raised-button color="primary">Voltar</button>
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-3">
+            <div class="col-6">
+                <label><strong>Nome Completo</strong></label>
+                <p>{{infoUser.fullname != null ? infoUser.fullname : '-'}}</p>
+            </div>
+            <div class="col-6">
+                <label><strong>Nome social</strong></label>
+                <p>{{infoUser.socialname != null ? infoUser.socialname : '-'}}</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-4">
+                <label><strong>CPF</strong></label>
+                <p>{{infoUser.cpf != null ? infoUser.cpf : '-'}}</p>
+            </div>
+            <div class="col-4">
+                <label><strong>Data de nascimento</strong></label>
+                <p>{{ infoUser.dataNiver != null ? (infoUser.dataNiver | date: 'dd/MM/yyyy') : '-'  }}</p>
+            </div>
+            <div class="col-4">
+                <label><strong>Nacionalidade</strong></label>
+                <p>{{infoUser.nacionalidade != null ? infoUser.nacionalidade : '-'}}</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-4">
+                <label><strong>Identidade</strong></label>
+                <p>{{infoUser.rg != null ? infoUser.rg : '-'}}</p>
+            </div>
+            <div class="col-4">
+                <label><strong>Órgão Emissor</strong></label>
+                <p>{{infoUser.rgEmissor != null ? infoUser.rgEmissor : '-'}}</p>
+            </div>
+            <div class="col-4">
+                <label><strong>Passaporte</strong></label>
+                <p>{{infoUser.passaporte != null ? infoUser.passaporte : '-'}}</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-6">
+                <label><strong>Cor</strong></label>
+                <p>{{infoUser.cor != null ? infoUser.cor : '-'}}</p>
+            </div>
+            <div class="col-6">
+                <label><strong>Gênero</strong></label>
+                <p>{{infoUser.genero != null ? infoUser.genero : '-'}}</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-6">
+                <label><strong>Possui alguma deficiência? Qual?</strong></label>
+                <p>{{infoUser.deficiencia != null ? infoUser.deficiencia : '-'}}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-3">
+            <div class="col-4">
+                <label><strong>Email</strong></label>
+                <p>{{infoUser.email != null ? infoUser.email : '-'}}</p>
+            </div>
+            <div class="col-4">
+                <label><strong>Telefone</strong></label>
+                <p>{{infoUser.telefone != null ? infoUser.telefone : '-'}}</p>
+            </div>
+            <div class="col-4">
+                <label><strong>Celular</strong></label>
+                <p>{{infoUser.celular != null ? infoUser.celular : '-'}}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-3">
+
+            <!-- Endereço -->
+            <div class="col-6">
+                <label><strong>Código postal</strong></label>
+                <p>{{infoUser.cep != null ? infoUser.cep : '-'}}</p>
+            </div>
+            <div class="col-6">
+                <label><strong>Endereço</strong></label>
+                <p>{{infoUser.endereco != null ? infoUser.endereco : '-'}}</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-4">
+                <label><strong>Cidade</strong></label>
+                <p>{{infoUser.cidade != null ? infoUser.cidade : '-'}}</p>
+            </div>
+            <div class="col-4">
+                <label><strong>Estado</strong></label>
+                <p>{{infoUser.estado != null ? infoUser.estado : '-'}}</p>
+            </div>
+            <div class="col-4">
+                <label><strong>Bairro</strong></label>
+                <p>{{infoUser.bairro != null ? infoUser.bairro : '-'}}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-3">
+            <div class="col-6">
+                <label><strong>"Ocupação atual / Cargo</strong></label>
+                <p>{{infoUser.cargo != null ? infoUser.cargo : '-'}}</p>
+            </div>
+            <div class="col-6">
+                <label><strong>Instituição / Empresa</strong></label>
+                <p>{{infoUser.empresa != null ? infoUser.empresa : '-'}}</p>
+            </div>
+        </div>
+
+    </ng-template>
 </div>
+<hr>    
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">fechar</button>
+    <button mat-button (click)="onNoClick()">fechar</button>
 </div>

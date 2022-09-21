@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SiteAdminService } from "@app/shared/services/site-admin.service";
 
 export interface DialogData {
   title: string;
@@ -13,9 +14,26 @@ export interface DialogData {
 export class ViewInscritosProcessoSeletivoComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ViewInscritosProcessoSeletivoComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+    private siteService: SiteAdminService,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+  ) { }
+  
+  infoUser: any = {};
+  flagShowInfoUser: boolean = false;
 
   ngOnInit(): void {
+  }
+
+  getUserInfo(idUser) {
+    this.siteService.getUserById(idUser).subscribe(user => {
+      this.infoUser = user;
+      this.flagShowInfoUser = true;
+    })
+  }
+
+  voltar() {
+    this.flagShowInfoUser = false; 
+    this.infoUser={};
   }
   
   onNoClick(): void {

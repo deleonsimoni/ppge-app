@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SiteAdminService {
+  private readonly URL_API_USER = '/api/user';
   private readonly URL_API_PPGE = '/api/ppge';
   private readonly URL_HISTORICO = `${this.URL_API_PPGE}/historico`;
   private readonly URL_CORPO_DOCENTE = `${this.URL_API_PPGE}/corpo-docente`;
@@ -16,6 +17,10 @@ export class SiteAdminService {
   constructor(
     private http: HttpClient
   ) { }
+
+  getUserById(id) {
+    return this.http.get(`${this.URL_API_USER}/${id}`);
+  }
 
   /* Page */
     
