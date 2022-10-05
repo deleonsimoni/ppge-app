@@ -3,6 +3,7 @@ const passport = require('passport');
 const asyncHandler = require('express-async-handler');
 const siteCtrl = require('../controllers/site.controller');
 const requireAdmin = require('../middleware/require-admin');
+const setLocation = require('../middleware/set-location');
 const fileUpload = require('express-fileupload');
 const processoSeletivoRoutes = require('./processo-seletivo.route');
 
@@ -10,8 +11,9 @@ const router = express.Router();
 module.exports = router;
 
 /* Page */
-router.get('/page/:selectedPage', asyncHandler(getPage));
+router.get('/page/:selectedPage', setLocation, asyncHandler(getPage));
 router.get('/page/:selectedPage/headers', asyncHandler(getHeadersPage));
+router.get('/page/:selectedPage/all-titles', asyncHandler(getAllTitlesPage));
 
 router.post('/page/:selectedPage', [passport.authenticate('jwt', {
   session: false
@@ -35,6 +37,11 @@ async function getHeadersPage(req, res) {
   res.json(response);
 }
 
+async function getAllTitlesPage(req, res) {
+  let response = await siteCtrl.getAllTitlesPage(req);
+  res.json(response);
+}
+
 async function insertPage(req, res) {
   let response = await siteCtrl.insertPage(req, req.user._id);
   res.json(response);
@@ -55,6 +62,8 @@ async function deletePage(req, res) {
 /* Corpo Docente */
 router.get('/corpo-docente', asyncHandler(getCorpoDocente));
 
+router.get('/corpo-docente/name', asyncHandler(getCorpoDocenteName));
+
 router.post('/corpo-docente', [passport.authenticate('jwt', {
   session: false
 }), requireAdmin], asyncHandler(insertCorpoDocente));
@@ -69,6 +78,11 @@ router.delete('/corpo-docente/:id', [passport.authenticate('jwt', {
 
 async function getCorpoDocente(req, res) {
   let response = await siteCtrl.getCorpoDocente(req);
+  res.json(response);
+}
+
+async function getCorpoDocenteName(req, res) {
+  let response = await siteCtrl.getCorpoDocenteName(req);
   res.json(response);
 }
 

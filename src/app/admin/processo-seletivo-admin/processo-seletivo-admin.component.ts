@@ -18,6 +18,7 @@ import { ViewInscritosProcessoSeletivoComponent } from "./modal/view-inscritos-p
 export class ProcessoSeletivoAdminComponent implements OnInit {
   form: any;
   datas: any[];
+  listLinhaPesquisa: any = [];
 
   editorConfig: AngularEditorConfig = {
     editable: true,
@@ -55,7 +56,9 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
   ) {
     this.form = this.builder.group({
       _id: [],
+      type: ["1", [Validators.required]],
       title: [null, [Validators.required]],
+      researchLine: [null, [Validators.required]],
       content: new FormArray([]),
     });
   }
@@ -63,7 +66,14 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
 
   ngOnInit(): void { 
     this.getProcessoSeletivo();
+    this.getTitleLinhaPesquisa();
     this.addContentLine();
+  }
+
+  public getTitleLinhaPesquisa() {
+    this.siteService.getTitleLinhaPesquisa().subscribe(data => {
+      this.listLinhaPesquisa = data;
+    })
   }
 
   public initContentLine() {
@@ -155,7 +165,10 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
   }
 
   editar(obj) {
-    this.form.patchValue(obj);
+    this.getTitleLinhaPesquisa();
+    console.log("AAAAAAAA: ", obj);
+    
+    this.form.patchValue({...obj, type: String(obj.type) });
     const formArray = <FormArray>this.form.controls['content'];
     formArray.clear();
     obj.content.forEach(element => {
@@ -174,7 +187,8 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
     this.siteService.listProcessoSeletivoInscritos(id).subscribe((res: any) => {
       const dialogRef = this.dialog.open(ViewInscritosProcessoSeletivoComponent, {
         width: '750px',
-        data: { title: title, users: res.enrolled }
+        data: { title: title, users: res.enrolled, idProcesso: id },
+        
       });
     }, err => {
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');

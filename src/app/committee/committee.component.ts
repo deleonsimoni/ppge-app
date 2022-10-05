@@ -35,6 +35,7 @@ export class CommitteeComponent implements OnInit {
 
   private getCommitteeService(committeeType: number) {
     this.committeeService.getInfoCommittee(committeeType).subscribe(data => {
+      data = data ? data : {};
       data.content = this._sanitizer.bypassSecurityTrustHtml(data.content);
       this.committeeInfo = data;
     });

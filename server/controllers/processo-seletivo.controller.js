@@ -1,5 +1,6 @@
 
 const ProcessoSeletivoModel = require('../models/processo-seletivo.model');
+const UserController = require('./user.controller')
 
 module.exports = {
   getProcessoSeletivo,
@@ -11,6 +12,7 @@ module.exports = {
   updateProcessoSeletivo,
   deleteProcessoSeletivo,
   atualizarProcessoSeletivoAtivo,
+  getProcessoSeletivoInscreverInfosById,
 };
 
 
@@ -21,6 +23,23 @@ async function getProcessoSeletivo(req) {
   let whereClause = {};
   if(req.query.isAtivo != undefined) whereClause.isAtivo = req.query.isAtivo;
   return await ProcessoSeletivoModel.find(whereClause, {enrolled: 0})
+    .sort({
+      createAt: -1
+    });
+}
+
+async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo) {
+  return await ProcessoSeletivoModel.findOne({_id: idProcessoSeletivo}, {researchLine: 1})
+    .populate(
+      {
+        path:"researchLine", 
+        select:"title corpoDocente",
+        populate: {
+          path: "corpoDocente",
+          select: "fullName"
+        }
+      }
+    )
     .sort({
       createAt: -1
     });
@@ -61,22 +80,34 @@ async function atualizarProcessoSeletivoAtivo(req, idProcesso) {
   );
 }
 
-async function subscribeProcessoSeletivo(idProcessoSeletivo, idUser) {
-  return await ProcessoSeletivoModel.findOneAndUpdate({
-    _id: idProcessoSeletivo, isAtivo: true
-  },
-  {$addToSet: {enrolled: idUser}}, 
-  {upsert: false}
-  );
+async function subscribeProcessoSeletivo(idProcessoSeletivo, idUser, reqBody) {
+  try {
+    await UserController.subscribeProcessoSeletivo(idProcessoSeletivo, idUser, reqBody.formulario);
+    await ProcessoSeletivoModel.findOneAndUpdate({
+        _id: idProcessoSeletivo, isAtivo: true
+      },
+      {$addToSet: {enrolled: idUser}}, 
+      {upsert: false}
+    );
+  } catch(e) {
+    console.log(e);
+  }
+  return 200;
 }
 
 async function unsubscribeProcessoSeletivo(idProcessoSeletivo, idUser) {
-  return await ProcessoSeletivoModel.findOneAndUpdate({
-    _id: idProcessoSeletivo
-  },
-  {$pull: {enrolled: idUser}}, 
-  {upsert: false}
-  );
+  try {
+    await UserController.unsubscribeProcessoSeletivo(idProcessoSeletivo, idUser);
+    await ProcessoSeletivoModel.findOneAndUpdate({
+      _id: idProcessoSeletivo
+    },
+    {$pull: {enrolled: idUser}}, 
+    {upsert: false}
+    );
+  } catch(e) {
+    console.log(e);
+  }
+  return 
 }
 
 async function updateProcessoSeletivo(req, idUser) {

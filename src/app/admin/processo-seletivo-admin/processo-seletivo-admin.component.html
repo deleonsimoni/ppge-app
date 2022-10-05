@@ -10,6 +10,25 @@
 
         <div class="col-md-12">
             <form role="form" class="reviewer" [formGroup]="form" (ngSubmit)="register()">
+                <div class="row">
+                    <div class="col-auto">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Selecione o Tipo</mat-label>
+                            <mat-select formControlName="type">
+                            <mat-option value="1">Mestrado</mat-option>
+                            <mat-option value="2">Doutorado</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col">
+                        <mat-form-field style="width: 100%;" appearance="fill">
+                            <mat-label>Selecione a Linha de Pesquisa</mat-label>
+                            <mat-select multiple formControlName="researchLine">
+                              <mat-option *ngFor="let linha of listLinhaPesquisa" [value]="linha._id">{{linha.title}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
                 <div class="form-row justify-content-center">
                     <div class="form-group col-md-12">
                         <input type="text" name="title" class="form-control" id="title" placeholder="Título"
@@ -48,13 +67,14 @@
     </div>
     <div class="col-md-12">
         <section id="about" class="about">
-            <div class="container" data-aos="fade-up">
-                <div class="row text-center" data-aos="fade-up" data-aos-delay="200">
+            <div class="container">
+                <div class="row text-center" data-aos-delay="200">
                     <div class="card-body">
                         <div class="text-center">
                             <table class="table">
                                 <thead>
                                     <tr>
+                                        <th scope="col">Tipo</th>
                                         <th scope="col">Titulo</th>
                                         <th scope="col">Ações</th>
                                         <th scope="col">Ativo</th>
@@ -62,6 +82,7 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let di of datas; let i= index">
+                                        <th scope="row">{{ di.type == 1 ? "Mestrado" : "Doutorado" }}</th>
                                         <th scope="row">{{ di.title }}</th>
                                         <th scope="row">
                                             <span class="material-icons md-18 btn" (click)="apagar(di._id, di.title)">delete</span>

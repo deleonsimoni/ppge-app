@@ -14,14 +14,16 @@ import { ComfirmDeleteProcessoComponent } from '../processo-seletivo-admin/modal
   encapsulation: ViewEncapsulation.None
 })
 export class PagesAdminComponent implements OnInit {
+  @ViewChild('imageRender', { static: false }) imageRender: ElementRef;
 
   public form: FormGroup;
   carregando = false;
   data: any;
   dataExpansivel: any = null;
+  listCorpoDocenteName: any = null;
   expansivel: boolean = false;
-  @ViewChild('imageRender', { static: false }) imageRender: ElementRef;
   private image: FileList;
+
 
   editorConfig: AngularEditorConfig = {
     editable: true,
@@ -68,6 +70,9 @@ export class PagesAdminComponent implements OnInit {
       instagram: [null, []],
       twitter: [null, []],
 
+      /* Para pagina 'Linha de Pesquisa' */
+      corpoDocente: [null, []],
+
       selectPage: ['historico', [Validators.required]],
       language: ['pt-br', [Validators.required]],
     });
@@ -78,13 +83,23 @@ export class PagesAdminComponent implements OnInit {
     this.getInfoPage();
     
   }
+  // Variavel de setups
+  private setups = {
+    linha_pesquisa: () => this.setUpLinhaPesquisa()
+  }
+
+  setUpLinhaPesquisa() {
+    this.siteService.listCorpoDocenteName().subscribe(data => {
+      this.listCorpoDocenteName = data;
+    })
+  }
 
   getInfoPage() {
     const pageSelected = this.form.value.selectPage;
     const languageSelected = this.form.value.language;
     this.siteService.listPage(pageSelected, languageSelected).subscribe((res: any) => {
       this.carregando = false;
-      if(res.constructor.name === "Array") {
+      if(res && res.constructor.name === "Array") {
         this.expansivel = true;
         this.dataExpansivel = res;
         this.data = res[0];
@@ -102,6 +117,7 @@ export class PagesAdminComponent implements OnInit {
       this.carregando = false;
       this.toastr.error(`Ocorreu um erro ao listar a página`, 'Atenção: ');
     });
+    if(this.setups[pageSelected]) this.setups[pageSelected]();
   }
 
   adicionarPagina() {
@@ -130,6 +146,7 @@ export class PagesAdminComponent implements OnInit {
         
         this.siteService.atualizarPage(this.form.value, pageSelected)
           .subscribe((res: any) => {
+            this.getInfoPage();
             this.toastr.success(`Página alterado com sucesso`, 'Sucesso');
           }, (err: any) => {
             this.toastr.error('Ocorreu um erro ao atualizar', 'Atenção: ');

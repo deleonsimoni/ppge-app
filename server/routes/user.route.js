@@ -13,15 +13,15 @@ router.route('/').post(asyncHandler(insert));
 
 router.get('/:id', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], asyncHandler(getById));
+}), requireAdmin], asyncHandler(getByIdOnlyProcesso));
 
 async function insert(req, res) {
   let user = await userCtrl.insert(req.body);
   res.json(user);
 }
 
-async function getById(req, res) {
-  let user = await userCtrl.getById(req.params.id);
+async function getByIdOnlyProcesso(req, res) {
+  let user = await userCtrl.getByIdOnlyProcesso(req.params.id, req);
   res.json(user);
 
 }

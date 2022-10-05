@@ -18,8 +18,18 @@ export class SiteAdminService {
     private http: HttpClient
   ) { }
 
-  getUserById(id) {
-    return this.http.get(`${this.URL_API_USER}/${id}`);
+  getUserByIdOnlyProcesso(idUser, idProcesso) {
+    let params = new HttpParams();
+    params = params.set("idProcesso", idProcesso);
+    return this.http.get(`${this.URL_API_USER}/${idUser}`,{params});
+  }
+
+  getTitleLinhaPesquisa() {
+    return this.http.get(`${this.URL_PAGE}/linha_pesquisa/all-titles`);
+  }
+
+  listCorpoDocenteName() {
+    return this.http.get(`${this.URL_CORPO_DOCENTE}/name`);
   }
 
   /* Page */

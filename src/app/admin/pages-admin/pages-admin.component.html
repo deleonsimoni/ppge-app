@@ -30,10 +30,6 @@
               </mat-optgroup>
               <mat-option value="linha_pesquisa">Linhas de pesquisa</mat-option>
               <mat-option value="cursos">Cursos</mat-option>
-              <mat-optgroup label="Teses e Dissertações"> 
-                <mat-option value="tese">Tese</mat-option>
-                <mat-option value="dissertacao">Dissertação</mat-option>
-              </mat-optgroup>
             </mat-select>
           </mat-form-field>
 
@@ -44,7 +40,7 @@
               <mat-option value="es-es"><span class="flag-icon flag-icon-es flag-icon-margin-right ng-star-inserted"></span> ES</mat-option>
               <mat-option value="pt-br"><span class="flag-icon flag-icon-br flag-icon-margin-right ng-star-inserted"></span> BR</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field>   
 
           <div *ngIf="expansivel" class="form-row justify-content-center mb-3">
             <div class="form-group col-md-12">
@@ -57,13 +53,20 @@
             </div>
           </div>
 
+          <mat-form-field *ngIf="form.value.selectPage === 'linha_pesquisa'" appearance="fill" class="mb-3 w-100">
+            <mat-label>Selecione o Corpo Docente</mat-label>
+            <mat-select multiple formControlName="corpoDocente">
+              <mat-option *ngFor="let cdn of listCorpoDocenteName" [value]="cdn._id">{{cdn.type == 1 ? 'Professor' : 'Doutor'}} - {{cdn.fullName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
           <!-- <div class="form-row justify-content-center">
               <div class="conferencer-img">
                   <img id="imageRender" height="100px" width="100px" src="../../assets/img/user.png" alt=""
                       #imageRender>
                   <button (click)="loadImage()"><i class="fas fa-camera"></i></button>
               </div>
-          </div> -->
+          </div> -->     
           
           <div *ngIf="(!!dataExpansivel && dataExpansivel.length > 0) || !dataExpansivel">
             <div *ngIf="expansivel" class="form-row justify-content-center">

@@ -17,8 +17,8 @@ import { Observable } from "rxjs";
       return this.http.get(`${this.URL_PROCESSO_SELETIVO}`, {params});
     }
 
-    public inscreverProcessoSeletivo(idProcesso) {
-      return this.http.post(`${this.URL_PROCESSO_SELETIVO}/inscrever/${idProcesso}`, {});
+    public inscreverProcessoSeletivo(idProcesso, formulario) {
+      return this.http.post(`${this.URL_PROCESSO_SELETIVO}/inscrever/${idProcesso}`, {formulario});
     }
 
     public buscarMinhasInscricoes() {

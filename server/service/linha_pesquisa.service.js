@@ -4,6 +4,7 @@ const LinhaPesquisaModel = require("../models/linha-pesquisa.model");
 module.exports = {
   getLinhaPesquisa,
   getHeadersLinhaPesquisa,
+  getAllTitlesLinhaPesquisa,
   insertLinhaPesquisa,
   updateLinhaPesquisa,
   deleteLinhaPesquisa,
@@ -26,6 +27,14 @@ async function getHeadersLinhaPesquisa(req) {
   let whereClause = {};
   if(!!req.query.language) whereClause.language = req.query.language
   return await LinhaPesquisaModel.find(whereClause, {navTitle: 1})
+    .sort({
+      createAt: -1
+    });
+}
+
+async function getAllTitlesLinhaPesquisa(req) {
+  let whereClause = {};
+  return await LinhaPesquisaModel.find(whereClause, {title: 1})
     .sort({
       createAt: -1
     });

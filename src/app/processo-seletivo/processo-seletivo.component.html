@@ -1,15 +1,17 @@
-<section id="processoSeletivo" class="processoSeletivo">
-    <div class="container">
 
-        <div class="section-header">
-            <h2>Processos Seletivos</h2>
-        </div>
+<div class="container">
 
+    <div class="section-header">
+        <h2>Processos Seletivos</h2>
     </div>
+</div>
+<section id="processoSeletivo" class="processoSeletivo" *ngIf="!completarInscricao">
+
 
     <div *ngFor="let ps of processoSeletivo" class="container mb-5">
 
         <div class="text-body">
+
             <h3>{{ps.title}}</h3>
             <div *ngFor="let content of ps.content">
                 <a  href="{{content.contentLink}}">{{content.contentTitle}}</a>
@@ -19,11 +21,23 @@
                 Cancelar inscrição
             </button>
             <ng-template #btnInsc>
-                <button class="mt-2" type="button" (click)="inscreverNoProcesso(ps._id)" mat-raised-button color="primary">
+                <button class="mt-2" type="button" (click)="iniciarInscricaoNoProcesso(ps._id, ps.type)" mat-raised-button color="primary">
                     Inscrever-se
                 </button>
             </ng-template>
+            
         </div>
 
+    </div>
+</section>
+
+<section id="processoSeletivo" class="processoSeletivo" *ngIf="completarInscricao">
+    <div class="container text-body">
+        <div class="row justify-content-end">
+            <div class="col-auto">
+                <button  mat-raised-button (click)="completarInscricao = false">VOLTAR</button>
+            </div>
+        </div>
+        <app-form-processo-seletivo [type]="typeFormInscricaoSelected" [idProcessoSeletivo]="idProcessoSelected" (inscrever)="inscreverNoProcesso($event)"></app-form-processo-seletivo>
     </div>
 </section>

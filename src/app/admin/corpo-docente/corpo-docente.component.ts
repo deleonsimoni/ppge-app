@@ -28,7 +28,6 @@ export class CorpoDocenteComponent implements OnInit {
       _id: [],
       fullName: [null, [Validators.required]],
       academicFormation: [null, [Validators.required]],
-      researchLine: [null, [Validators.required]],
       twitter: [null, []],
       facebook: [null, []],
       instagram: [null, []],
@@ -72,6 +71,8 @@ export class CorpoDocenteComponent implements OnInit {
             this.toastr.error('Ocorreu um erro ao cadastrar', 'Atenção: ');
           });
       }
+    } else {
+      this.toastr.error("É necessário preencher todos os campos!", "Atenção: ")
     }
   }
 

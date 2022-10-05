@@ -28,6 +28,7 @@ export class ObjectiveComponent implements OnInit {
 
   private getOnjectiveInfo() {
     this.objectiveService.getInfoObjective().subscribe(data => {
+      data = data ? data : {};
       data.content = this._sanitizer.bypassSecurityTrustHtml(data.content);
       this.objectiveInfo = data;
     });

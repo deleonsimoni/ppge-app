@@ -12,6 +12,19 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
       default: true
     },
 
+    type: {
+      type: Number,
+      required: true,
+      default: 1
+    },
+    
+    researchLine: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'LinhaPesquisa',
+      }
+    ],
+
     title: {
       type: String,
       required: true,

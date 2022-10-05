@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { merge, Observable, take } from "rxjs";
@@ -22,6 +23,9 @@ import { ProcessoSeletivoService } from "./processo-seletivo.service";
 
     processoSeletivo: any;
     minhasInscricoes: any;
+    completarInscricao: boolean = false;
+    typeFormInscricaoSelected;
+    idProcessoSelected;
 
     constructor(
       private processoSeletivoService: ProcessoSeletivoService,
@@ -55,13 +59,16 @@ import { ProcessoSeletivoService } from "./processo-seletivo.service";
       });
     }
 
-    inscreverNoProcesso(idProcesso) {
+    iniciarInscricaoNoProcesso(idProcesso, type) {
       this.user$.pipe(take(1)).subscribe(myUser => {
         if(myUser != null) {
-          this.processoSeletivoService.inscreverProcessoSeletivo(idProcesso).subscribe(() => {
-            this.toastr.success('Inscrito com sucesso', 'Sucesso');
-            this.getMinhasIncricoes();
-          });
+          this.typeFormInscricaoSelected = type;
+          this.idProcessoSelected = idProcesso;
+          this.completarInscricao = true;
+          // this.processoSeletivoService.inscreverProcessoSeletivo(idProcesso).subscribe(() => {
+          //   this.toastr.success('Inscrito com sucesso', 'Sucesso');
+          //   this.getMinhasIncricoes();
+          // });
         } else {
           this.toastr.error('Precisa estar logado para se inscrever em um processo seletivo', 'Atenção: ');
           setTimeout(() => {
@@ -74,6 +81,38 @@ import { ProcessoSeletivoService } from "./processo-seletivo.service";
 
       })
     }
+
+    inscreverNoProcesso(formRetorno: FormGroup) {
+      console.log("VOLTOUUUUUUUUUUU ");
+      console.log("iniciarInsNoProcesso: ", formRetorno.value);
+      console.log("formRetornoformRetornoformRetornoformRetorno: ", formRetorno);
+      //AAAAAAAAAAAA
+      const invalid = [];
+      const controls = formRetorno.controls;
+      for (const name in controls) {
+          if (controls[name].invalid) {
+              invalid.push(name);
+          }
+      }
+      console.log("invalid: ", invalid)
+      //AAAAAAAAAAAA
+      if(formRetorno.valid) {
+        this.processoSeletivoService.inscreverProcessoSeletivo(formRetorno.value.idProcessoSeletivo, formRetorno.value)
+          .subscribe(
+            () => {
+              this.toastr.success('Inscrito com sucesso', 'Sucesso');
+              this.completarInscricao = false;
+              this.getMinhasIncricoes();
+            },
+            erro => {
+              this.toastr.error('Ocorreu um erro inesperado!', 'Atenção: ');
+            }
+          );
+      } else {
+        this.toastr.error('Preencha os campos corretamente', 'Atenção: ')
+      }
+    }
+
     cancelarInscricao(idProcesso) {
       this.user$.pipe(take(1)).subscribe(myUser => {
         if(myUser != null) {

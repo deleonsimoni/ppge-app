@@ -74,8 +74,8 @@
         </div>
         <div class="col-md-12">
             <section id="about" class="about">
-                <div class="container" data-aos="fade-up">
-                    <div class="row text-center" data-aos="fade-up" data-aos-delay="200">
+                <div class="container" >
+                    <div class="row text-center"  data-aos-delay="200">
                         <!-- Tabs -->
                         <ul class="nav nav-pills mb-3">
                             <li><a class="nav-link active" data-bs-toggle="pill" href="#tab1" (click)="getPerTipo('1')">Teses</a></li>
@@ -85,11 +85,11 @@
                         <!-- Tab Content -->
                         <div class="tab-content">
 
-                            <div class="tab-pane fade show active" id="tab1">
+                            <div class="tab-pane show active" id="tab1">
                                 <app-tese-ou-dissertacao [datas]="datas" (resposta)="reciverFeedback($event)"></app-tese-ou-dissertacao>
                             </div><!-- End Tab 1 Content -->
 
-                            <div class="tab-pane fade show" id="tab2">
+                            <div class="tab-pane show" id="tab2">
                                 <app-tese-ou-dissertacao [datas]="datas" (resposta)="reciverFeedback($event)"></app-tese-ou-dissertacao>
                             </div><!-- End Tab 2 Content -->
                         </div>

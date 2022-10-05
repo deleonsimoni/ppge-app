@@ -89,6 +89,17 @@ const UserSchema = new mongoose.Schema(
         type: String,
       },
     ],
+    processosSeletivo: [
+      {
+        idProcesso: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'ProcessoSeletivo',
+        },
+        formulario: {
+          type: mongoose.Schema.Types.Mixed
+        }
+      }
+    ],
   },
   {
     versionKey: false,

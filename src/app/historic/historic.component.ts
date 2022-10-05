@@ -25,7 +25,7 @@ export class HistoricComponent implements OnInit {
   private getInfoHistoric() {
     this.historicService.getInfoHistoric().subscribe(historicInfo => {
       // historicInfo[0].content = this._sanitizer.bypassSecurityTrustHtml(historicInfo[0].content);
-      this.historicInfo = historicInfo;
+      this.historicInfo = historicInfo ? historicInfo : {};
     });
   }
 

@@ -15,7 +15,14 @@ const LinhaPesquisaSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-    },
+    },    
+    
+    corpoDocente: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'CorpoDocente'
+      }
+    ],
 
     content: {
       type: String,

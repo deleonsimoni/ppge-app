@@ -17,11 +17,6 @@ const CorpoDocenteSchema = new mongoose.Schema(
       required: true,
     },
 
-    researchLine: {
-      type: String,
-      required: true,
-    },
-
     twitter: {
       type: String,
       required: false,
@@ -42,6 +37,7 @@ const CorpoDocenteSchema = new mongoose.Schema(
       required: false,
     },
 
+    // Tipos 1-Professor / 2-Doutor
     type: {
       type: String,
       required: true,

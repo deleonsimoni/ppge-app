@@ -15,11 +15,13 @@ const CorpoDocenteModel = require('../models/corpo-docente.model');
 module.exports = {
   getPage,
   getHeadersPage,
+  getAllTitlesPage,
   insertPage,
   updatePage,
   deletePage,
 
   getCorpoDocente,
+  getCorpoDocenteName,
   insertCorpoDocente,
   updateCorpoDocente,
   deleteCorpoDocente,
@@ -83,6 +85,7 @@ const pagesFunctions = {
   linha_pesquisa: {
     get: async (req) => await linhaPesquisaService.getLinhaPesquisa(req),
     getHeaders: async (req) => await linhaPesquisaService.getHeadersLinhaPesquisa(req),
+    getAllTitles: async (req) => await linhaPesquisaService.getAllTitlesLinhaPesquisa(req),
     update: async (req, idUser) => await linhaPesquisaService.updateLinhaPesquisa(req, idUser),
     insert: async (req, idUser) => await linhaPesquisaService.insertLinhaPesquisa(req, idUser),
     delete: async (id) => await linhaPesquisaService.deleteLinhaPesquisa(id),
@@ -109,6 +112,10 @@ async function getHeadersPage(req) {
   return pagesFunctions[req.params.selectedPage].getHeaders(req);
 }
 
+async function getAllTitlesPage(req) {
+  return pagesFunctions[req.params.selectedPage].getAllTitles(req);
+}
+
 async function updatePage(req, idUser) {
   return pagesFunctions[req.params.selectedPage].update(req, idUser);
 }
@@ -132,6 +139,13 @@ async function getCorpoDocente(req) {
     .sort({
       createAt: -1
     });
+}
+
+async function getCorpoDocenteName(req) {
+  return await CorpoDocenteModel.find({}, {fullName: 1, type: 1})
+  .sort({
+    createAt: -1
+  });
 }
 
 async function updateCorpoDocente(req, idUser) {

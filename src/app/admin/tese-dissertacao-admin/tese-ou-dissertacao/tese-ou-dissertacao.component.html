@@ -13,17 +13,17 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let di of datas; let i= index" style="font-size: 10px;">
-                    <th scope="row">{{ di.autor }}</th>
-                    <th scope="row">{{ di.titulo }}</th>
-                    <th scope="row">{{ di.dataSala }}</th>
-                    <th scope="row">{{ di.banca }}</th>
-                    <th scope="row">{{ di.ingresso }}</th>
-                    <th scope="row">{{ di.linkTitulo | breakString }}</th>
-                    <th scope="row">
+                <tr *ngFor="let di of datas; let i= index">
+                    <td scope="row">{{ di.autor }}</td>
+                    <td scope="row">{{ di.titulo }}</td>
+                    <td scope="row">{{ di.dataSala }}</td>
+                    <td scope="row">{{ di.banca }}</td>
+                    <td scope="row">{{ di.ingresso }}</td>
+                    <td scope="row">{{ di.linkTitulo | breakString }}</td>
+                    <td scope="row">
                         <span class="material-icons md-18 btn" (click)="apagarTitulo(di._id, di.autor, di.titulo, di.tipo)">delete</span>
                         <span class="material-icons md-18 btn" (click)="editarTitulo(di)">edit_square</span>
-                    </th>
+                    </td>
                 </tr>
             </tbody>
         </table>

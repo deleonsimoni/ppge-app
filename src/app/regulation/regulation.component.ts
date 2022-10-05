@@ -35,6 +35,7 @@ export class RegulationComponent implements OnInit {
 
   private getCommitteeService(regulationType: number) {
     this.regulationService.getInfoRegulation(regulationType).subscribe(data => {
+      data = data ? data : {};
       data.content = this._sanitizer.bypassSecurityTrustHtml(data.content);
       this.regulationInfo = data;
     });

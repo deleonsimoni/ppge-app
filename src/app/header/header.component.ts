@@ -34,6 +34,8 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    const languageStorage = localStorage.getItem('language');
+    this.changeSelectedCountryCode(languageStorage)
     this.getHeaders();
   }
 
@@ -69,9 +71,10 @@ export class HeaderComponent implements OnInit {
   countryCodes = ['us', 'es', 'br'];
 
   changeSelectedCountryCode(value: string): void {
+    value = value ? value : 'br';
     this.selectedCountryCode = value;
     this.translate.use(value);
+    localStorage.setItem('language', this.selectedCountryCode);
     this.getHeaders();
-    this.router.navigateByUrl('');
   }
 }

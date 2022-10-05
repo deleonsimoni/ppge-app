@@ -32,6 +32,7 @@ export class ScheduleComponent implements OnInit {
 
   private getCommitteeService(scheduleType: number) {
     this.scheduleService.getInfoSchedule(scheduleType).subscribe(data => {
+      data = data ? data : {};
       data.content = this._sanitizer.bypassSecurityTrustHtml(data.content);
       this.scheduleInfo = data;
     });
