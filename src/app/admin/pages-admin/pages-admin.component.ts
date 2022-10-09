@@ -22,7 +22,13 @@ export class PagesAdminComponent implements OnInit {
   dataExpansivel: any = null;
   listCorpoDocenteName: any = null;
   expansivel: boolean = false;
+  listUrlExpansivel: string[] = [
+    'linha_pesquisa',
+    'cursos',
+  ]
   private image: FileList;
+
+  
 
 
   editorConfig: AngularEditorConfig = {
@@ -61,9 +67,8 @@ export class PagesAdminComponent implements OnInit {
   ) {
     this.form = this.builder.group({
       _id: [],
-      navTitle: [null, []],
-      title: [null, [Validators.required]],
-      content: [null, [Validators.required]],
+      title: [null, []],
+      content: [null, []],
       logo: [null, []],
       facebook: [null, []],
       youtube: [null, []],
@@ -72,6 +77,21 @@ export class PagesAdminComponent implements OnInit {
 
       /* Para pagina 'Linha de Pesquisa' */
       corpoDocente: [null, []],
+      "pt-br": this.builder.group({
+        navTitle: [null, []],
+        title: [null, []],
+        content: [null, []],
+      }),
+      "en-us": this.builder.group({
+        navTitle: [null, []],
+        title: [null, []],
+        content: [null, []],
+      }),
+      "es-es": this.builder.group({
+        navTitle: [null, []],
+        title: [null, []],
+        content: [null, []],
+      }),
 
       selectPage: ['historico', [Validators.required]],
       language: ['pt-br', [Validators.required]],
@@ -79,7 +99,6 @@ export class PagesAdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
     this.getInfoPage();
     
   }

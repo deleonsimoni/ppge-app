@@ -72,6 +72,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
 
   public getTitleLinhaPesquisa() {
     this.siteService.getTitleLinhaPesquisa().subscribe(data => {
+      console.log("LIST LINHA PESQUISA: ", data)
       this.listLinhaPesquisa = data;
     })
   }
@@ -110,7 +111,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
       if (this.form.value._id) {
         this.siteService.atualizarProcessoSeletivo(this.form.value)
           .subscribe((res: any) => {
-            this.toastr.success('Histórico alterado com sucesso', 'Sucesso');
+            this.toastr.success('Processo Seletivo alterado com sucesso', 'Sucesso');
             this.getProcessoSeletivo();
             this.limparForm();
           }, (err: any) => {

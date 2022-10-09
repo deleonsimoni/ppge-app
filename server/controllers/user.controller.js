@@ -17,7 +17,7 @@ async function insert(user) {
 }
 
 async function getByIdOnlyProcesso(idUser, req) {
-  return await UserModel.findOne(
+  let userResult = await UserModel.findOne(
     {_id: idUser},
     {
       fullname: 1,
@@ -47,18 +47,29 @@ async function getByIdOnlyProcesso(idUser, req) {
         }
       }
     }
-  );
+  )
+  .populate({
+    path: "processosSeletivo.primeiroOrientador",
+    select: "fullName",
+  })
+  .populate({
+    path: "processosSeletivo.segundoOrientador",
+    select: "fullName",
+  })
+  .populate({
+    path: "processosSeletivo.linhaPesquisa",
+    select: `${req.query.language}.title`,
+  });
+
+  return userResult
 }
 
-async function subscribeProcessoSeletivo(idProcesso, idUser, formulario) {
+async function subscribeProcessoSeletivo(idUser, formulario) {
   return await UserModel.findOneAndUpdate(
     {_id: idUser},
     {
       $addToSet: {
-        processosSeletivo: {
-          idProcesso,
-          formulario
-        }
+        processosSeletivo: formulario
       }
     },
     {upsert: false}

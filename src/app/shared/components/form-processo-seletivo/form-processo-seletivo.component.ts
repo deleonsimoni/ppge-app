@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TypeGraduateEnum } from '@app/shared/shared.model';
+import { TypeGraduateEnum, TypeOpcaoVagaEnum } from '@app/shared/shared.model';
 import { FormProcessoSeletivoService } from './form-processo-seletivo.service';
 
 @Component({
@@ -19,6 +19,7 @@ export class FormProcessoSeletivoComponent implements OnInit {
   public listLinhaPesquisa: any = [];
   public listCorpoDocente: any = [];
   public typeGraduateEnum = TypeGraduateEnum;
+  public typeOpcaoVagaEnum = TypeOpcaoVagaEnum;
 
   constructor(
     private builder: FormBuilder,
@@ -27,12 +28,12 @@ export class FormProcessoSeletivoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("this.type: ",this.type)
-    if(this.type == TypeGraduateEnum.MESTRADO) console.log("MESTRADO");
-    if(this.type == TypeGraduateEnum.DOUTORADO) console.log("DOUTORADO");
+    window.scroll({
+      top: 0,
+      left: 0
+    })
 
     this.getProcessoSeletivoInfosById();
-    // this.getTitleLinhaPesquisa();
     this.createForm();
   }
 
@@ -41,24 +42,21 @@ export class FormProcessoSeletivoComponent implements OnInit {
     console.log("createForm() type: ", );
 
     let groupForm: any = {
-      tipoFormulario: this.type,
-      idProcessoSeletivo: [this.idProcessoSeletivo, [Validators.required]],
+      idProcesso: [this.idProcessoSeletivo, [Validators.required]],
+      tipoFormulario: [this.type, [Validators.required]],
       linhaPesquisa: [null, [Validators.required]],
       primeiroOrientador: [null, [Validators.required]],
-      opcaoVagaAmpla: [false, []],
-      opcaoVagaCota: [false, []],
-      opcaoVagaCotaSub: ["", []],
+      opcaoVaga: [null, []],
+      opcaoVagaCotaSub: [null, []],
       deficienciaSub: [null, []],
       graduacao: this.builder.group({
         nome: [null, []],
-        campo: [null, []],
         instituicao: [null, []],
         anoConclusao: [null, []],
         termoNaoColacaoGrau: [null, []]
       }),
       posGraduacao: this.builder.group({
         nome: [null, []],
-        campo: [null, []],
         instituicao: [null, []],
         anoConclusao: [null, []],
       }),
@@ -69,10 +67,8 @@ export class FormProcessoSeletivoComponent implements OnInit {
     if(this.type == TypeGraduateEnum.DOUTORADO) {
       groupForm = {
         ...groupForm,
-        opcaoVagaDocente: [false, []],
         posGraduacaoMestrado: this.builder.group({
           nome: [null, []],
-          campo: [null, []],
           instituicao: [null, []],
           anoConclusao: [null, []],
           tituloDissertacao: [null, []],
@@ -89,17 +85,9 @@ export class FormProcessoSeletivoComponent implements OnInit {
       };
 
     }
-    console.log("groupForm: ", groupForm)
     this.form = this.builder.group(groupForm);
   }
 
-  // private getTitleLinhaPesquisa() {
-  //   this.serviceFormProcesso.getTitleLinhaPesquisa()
-  //     .subscribe(data => {
-  //       this.listLinhaPesquisa = data;
-        
-  //     });
-  // }
 
   private getProcessoSeletivoInfosById() {
     this.serviceFormProcesso.getProcessoSeletivoInfosById(this.idProcessoSeletivo)
@@ -109,6 +97,10 @@ export class FormProcessoSeletivoComponent implements OnInit {
           this.listLinhaPesquisa = data.researchLine
         }
       });
+  }
+
+  limpaOpcaoVagaCotaSub() {
+    this.form.patchValue({opcaoVagaCotaSub: null});
   }
 
   register() {

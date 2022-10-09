@@ -5,6 +5,7 @@ module.exports = {
   getLinhaPesquisa,
   getHeadersLinhaPesquisa,
   getAllTitlesLinhaPesquisa,
+  getHeadersLinhaPesquisaByIdDocente,
   insertLinhaPesquisa,
   updateLinhaPesquisa,
   deleteLinhaPesquisa,
@@ -12,27 +13,61 @@ module.exports = {
 
 async function getLinhaPesquisa(req) {
   let whereClause = {};
-  if(!!req.query.language) whereClause.language = req.query.language
   if(!!req.query._id) {
     if(!mongoose.Types.ObjectId.isValid(req.query._id)) return [];
     whereClause._id = req.query._id
   }
-  return await LinhaPesquisaModel.find(whereClause)
-    .sort({
-      createAt: -1
-    });
+  let ret = await LinhaPesquisaModel.find(whereClause)
+  .sort({
+    createAt: -1
+  })
+  if(whereClause._id) {
+    ret = ret.map(data => (
+      {
+        _id: data._id, 
+        title: data[req.query.language].title, 
+        navTitle: data[req.query.language].navTitle, 
+        content: data[req.query.language].content  
+      }
+    ));
+  }
+  return ret;
 }
 
+
 async function getHeadersLinhaPesquisa(req) {
-  let whereClause = {};
-  if(!!req.query.language) whereClause.language = req.query.language
-  return await LinhaPesquisaModel.find(whereClause, {navTitle: 1})
+  let ret = await LinhaPesquisaModel.find({}, {
+      [`${req.query.language}.title`]: 1,
+      [`${req.query.language}.navTitle`]: 1,
+    })
     .sort({
       createAt: -1
-    });
+    })
+  ret = ret.map(data => (
+    {
+      _id: data._id, 
+      title: data[req.query.language].title, 
+      navTitle: data[req.query.language].navTitle 
+    }
+  ));
+  return ret;
+}
+
+async function getHeadersLinhaPesquisaByIdDocente(idDocente, language) {
+  await LinhaPesquisaModel.find({ // condicao where
+    corpoDocente: idDocente
+  }, 
+  { // limita campos
+    [`${language}.title`]: 1,
+  })
+  .sort({
+    createAt: -1
+  })
+
 }
 
 async function getAllTitlesLinhaPesquisa(req) {
+  console.log("AQUIIII> ", req.params)
   let whereClause = {};
   return await LinhaPesquisaModel.find(whereClause, {title: 1})
     .sort({

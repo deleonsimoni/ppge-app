@@ -6,16 +6,6 @@ const LinhaPesquisaSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true
     },
-
-    navTitle: {
-      type: String,
-      required: true,
-    },
-
-    title: {
-      type: String,
-      required: true,
-    },    
     
     corpoDocente: [
       {
@@ -24,14 +14,61 @@ const LinhaPesquisaSchema = new mongoose.Schema(
       }
     ],
 
-    content: {
-      type: String,
-      required: true,
+    "pt-br": {
+
+      navTitle: {
+        type: String,
+        required: true,
+      },
+  
+      title: {
+        type: String,
+        required: true,
+      },
+
+      content: {
+        type: String,
+        required: true,
+      },
+
     },
 
-    language: {
-      type: String,
-      required: true,
+    "en-us": {
+
+      navTitle: {
+        type: String,
+        required: true,
+      },
+  
+      title: {
+        type: String,
+        required: true,
+      },
+
+      content: {
+        type: String,
+        required: true,
+      },
+
+    },
+
+    "es-es": {
+
+      navTitle: {
+        type: String,
+        required: true,
+      },
+  
+      title: {
+        type: String,
+        required: true,
+      },
+
+      content: {
+        type: String,
+        required: true,
+      },
+
     },
 
     imagePathS3: {

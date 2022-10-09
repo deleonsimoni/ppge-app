@@ -25,7 +25,7 @@
                         <h4>{{ profile.fullName }}</h4>
 
                         <span>{{ profile.academicFormation }}</span>
-                        <span>Linha de pesquisa: {{ profile.researchLine }} </span>
+                        <span>Linha de pesquisa: {{ profile?.linhaPesquisa?.join(' | ') }} </span>
 
                     </div>
                 </div>

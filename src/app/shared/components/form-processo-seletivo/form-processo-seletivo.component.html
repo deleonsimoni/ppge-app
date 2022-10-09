@@ -40,13 +40,19 @@
       <div class="col-12">
         <label><strong>Opção de vaga: </strong></label>
         <br>
-        <mat-checkbox formControlName="opcaoVagaAmpla"class="mr-3">Ampla concorrência</mat-checkbox>
-        <mat-checkbox formControlName="opcaoVagaCota" class="mr-3">Cotas de Ações Afirmativas</mat-checkbox> 
-        <mat-checkbox formControlName="opcaoVagaDocente" *ngIf="type == typeGraduateEnum.DOUTORADO">Programa de Qualificação Institucional da UFRJ (exclusiva para docentes e técnicos administrativos em Educação)</mat-checkbox>          
+        <mat-radio-group
+          class="example-radio-group w-100"
+          formControlName="opcaoVaga"
+          (change)="limpaOpcaoVagaCotaSub()"
+        >
+          <mat-radio-button class="example-radio-button mr-3" [value]="typeOpcaoVagaEnum.AMPLA_CONCORRENCIA">Ampla concorrência</mat-radio-button>
+          <mat-radio-button class="example-radio-button mr-3" [value]="typeOpcaoVagaEnum.COTAS_ACOES_AFIRMATIVAS">Cotas de Ações Afirmativas</mat-radio-button>
+          <mat-radio-button class="example-radio-button mr-3" [value]="typeOpcaoVagaEnum.EXCLUSIVA_DOCENTE" *ngIf="type == typeGraduateEnum.DOUTORADO">Programa de Qualificação Institucional da UFRJ (exclusiva para docentes e técnicos administrativos em Educação)</mat-radio-button>
+        </mat-radio-group>
       </div>
     </div>
 
-    <div *ngIf="form.value.opcaoVagaCota" class="row mb-3">
+    <div *ngIf="form.value.opcaoVaga == typeOpcaoVagaEnum.COTAS_ACOES_AFIRMATIVAS" class="row mb-3">
       <label id="example-radio-group-label"><strong>Sobre a política de ação afirmativa para negros(as), indígenas, quilombolas, pessoas com deficiência, pessoas travestis e transexuais, assinale uma das alternativas a seguir: </strong></label>
       <mat-radio-group
         aria-labelledby="example-radio-group-label"
@@ -69,14 +75,8 @@
     </div>
 
     <div class="row justify-content-around mb-5">
-      <div formGroupName="graduacao" class="col-4">
+      <div formGroupName="graduacao" class="col-lg-4 mb-3">
         <label><strong>Graduação</strong></label>
-        <div class="row mb-3 ml-2">
-          <div class="col">
-            <label><strong>Campos</strong></label>
-            <input type="text" formControlName="campo" class="form-control" >
-          </div>
-        </div>
         <div class="row mb-3 ml-2">
           <div class="col">
             <label><strong>Informar a graduação</strong></label>
@@ -108,14 +108,8 @@
           </div>
         </div>
       </div>
-      <div formGroupName="posGraduacao" class="col-4">
+      <div formGroupName="posGraduacao" class="col-lg-4 mb-3">
         <label><strong>Pós-graduação {{type == typeGraduateEnum.DOUTORADO ? "(especialização)" : ""}}</strong></label>
-        <div class="row mb-3 ml-2">
-          <div class="col">
-            <label><strong>Campos</strong></label>
-            <input type="text" formControlName="campo" class="form-control" >
-          </div>
-        </div>
         <div class="row mb-3 ml-2">
           <div class="col">
             <label><strong>Informar a graduação</strong></label>
@@ -136,14 +130,8 @@
         </div>
 
       </div>
-      <div *ngIf="type == typeGraduateEnum.DOUTORADO" formGroupName="posGraduacaoMestrado" class="col-4">
+      <div formGroupName="posGraduacaoMestrado" class="col-lg-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
         <label><strong>Pós-graduação (mestrado)</strong></label>
-        <div class="row mb-3 ml-2">
-          <div class="col">
-            <label><strong>Campos</strong></label>
-            <input type="text" formControlName="campo" class="form-control" >
-          </div>
-        </div>
         <div class="row mb-3 ml-2">
           <div class="col">
             <label><strong>Informar a graduação</strong></label>
@@ -180,23 +168,23 @@
     
     <div class="row mb-5">
       <label><strong>Anexos</strong></label>
-      <div class="col-4 pl-4">
-        <label><strong>Currículo Lattes</strong></label>
+      <div class="col-lg-4 mb-3 pl-4">
+        <label><strong>Currículo Lattes</strong></label><br>
         <input type="file">
         <p class="file-subtitle">* Anexe aqui em formato PDF seu Currículo Lattes.</p>
       </div>
-      <div class="col-4 pl-4">
-        <label><strong>Comprovante de pagamento</strong></label>
+      <div class="col-lg-4 mb-3 pl-4">
+        <label><strong>Comprovante de pagamento</strong></label><br>
         <input type="file">
         <p class="file-subtitle">* Anexe aqui em formato PDF o comprovante de pagamento da taxa de inscrição.</p>
       </div>
-      <div class="col-4 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
-        <label><strong>Pré-Projeto de pesquisa</strong></label>
+      <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
+        <label><strong>Pré-Projeto de pesquisa</strong></label><br>
         <input type="file">
         <p class="file-subtitle">* Anexe aqui em formato PDF o Pré-Projeto de pesquisa. (Observe os itens exigidos: indicação de linha de pesquisa, dois possíveis orientadores/as, nome completo, título, introdução, objetivos, possíveis abordagens teórico-metodológicas, referências bibliográficas e a extensão de 8 a 10 páginas)</p>
       </div>
-      <div class="col-4 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
-        <label><strong>Memorial</strong></label>
+      <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
+        <label><strong>Memorial</strong></label><br>
         <input type="file">
         <p class="file-subtitle">
           * Anexe aqui em formato PDF o Memorial. Observe os itens exigidos: 
@@ -208,13 +196,13 @@
           orientadoras/es selecionadas/os, com extensão máxima de 3 páginas.
         </p>
       </div>
-      <div class="col-4 pl-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
-        <label><strong>Projeto de Tese</strong></label>
+      <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
+        <label><strong>Projeto de Tese</strong></label><br>
         <input type="file">
         <p class="file-subtitle">* Anexe aqui o Projeto de Tese em formato PDF. (Observe os itens exigidos: nome do candidato, linha de pesquisa, orientador escolhido, título do projeto, introdução, justificativa, objetivos, referencial teórico-metodológico, referências bibliográficas e a extensão de até 20 folhas).</p>
       </div>
-      <div class="col-4 pl-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
-        <label><strong>Principal publicação dos últimos 5 anos</strong></label>
+      <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
+        <label><strong>Principal publicação dos últimos 5 anos</strong></label><br>
         <input type="file">
         <p class="file-subtitle">* Anexe aqui o arquivo em formato PDF da publicação escolhida.</p>
       </div>
@@ -246,9 +234,12 @@
         </mat-checkbox>
       </div>
     </div>
+
+    <div class="row justify-content-center">
+      <div class="col-auto">
+        <button style="background-color: green;" mat-raised-button color="primary">Inscrever-se</button>
+      </div>
+    </div>
     
-    
-    
-    <button style="background-color: green;" mat-raised-button color="primary">Inscrever-se</button>
   </form>
 </div>

@@ -224,10 +224,34 @@ async function updateNoticia(req, idUser) {
 async function getCorpoDocente(req) {
   let whereParam = {};
   if (req.query.type) whereParam.type = req.query.type
-  return await CorpoDocenteModel.find(whereParam)
+  let ret = await CorpoDocenteModel
+    .find(whereParam)
+    .populate({
+      path: "listLinhaPesquisa",
+      select: {
+        [`${req.query.language}.title`]: 1,
+        corpoDocente: 0
+      }
+    })
     .sort({
       createAt: -1
     });
+
+  ret = ret.map(data => (
+    {
+      _id: data._id,
+      fullName: data.fullName,
+      academicFormation: data.academicFormation,
+      twitter: data.twitter,
+      facebook: data.facebook,
+      instagram: data.instagram,
+      linkedin: data.linkedin,
+      type: data.type,
+      linhaPesquisa: data.listLinhaPesquisa.map(dataLinha => (dataLinha[req.query.language].title)),
+    }
+  ))
+
+  return ret
 }
 
 async function getCorpoDocenteName(req) {

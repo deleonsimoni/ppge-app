@@ -43,6 +43,7 @@ export class HeaderComponent implements OnInit {
     this.listUrlHeaders.forEach((pageSelected, index) => {
       this.headerService.getHeaderPage(pageSelected, this.fromInitialsToLanguageCode[this.selectedCountryCode]).subscribe((data) => {
         this.headerData[pageSelected] = data;
+        console.log("this.headerData: ", this.headerData);
         
       });
     });

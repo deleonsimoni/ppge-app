@@ -3,6 +3,7 @@ const passport = require('passport');
 const asyncHandler = require('express-async-handler');
 const userCtrl = require('../controllers/user.controller');
 const requireAdmin = require('../middleware/require-admin');
+const setLocation = require('../middleware/set-location');
 
 const router = express.Router();
 module.exports = router;
@@ -13,7 +14,7 @@ router.route('/').post(asyncHandler(insert));
 
 router.get('/:id', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], asyncHandler(getByIdOnlyProcesso));
+}), requireAdmin], setLocation, asyncHandler(getByIdOnlyProcesso));
 
 async function insert(req, res) {
   let user = await userCtrl.insert(req.body);
