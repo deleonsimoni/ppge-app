@@ -1,114 +1,125 @@
 <div class="container">
   <div class="row justify-content-between">
-      <div class="section-header" mat-dialog-title>
-          <h2>Administrar páginas.</h2>
-      </div>
+    <div class="section-header" mat-dialog-title>
+      <h2>Administrar páginas.</h2>
+    </div>
   </div>
   <em class="fa fa-undo"></em>
   <i class="fa-solid fa-address-card"></i>
   <div class="row justify-content-center">
 
-      <form role="form" class="reviewer" [formGroup]="form" (ngSubmit)="register()">
+    <form role="form" class="reviewer" [formGroup]="form" (ngSubmit)="register()">
 
-          <mat-form-field appearance="fill">
-            <mat-label>Selecione a Página</mat-label>
-            <mat-select formControlName="selectPage" (selectionChange)="getInfoPage()">
-              <mat-option value="historico">Histórico</mat-option>
-              <mat-option value="objetivo">Objetivos</mat-option>
-              <mat-optgroup label="Comissões">
-                <mat-option value="comissao_deliberativa">Comissão Deliberativa</mat-option>
-                <mat-option value="comissao_gestao">Comissão de Gestão</mat-option>
-              </mat-optgroup>
-              <mat-optgroup label="Agenda">
-                <mat-option value="agenda_colegiado">Colegiado</mat-option>
-                <mat-option value="agenda_comissao_deliberativa">Comissão Deliberativa</mat-option>
-                <mat-option value="agenda_comissao_gestao">Comissão de Gestão</mat-option>
-              </mat-optgroup>
-              <mat-optgroup label="Regulamentos e Normas de Credenciamento"> 
-                <mat-option value="regulamento_ppge">Regulamento do PPGE</mat-option>
-                <mat-option value="regras_credenciamento">Regras de Credenciamento</mat-option>
-              </mat-optgroup>
-              <mat-option value="linha_pesquisa">Linhas de pesquisa</mat-option>
-              <mat-option value="cursos">Cursos</mat-option>
-            </mat-select>
-          </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Selecione a Página</mat-label>
+        <mat-select formControlName="selectPage" (selectionChange)="getInfoPage()">
+          <mat-option value="historico">Histórico</mat-option>
+          <mat-option value="objetivo">Objetivos</mat-option>
+          <mat-option value="noticias">Noticias</mat-option>
+          <mat-optgroup label="Comissões">
+            <mat-option value="comissao_deliberativa">Comissão Deliberativa</mat-option>
+            <mat-option value="comissao_gestao">Comissão de Gestão</mat-option>
+          </mat-optgroup>
+          <mat-optgroup label="Agenda">
+            <mat-option value="agenda_colegiado">Colegiado</mat-option>
+            <mat-option value="agenda_comissao_deliberativa">Comissão Deliberativa</mat-option>
+            <mat-option value="agenda_comissao_gestao">Comissão de Gestão</mat-option>
+          </mat-optgroup>
+          <mat-optgroup label="Regulamentos e Normas de Credenciamento">
+            <mat-option value="regulamento_ppge">Regulamento do PPGE</mat-option>
+            <mat-option value="regras_credenciamento">Regras de Credenciamento</mat-option>
+          </mat-optgroup>
+          <mat-option value="linha_pesquisa">Linhas de pesquisa</mat-option>
+          <mat-option value="cursos">Cursos</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-          <mat-form-field appearance="fill" class="ml-3 mb-5">
-            <mat-label>Selecione o Idioma</mat-label>
-            <mat-select formControlName="language" (selectionChange)="getInfoPage()">
-              <mat-option value="en-us"><span class="flag-icon flag-icon-us flag-icon-margin-right ng-star-inserted"></span> US</mat-option>
-              <mat-option value="es-es"><span class="flag-icon flag-icon-es flag-icon-margin-right ng-star-inserted"></span> ES</mat-option>
-              <mat-option value="pt-br"><span class="flag-icon flag-icon-br flag-icon-margin-right ng-star-inserted"></span> BR</mat-option>
-            </mat-select>
-          </mat-form-field>   
+      <mat-form-field appearance="fill" class="ml-3 mb-5">
+        <mat-label>Selecione o Idioma</mat-label>
+        <mat-select formControlName="language" (selectionChange)="getInfoPage()">
+          <mat-option value="en-us"><span class="flag-icon flag-icon-us flag-icon-margin-right ng-star-inserted"></span>
+            US</mat-option>
+          <mat-option value="es-es"><span class="flag-icon flag-icon-es flag-icon-margin-right ng-star-inserted"></span>
+            ES</mat-option>
+          <mat-option value="pt-br"><span class="flag-icon flag-icon-br flag-icon-margin-right ng-star-inserted"></span>
+            BR</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-          <div *ngIf="expansivel" class="form-row justify-content-center mb-3">
-            <div class="form-group col-md-12">
-              <button class="ml-2 mb-3" type="button" *ngFor="let item of dataExpansivel; let i = index" (click)="selecionarPagina(i)" mat-stroked-button [ngClass]="{'activate': i==data.index}" color="accent">
-                  {{ item.navTitle }} {{!item._id ? "(Novo*)" : ""}}
-              </button>
-              <button class="ml-2 mb-3" type="button" (click)="adicionarPagina()" mat-stroked-button color="accent">
-                <svg height="16px" width="24px" fill="#ff4081" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-              </button>
-            </div>
-          </div>
+      <div *ngIf="expansivel" class="form-row justify-content-center mb-3">
+        <div class="form-group col-md-12">
+          <button class="ml-2 mb-3" type="button" *ngFor="let item of dataExpansivel; let i = index"
+            (click)="selecionarPagina(i)" mat-stroked-button [ngClass]="{'activate': i==data.index}" color="accent">
+            {{ item.navTitle }} {{!item._id ? "(Novo*)" : ""}}
+          </button>
+          <button class="ml-2 mb-3" type="button" (click)="adicionarPagina()" mat-stroked-button color="accent">
+            <svg height="16px" width="24px" fill="#ff4081" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+              <path
+                d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+            </svg>
+          </button>
+        </div>
+      </div>
 
-          <mat-form-field *ngIf="form.value.selectPage === 'linha_pesquisa'" appearance="fill" class="mb-3 w-100">
-            <mat-label>Selecione o Corpo Docente</mat-label>
-            <mat-select multiple formControlName="corpoDocente">
-              <mat-option *ngFor="let cdn of listCorpoDocenteName" [value]="cdn._id">{{cdn.type == 1 ? 'Professor' : 'Doutor'}} - {{cdn.fullName}}</mat-option>
-            </mat-select>
-          </mat-form-field>
+      <mat-form-field *ngIf="form.value.selectPage === 'linha_pesquisa'" appearance="fill" class="mb-3 w-100">
+        <mat-label>Selecione o Corpo Docente</mat-label>
+        <mat-select multiple formControlName="corpoDocente">
+          <mat-option *ngFor="let cdn of listCorpoDocenteName" [value]="cdn._id">{{cdn.type == 1 ? 'Professor' :
+            'Doutor'}} - {{cdn.fullName}}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-          <!-- <div class="form-row justify-content-center">
+      <!-- <div class="form-row justify-content-center">
               <div class="conferencer-img">
                   <img id="imageRender" height="100px" width="100px" src="../../assets/img/user.png" alt=""
                       #imageRender>
                   <button (click)="loadImage()"><i class="fas fa-camera"></i></button>
               </div>
-          </div> -->     
-          
-          <div *ngIf="(!!dataExpansivel && dataExpansivel.length > 0) || !dataExpansivel">
-            <div *ngIf="expansivel" class="form-row justify-content-center">
-              <div class="form-group col-md-12">
-                  <input type="text" name="navTitle" class="form-control" id="navTitle" placeholder="Título de Navegação"
-                      formControlName="navTitle" />
-                </div>
-            </div>
-  
-            <div class="form-row justify-content-center">
-                <div class="form-group col-md-12">
-                    <input type="text" name="title" class="form-control" id="title" placeholder="Título"
-                        formControlName="title" />
-  
-                </div>
-            </div>
-  
-            <div class="form-row justify-content-center">
-                <div class="form-group col-md-12">
-  
-                    <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [(ngModel)]="content" [config]="editorConfig"></angular-editor>
-  
-                </div>
-            </div>
-  
-            <input type="file" class="custom-file-input" style="display: none;" accept="image/*" data-max-size="5048"
-                id="image" (change)="setImage($event.target.files)" #fileInput />
-  
-            <div class="row justify-content-around m-4">
-              <div class="col-8">
-                <button class="w-100" type="submit" mat-raised-button color="primary">
-                    Submeter
-                </button>
-              </div>
-              <div *ngIf="expansivel" class="col-3">
-                <button (click)="excluirPaginaExpansivel()" class="w-100" type="button" mat-raised-button color="warn">
-                    Excluir
-                </button>
-              </div>
-            </div>
+          </div> -->
+
+      <div *ngIf="(!!dataExpansivel && dataExpansivel.length > 0) || !dataExpansivel">
+        <div *ngIf="expansivel" class="form-row justify-content-center">
+          <div class="form-group col-md-12">
+            <input type="text" name="navTitle" class="form-control" id="navTitle" placeholder="Título de Navegação"
+              formControlName="navTitle" />
+          </div>
+        </div>
+
+        <div class="form-row justify-content-center">
+          <div class="form-group col-md-12">
+            <input type="text" name="title" class="form-control" id="title" placeholder="Título"
+              formControlName="title" />
 
           </div>
-      </form>
+        </div>
+
+        <div class="form-row justify-content-center">
+          <div class="form-group col-md-12">
+
+            <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [(ngModel)]="content"
+              [config]="editorConfig"></angular-editor>
+
+          </div>
+        </div>
+
+        <input type="file" class="custom-file-input" style="display: none;" accept="image/*" data-max-size="5048"
+          id="image" (change)="setImage($event.target.files)" #fileInput />
+
+        <div class="row justify-content-around m-4">
+          <div class="col-8">
+            <button class="w-100" type="submit" mat-raised-button color="primary">
+              Submeter
+            </button>
+          </div>
+          <div *ngIf="expansivel" class="col-3">
+            <button (click)="excluirPaginaExpansivel()" class="w-100" type="button" mat-raised-button color="warn">
+              Excluir
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </form>
   </div>
 </div>

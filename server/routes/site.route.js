@@ -10,6 +10,48 @@ const processoSeletivoRoutes = require('./processo-seletivo.route');
 const router = express.Router();
 module.exports = router;
 
+/* INICIO NOTICIAS */
+router.get('/noticia', asyncHandler(getNoticia));
+router.get('/noticiaCarrossel', asyncHandler(getNoticiaCarrossel));
+router.post('/noticia', [passport.authenticate('jwt', {
+  session: false
+}), requireAdmin, fileUpload()], asyncHandler(insertNoticia));
+
+router.put('/noticia', [passport.authenticate('jwt', {
+  session: false
+}), requireAdmin, fileUpload()], asyncHandler(updateNoticia));
+
+router.delete('/noticia/:id', [passport.authenticate('jwt', {
+  session: false
+}), requireAdmin], asyncHandler(deleteNoticia));
+
+async function getNoticiaCarrossel(req, res) {
+  let response = await lepedCtrl.getNoticiaCarrossel();
+  res.json(response);
+}
+
+async function getNoticia(req, res) {
+  let response = await lepedCtrl.getNoticia();
+  res.json(response);
+}
+
+async function updateNoticia(req, res) {
+  let response = await lepedCtrl.updateNoticia(req, req.user._id);
+  res.json(response);
+}
+
+async function insertNoticia(req, res) {
+  let response = await lepedCtrl.insertNoticia(req, req.user._id);
+  res.json(response);
+}
+
+async function deleteNoticia(req, res) {
+  let response = await lepedCtrl.deleteNoticia(req.params.id);
+  res.json(response);
+}
+
+/* FIM NOTICIA */
+
 /* Page */
 router.get('/page/:selectedPage', setLocation, asyncHandler(getPage));
 router.get('/page/:selectedPage/headers', asyncHandler(getHeadersPage));
@@ -66,11 +108,11 @@ router.get('/corpo-docente/name', asyncHandler(getCorpoDocenteName));
 
 router.post('/corpo-docente', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], asyncHandler(insertCorpoDocente));
+}), requireAdmin, fileUpload()], asyncHandler(insertCorpoDocente));
 
 router.put('/corpo-docente/:id', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], asyncHandler(updateCorpoDocente));
+}), requireAdmin, fileUpload()], asyncHandler(updateCorpoDocente));
 
 router.delete('/corpo-docente/:id', [passport.authenticate('jwt', {
   session: false

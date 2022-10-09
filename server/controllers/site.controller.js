@@ -11,6 +11,7 @@ const linhaPesquisaService = require('../service/linha_pesquisa.service');
 const cursosService = require('../service/cursos.service');
 const S3Uploader = require('./aws.controller');
 const CorpoDocenteModel = require('../models/corpo-docente.model');
+const Noticia = require('../models/noticia.model');
 
 module.exports = {
   getPage,
@@ -25,7 +26,15 @@ module.exports = {
   insertCorpoDocente,
   updateCorpoDocente,
   deleteCorpoDocente,
+
+  getNoticia,
+  getNoticiaCarrossel,
+  insertNoticia,
+  deleteNoticia,
+  updateNoticia,
 };
+
+
 
 const pagesFunctions = {
   historico: {
@@ -89,7 +98,7 @@ const pagesFunctions = {
     update: async (req, idUser) => await linhaPesquisaService.updateLinhaPesquisa(req, idUser),
     insert: async (req, idUser) => await linhaPesquisaService.insertLinhaPesquisa(req, idUser),
     delete: async (id) => await linhaPesquisaService.deleteLinhaPesquisa(id),
-    
+
   },
   cursos: {
     get: async (req) => await cursosService.getCursos(req),
@@ -97,7 +106,7 @@ const pagesFunctions = {
     update: async (req, idUser) => await cursosService.updateCursos(req, idUser),
     insert: async (req, idUser) => await cursosService.insertCursos(req, idUser),
     delete: async (id) => await cursosService.deleteCursos(id),
-    
+
   },
 }
 
@@ -130,11 +139,91 @@ async function deletePage(req, id) {
 }
 /* Fim Page*/
 
+async function getNoticia() {
+  return await Noticia.find()
+    .sort({
+      createAt: -1
+    });
+}
+
+async function getNoticiaCarrossel() {
+  return await Noticia.find({ isCarrossel: true })
+    .sort({
+      ordem: 1
+    });
+}
+
+async function insertNoticia(req, idUser) {
+  let form = JSON.parse(req.body.formulario);
+  form.user = idUser;
+  let retorno = { temErro: true };
+
+  if (req.files) {
+    let fileName = 'images/news/' + req.files.fileArray.name;
+    await S3Uploader.uploadBase64(fileName, req.files.fileArray.data).then(async fileData => {
+      console.log('Arquivo submetido para AWS ' + fileName);
+      form.imagePathS3 = fileName;
+      retorno.temErro = false;
+      return await new Noticia(form).save();
+    }, err => {
+      console.log('Erro ao enviar imagem para AWS: ' + fileName);
+      retorno.temErro = true;
+      retorno.mensagem = 'Servidor momentaneamente inoperante. Tente novamente mais tarde.';
+    });
+
+  } else {
+    return await new Noticia(form).save();
+  }
+}
+
+
+async function deleteNoticia(id) {
+  return await Noticia.findOneAndRemove({
+    _id: id
+  });
+}
+
+async function updateNoticia(req, idUser) {
+
+  let form = JSON.parse(req.body.formulario);
+  form.user = idUser;
+  let retorno = { temErro: true };
+
+  if (req.files) {
+    let fileName = 'images/news/' + req.files.fileArray.name;
+    await S3Uploader.uploadBase64(fileName, req.files.fileArray.data).then(async fileData => {
+      console.log('Arquivo submetido para AWS ' + fileName);
+      form.imagePathS3 = fileName;
+      retorno.temErro = false;
+
+      return await Noticia.findOneAndUpdate({
+        _id: form._id
+      },
+        form, {
+        upsert: true
+      });
+    }, err => {
+      console.log('Erro ao enviar imagem para AWS: ' + fileName);
+      retorno.temErro = true;
+      retorno.mensagem = 'Servidor momentaneamente inoperante. Tente novamente mais tarde.';
+    });
+
+  } else {
+    return await Noticia.findOneAndUpdate({
+      _id: form._id
+    },
+      form, {
+      upsert: true
+    });
+  }
+
+}
+
 
 /* Corpo Docente */
 async function getCorpoDocente(req) {
   let whereParam = {};
-  if(req.query.type) whereParam.type = req.query.type
+  if (req.query.type) whereParam.type = req.query.type
   return await CorpoDocenteModel.find(whereParam)
     .sort({
       createAt: -1
@@ -142,28 +231,69 @@ async function getCorpoDocente(req) {
 }
 
 async function getCorpoDocenteName(req) {
-  return await CorpoDocenteModel.find({}, {fullName: 1, type: 1})
-  .sort({
-    createAt: -1
-  });
+  return await CorpoDocenteModel.find({}, { fullName: 1, type: 1 })
+    .sort({
+      createAt: -1
+    });
 }
 
 async function updateCorpoDocente(req, idUser) {
 
-  let form = req.body.formulario;
+  let form = JSON.parse(req.body.formulario);
   form.user = idUser;
-  return await CorpoDocenteModel.findOneAndUpdate({
-    _id: form._id
-  },
-    form, {
-    upsert: true
-  });
+  let retorno = { temErro: true };
+
+  if (req.files) {
+    let fileName = 'images/corpo-docente/' + req.files.fileArray.name;
+    await S3Uploader.uploadBase64(fileName, req.files.fileArray.data).then(async fileData => {
+      console.log('Arquivo submetido para AWS ' + fileName);
+      form.imagePathS3 = fileName;
+      retorno.temErro = false;
+
+      return await CorpoDocenteModel.findOneAndUpdate({
+        _id: form._id
+      },
+        form, {
+        upsert: true
+      });
+    }, err => {
+      console.log('Erro ao enviar imagem para AWS: ' + fileName);
+      retorno.temErro = true;
+      retorno.mensagem = 'Servidor momentaneamente inoperante. Tente novamente mais tarde.';
+    });
+
+  } else {
+    return await CorpoDocenteModel.findOneAndUpdate({
+      _id: form._id
+    },
+      form, {
+      upsert: true
+    });
+  }
+
 }
 
 async function insertCorpoDocente(req, idUser) {
-  let form = req.body.formulario;
+  let form = JSON.parse(req.body.formulario);
   form.user = idUser;
-  return await new CorpoDocenteModel(form).save();
+  let retorno = { temErro: true };
+
+  if (req.files) {
+    let fileName = 'images/corpo-docente/' + req.files.fileArray.name;
+    await S3Uploader.uploadBase64(fileName, req.files.fileArray.data).then(async fileData => {
+      console.log('Arquivo submetido para AWS ' + fileName);
+      form.imagePathS3 = fileName;
+      retorno.temErro = false;
+      return await new CorpoDocenteModel(form).save();
+    }, err => {
+      console.log('Erro ao enviar imagem para AWS: ' + fileName);
+      retorno.temErro = true;
+      retorno.mensagem = 'Servidor momentaneamente inoperante. Tente novamente mais tarde.';
+    });
+
+  } else {
+    return await new CorpoDocenteModel(form).save();
+  }
 }
 
 async function deleteCorpoDocente(id) {

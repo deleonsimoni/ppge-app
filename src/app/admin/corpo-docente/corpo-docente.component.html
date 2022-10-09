@@ -1,10 +1,8 @@
-
-    
-
 <div class="container">
   <div class="row justify-content-end">
     <div class="col-auto">
-      <button type="button" (click)="alternarForm(!isForm)" mat-raised-button color="primary" [ngStyle]="{'background-color': !isForm ? 'green' : ''}">
+      <button type="button" (click)="alternarForm(!isForm)" mat-raised-button color="primary"
+        [ngStyle]="{'background-color': !isForm ? 'green' : ''}">
         {{isForm ? 'Voltar' : 'Adicionar novo'}}
       </button>
     </div>
@@ -12,7 +10,8 @@
   <mat-tab-group *ngIf="!isForm; else formBlock" animationDuration="0ms">
     <mat-tab label="Professores">
       <div class="row w-100 mt-4">
-        <div *ngFor="let profile of listProfile; let i = index" class="col-6 col-md-4 mb-3" [hidden]="profile.type != 1">
+        <div *ngFor="let profile of listProfile; let i = index" class="col-6 col-md-4 mb-3"
+          [hidden]="profile.type != 1">
           <card-profiles [profile]="profile" (edit)="edit(profile)" (delete)="delete(profile, i)"></card-profiles>
         </div>
       </div>
@@ -20,7 +19,8 @@
 
     <mat-tab label="Doutores">
       <div class="row w-100 mt-4">
-        <div *ngFor="let profile of listProfile; let i = index" class="col-6 col-md-4 mb-3" [hidden]="profile.type != 2">
+        <div *ngFor="let profile of listProfile; let i = index" class="col-6 col-md-4 mb-3"
+          [hidden]="profile.type != 2">
           <card-profiles [profile]="profile" (edit)="edit(profile)" (delete)="delete(profile, i)"></card-profiles>
         </div>
       </div>
@@ -39,46 +39,55 @@
       </mat-form-field>
 
       <div class="form-row justify-content-center">
-          <div class="form-group col-md-6">
-              <input type="text" name="fullName" class="form-control" id="fullName" placeholder="Nome completo"
-                  formControlName="fullName" />
+        <div class="col-8 col-md-4 order-1 order-md-2 mb-3">
+          <div class="profile">
+            <img [src]="logo ? logo : '../../../assets/img/placeholder-profile.png'" class="profile__image">
+            <input type="file" name="logo" class="profile__input" id="logo" placeholder="Logo"
+              (change)="getProfileImageCode($event)" />
           </div>
-      
+        </div>
+        <div class="col-12 col-md-8 order-2 order-md-1">
           <div class="form-group col-md-6">
-              <input type="text" name="academicFormation" class="form-control" id="academicFormation" placeholder="Título acadêmico"
-                  formControlName="academicFormation" />
+            <input type="text" name="fullName" class="form-control" id="fullName" placeholder="Nome completo"
+              formControlName="fullName" />
           </div>
-      
+
+          <div class="form-group col-md-6">
+            <input type="text" name="academicFormation" class="form-control" id="academicFormation"
+              placeholder="Título acadêmico" formControlName="academicFormation" />
+          </div>
+
           <!-- <div class="form-group col-md-4">
               <input type="text" name="researchLine" class="form-control" id="researchLine" placeholder="Linha de Pesquisa"
                   formControlName="researchLine" />
           </div> -->
 
           <div class="form-group col-md-3">
-              <input type="text" name="twitter" class="form-control" id="twitter" placeholder="Link Twitter"
-                  formControlName="twitter" />
+            <input type="text" name="twitter" class="form-control" id="twitter" placeholder="Link Twitter"
+              formControlName="twitter" />
           </div>
-      
+
           <div class="form-group col-md-3">
-              <input type="text" name="facebook" class="form-control" id="facebook" placeholder="Link Facebook"
-                  formControlName="facebook" />
+            <input type="text" name="facebook" class="form-control" id="facebook" placeholder="Link Facebook"
+              formControlName="facebook" />
           </div>
-      
+
           <div class="form-group col-md-3">
-              <input type="text" name="instagram" class="form-control" id="instagram" placeholder="Link Instagram"
-                  formControlName="instagram" />
+            <input type="text" name="instagram" class="form-control" id="instagram" placeholder="Link Instagram"
+              formControlName="instagram" />
           </div>
-      
+
           <div class="form-group col-md-3">
-              <input type="text" name="linkedin" class="form-control" id="linkedin" placeholder="Link LinkedIn"
-                  formControlName="linkedin" />
+            <input type="text" name="linkedin" class="form-control" id="linkedin" placeholder="Link LinkedIn"
+              formControlName="linkedin" />
           </div>
+        </div>
       </div>
 
       <div class="row justify-content-around m-4">
         <div class="col-8">
           <button class="w-100" type="submit" mat-raised-button color="primary">
-              Submeter
+            Submeter
           </button>
         </div>
       </div>

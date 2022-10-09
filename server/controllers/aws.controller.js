@@ -14,7 +14,7 @@ function uploadFile(key, file) {
   });
 
   var s3Config = {
-    Bucket: 'leped',
+    Bucket: 'ppge-public',
     Key: key,
     Body: file
   };
@@ -38,7 +38,7 @@ function uploadBase64(key, file) {
   });
 
   var s3Config = {
-    Bucket: 'leped',
+    Bucket: 'ppge-public',
     Key: key,
     Body: file,
     ACL: "public-read",
