@@ -30,6 +30,7 @@ export class CorpoDocenteComponent implements OnInit {
   getAllCorpoDocenteByTipo() {
     this.corpoDocenteService.getCorpoDocente(this.tipoDocente)
       .subscribe(data => {
+        console.log(data);
         this.listProfile = data;
       })
   }

@@ -321,7 +321,7 @@ section {
     font-weight: 400;
     color: black;
     white-space: nowrap;
-    transition: 0.3s;
+    // transition: 0.3s;
     position: relative;
   }
 
@@ -389,7 +389,7 @@ section {
     opacity: 0;
     visibility: hidden;
     background: var(--color-secondary);
-    transition: 0.3s;
+    // transition: 0.3s;
   }
 
   .navbar .dropdown ul li {
@@ -469,7 +469,7 @@ section {
   }
 
   .navbar .dropdown .dropdown:hover>ul {
-    left: -100%;
+    // left: -100%;
   }
 }
 
@@ -574,6 +574,10 @@ section {
     inset: 0;
     background: rgba(var(--color-secondary-rgb), 0.8);
     z-index: 9996;
+  }
+
+  .language {
+    margin-top: 50px;
   }
 }
 

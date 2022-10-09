@@ -25,7 +25,7 @@ export class SiteAdminService {
   }
 
   getTitleLinhaPesquisa() {
-    return this.http.get(`${this.URL_PAGE}/linha_pesquisa/all-titles`);
+    return this.http.get(`${this.URL_PAGE}/linha_pesquisa/headers`);
   }
 
   listCorpoDocenteName() {

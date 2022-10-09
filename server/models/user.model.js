@@ -94,10 +94,52 @@ const UserSchema = new mongoose.Schema(
         idProcesso: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'ProcessoSeletivo',
+          required: true,
         },
-        formulario: {
-          type: mongoose.Schema.Types.Mixed
-        }
+        tipoFormulario: {
+          type: Number,
+        },
+        linhaPesquisa: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'LinhaPesquisa',
+          required: true,
+        },
+        primeiroOrientador: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'CorpoDocente',
+          required: true,
+        },
+        segundoOrientador: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'CorpoDocente',
+        },
+        opcaoVaga: {
+          type: Number,
+        },
+        opcaoVagaCotaSub: {
+          type: Number,
+        },
+        deficienciaSub: {
+          type: String,
+        },
+        graduacao: {
+          type: mongoose.Schema.Types.Mixed,
+        },
+        posGraduacao: {
+          type: mongoose.Schema.Types.Mixed,
+        },
+        posGraduacaoMestrado: {
+          type: mongoose.Schema.Types.Mixed,
+        },
+        termoConcordanciaEdital: {
+          type: Boolean,
+        },
+        termoResponsabilidadeInfo: {
+          type: Boolean,
+        },
+        termoLeituraEdital: {
+          type: Boolean,
+        },
       }
     ],
   },

@@ -1,43 +1,47 @@
-// mat-form-field.mat-form-field {
-//   font-size: 16px;
-//   color: #ff4081 !important;
-//   .mat-form-field-flex:hover {
-//     .mat-form-field-label {
-//       /*change color of label*/
-//       color: #ff4081 !important;
-//     }
-//   }
+mat-form-field.mat-form-field {
+  font-size: 16px;
+  color: #ff4081 !important;
+  .mat-form-field-flex:hover {
+    .mat-form-field-label {
+      /*change color of label*/
+      color: #ff4081 !important;
+    }
+  }
 
-//   .mat-form-field-underline {
-//     /*change color of underline*/
-//     background-color: #ff4081 !important;
-//   } 
+  .mat-form-field-underline {
+    /*change color of underline*/
+    background-color: #ff4081 !important;
+  } 
 
-//   .mat-form-field-ripple {
-//     /*change color of underline when focused*/
-//     background-color: #ff4081 !important;
-//   }
+  .mat-form-field-ripple {
+    /*change color of underline when focused*/
+    background-color: #ff4081 !important;
+  }
 
-// }
-// .mat-focused .mat-select-arrow {
-//   color: #ff4081 !important;
-// }
-// .mat-focused .mat-form-field-label {
-//   /*change color of label*/
-//   color: #ff4081 !important;
-// }
-// mat-option.mat-selected {
-//   color: #ff4081 !important;
-// }
+}
+.mat-focused .mat-select-arrow {
+  color: #ff4081 !important;
+}
+.mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: #ff4081 !important;
+}
+mat-option.mat-selected {
+  color: #ff4081 !important;
+}
 
-// span.mat-optgroup-label {
-//   font-weight: bolder !important;
-// }
+span.mat-optgroup-label {
+  font-weight: bolder !important;
+}
 
-// .activate {
-//   background-color: #ff4081 !important;
-//   color: white !important;
-// }
+.activate {
+  background-color: #ff4081 !important;
+  color: white !important;
+}
+
+mat-radio-button {
+  font-size: 14px;;
+}
 
 mat-checkbox label {
   white-space: break-spaces !important;
@@ -45,6 +49,10 @@ mat-checkbox label {
   &:hover {
     text-decoration: underline;
   }
+}
+
+label {
+  white-space: normal !important;
 }
 
 .file-subtitle {

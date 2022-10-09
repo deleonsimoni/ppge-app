@@ -12,7 +12,7 @@ module.exports = router;
 
 /* Page */
 router.get('/page/:selectedPage', setLocation, asyncHandler(getPage));
-router.get('/page/:selectedPage/headers', asyncHandler(getHeadersPage));
+router.get('/page/:selectedPage/headers', setLocation, asyncHandler(getHeadersPage));
 router.get('/page/:selectedPage/all-titles', asyncHandler(getAllTitlesPage));
 
 router.post('/page/:selectedPage', [passport.authenticate('jwt', {
@@ -60,7 +60,7 @@ async function deletePage(req, res) {
 /* Fim Page */
 
 /* Corpo Docente */
-router.get('/corpo-docente', asyncHandler(getCorpoDocente));
+router.get('/corpo-docente', setLocation, asyncHandler(getCorpoDocente));
 
 router.get('/corpo-docente/name', asyncHandler(getCorpoDocenteName));
 

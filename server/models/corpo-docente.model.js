@@ -55,7 +55,15 @@ const CorpoDocenteSchema = new mongoose.Schema(
   },
   {
     versionKey: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
+
+CorpoDocenteSchema.virtual('listLinhaPesquisa', {
+  ref: 'LinhaPesquisa',
+  localField: '_id',
+  foreignField: 'corpoDocente'  
+})
 
 module.exports = mongoose.model('CorpoDocente', CorpoDocenteSchema);

@@ -4,6 +4,7 @@ const asyncHandler = require('express-async-handler');
 const requireAdmin = require('../middleware/require-admin');
 const requireLogin = require('../middleware/require-login');
 const processoSeletivoCtrl = require('../controllers/processo-seletivo.controller');
+const setLocation = require('../middleware/set-location');
 
 const router = express.Router();
 module.exports = router;
@@ -30,7 +31,7 @@ router.post('/processo-seletivo/inscrever/:id', [passport.authenticate('jwt', {
   session: false
 }), requireLogin], asyncHandler(subscribeProcessoSeletivo));
 
-router.get('/processo-seletivo/inscrever/infos/:id', asyncHandler(getProcessoSeletivoInscreverInfosById));
+router.get('/processo-seletivo/inscrever/infos/:id', setLocation, asyncHandler(getProcessoSeletivoInscreverInfosById));
 
 router.delete('/processo-seletivo/inscrever/:id', [passport.authenticate('jwt', {
   session: false
@@ -50,7 +51,7 @@ async function getProcessoSeletivo(req, res) {
 }
 
 async function getProcessoSeletivoInscreverInfosById(req, res) {
-  let response = await processoSeletivoCtrl.getProcessoSeletivoInscreverInfosById(req.params.id);
+  let response = await processoSeletivoCtrl.getProcessoSeletivoInscreverInfosById(req.params.id, req.query.language);
   res.json(response);
 }
 

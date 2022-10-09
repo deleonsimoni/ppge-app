@@ -97,7 +97,7 @@ import { ProcessoSeletivoService } from "./processo-seletivo.service";
       console.log("invalid: ", invalid)
       //AAAAAAAAAAAA
       if(formRetorno.valid) {
-        this.processoSeletivoService.inscreverProcessoSeletivo(formRetorno.value.idProcessoSeletivo, formRetorno.value)
+        this.processoSeletivoService.inscreverProcessoSeletivo(formRetorno.value.idProcesso, formRetorno.value)
           .subscribe(
             () => {
               this.toastr.success('Inscrito com sucesso', 'Sucesso');

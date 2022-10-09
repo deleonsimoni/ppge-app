@@ -28,12 +28,12 @@ async function getProcessoSeletivo(req) {
     });
 }
 
-async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo) {
-  return await ProcessoSeletivoModel.findOne({_id: idProcessoSeletivo}, {researchLine: 1})
+async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, language) {
+  let ret = await ProcessoSeletivoModel.findOne({_id: idProcessoSeletivo}, {researchLine: 1})
     .populate(
       {
         path:"researchLine", 
-        select:"title corpoDocente",
+        select:`${language}.title corpoDocente`,
         populate: {
           path: "corpoDocente",
           select: "fullName"
@@ -43,6 +43,22 @@ async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo) {
     .sort({
       createAt: -1
     });
+
+  if(ret) {
+    console.log("antes: ", ret)
+    ret = {
+      _id: ret._id,
+      researchLine: ret.researchLine.map(data => (
+        {
+          _id: data._id,
+          corpoDocente: data.corpoDocente,
+          title: data[language].title,
+        }
+      ))
+    }
+    console.log("depois: ", ret)
+  }
+  return ret;
 }
 
 async function getInscritosByProcessoSelectivo(idProcessoSeletivo) {
@@ -82,7 +98,7 @@ async function atualizarProcessoSeletivoAtivo(req, idProcesso) {
 
 async function subscribeProcessoSeletivo(idProcessoSeletivo, idUser, reqBody) {
   try {
-    await UserController.subscribeProcessoSeletivo(idProcessoSeletivo, idUser, reqBody.formulario);
+    await UserController.subscribeProcessoSeletivo(idUser, reqBody.formulario);
     await ProcessoSeletivoModel.findOneAndUpdate({
         _id: idProcessoSeletivo, isAtivo: true
       },
