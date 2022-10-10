@@ -30,8 +30,9 @@ export class CorpoDocenteComponent implements OnInit {
   getAllCorpoDocenteByTipo() {
     this.corpoDocenteService.getCorpoDocente(this.tipoDocente)
       .subscribe(data => {
-        console.log(data);
         this.listProfile = data;
+        this.listProfile.map(cd => cd.imagePathS3 ? cd.imagePathS3 = 'https://ppge-public.s3.sa-east-1.amazonaws.com/'.concat(cd.imagePathS3) : null);
+
       })
   }
 

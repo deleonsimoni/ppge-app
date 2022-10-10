@@ -17,10 +17,29 @@ import { TeseOuDissertacaoComponent } from './tese-dissertacao-admin/tese-ou-dis
 import { ComfirmDeleteProcessoComponent } from './processo-seletivo-admin/modal/confirm-delet-processo.component';
 import { ViewHtmlProcessoSeletivoComponent } from './processo-seletivo-admin/modal/view-html-processo-seletivo.component';
 import { ViewInscritosProcessoSeletivoComponent } from './processo-seletivo-admin/modal/view-inscritos-processo-seletivo.component';
+import { ImagePathComplementPipe } from '@app/shared/pipes/image-path/image-path-complement.pipe';
 
 @NgModule({
-  declarations: [AdminComponent, PagesAdminComponent, TeseDissertacaoAdminComponent, TeseOuDissertacaoComponent, BreakStringPipe, ComfirmDeleteComponent, ProcessoSeletivoAdminComponent, CorpoDocenteComponent, ComfirmDeleteProcessoComponent, ViewHtmlProcessoSeletivoComponent, ViewInscritosProcessoSeletivoComponent],
-  imports: [CommonModule, AdminRoutingModule, HttpClientModule, AngularEditorModule, SharedModule],
+  declarations: [
+    AdminComponent,
+    PagesAdminComponent,
+    TeseDissertacaoAdminComponent,
+    TeseOuDissertacaoComponent,
+    BreakStringPipe,
+    ComfirmDeleteComponent,
+    ProcessoSeletivoAdminComponent,
+    CorpoDocenteComponent,
+    ComfirmDeleteProcessoComponent,
+    ViewHtmlProcessoSeletivoComponent,
+    ViewInscritosProcessoSeletivoComponent
+  ],
+  imports: [
+    CommonModule,
+    AdminRoutingModule,
+    HttpClientModule,
+    AngularEditorModule,
+    SharedModule
+  ],
   providers: [OnlyAdminUsersGuard],
 })
 export class AdminModule { }

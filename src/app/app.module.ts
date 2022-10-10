@@ -8,6 +8,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxFlagPickerModule } from 'ngx-flag-picker';
 import { ToastrModule } from 'ngx-toastr';
+import { AdminModule } from './admin/admin.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommitteeModule } from './committee/committee.module';
@@ -30,6 +31,10 @@ import { ProcessoSeletivoModule } from './processo-seletivo/processo-seletivo.mo
 import { RegulationModule } from './regulation/regulation.module';
 import { ResearchLineModule } from './research-line/research-line.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { ComponentsModule } from './shared/components/components.module';
+import { ImagePathComplementModule } from './shared/pipes/image-path/image-path-complement.module';
+import { ImagePathComplementPipe } from './shared/pipes/image-path/image-path-complement.pipe';
+import { PipesModule } from './shared/pipes/pipes.module';
 import { AuthService } from './shared/services';
 import { SharedModule } from './shared/shared.module';
 import { TeseDissertacaoModule } from './tese-dissertacao/tese-dissertacao.module';
@@ -55,6 +60,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     FormularioModule,
     NgxFlagPickerModule,
     ToastrModule.forRoot(),
+    ComponentsModule,
     CommitteeModule,
     ScheduleModule,
     RegulationModule,
@@ -71,9 +77,24 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    HistoricModule
+    HistoricModule,
+
+
   ],
-  declarations: [AppComponent, HeaderComponent, HomeComponent, CorpoDocenteComponent, FooterComponent, ContatoComponent, DummyComponent, ModalTermoUsoComponent],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    HomeComponent,
+    CorpoDocenteComponent,
+    FooterComponent,
+    ContatoComponent,
+    DummyComponent,
+    ModalTermoUsoComponent,
+
+  ],
+  exports: [
+    ImagePathComplementPipe
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
@@ -91,6 +112,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       multi: true,
       deps: [AuthService],
     },
+
   ],
   bootstrap: [AppComponent],
 })

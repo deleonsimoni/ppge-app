@@ -1,15 +1,18 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ImagePathComplementPipe } from './image-path/image-path-complement.pipe';
+
 import { SanitizeHtmlPipe } from './sanitize-html.pipe';
 
 
 
 @NgModule({
   declarations: [
-    SanitizeHtmlPipe
+    SanitizeHtmlPipe,
+    ImagePathComplementPipe
   ],
   exports: [
-    SanitizeHtmlPipe
+    SanitizeHtmlPipe,
+    ImagePathComplementPipe
   ]
 
 })

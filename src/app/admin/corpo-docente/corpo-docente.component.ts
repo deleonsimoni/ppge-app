@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { ImagePathComplementPipe } from '@app/shared/pipes/image-path/image-path-complement.pipe';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
@@ -17,13 +18,16 @@ export class CorpoDocenteComponent implements OnInit {
   public form: FormGroup;
   public listProfile: any;
   public isForm = false;
+  public logo: any;
+  public imagePathS3: any;
 
   constructor(
     private builder: FormBuilder,
     private siteAdminService: SiteAdminService,
     private toastr: ToastrService,
-    public dialog: MatDialog
-  ) { 
+    public dialog: MatDialog,
+    private pipeImage: ImagePathComplementPipe
+  ) {
     this.form = this.builder.group({
       _id: [],
       fullName: [null, [Validators.required]],
@@ -44,15 +48,16 @@ export class CorpoDocenteComponent implements OnInit {
   getAllCorpoDocente() {
     this.siteAdminService.listCorpoDocente().subscribe(data => {
       this.listProfile = data;
+      this.listProfile.map(cd => cd.imagePathS3 ? cd.imagePathS3 = 'https://ppge-public.s3.sa-east-1.amazonaws.com/'.concat(cd.imagePathS3) : null);
     }, () => {
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
     })
   }
 
   register() {
-    if(this.form.valid) {
-      if(this.form.value._id) {
-        this.siteAdminService.atualizarCorpoDocente(this.form.value)
+    if (this.form.valid) {
+      if (this.form.value._id) {
+        this.siteAdminService.atualizarCorpoDocente(this.imagePathS3, this.form.value)
           .subscribe(() => {
             this.getAllCorpoDocente();
             this.alternarForm(false);
@@ -62,7 +67,7 @@ export class CorpoDocenteComponent implements OnInit {
           });
 
       } else {
-        this.siteAdminService.cadastrarCorpoDocente(this.form.value)
+        this.siteAdminService.cadastrarCorpoDocente(this.imagePathS3, this.form.value)
           .subscribe(() => {
             this.getAllCorpoDocente();
             this.alternarForm(false);
@@ -78,35 +83,55 @@ export class CorpoDocenteComponent implements OnInit {
 
   edit(profile: any) {
     this.alternarForm(true);
-    this.form.patchValue({...profile})
+    this.logo = this.pipeImage.transform(profile.imagePathS3);
+    this.form.patchValue({ ...profile })
   }
-  
+
 
   delete(profile: any, index: number) {
-    
+
     const dialogRef = this.dialog.open(ComfirmDeleteProcessoComponent, {
       width: '750px',
       data: { title: profile.fullName }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
-      if(result) {
+      if (result) {
         this.siteAdminService.deletarCorpoDocente(profile)
           .pipe(take(1))
           .subscribe(() => {
             this.listProfile.splice(index, 1);
             this.toastr.success(`Perfil deletado`, 'Sucesso');
           },
-          () => {
-            this.toastr.error('Ocorreu um erro ao deletar', 'Atenção: ');
-          });
+            () => {
+              this.toastr.error('Ocorreu um erro ao deletar', 'Atenção: ');
+            });
       }
     })
+  }
+
+
+  public getProfileImageCode(event: any): void {
+    const that = this;
+    const FR = new FileReader();
+    const files = event.target.files;
+
+    FR.addEventListener("load", function (e) {
+      that.logo = e.target.result;
+    });
+
+    if (files && files[0]) {
+      that.imagePathS3 = files[0];
+      FR.readAsDataURL(files[0]);
+    } else {
+      that.logo = null;
+      that.imagePathS3 = null;
+    }
   }
 
   alternarForm(isForm) {
     this.isForm = isForm;
     this.form.reset();
-    this.form.patchValue({type: String(TypeProfileEnum.PROFESSOR)});
+    this.form.patchValue({ type: String(TypeProfileEnum.PROFESSOR) });
   }
 
 }

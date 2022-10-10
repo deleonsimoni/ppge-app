@@ -21,6 +21,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTreeModule } from '@angular/material/tree';
 import { ComponentsModule } from './components/components.module';
+import { ImagePathComplementPipe } from './pipes/image-path/image-path-complement.pipe';
+
 
 @NgModule({
   exports: [
@@ -46,8 +48,13 @@ import { ComponentsModule } from './components/components.module';
     MatProgressBarModule,
     MatSlideToggleModule,
     ComponentsModule,
+    ImagePathComplementPipe
   ],
   declarations: [
+    ImagePathComplementPipe
+
   ],
+  providers: [ImagePathComplementPipe]
+
 })
-export class SharedModule {}
+export class SharedModule { }

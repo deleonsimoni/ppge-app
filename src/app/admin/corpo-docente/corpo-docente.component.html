@@ -39,20 +39,14 @@
       </mat-form-field>
 
       <div class="form-row justify-content-center">
-        <div class="col-8 col-md-4 order-1 order-md-2 mb-3">
-          <div class="profile">
-            <img [src]="logo ? logo : '../../../assets/img/placeholder-profile.png'" class="profile__image">
-            <input type="file" name="logo" class="profile__input" id="logo" placeholder="Logo"
-              (change)="getProfileImageCode($event)" />
-          </div>
-        </div>
+
         <div class="col-12 col-md-8 order-2 order-md-1">
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-12">
             <input type="text" name="fullName" class="form-control" id="fullName" placeholder="Nome completo"
               formControlName="fullName" />
           </div>
 
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-12">
             <input type="text" name="academicFormation" class="form-control" id="academicFormation"
               placeholder="Título acadêmico" formControlName="academicFormation" />
           </div>
@@ -62,26 +56,35 @@
                   formControlName="researchLine" />
           </div> -->
 
-          <div class="form-group col-md-3">
+          <div class="form-group col-md-12">
             <input type="text" name="twitter" class="form-control" id="twitter" placeholder="Link Twitter"
               formControlName="twitter" />
           </div>
 
-          <div class="form-group col-md-3">
+          <div class="form-group col-md-12">
             <input type="text" name="facebook" class="form-control" id="facebook" placeholder="Link Facebook"
               formControlName="facebook" />
           </div>
 
-          <div class="form-group col-md-3">
+          <div class="form-group col-md-12">
             <input type="text" name="instagram" class="form-control" id="instagram" placeholder="Link Instagram"
               formControlName="instagram" />
           </div>
 
-          <div class="form-group col-md-3">
+          <div class="form-group col-md-12">
             <input type="text" name="linkedin" class="form-control" id="linkedin" placeholder="Link LinkedIn"
               formControlName="linkedin" />
           </div>
         </div>
+
+        <div class="col-8 col-md-4 order-1 order-md-2 mb-3">
+          <div class="profile">
+            <img [src]="logo ? logo : '../../../assets/placeholder-profile.png'" class="profile__image">
+            <input type="file" name="logo" class="profile__input" id="logo" placeholder="Logo"
+              (change)="getProfileImageCode($event)" />
+          </div>
+        </div>
+
       </div>
 
       <div class="row justify-content-around m-4">

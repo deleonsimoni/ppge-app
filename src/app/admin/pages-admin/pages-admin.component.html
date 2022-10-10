@@ -15,7 +15,6 @@
         <mat-select formControlName="selectPage" (selectionChange)="getInfoPage()">
           <mat-option value="historico">Histórico</mat-option>
           <mat-option value="objetivo">Objetivos</mat-option>
-          <mat-option value="noticias">Noticias</mat-option>
           <mat-optgroup label="Comissões">
             <mat-option value="comissao_deliberativa">Comissão Deliberativa</mat-option>
             <mat-option value="comissao_gestao">Comissão de Gestão</mat-option>
@@ -34,7 +33,8 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="fill" class="ml-3 mb-5">
+      <mat-form-field *ngIf="!this.listUrlExpansivel.includes(form.value.selectPage)" appearance="fill"
+        class="ml-3 mb-5">
         <mat-label>Selecione o Idioma</mat-label>
         <mat-select formControlName="language" (selectionChange)="getInfoPage()">
           <mat-option value="en-us"><span class="flag-icon flag-icon-us flag-icon-margin-right ng-star-inserted"></span>
@@ -50,7 +50,7 @@
         <div class="form-group col-md-12">
           <button class="ml-2 mb-3" type="button" *ngFor="let item of dataExpansivel; let i = index"
             (click)="selecionarPagina(i)" mat-stroked-button [ngClass]="{'activate': i==data.index}" color="accent">
-            {{ item.navTitle }} {{!item._id ? "(Novo*)" : ""}}
+            {{ item['pt-br']?.navTitle }} {{!item._id ? "(Novo*)" : ""}}
           </button>
           <button class="ml-2 mb-3" type="button" (click)="adicionarPagina()" mat-stroked-button color="accent">
             <svg height="16px" width="24px" fill="#ff4081" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -62,7 +62,9 @@
         </div>
       </div>
 
-      <mat-form-field *ngIf="form.value.selectPage === 'linha_pesquisa'" appearance="fill" class="mb-3 w-100">
+      <mat-form-field
+        *ngIf="form.value.selectPage === 'linha_pesquisa' && ((!!dataExpansivel && dataExpansivel.length > 0) || !dataExpansivel)"
+        appearance="fill" class="mb-3 w-100">
         <mat-label>Selecione o Corpo Docente</mat-label>
         <mat-select multiple formControlName="corpoDocente">
           <mat-option *ngFor="let cdn of listCorpoDocenteName" [value]="cdn._id">{{cdn.type == 1 ? 'Professor' :
@@ -78,95 +80,110 @@
               </div>
           </div> -->
 
-      <div *ngIf="(!!dataExpansivel && dataExpansivel.length > 0) || !dataExpansivel">
-        <div *ngIf="expansivel" class="form-row justify-content-center">
-          <div class="form-group col-md-12">
-            <input type="text" name="navTitle" class="form-control" id="navTitle" placeholder="Título de Navegação"
-              formControlName="navTitle" />
-          </div>
-        </div>
+      <div *ngIf="!dataExpansivel">
 
         <div class="form-row justify-content-center">
           <div class="form-group col-md-12">
             <input type="text" name="title" class="form-control" id="title" placeholder="Título"
               formControlName="title" />
-
-            <div class="mb-5" formGroupName="en-us">
-              <h3 class="text-center">EN-US</h3>
-              <div class="form-row justify-content-center">
-                <div class="form-group col-md-12">
-                  <input type="text" class="form-control" placeholder="Título de Navegação"
-                    formControlName="navTitle" />
-                </div>
-              </div>
-
-              <div class="form-row justify-content-center">
-                <div class="form-group col-md-12">
-                  <input type="text" class="form-control" placeholder="Título" formControlName="title" />
-                </div>
-              </div>
-
-              <div class="form-row justify-content-center">
-                <div class="form-group col-md-12">
-                  <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [config]="editorConfig">
-                  </angular-editor>
-                </div>
-              </div>
-            </div>
-
-            <div class="mb-5" formGroupName="es-es">
-              <h3 class="text-center">ES-ES</h3>
-              <div class="form-row justify-content-center">
-                <div class="form-group col-md-12">
-                  <input type="text" class="form-control" placeholder="Título de Navegação"
-                    formControlName="navTitle" />
-                </div>
-              </div>
-
-              <div class="form-row justify-content-center">
-                <div class="form-group col-md-12">
-                  <input type="text" class="form-control" placeholder="Título" formControlName="title" />
-                </div>
-              </div>
-
-              <div class="form-row justify-content-center">
-                <div class="form-group col-md-12">
-                  <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [config]="editorConfig">
-                  </angular-editor>
-                </div>
-              </div>
-            </div>
-
-
           </div>
         </div>
 
         <div class="form-row justify-content-center">
           <div class="form-group col-md-12">
-
             <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [(ngModel)]="content"
               [config]="editorConfig"></angular-editor>
-
           </div>
         </div>
 
         <input type="file" class="custom-file-input" style="display: none;" accept="image/*" data-max-size="5048"
           id="image" (change)="setImage($event.target.files)" #fileInput />
 
-        <div class="row justify-content-around m-4">
-          <div class="col-8">
-            <button class="w-100" type="submit" mat-raised-button color="primary">
-              Submeter
-            </button>
+      </div>
+
+      <div *ngIf="!!dataExpansivel && dataExpansivel.length > 0">
+
+        <div class="mb-5" formGroupName="pt-br">
+          <h3 class="text-center">PT-BR</h3>
+          <div class="form-row justify-content-center">
+            <div class="form-group col-md-12">
+              <input type="text" class="form-control" placeholder="Título de Navegação" formControlName="navTitle" />
+            </div>
           </div>
-          <div *ngIf="expansivel" class="col-3">
-            <button (click)="excluirPaginaExpansivel()" class="w-100" type="button" mat-raised-button color="warn">
-              Excluir
-            </button>
+
+          <div class="form-row justify-content-center">
+            <div class="form-group col-md-12">
+              <input type="text" class="form-control" placeholder="Título" formControlName="title" />
+            </div>
+          </div>
+
+          <div class="form-row justify-content-center">
+            <div class="form-group col-md-12">
+              <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [config]="editorConfig">
+              </angular-editor>
+            </div>
           </div>
         </div>
 
+        <div class="mb-5" formGroupName="en-us">
+          <h3 class="text-center">EN-US</h3>
+          <div class="form-row justify-content-center">
+            <div class="form-group col-md-12">
+              <input type="text" class="form-control" placeholder="Título de Navegação" formControlName="navTitle" />
+            </div>
+          </div>
+
+          <div class="form-row justify-content-center">
+            <div class="form-group col-md-12">
+              <input type="text" class="form-control" placeholder="Título" formControlName="title" />
+            </div>
+          </div>
+
+          <div class="form-row justify-content-center">
+            <div class="form-group col-md-12">
+              <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [config]="editorConfig">
+              </angular-editor>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-5" formGroupName="es-es">
+          <h3 class="text-center">ES-ES</h3>
+          <div class="form-row justify-content-center">
+            <div class="form-group col-md-12">
+              <input type="text" class="form-control" placeholder="Título de Navegação" formControlName="navTitle" />
+            </div>
+          </div>
+
+          <div class="form-row justify-content-center">
+            <div class="form-group col-md-12">
+              <input type="text" class="form-control" placeholder="Título" formControlName="title" />
+            </div>
+          </div>
+
+          <div class="form-row justify-content-center">
+            <div class="form-group col-md-12">
+              <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [config]="editorConfig">
+              </angular-editor>
+            </div>
+          </div>
+        </div>
+
+
       </div>
+      <div class="row justify-content-around m-4">
+        <div class="col-8">
+          <button class="w-100" type="submit" mat-raised-button color="primary">
+            Submeter
+          </button>
+        </div>
+        <div *ngIf="expansivel" class="col-3">
+          <button (click)="excluirPaginaExpansivel()" class="w-100" type="button" mat-raised-button color="warn">
+            Excluir
+          </button>
+        </div>
+      </div>
+
     </form>
   </div>
 </div>

@@ -6,6 +6,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { ImagePathComplementModule } from '../pipes/image-path/image-path-complement.module';
+import { ImagePathComplementPipe } from '../pipes/image-path/image-path-complement.pipe';
+import { SharedModule } from '../shared.module';
 import { CardProfilesComponent } from './card-profiles/card-profiles.component';
 import { FormProcessoSeletivoComponent } from './form-processo-seletivo/form-processo-seletivo.component';
 import { FormProcessoSeletivoService } from './form-processo-seletivo/form-processo-seletivo.service';
@@ -15,7 +18,8 @@ import { FormProcessoSeletivoService } from './form-processo-seletivo/form-proce
 @NgModule({
   declarations: [
     CardProfilesComponent,
-    FormProcessoSeletivoComponent
+    FormProcessoSeletivoComponent,
+
   ],
   imports: [
     CommonModule,
@@ -26,13 +30,18 @@ import { FormProcessoSeletivoService } from './form-processo-seletivo/form-proce
     MatCheckboxModule,
     MatRadioModule,
     MatButtonModule,
+
+
   ],
   exports: [
     CardProfilesComponent,
-    FormProcessoSeletivoComponent
+    FormProcessoSeletivoComponent,
+
   ],
   providers: [
-    FormProcessoSeletivoService
+    FormProcessoSeletivoService,
+
+
   ]
 })
 export class ComponentsModule { }

@@ -229,8 +229,7 @@ async function getCorpoDocente(req) {
     .populate({
       path: "listLinhaPesquisa",
       select: {
-        [`${req.query.language}.title`]: 1,
-        corpoDocente: 0
+        [`${req.query.language}.title`]: 1
       }
     })
     .sort({
@@ -241,6 +240,7 @@ async function getCorpoDocente(req) {
     {
       _id: data._id,
       fullName: data.fullName,
+      imagePathS3: data.imagePathS3,
       academicFormation: data.academicFormation,
       twitter: data.twitter,
       facebook: data.facebook,
