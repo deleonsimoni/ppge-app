@@ -1,6 +1,7 @@
 
 const ProcessoSeletivoModel = require('../models/processo-seletivo.model');
 const UserController = require('./user.controller')
+const S3Uploader = require('./aws.controller');
 
 module.exports = {
   getProcessoSeletivo,
@@ -21,19 +22,19 @@ module.exports = {
 
 async function getProcessoSeletivo(req) {
   let whereClause = {};
-  if(req.query.isAtivo != undefined) whereClause.isAtivo = req.query.isAtivo;
-  return await ProcessoSeletivoModel.find(whereClause, {enrolled: 0})
+  if (req.query.isAtivo != undefined) whereClause.isAtivo = req.query.isAtivo;
+  return await ProcessoSeletivoModel.find(whereClause, { enrolled: 0 })
     .sort({
       createAt: -1
     });
 }
 
 async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, language) {
-  let ret = await ProcessoSeletivoModel.findOne({_id: idProcessoSeletivo}, {researchLine: 1})
+  let ret = await ProcessoSeletivoModel.findOne({ _id: idProcessoSeletivo }, { researchLine: 1 })
     .populate(
       {
-        path:"researchLine", 
-        select:`${language}.title corpoDocente`,
+        path: "researchLine",
+        select: `${language}.title corpoDocente`,
         populate: {
           path: "corpoDocente",
           select: "fullName"
@@ -44,7 +45,7 @@ async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, languag
       createAt: -1
     });
 
-  if(ret) {
+  if (ret) {
     console.log("antes: ", ret)
     ret = {
       _id: ret._id,
@@ -63,8 +64,8 @@ async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, languag
 
 async function getInscritosByProcessoSelectivo(idProcessoSeletivo) {
   return await ProcessoSeletivoModel
-    .findOne({_id: idProcessoSeletivo}, {enrolled: 1})
-    .populate({path: 'enrolled', select: 'fullname socialname'})
+    .findOne({ _id: idProcessoSeletivo }, { enrolled: 1 })
+    .populate({ path: 'enrolled', select: 'fullname socialname' })
     .sort({
       createAt: -1
     });
@@ -73,7 +74,7 @@ async function getInscritosByProcessoSelectivo(idProcessoSeletivo) {
 
 async function getMinhaInscricoesProcessoSelectivo(idUser) {
   return await ProcessoSeletivoModel
-    .find({enrolled: idUser}, {_id: 1})
+    .find({ enrolled: idUser }, { _id: 1 })
     .sort({
       createAt: -1
     });
@@ -90,25 +91,64 @@ async function atualizarProcessoSeletivoAtivo(req, idProcesso) {
 
   let isAtivo = req.body.isAtivo;
   return await ProcessoSeletivoModel.findOneAndUpdate(
-    {_id: idProcesso},
-    {isAtivo: !!isAtivo}, 
-    {upsert: false}
+    { _id: idProcesso },
+    { isAtivo: !!isAtivo },
+    { upsert: false }
   );
 }
 
-async function subscribeProcessoSeletivo(idProcessoSeletivo, idUser, reqBody) {
+async function subscribeProcessoSeletivo(req) {
   try {
-    await UserController.subscribeProcessoSeletivo(idUser, reqBody.formulario);
+
+    let formulario = JSON.parse(req.body.formulario);
+    formulario.arquivos = await userCtrl.uploadFilesProcessoSeletivo(req.files.fileArray);
+
+    await UserController.subscribeProcessoSeletivo(req.user._id, formulario);
     await ProcessoSeletivoModel.findOneAndUpdate({
-        _id: idProcessoSeletivo, isAtivo: true
-      },
-      {$addToSet: {enrolled: idUser}}, 
-      {upsert: false}
+      _id: req.params.id, isAtivo: true
+    },
+      { $addToSet: { enrolled: req.user._id } },
+      { upsert: false }
     );
-  } catch(e) {
+  } catch (e) {
     console.log(e);
   }
   return 200;
+}
+
+async function uploadFilesProcessoSeletivo(files) {
+  let retorno = {
+    pathLattes: '',
+    pathMemorial: '',
+    pathComprovantePagamento: '',
+    pathPreProj: ''
+  }
+
+  let fileName;
+
+  for (let i = 0; i < files.length; i++) {
+
+    fileName = 'processo-seletivos/' + files[i].name;
+    await S3Uploader.uploadFile(fileName, files[i].data).then(fileData => {
+      console.log('Arquivo submetido para AWS ' + fileName);
+      if (i == 0) {
+        retorno.pathLattes = fileName;
+      } else if (i == 1) {
+        retorno.pathPreProj = fileName;
+      } else if (i == 2) {
+        retorno.pathComprovantePagamento = fileName;
+      } else if (i == 3) {
+        retorno.pathMemorial = fileName;
+      }
+    }, err => {
+      console.log('Erro ao enviar o trabalho para AWS: ' + fileName);
+      retorno.temErro = true;
+      retorno.mensagem = 'Servidor momentaneamente inoperante. Tente novamente mais tarde.';
+    });
+  }
+
+  return retorno;
+
 }
 
 async function unsubscribeProcessoSeletivo(idProcessoSeletivo, idUser) {
@@ -117,13 +157,13 @@ async function unsubscribeProcessoSeletivo(idProcessoSeletivo, idUser) {
     await ProcessoSeletivoModel.findOneAndUpdate({
       _id: idProcessoSeletivo
     },
-    {$pull: {enrolled: idUser}}, 
-    {upsert: false}
+      { $pull: { enrolled: idUser } },
+      { upsert: false }
     );
-  } catch(e) {
+  } catch (e) {
     console.log(e);
   }
-  return 
+  return
 }
 
 async function updateProcessoSeletivo(req, idUser) {

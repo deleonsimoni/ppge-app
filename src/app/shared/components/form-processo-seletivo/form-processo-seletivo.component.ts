@@ -21,6 +21,11 @@ export class FormProcessoSeletivoComponent implements OnInit {
   public typeGraduateEnum = TypeGraduateEnum;
   public typeOpcaoVagaEnum = TypeOpcaoVagaEnum;
 
+  fileLattes: FileList;
+  fileComprovantePagamento: FileList;
+  filePreProjeto: FileList;
+  fileMemorial: FileList;
+
   constructor(
     private builder: FormBuilder,
     private serviceFormProcesso: FormProcessoSeletivoService,
@@ -37,9 +42,43 @@ export class FormProcessoSeletivoComponent implements OnInit {
     this.createForm();
   }
 
+  public getFileNameLattes(): string {
+    const fileName = this.fileLattes ? this.fileLattes[0].name : 'Curriculo LATTES';
+    return fileName;
+  }
+
+  public getFileNamePreProjeto(): string {
+    const fileName = this.filePreProjeto ? this.filePreProjeto[0].name : 'PDF Pré Projeto';
+    return fileName;
+  }
+
+  public getFileNameMemorial(): string {
+    const fileName = this.fileMemorial ? this.fileMemorial[0].name : 'PDF Memorial';
+    return fileName;
+  }
+
+  public getFileNameComprovantePagamento(): string {
+    const fileName = this.fileComprovantePagamento ? this.fileComprovantePagamento[0].name : 'PDF Comprovante de Pagamento';
+    return fileName;
+  }
+
+  public setFileNamComprovantePreProjeto(files: FileList): void {
+    this.filePreProjeto = files;
+  }
+
+  public setFileNamComprovanteMemorial(files: FileList): void {
+    this.fileMemorial = files;
+  }
+
+  public setFileNamComprovantePagamento(files: FileList): void {
+    this.fileComprovantePagamento = files;
+  }
+
+  public setFileNameLattes(files: FileList): void {
+    this.fileLattes = files;
+  }
+
   private createForm() {
-    console.log("createForm()");
-    console.log("createForm() type: ", );
 
     let groupForm: any = {
       idProcesso: [this.idProcessoSeletivo, [Validators.required]],
@@ -64,7 +103,7 @@ export class FormProcessoSeletivoComponent implements OnInit {
       termoResponsabilidadeInfo: [null, [Validators.required]]
     };
 
-    if(this.type == TypeGraduateEnum.DOUTORADO) {
+    if (this.type == TypeGraduateEnum.DOUTORADO) {
       groupForm = {
         ...groupForm,
         posGraduacaoMestrado: this.builder.group({
@@ -76,7 +115,7 @@ export class FormProcessoSeletivoComponent implements OnInit {
         }),
 
       };
-    } else if(this.type == TypeGraduateEnum.MESTRADO) {
+    } else if (this.type == TypeGraduateEnum.MESTRADO) {
       groupForm = {
         ...groupForm,
         termoLeituraEdital: [null, [Validators.required]],
@@ -91,22 +130,43 @@ export class FormProcessoSeletivoComponent implements OnInit {
 
   private getProcessoSeletivoInfosById() {
     this.serviceFormProcesso.getProcessoSeletivoInfosById(this.idProcessoSeletivo)
-      .subscribe((data:any) => {
+      .subscribe((data: any) => {
         console.log("BBBBBBBBBBBBBBBB: ", data);
-        if(data) { 
+        if (data) {
           this.listLinhaPesquisa = data.researchLine
         }
       });
   }
 
   limpaOpcaoVagaCotaSub() {
-    this.form.patchValue({opcaoVagaCotaSub: null});
+    this.form.patchValue({ opcaoVagaCotaSub: null });
   }
 
   register() {
-    console.log("register()");
-    this.inscrever.emit(this.form);
-    console.log("register()");
+
+    //TODO vai ter limite de tamanho?
+
+    if (!this.fileLattes) {
+      //this.toastr.error('É necessário selecionar o curriculo Lattes', 'Atenção');
+      return;
+    }
+    if (!this.filePreProjeto) {
+      //this.toastr.error('É necessário selecionar o curriculo Lattes', 'Atenção');
+      return;
+    }
+    if (!this.fileComprovantePagamento) {
+      //this.toastr.error('É necessário selecionar o curriculo Lattes', 'Atenção');
+      return;
+    }
+    if (!this.fileMemorial) {
+      // tslint:disable-next-line: align
+      //this.toastr.error('É necessário selecionar o arquivo DOC', 'Atenção');
+      return;
+    }
+
+
+    this.inscrever.emit(this.fileLattes, this.filePreProjeto, this.fileComprovantePagamento, this.fileMemorial, this.form);
+
   }
 
   getCorpoDocenteByLinhaPesquisa() {

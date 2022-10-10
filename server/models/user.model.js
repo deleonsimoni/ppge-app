@@ -140,6 +140,20 @@ const UserSchema = new mongoose.Schema(
         termoLeituraEdital: {
           type: Boolean,
         },
+        files: {
+          pathLattes: {
+            type: String,
+          },
+          pathMemorial: {
+            type: String,
+          },
+          pathComprovantePagamento: {
+            type: String,
+          },
+          pathPreProj: {
+            type: String,
+          },
+        },
       }
     ],
   },

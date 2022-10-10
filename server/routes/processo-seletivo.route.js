@@ -29,7 +29,7 @@ router.post('/processo-seletivo/ativo/:id', [passport.authenticate('jwt', {
 
 router.post('/processo-seletivo/inscrever/:id', [passport.authenticate('jwt', {
   session: false
-}), requireLogin], asyncHandler(subscribeProcessoSeletivo));
+}), requireLogin, fileUpload()], asyncHandler(subscribeProcessoSeletivo));
 
 router.get('/processo-seletivo/inscrever/infos/:id', setLocation, asyncHandler(getProcessoSeletivoInscreverInfosById));
 
@@ -39,7 +39,7 @@ router.delete('/processo-seletivo/inscrever/:id', [passport.authenticate('jwt', 
 
 router.put('/processo-seletivo/:id', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], asyncHandler(updateProcessoSeletivo));
+}), requireAdmin, fileUpload()], asyncHandler(updateProcessoSeletivo));
 
 router.delete('/processo-seletivo/:id', [passport.authenticate('jwt', {
   session: false
@@ -78,7 +78,7 @@ async function atualizarProcessoSeletivoAtivo(req, res) {
 }
 
 async function subscribeProcessoSeletivo(req, res) {
-  await processoSeletivoCtrl.subscribeProcessoSeletivo(req.params.id, req.user._id, req.body);
+  await processoSeletivoCtrl.subscribeProcessoSeletivo(req);
   res.json({});
 }
 
