@@ -17,7 +17,7 @@
       </div>
     </mat-tab>
 
-    <mat-tab label="Doutores">
+    <mat-tab label="Pós-Doutorando">
       <div class="row w-100 mt-4">
         <div *ngFor="let profile of listProfile; let i = index" class="col-6 col-md-4 mb-3"
           [hidden]="profile.type != 2">
@@ -34,7 +34,7 @@
         <mat-label>Selecione o Tipo</mat-label>
         <mat-select formControlName="type">
           <mat-option value="1">Professor</mat-option>
-          <mat-option value="2">Doutor</mat-option>
+          <mat-option value="2">Pós-Doutorando</mat-option>
         </mat-select>
       </mat-form-field>
 

@@ -72,7 +72,6 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
 
   public getTitleLinhaPesquisa() {
     this.siteService.getTitleLinhaPesquisa().subscribe(data => {
-      console.log("LIST LINHA PESQUISA: ", data)
       this.listLinhaPesquisa = data;
     })
   }
@@ -167,7 +166,6 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
 
   editar(obj) {
     this.getTitleLinhaPesquisa();
-    console.log("AAAAAAAA: ", obj);
     
     this.form.patchValue({...obj, type: String(obj.type) });
     const formArray = <FormArray>this.form.controls['content'];
@@ -197,7 +195,6 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
   }
 
   atualizarProcessoAtivo(event: MatSlideToggleChange, idProcesso) {
-    console.log("atualizarProcessoAtivoatualizarProcessoAtivo: ", event.checked, " : ", idProcesso);
     this.siteService.atualizarProcessoAtivo(event.checked, idProcesso).subscribe(() => {
       this.toastr.success('Visibilidade atualizada com sucesso.', 'Sucesso');
     },

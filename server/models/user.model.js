@@ -153,6 +153,12 @@ const UserSchema = new mongoose.Schema(
           pathPreProj: {
             type: String,
           },
+          pathProjetoTese: {
+            type: String,
+          },
+          pathPrincipalPubli: {
+            type: String,
+          },
         },
       }
     ],

@@ -46,7 +46,6 @@ async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, languag
     });
 
   if (ret) {
-    console.log("antes: ", ret)
     ret = {
       _id: ret._id,
       researchLine: ret.researchLine.map(data => (
@@ -57,7 +56,6 @@ async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, languag
         }
       ))
     }
-    console.log("depois: ", ret)
   }
   return ret;
 }
@@ -99,9 +97,10 @@ async function atualizarProcessoSeletivoAtivo(req, idProcesso) {
 
 async function subscribeProcessoSeletivo(req) {
   try {
-
     let formulario = JSON.parse(req.body.formulario);
-    formulario.arquivos = await userCtrl.uploadFilesProcessoSeletivo(req.files.fileArray);
+    let retUpload = await uploadFilesProcessoSeletivo(req.files.fileArray, formulario.idProcesso, req.user._id, formulario.tipoFormulario);
+    if(retUpload.temErro) throw retUpload.mensagem;
+    formulario.files = retUpload;
 
     await UserController.subscribeProcessoSeletivo(req.user._id, formulario);
     await ProcessoSeletivoModel.findOneAndUpdate({
@@ -112,33 +111,46 @@ async function subscribeProcessoSeletivo(req) {
     );
   } catch (e) {
     console.log(e);
+    return 500;
   }
   return 200;
 }
 
-async function uploadFilesProcessoSeletivo(files) {
+async function uploadFilesProcessoSeletivo(files, idProcesso, idUser, tipoFormulario) {
   let retorno = {
     pathLattes: '',
     pathMemorial: '',
     pathComprovantePagamento: '',
-    pathPreProj: ''
+    pathProjetoTese: '',
+    pathPrincipalPubli: ''
   }
 
   let fileName;
-
   for (let i = 0; i < files.length; i++) {
 
-    fileName = 'processo-seletivos/' + files[i].name;
+    fileName = `processo-seletivos/${idProcesso}/${idUser}/${Date.now()}${files[i].name}`;
     await S3Uploader.uploadFile(fileName, files[i].data).then(fileData => {
-      console.log('Arquivo submetido para AWS ' + fileName);
-      if (i == 0) {
-        retorno.pathLattes = fileName;
-      } else if (i == 1) {
-        retorno.pathPreProj = fileName;
-      } else if (i == 2) {
-        retorno.pathComprovantePagamento = fileName;
-      } else if (i == 3) {
-        retorno.pathMemorial = fileName;
+      if(tipoFormulario == 1) { // MESTRADO
+        if (i == 0) {
+          retorno.pathLattes = fileName;
+        } else if (i == 1) {
+          retorno.pathComprovantePagamento = fileName;
+        } else if (i == 2) {
+          retorno.pathPreProj = fileName;
+        } else if (i == 3) {
+          retorno.pathMemorial = fileName;
+        }
+      } else if(tipoFormulario == 2) { // DOUTORADO
+        if (i == 0) {
+          retorno.pathLattes = fileName;
+        } else if (i == 1) {
+          retorno.pathComprovantePagamento = fileName;
+        } else if (i == 2) {
+          retorno.pathProjetoTese = fileName;
+        } else if (i == 3) {
+          retorno.pathPrincipalPubli = fileName;
+        }
+
       }
     }, err => {
       console.log('Erro ao enviar o trabalho para AWS: ' + fileName);
@@ -146,7 +158,6 @@ async function uploadFilesProcessoSeletivo(files) {
       retorno.mensagem = 'Servidor momentaneamente inoperante. Tente novamente mais tarde.';
     });
   }
-
   return retorno;
 
 }

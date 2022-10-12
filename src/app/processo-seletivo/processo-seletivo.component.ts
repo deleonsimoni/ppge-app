@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { merge, Observable, take } from "rxjs";
@@ -82,22 +81,26 @@ export class ProcessoSeletivoComponent implements OnInit {
       })
   }
 
-  inscreverNoProcesso(fileLattes, filePreProjeto, fileComprovantePagamento, fileMemorial, formRetorno: FormGroup) {
-    console.log("VOLTOUUUUUUUUUUU ");
-    console.log("iniciarInsNoProcesso: ", formRetorno.value);
-    console.log("formRetornoformRetornoformRetornoformRetorno: ", formRetorno);
-    //AAAAAAAAAAAA
-    const invalid = [];
-    const controls = formRetorno.controls;
-    for (const name in controls) {
-      if (controls[name].invalid) {
-        invalid.push(name);
-      }
+  inscreverNoProcesso(objectReturned) {
+    let { 
+      fileLattes, 
+      filePreProjeto, 
+      fileComprovantePagamento, 
+      fileMemorial, 
+      fileProjetoTese, 
+      filePrincipalPubli, 
+      formRetorno 
+    } = objectReturned;
+    const files = {
+      fileLattes: fileLattes ? fileLattes[0] : null, 
+      filePreProjeto: filePreProjeto ? filePreProjeto[0] : null, 
+      fileComprovantePagamento: fileComprovantePagamento ? fileComprovantePagamento[0] : null, 
+      fileMemorial: fileMemorial ? fileMemorial[0] : null, 
+      fileProjetoTese: fileProjetoTese ? fileProjetoTese[0] : null, 
+      filePrincipalPubli: filePrincipalPubli ? filePrincipalPubli[0] : null, 
     }
-    console.log("invalid: ", invalid)
-    //AAAAAAAAAAAA
     if (formRetorno.valid) {
-      this.processoSeletivoService.inscreverProcessoSeletivo(formRetorno.value.idProcesso, formRetorno.value, fileLattes[0], filePreProjeto[0], fileComprovantePagamento[0], fileMemorial[0])
+      this.processoSeletivoService.inscreverProcessoSeletivo(formRetorno.value.idProcesso, formRetorno.value, files)
         .subscribe(
           () => {
             this.toastr.success('Inscrito com sucesso', 'Sucesso');

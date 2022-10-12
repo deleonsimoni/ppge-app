@@ -107,7 +107,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <mat-checkbox style="white-space: normal;" formControlName="termoNaoColacaoGrau">
+            <mat-checkbox style="white-space: normal; text-align: justify;" formControlName="termoNaoColacaoGrau">
               Declaro que li o edital do Processo Seletivo do Mestrado e que me responsabilizo a
               entregar no ato da matrícula Cópia do diploma de graduação, devidamente registrado,
               ou revalidado na forma da lei, ou cópia da declaração de conclusão de curso reconhecido
@@ -181,19 +181,19 @@
       <div class="col-lg-4 mb-3 pl-4">
         <label><strong>Currículo Lattes</strong></label><br>
         <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
-          id="customPreReadFile" (change)="setFileNamePDF($event.target.files)" #fileInput>
+          (change)="setFileNameLattes($event.target.files)" #fileInput>
         <p class="file-subtitle">* Anexe aqui em formato PDF seu Currículo Lattes.</p>
       </div>
       <div class="col-lg-4 mb-3 pl-4">
         <label><strong>Comprovante de pagamento</strong></label><br>
         <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
-          id="customPreReadFile" (change)="setFileNamePDF($event.target.files)" #fileInput>
+           (change)="setFileNameComprovantePagamento($event.target.files)" #fileInput>
         <p class="file-subtitle">* Anexe aqui em formato PDF o comprovante de pagamento da taxa de inscrição.</p>
       </div>
       <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
         <label><strong>Pré-Projeto de pesquisa</strong></label><br>
         <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
-          id="customPreReadFile" (change)="setFileNamePDF($event.target.files)" #fileInput>
+           (change)="setFileNamePreProjeto($event.target.files)" #fileInput>
         <p class="file-subtitle">* Anexe aqui em formato PDF o Pré-Projeto de pesquisa. (Observe os itens exigidos:
           indicação de linha de pesquisa, dois possíveis orientadores/as, nome completo, título, introdução, objetivos,
           possíveis abordagens teórico-metodológicas, referências bibliográficas e a extensão de 8 a 10 páginas)</p>
@@ -201,7 +201,7 @@
       <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
         <label><strong>Memorial</strong></label><br>
         <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
-          id="customPreReadFile" (change)="setFileNamePDF($event.target.files)" #fileInput>
+           (change)="setFileNameMemorial($event.target.files)" #fileInput>
         <p class="file-subtitle">
           * Anexe aqui em formato PDF o Memorial. Observe os itens exigidos:
           <br>I- nome completo;
@@ -214,14 +214,16 @@
       </div>
       <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
         <label><strong>Projeto de Tese</strong></label><br>
-        <input type="file">
+        <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
+        (change)="setFileNameProjetoTese($event.target.files)" #fileInput>
         <p class="file-subtitle">* Anexe aqui o Projeto de Tese em formato PDF. (Observe os itens exigidos: nome do
           candidato, linha de pesquisa, orientador escolhido, título do projeto, introdução, justificativa, objetivos,
           referencial teórico-metodológico, referências bibliográficas e a extensão de até 20 folhas).</p>
       </div>
       <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
         <label><strong>Principal publicação dos últimos 5 anos</strong></label><br>
-        <input type="file">
+        <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
+        (change)="setFileNamePrincipalPubli($event.target.files)" #fileInput>
         <p class="file-subtitle">* Anexe aqui o arquivo em formato PDF da publicação escolhida.</p>
       </div>
     </div>

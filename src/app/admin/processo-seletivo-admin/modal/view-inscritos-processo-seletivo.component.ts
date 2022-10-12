@@ -34,11 +34,25 @@ export class ViewInscritosProcessoSeletivoComponent implements OnInit {
   getUserInfo(idUser) {
     this.siteService.getUserByIdOnlyProcesso(idUser, this.data.idProcesso).subscribe((user: any) => {
       this.infoUser = user;
-      console.log("infoUser: ", this.infoUser)
       this.infoUserProcesso = user.processosSeletivo[0]
-      console.log("infoUserProcesso: ", this.infoUserProcesso)
+      
+      this.infoUserProcesso.files.pathComprovantePagamento;
+      this.infoUserProcesso.files.pathLattes;
+      this.infoUserProcesso.files.pathMemorial;
+      this.infoUserProcesso.files.pathPreProj;
+      this.infoUserProcesso.files.pathPrincipalPubli;
+      this.infoUserProcesso.files.pathProjetoTese;
+
       this.flagShowInfoUser = true;
     })
+  }
+
+  private addInicioS3Url(toConcat):string {
+    if(toConcat && toConcat != '') {
+      return 'https://ppge-public.s3.sa-east-1.amazonaws.com/'.concat(toConcat);
+    } else {
+      return '';
+    }
   }
 
   voltar() {

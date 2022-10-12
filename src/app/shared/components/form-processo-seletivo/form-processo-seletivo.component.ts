@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TypeGraduateEnum, TypeOpcaoVagaEnum } from '@app/shared/shared.model';
+import { ToastrService } from 'ngx-toastr';
 import { FormProcessoSeletivoService } from './form-processo-seletivo.service';
 
 @Component({
@@ -25,10 +26,13 @@ export class FormProcessoSeletivoComponent implements OnInit {
   fileComprovantePagamento: FileList;
   filePreProjeto: FileList;
   fileMemorial: FileList;
+  fileProjetoTese: FileList;
+  filePrincipalPubli: FileList;
 
   constructor(
     private builder: FormBuilder,
     private serviceFormProcesso: FormProcessoSeletivoService,
+    private toastr: ToastrService,
   ) {
   }
 
@@ -47,6 +51,16 @@ export class FormProcessoSeletivoComponent implements OnInit {
     return fileName;
   }
 
+  public getFileNameProjetoTese(): string {
+    const fileName = this.fileProjetoTese ? this.filePrincipalPubli[0].name : 'PDF Pré Projeto';
+    return fileName;
+  }
+
+  public getFileNamePrincipalPubli(): string {
+    const fileName = this.filePrincipalPubli ? this.filePrincipalPubli[0].name : 'PDF Memorial';
+    return fileName;
+  }
+
   public getFileNamePreProjeto(): string {
     const fileName = this.filePreProjeto ? this.filePreProjeto[0].name : 'PDF Pré Projeto';
     return fileName;
@@ -62,15 +76,23 @@ export class FormProcessoSeletivoComponent implements OnInit {
     return fileName;
   }
 
-  public setFileNamComprovantePreProjeto(files: FileList): void {
+  public setFileNameProjetoTese(files: FileList): void {
+    this.fileProjetoTese = files;
+  }
+
+  public setFileNamePrincipalPubli(files: FileList): void {
+    this.filePrincipalPubli = files;
+  }
+
+  public setFileNamePreProjeto(files: FileList): void {
     this.filePreProjeto = files;
   }
 
-  public setFileNamComprovanteMemorial(files: FileList): void {
+  public setFileNameMemorial(files: FileList): void {
     this.fileMemorial = files;
   }
 
-  public setFileNamComprovantePagamento(files: FileList): void {
+  public setFileNameComprovantePagamento(files: FileList): void {
     this.fileComprovantePagamento = files;
   }
 
@@ -131,7 +153,6 @@ export class FormProcessoSeletivoComponent implements OnInit {
   private getProcessoSeletivoInfosById() {
     this.serviceFormProcesso.getProcessoSeletivoInfosById(this.idProcessoSeletivo)
       .subscribe((data: any) => {
-        console.log("BBBBBBBBBBBBBBBB: ", data);
         if (data) {
           this.listLinhaPesquisa = data.researchLine
         }
@@ -147,25 +168,47 @@ export class FormProcessoSeletivoComponent implements OnInit {
     //TODO vai ter limite de tamanho?
 
     if (!this.fileLattes) {
-      //this.toastr.error('É necessário selecionar o curriculo Lattes', 'Atenção');
-      return;
-    }
-    if (!this.filePreProjeto) {
-      //this.toastr.error('É necessário selecionar o curriculo Lattes', 'Atenção');
+      this.toastr.error('É necessário selecionar o Curriculo Lattes', 'Atenção');
       return;
     }
     if (!this.fileComprovantePagamento) {
-      //this.toastr.error('É necessário selecionar o curriculo Lattes', 'Atenção');
-      return;
-    }
-    if (!this.fileMemorial) {
-      // tslint:disable-next-line: align
-      //this.toastr.error('É necessário selecionar o arquivo DOC', 'Atenção');
+      this.toastr.error('É necessário selecionar o Comprovante de Pagamento', 'Atenção');
       return;
     }
 
+    if(this.type == TypeGraduateEnum.MESTRADO) {
+      if (!this.filePreProjeto) {
+        this.toastr.error('É necessário selecionar o Pré-projeto', 'Atenção');
+        return;
+      }
+      if (!this.fileMemorial) {
+        // tslint:disable-next-line: align
+        this.toastr.error('É necessário selecionar o Memorial', 'Atenção');
+        return;
+      }
+    } else if(this.type == TypeGraduateEnum.DOUTORADO) {
+      if (!this.fileProjetoTese) {
+        this.toastr.error('É necessário selecionar o Projeto de Tese', 'Atenção');
+        return;
+      }
+      if (!this.filePrincipalPubli) {
+        // tslint:disable-next-line: align
+        this.toastr.error('É necessário selecionar a Principal Publicação', 'Atenção');
+        return;
+      }
 
-    this.inscrever.emit(this.fileLattes, this.filePreProjeto, this.fileComprovantePagamento, this.fileMemorial, this.form);
+    }
+
+
+    this.inscrever.emit({
+      fileLattes: this.fileLattes, 
+      filePreProjeto: this.filePreProjeto, 
+      fileComprovantePagamento: this.fileComprovantePagamento, 
+      fileMemorial: this.fileMemorial, 
+      fileProjetoTese: this.fileProjetoTese, 
+      filePrincipalPubli: this.filePrincipalPubli, 
+      formRetorno: this.form
+    });
 
   }
 

@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row justify-content-between">
     <div class="section-header" mat-dialog-title>
-      <h2>Administrar páginas.</h2>
+      <h2>Administrar páginas</h2>
     </div>
   </div>
   <em class="fa fa-undo"></em>
@@ -68,7 +68,7 @@
         <mat-label>Selecione o Corpo Docente</mat-label>
         <mat-select multiple formControlName="corpoDocente">
           <mat-option *ngFor="let cdn of listCorpoDocenteName" [value]="cdn._id">{{cdn.type == 1 ? 'Professor' :
-            'Doutor'}} - {{cdn.fullName}}</mat-option>
+            'Pós-Doutorando'}} - {{cdn.fullName}}</mat-option>
         </mat-select>
       </mat-form-field>
 

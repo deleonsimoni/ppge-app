@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { TypeGraduateEnum } from "@app/shared/shared.model";
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -17,13 +18,19 @@ export class ProcessoSeletivoService {
     return this.http.get(`${this.URL_PROCESSO_SELETIVO}`, { params });
   }
 
-  public inscreverProcessoSeletivo(idProcesso, formulario, fileLattes, filePreProjeto, fileComprovantePagamento, fileMemorial) {
+  public inscreverProcessoSeletivo(idProcesso, formulario, files) {
 
     const formData: FormData = new FormData();
-    formData.append('fileArray', fileLattes, `${idProcesso}/${fileLattes.name}`);
-    formData.append('fileArray', filePreProjeto, `${idProcesso}/${filePreProjeto.name}`);
-    formData.append('fileArray', fileComprovantePagamento, `${idProcesso}/${fileComprovantePagamento.name}`);
-    formData.append('fileArray', fileMemorial, `${idProcesso}/${fileMemorial.name}`);
+    formData.append('fileArray', files.fileLattes);
+    formData.append('fileArray', files.fileComprovantePagamento);
+
+    if(formulario.tipoFormulario == TypeGraduateEnum.MESTRADO) {
+      formData.append('fileArray', files.filePreProjeto);
+      formData.append('fileArray', files.fileMemorial);
+    } else if(formulario.tipoFormulario == TypeGraduateEnum.DOUTORADO) {
+      formData.append('fileArray', files.fileProjetoTese);
+      formData.append('fileArray', files.filePrincipalPubli);
+    }
     formData.append('formulario', JSON.stringify(formulario));
     return this.http.post(`${this.URL_PROCESSO_SELETIVO}/inscrever/${idProcesso}`, formData);
 

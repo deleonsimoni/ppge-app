@@ -166,7 +166,7 @@ export class PagesAdminComponent implements OnInit {
         this.siteService.atualizarPage(this.form.value, pageSelected)
           .subscribe((res: any) => {
             this.getInfoPage();
-            this.toastr.success(`Página alterado com sucesso`, 'Sucesso');
+            this.toastr.success(`Página alterada com sucesso`, 'Sucesso');
           }, (err: any) => {
             this.toastr.error('Ocorreu um erro ao atualizar', 'Atenção: ');
           });
@@ -175,7 +175,7 @@ export class PagesAdminComponent implements OnInit {
         this.siteService.cadastrarPage(this.form.value, pageSelected)
           .subscribe((res: any) => {
             this.getInfoPage();
-            this.toastr.success(`Página cadastrado`, 'Sucesso');
+            this.toastr.success(`Página cadastrada`, 'Sucesso');
           }, (err: any) => {
             this.toastr.error('Ocorreu um erro ao cadastrar', 'Atenção: ');
           });

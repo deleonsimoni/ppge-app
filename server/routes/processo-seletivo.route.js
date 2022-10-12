@@ -5,6 +5,7 @@ const requireAdmin = require('../middleware/require-admin');
 const requireLogin = require('../middleware/require-login');
 const processoSeletivoCtrl = require('../controllers/processo-seletivo.controller');
 const setLocation = require('../middleware/set-location');
+const fileUpload = require('express-fileupload');
 
 const router = express.Router();
 module.exports = router;
@@ -78,8 +79,8 @@ async function atualizarProcessoSeletivoAtivo(req, res) {
 }
 
 async function subscribeProcessoSeletivo(req, res) {
-  await processoSeletivoCtrl.subscribeProcessoSeletivo(req);
-  res.json({});
+  const statusReturned = await processoSeletivoCtrl.subscribeProcessoSeletivo(req);
+  res.status(statusReturned).json({});
 }
 
 async function unsubscribeProcessoSeletivo(req, res) {

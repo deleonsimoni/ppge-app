@@ -67,7 +67,6 @@ async function getHeadersLinhaPesquisaByIdDocente(idDocente, language) {
 }
 
 async function getAllTitlesLinhaPesquisa(req) {
-  console.log("AQUIIII> ", req.params)
   let whereClause = {};
   return await LinhaPesquisaModel.find(whereClause, {title: 1})
     .sort({
