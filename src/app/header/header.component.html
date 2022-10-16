@@ -6,7 +6,7 @@
     <a style="cursor: pointer;" [routerLink]="''"
       class="logo d-flex align-items-center scrollto me-auto me-lg-0  nav-link scrollto">
       <!-- Uncomment the line below if you also wish to use an image logo -->
-      <img src="../../assets/img/logo-ppge-final.png" alt="">
+      <img src="../../assets/img/logo-ppge2.png" alt="">
       <!--<h1>HeroBiz<span>.</span></h1>-->
     </a>
 
@@ -50,14 +50,16 @@
             <li class="dropdown"><a><span>{{'linhas.pesquisa' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li *ngFor="let item of headerData.linha_pesquisa; let i = index"><a class="nav-link scrollto" [routerLink]="['linhas-pesquisa/', item._id]">{{ item.navTitle }}</a></li>
+                <li *ngFor="let item of headerData.linha_pesquisa; let i = index"><a class="nav-link scrollto"
+                    [routerLink]="['linhas-pesquisa/', item._id]">{{ item.navTitle }}</a></li>
               </ul>
             </li>
 
             <li class="dropdown"><a><span>{{'cursos' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li *ngFor="let item of headerData.cursos; let i = index"><a class="nav-link scrollto" [routerLink]="['cursos/', item._id]">{{ item.navTitle }}</a></li>
+                <li *ngFor="let item of headerData.cursos; let i = index"><a class="nav-link scrollto"
+                    [routerLink]="['cursos/', item._id]">{{ item.navTitle }}</a></li>
               </ul>
             </li>
 
@@ -137,8 +139,8 @@
     </nav><!-- .navbar -->
 
     <!--<a class="btn-getstarted scrollto" href="index.html#about">Get Started</a>-->
-    <ngx-flag-picker class="language" [selectedCountryCode]="selectedCountryCode" [countryCodes]="countryCodes" [showArrow]="true"
-      [showFlags]="true" (changedCountryCode)="changeSelectedCountryCode($event)">
+    <ngx-flag-picker class="language" [selectedCountryCode]="selectedCountryCode" [countryCodes]="countryCodes"
+      [showArrow]="true" [showFlags]="true" (changedCountryCode)="changeSelectedCountryCode($event)">
     </ngx-flag-picker>
 
 
