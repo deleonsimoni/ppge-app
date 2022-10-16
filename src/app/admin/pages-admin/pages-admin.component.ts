@@ -28,7 +28,7 @@ export class PagesAdminComponent implements OnInit {
   ]
   private image: FileList;
 
-  
+
 
 
   editorConfig: AngularEditorConfig = {
@@ -40,7 +40,6 @@ export class PagesAdminComponent implements OnInit {
     translate: "no",
     defaultParagraphSeparator: "p",
     defaultFontName: "Arial",
-    toolbarHiddenButtons: [["bold"]],
     sanitize: false,
     customClasses: [
       {
@@ -100,7 +99,7 @@ export class PagesAdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.getInfoPage();
-    
+
   }
   // Variavel de setups
   private setups = {
@@ -118,51 +117,51 @@ export class PagesAdminComponent implements OnInit {
     const languageSelected = this.form.value.language;
     this.siteService.listPage(pageSelected, languageSelected).subscribe((res: any) => {
       this.carregando = false;
-      if(res && res.constructor.name === "Array") {
+      if (res && res.constructor.name === "Array") {
         this.expansivel = true;
         this.dataExpansivel = res;
         this.data = res[0];
-        if(this.data) this.data.index = 0;
+        if (this.data) this.data.index = 0;
         this.form.reset();
-        this.form.patchValue({...res[0], selectPage:pageSelected, language:languageSelected});
+        this.form.patchValue({ ...res[0], selectPage: pageSelected, language: languageSelected });
       } else {
         this.expansivel = false;
         this.dataExpansivel = null;
         this.data = res;
         this.form.reset();
-        this.form.patchValue({...res, selectPage:pageSelected, language:languageSelected});
+        this.form.patchValue({ ...res, selectPage: pageSelected, language: languageSelected });
       }
     }, err => {
       this.carregando = false;
       this.toastr.error(`Ocorreu um erro ao listar a página`, 'Atenção: ');
     });
-    if(this.setups[pageSelected]) this.setups[pageSelected]();
+    if (this.setups[pageSelected]) this.setups[pageSelected]();
   }
 
   adicionarPagina() {
-    const newPage = {navTitle: "Título menu"};
+    const newPage = { navTitle: "Título menu" };
     this.dataExpansivel.push(newPage);
-    this.selecionarPagina(this.dataExpansivel.length -1);
+    this.selecionarPagina(this.dataExpansivel.length - 1);
   }
 
   selecionarPagina(index) {
     const pageSelected = this.form.value.selectPage;
     const languageSelected = this.form.value.language;
     this.form.reset();
-    this.form.patchValue({...this.dataExpansivel[index], selectPage:pageSelected, language:languageSelected});
+    this.form.patchValue({ ...this.dataExpansivel[index], selectPage: pageSelected, language: languageSelected });
     this.data = this.dataExpansivel[index];
-    if(this.data) {
+    if (this.data) {
       this.data.index = index;
     }
   }
 
   public register() {
     const pageSelected = this.form.value.selectPage;
-    
+
     if (this.form.valid) {
 
       if (this.form.value._id) {
-        
+
         this.siteService.atualizarPage(this.form.value, pageSelected)
           .subscribe((res: any) => {
             this.getInfoPage();
@@ -202,15 +201,15 @@ export class PagesAdminComponent implements OnInit {
 
   public excluirPaginaExpansivel() {
     const pageSelected = this.form.value.selectPage;
-    
+
     const dialogRef = this.dialog.open(ComfirmDeleteProcessoComponent, {
       width: '750px',
       data: { title: this.data.title }
     });
-    
+
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
-      if(result) {
-        if(!!this.data._id) {
+      if (result) {
+        if (!!this.data._id) {
           this.siteService.deletarPage(this.form.value, pageSelected)
             .pipe(take(1))
             .subscribe(() => {
@@ -218,9 +217,9 @@ export class PagesAdminComponent implements OnInit {
               this.dataExpansivel.splice(this.data.index, 1);
               this.selecionarPagina(0);
             },
-            () => {
-              this.toastr.error('Ocorreu um erro ao deletar', 'Atenção: ');
-            });
+              () => {
+                this.toastr.error('Ocorreu um erro ao deletar', 'Atenção: ');
+              });
         } else {
           this.dataExpansivel.splice(this.data.index, 1);
           this.selecionarPagina(0);

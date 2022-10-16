@@ -5,6 +5,9 @@ const comissaoDeliberativaService = require('../service/comissao-deliberativa.se
 const comissaoGestaoService = require('../service/comissao-gestao.service');
 const historicoService = require('../service/historico.service');
 const objetivoService = require('../service/objetivo.service');
+const noticiaService = require('../service/noticias.service');
+const revistaService = require('../service/revistas.service');
+
 const regrasCredenciamentoService = require('../service/regras-credenciamento.service');
 const regulamentoPpgeService = require('../service/regulamento-ppge.service');
 const linhaPesquisaService = require('../service/linha_pesquisa.service');
@@ -107,6 +110,19 @@ const pagesFunctions = {
     insert: async (req, idUser) => await cursosService.insertCursos(req, idUser),
     delete: async (id) => await cursosService.deleteCursos(id),
 
+  },
+  noticias: {
+    get: async (req) => await noticiaService.getNoticia(req),
+    getHeaders: async (req) => await noticiaService.getHeadersNoticias(req),
+    update: async (req, idUser) => await noticiaService.updateNoticia(req, idUser),
+    insert: async (req, idUser) => await noticiaService.insertNoticia(req, idUser),
+    delete: async (id) => await noticiaService.deleteNoticia(id),
+  },
+  revistas: {
+    get: async (req) => await objetivoService.getObjetivo(req),
+    update: async (req, idUser) => await objetivoService.updateObjetivo(req, idUser),
+    insert: async (req, idUser) => await objetivoService.insertObjetivo(req, idUser),
+    delete: async (id) => await objetivoService.deleteObjetivo(id),
   },
 }
 
