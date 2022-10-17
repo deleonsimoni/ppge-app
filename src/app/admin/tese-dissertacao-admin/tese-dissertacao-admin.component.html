@@ -4,8 +4,7 @@
             <h2>Administrar - Tese e Dissertação</h2>
         </div>
     </div>
-    <em class="fa fa-undo"></em>
-    <i class="fa-solid fa-address-card"></i>
+
     <div class="row justify-content-center">
 
         <div class="col-md-12">
@@ -74,23 +73,27 @@
         </div>
         <div class="col-md-12">
             <section id="about" class="about">
-                <div class="container" >
-                    <div class="row text-center"  data-aos-delay="200">
+                <div class="container">
+                    <div class="row text-center" data-aos-delay="200">
                         <!-- Tabs -->
                         <ul class="nav nav-pills mb-3">
-                            <li><a class="nav-link active" data-bs-toggle="pill" href="#tab1" (click)="getPerTipo('1')">Teses</a></li>
-                            <li><a class="nav-link" data-bs-toggle="pill" href="#tab2"(click)="getPerTipo('2')">Dissertações</a></li>
+                            <li><a class="nav-link active" data-bs-toggle="pill" href="#tab1"
+                                    (click)="getPerTipo('1')">Teses</a></li>
+                            <li><a class="nav-link" data-bs-toggle="pill" href="#tab2"
+                                    (click)="getPerTipo('2')">Dissertações</a></li>
                         </ul><!-- End Tabs -->
 
                         <!-- Tab Content -->
                         <div class="tab-content">
 
                             <div class="tab-pane show active" id="tab1">
-                                <app-tese-ou-dissertacao [datas]="datas" (resposta)="reciverFeedback($event)"></app-tese-ou-dissertacao>
+                                <app-tese-ou-dissertacao [datas]="datas" (resposta)="reciverFeedback($event)">
+                                </app-tese-ou-dissertacao>
                             </div><!-- End Tab 1 Content -->
 
                             <div class="tab-pane show" id="tab2">
-                                <app-tese-ou-dissertacao [datas]="datas" (resposta)="reciverFeedback($event)"></app-tese-ou-dissertacao>
+                                <app-tese-ou-dissertacao [datas]="datas" (resposta)="reciverFeedback($event)">
+                                </app-tese-ou-dissertacao>
                             </div><!-- End Tab 2 Content -->
                         </div>
                     </div>

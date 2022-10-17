@@ -32,9 +32,8 @@ import { RegulationModule } from './regulation/regulation.module';
 import { ResearchLineModule } from './research-line/research-line.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { ComponentsModule } from './shared/components/components.module';
-import { ImagePathComplementModule } from './shared/pipes/image-path/image-path-complement.module';
 import { ImagePathComplementPipe } from './shared/pipes/image-path/image-path-complement.pipe';
-import { PipesModule } from './shared/pipes/pipes.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from './shared/services';
 import { SharedModule } from './shared/shared.module';
 import { TeseDissertacaoModule } from './tese-dissertacao/tese-dissertacao.module';
@@ -78,7 +77,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       }
     }),
     HistoricModule,
-
+    NgbModule
 
   ],
   declarations: [

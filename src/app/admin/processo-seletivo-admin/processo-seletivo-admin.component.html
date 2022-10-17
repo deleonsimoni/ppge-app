@@ -4,8 +4,7 @@
             <h2>Administrar - Processo Seletivo</h2>
         </div>
     </div>
-    <em class="fa fa-undo"></em>
-    <i class="fa-solid fa-address-card"></i>
+
     <div class="row justify-content-center">
 
         <div class="col-md-12">
@@ -15,8 +14,8 @@
                         <mat-form-field appearance="fill">
                             <mat-label>Selecione o Tipo</mat-label>
                             <mat-select formControlName="type">
-                            <mat-option value="1">Mestrado</mat-option>
-                            <mat-option value="2">Doutorado</mat-option>
+                                <mat-option value="1">Mestrado</mat-option>
+                                <mat-option value="2">Doutorado</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -24,7 +23,8 @@
                         <mat-form-field style="width: 100%;" appearance="fill">
                             <mat-label>Selecione a Linha de Pesquisa</mat-label>
                             <mat-select multiple formControlName="researchLine">
-                              <mat-option *ngFor="let linha of listLinhaPesquisa" [value]="linha._id">{{linha.title}}</mat-option>
+                                <mat-option *ngFor="let linha of listLinhaPesquisa" [value]="linha._id">{{linha.title}}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -36,10 +36,10 @@
 
                     </div>
                 </div>
-                <div formArrayName="content" >
-                    <div *ngFor="let contentLine of getFormContent.controls; let i = index;" >
+                <div formArrayName="content">
+                    <div *ngFor="let contentLine of getFormContent.controls; let i = index;">
                         <div class="form-row justify-content-center" [formGroupName]="i">
-                            <div class="form-group col-md-5" >
+                            <div class="form-group col-md-5">
                                 <input type="text" class="form-control" placeholder="Texto"
                                     formControlName="contentTitle" />
                             </div>
@@ -48,13 +48,15 @@
                                     formControlName="contentLink" />
                             </div>
                             <div class="form-group col-md-2">
-                                <button type="button" (click)="removeContentLine(i)" mat-raised-button color="warn">Remover linha</button>
+                                <button type="button" (click)="removeContentLine(i)" mat-raised-button
+                                    color="warn">Remover linha</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="form-row justify-content-center">
-                    <button class="add-button" type="button" (click)="addContentLine()" mat-raised-button>Adicionar linha</button>
+                    <button class="add-button" type="button" (click)="addContentLine()" mat-raised-button>Adicionar
+                        linha</button>
                 </div>
 
                 <div class="row justify-content-end m-4">
@@ -85,13 +87,18 @@
                                         <th scope="row">{{ di.type == 1 ? "Mestrado" : "Doutorado" }}</th>
                                         <th scope="row">{{ di.title }}</th>
                                         <th scope="row">
-                                            <span class="material-icons md-18 btn" (click)="apagar(di._id, di.title)">delete</span>
-                                            <span class="material-icons md-18 btn" (click)="editar(di)">edit_square</span>
-                                            <span class="material-icons md-18 btn" (click)="visualizar(di.title, di.content)">preview</span>
-                                            <span class="material-icons md-18 btn" (click)="inscritos(di._id, di.title)">group</span>
+                                            <span class="material-icons md-18 btn"
+                                                (click)="apagar(di._id, di.title)">delete</span>
+                                            <span class="material-icons md-18 btn"
+                                                (click)="editar(di)">edit_square</span>
+                                            <span class="material-icons md-18 btn"
+                                                (click)="visualizar(di.title, di.content)">preview</span>
+                                            <span class="material-icons md-18 btn"
+                                                (click)="inscritos(di._id, di.title)">group</span>
                                         </th>
                                         <th>
-                                            <mat-slide-toggle (change)="atualizarProcessoAtivo($event, di._id)" [checked]="di.isAtivo"></mat-slide-toggle>
+                                            <mat-slide-toggle (change)="atualizarProcessoAtivo($event, di._id)"
+                                                [checked]="di.isAtivo"></mat-slide-toggle>
                                         </th>
                                     </tr>
                                 </tbody>
