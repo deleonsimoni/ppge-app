@@ -1,21 +1,21 @@
 const { default: mongoose } = require("mongoose");
-const CursosModel = require("../models/cursos.model");
+const RevistasModel = require("../models/revista.model");
 
 module.exports = {
-  getCursos,
-  getHeadersCursos,
-  insertCursos,
-  updateCursos,
-  deleteCursos,
+  getRevistas,
+  getHeadersRevistas,
+  insertRevistas,
+  updateRevistas,
+  deleteRevistas,
 };
 
-async function getCursos(req) {
+async function getRevistas(req) {
   let whereClause = {};
   if(!!req.query._id) {
     if(!mongoose.Types.ObjectId.isValid(req.query._id)) return [];
     whereClause._id = req.query._id
   }
-  let ret = await CursosModel.find(whereClause)
+  let ret = await RevistasModel.find(whereClause)
     .sort({
       createAt: -1
     });
@@ -33,8 +33,8 @@ async function getCursos(req) {
   return ret;
 }
 
-async function getHeadersCursos(req) {
-  let ret = await CursosModel.find({}, {
+async function getHeadersRevistas(req) {
+  let ret = await RevistasModel.find({}, {
     [`${req.query.language}.title`]: 1,
     [`${req.query.language}.navTitle`]: 1,
   }).sort({
@@ -51,11 +51,11 @@ async function getHeadersCursos(req) {
   return ret;
 }
 
-async function updateCursos(req, idUser) {
+async function updateRevistas(req, idUser) {
 
   let form = req.body.formulario;
   form.user = idUser;
-  return await CursosModel.findOneAndUpdate({
+  return await RevistasModel.findOneAndUpdate({
     _id: form._id
   },
     form, {
@@ -64,14 +64,14 @@ async function updateCursos(req, idUser) {
 
 }
 
-async function insertCursos(req, idUser) {
+async function insertRevistas(req, idUser) {
   let form = req.body.formulario;
   form.user = idUser;
-  return await new CursosModel(form).save();
+  return await new RevistasModel(form).save();
 }
 
-async function deleteCursos(id) {
-  return await CursosModel.findOneAndRemove({
+async function deleteRevistas(id) {
+  return await RevistasModel.findOneAndRemove({
     _id: id
   });
 }

@@ -112,17 +112,18 @@ const pagesFunctions = {
 
   },
   noticias: {
-    get: async (req) => await noticiaService.getNoticia(req),
+    get: async (req) => await noticiaService.getNoticias(req),
     getHeaders: async (req) => await noticiaService.getHeadersNoticias(req),
     update: async (req, idUser) => await noticiaService.updateNoticia(req, idUser),
     insert: async (req, idUser) => await noticiaService.insertNoticia(req, idUser),
     delete: async (id) => await noticiaService.deleteNoticia(id),
   },
   revistas: {
-    get: async (req) => await objetivoService.getObjetivo(req),
-    update: async (req, idUser) => await objetivoService.updateObjetivo(req, idUser),
-    insert: async (req, idUser) => await objetivoService.insertObjetivo(req, idUser),
-    delete: async (id) => await objetivoService.deleteObjetivo(id),
+    get: async (req) => await revistaService.getRevistas(req),
+    getHeaders: async (req) => await revistaService.getHeadersRevistas(req),
+    update: async (req, idUser) => await revistaService.updateRevistas(req, idUser),
+    insert: async (req, idUser) => await revistaService.insertRevistas(req, idUser),
+    delete: async (id) => await revistaService.deleteRevistas(id),
   },
 }
 

@@ -25,6 +25,8 @@ export class PagesAdminComponent implements OnInit {
   listUrlExpansivel: string[] = [
     'linha_pesquisa',
     'cursos',
+    'noticias',
+    'revistas',
   ]
   private image: FileList;
 
