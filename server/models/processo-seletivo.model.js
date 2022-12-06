@@ -43,8 +43,89 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
 
     enrolled: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        idUser: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
+        tipoFormulario: {
+          type: Number,
+        },
+        linhaPesquisa: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'LinhaPesquisa',
+          required: true,
+        },
+        primeiroOrientador: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'CorpoDocente',
+          required: true,
+        },
+        segundoOrientador: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'CorpoDocente',
+        },
+        opcaoVaga: {
+          type: Number,
+        },
+        opcaoVagaCotaSub: {
+          type: Number,
+        },
+        deficienciaSub: {
+          type: String,
+        },
+        graduacao: {
+          type: mongoose.Schema.Types.Mixed,
+        },
+        posGraduacao: {
+          type: mongoose.Schema.Types.Mixed,
+        },
+        posGraduacaoMestrado: {
+          type: mongoose.Schema.Types.Mixed,
+        },
+        termoConcordanciaEdital: {
+          type: Boolean,
+        },
+        termoResponsabilidadeInfo: {
+          type: Boolean,
+        },
+        termoLeituraEdital: {
+          type: Boolean,
+        },
+        files: {
+          pathLattes: {
+            type: String,
+          },
+          pathMemorial: {
+            type: String,
+          },
+          pathComprovantePagamento: {
+            type: String,
+          },
+          pathPreProj: {
+            type: String,
+          },
+          pathProjetoTese: {
+            type: String,
+          },
+          pathPrincipalPubli: {
+            type: String,
+          },
+        },
+        parecerista: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
+        parecer: {
+          abacaxi: {
+            type: String,
+          },
+          nota: {
+            type: Number,
+          },
+          aprovado: {
+            type: Boolean,
+          }
+        }
       }
     ],
 

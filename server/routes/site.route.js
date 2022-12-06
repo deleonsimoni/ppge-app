@@ -6,6 +6,7 @@ const requireAdmin = require('../middleware/require-admin');
 const setLocation = require('../middleware/set-location');
 const fileUpload = require('express-fileupload');
 const processoSeletivoRoutes = require('./processo-seletivo.route');
+const pareceristasoRoutes = require('./pareceristas.route');
 
 const router = express.Router();
 module.exports = router;
@@ -104,3 +105,4 @@ async function deleteCorpoDocente(req, res) {
 
 /* Fim Corpo Docente */
 router.use('/', processoSeletivoRoutes);
+router.use('/parecerista', pareceristasoRoutes);

@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Parecer da inscrição</h1>
+<div mat-dialog-content>
+  <form role="form" class="reviewer" [formGroup]="form">
+    <div class="row">
+      <div class="form-group col-md-12">
+        <label for="abacaxi">Abacaxi?</label>
+        <input class="form-control" placeholder="Abacaxi" type="text" name="abacaxi" id="abacaxi" formControlName="abacaxi">
+      </div>
+      <div class="form-group col-md-12">
+        <label for="Nota">Nota</label>
+        <input class="form-control" placeholder="Nota" type="number" name="Nota" id="Nota" formControlName="nota" minlength="0" maxlength="10" pattern="\d*" max="10" min="0" step="1">
+      </div>
+      <div class="col-12">
+        <label for="aprovado"></label>
+        <mat-radio-group class="example-radio-group w-100" formControlName="aprovado" >
+          <mat-radio-button class="example-radio-button mr-3" value="true">Aprovado</mat-radio-button>
+          <mat-radio-button class="example-radio-button mr-3" value="false">Reprovado</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Fechar</button>
+  <button mat-raised-button color="primary" style="background-color: green;" (click)="register()">Finalizar parecer</button>
+</div>

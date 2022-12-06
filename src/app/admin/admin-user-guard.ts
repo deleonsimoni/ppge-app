@@ -11,6 +11,6 @@ export class OnlyAdminUsersGuard implements CanActivate {
   constructor(private authService: AuthService) {}
 
   canActivate(): Observable<boolean> {
-    return this.authService.getUser().pipe(map(user => !!user?.isAdmin));
+    return this.authService.getUser().pipe(map(user => !!user?.isAdmin ));
   }
 }

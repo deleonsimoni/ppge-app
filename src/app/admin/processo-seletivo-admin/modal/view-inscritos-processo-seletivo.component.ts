@@ -29,12 +29,18 @@ export class ViewInscritosProcessoSeletivoComponent implements OnInit {
   typeGraduateEnum = TypeGraduateEnum;
 
   ngOnInit(): void {
+    console.log("MODAL: ", this.data)
+    this.data.users.forEach(u =>{
+      console.log("1 user -> ",u);
+      
+    });
   }
 
   getUserInfo(idUser) {
     this.siteService.getUserByIdOnlyProcesso(idUser, this.data.idProcesso).subscribe((user: any) => {
-      this.infoUser = user;
-      this.infoUserProcesso = user.processosSeletivo[0]
+      console.log("useruseruser: ", user)
+      this.infoUser = user.enrolled[0].idUser;
+      this.infoUserProcesso = user.enrolled[0];
       
       this.infoUserProcesso.files.pathComprovantePagamento;
       this.infoUserProcesso.files.pathLattes;

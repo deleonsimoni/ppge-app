@@ -1,0 +1,126 @@
+<div class="container pb-5">
+  <div class="row justify-content-between">
+    <div class="section-header" mat-dialog-title>
+      <h2>Inscrições/Pareceristas</h2>
+    </div>
+  </div>
+  
+  <div class="row justify-content-end mb-5">
+    <div class="col-12">
+      
+      <mat-form-field appearance="fill" class="mb-3 w-100">
+        <mat-label>Selecione um Processo Seletivo</mat-label>
+        <mat-select (selectionChange)="getInscricoes($event.value)">
+          <mat-option *ngFor="let linha of listProcessoSeletivo" [value]="linha._id" >{{ linha.title }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  
+  <div *ngFor="let inscricoes of listInscritos; let i = index" class="row justify-content-between mb-3 px-2 card-inscricoes">
+    <div class="col pt-3 pb-2">
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Parecerista</mat-label>
+            <mat-select [disabled]="!myUser.isAdmin && !myUser.isCoordenador" [value]="inscricoes.parecerista?._id" (selectionChange)="selecionarPareceristaNoInscrito($event.value, i)">
+              <mat-option *ngFor="let parecerista of listPareceristas" [value]="parecerista._id" >{{ parecerista.email }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 ">
+          <p class="m-0 title">Nome: </p>
+          <p>{{inscricoes.idUser.fullname}}</p>
+        </div>
+      </div>
+      <div *ngIf="this.flagDetalharInscricao && this.inscricaoSelecionada._id == inscricoes._id" class="row">
+        <div class="col-12">
+          <hr>
+          <div class="row mb-3">
+              <div class="col-md-6">
+                  <label class="mb-0"><strong>Currículo Lattes</strong></label>
+                  <br>
+                  <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathLattes)">
+                      <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
+                  </a>
+              </div>
+              <div class="col-md-6">
+                  <label class="mb-0"><strong>Comprovante de pagamento</strong></label>
+                  <br>
+                  <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathComprovantePagamento)">
+                      <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
+                  </a>
+              </div>
+          </div>
+          <div class="row mb-3" *ngIf="inscricaoSelecionada.tipoFormulario == typeGraduateEnum.MESTRADO">
+              <div class="col-md-6">
+                  <label class="mb-0"><strong>Pré-projeto</strong></label>
+                  <br>
+                  <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathPreProj)">
+                      <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
+                  </a>
+              </div>
+              <div class="col-md-6">
+                  <label class="mb-0"><strong>Memorial</strong></label>
+                  <br>
+                  <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathMemorial)">
+                      <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
+                  </a>
+              </div>
+          </div>
+          <div class="row mb-3" *ngIf="inscricaoSelecionada.tipoFormulario == typeGraduateEnum.DOUTORADO">
+              <div class="col-md-6">
+                  <label class="mb-0"><strong>Projeto de Tese</strong></label>
+                  <br>
+                  <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathProjetoTese)">
+                      <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
+                  </a>
+              </div>
+              <div class="col-md-6">
+                  <label class="mb-0"><strong>Principal publicação</strong></label>
+                  <br>
+                  <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathPrincipalPubli)">
+                      <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
+                  </a>
+              </div>
+          </div>
+          <hr>
+          <div class="row mb-3">
+            <div class="col-6">
+              {{inscricaoSelecionada.parecer?.abacaxi }}
+            </div>
+            <div class="col-6">
+              {{inscricaoSelecionada.parecer?.aprovado}}
+            </div>
+          </div>
+          <div *ngIf="!inscricaoSelecionada.parecer && inscricaoSelecionada.parecerista == myUser._id" class="row">
+            <div class="col-auto">
+              <button type="button" mat-raised-button
+                  color="primary" (click)="openModalParecer(inscricoes._id)">Dar parecer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-auto pt-3 pb-2">
+      <div *ngIf="myUser.isAdmin || myUser.isCoordenador" class="row">
+        <span (click)="vincularParecerista(inscricoes)" matTooltip="Salvar" matTooltipPosition="above" class="material-icons md-18 btn card-icon-action">save</span>
+      </div>
+      <div class="row">
+        <div class="col">
+          <p>
+            {{verificarAprovacao(inscricoes.parecer.aprovado)}}
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <span (click)="detalharInscricao(inscricoes._id)" matTooltip="Detalhar" matTooltipPosition="above" class="material-icons md-18 btn card-icon-action">add</span>
+      </div>
+      <div class="row">
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
-import { Observable, BehaviorSubject, firstValueFrom, of } from 'rxjs';
-import { tap, pluck, catchError } from 'rxjs/operators';
+import { BehaviorSubject, firstValueFrom, Observable, of } from 'rxjs';
+import { catchError, pluck, tap } from 'rxjs/operators';
 
 import { User } from '@app/shared/interfaces';
 
@@ -48,6 +48,8 @@ export class AuthService {
   setUser(user: User | null): void {
     if (user) {
       user.isAdmin = user.roles.includes('admin');
+      user.isCoordenador = user.roles.includes('coordenador');
+      user.isParecerista = user.roles.includes('parecerista');
     }
 
     this.user$.next(user);

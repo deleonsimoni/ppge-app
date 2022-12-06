@@ -19,6 +19,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { ComponentsModule } from './components/components.module';
 import { ImagePathComplementPipe } from './pipes/image-path/image-path-complement.pipe';
@@ -47,6 +48,7 @@ import { ImagePathComplementPipe } from './pipes/image-path/image-path-complemen
     MatFormFieldModule,
     MatProgressBarModule,
     MatSlideToggleModule,
+    MatTooltipModule,
     ComponentsModule,
     ImagePathComplementPipe
   ],

@@ -184,6 +184,8 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
 
   inscritos(id, title) {
     this.siteService.listProcessoSeletivoInscritos(id).subscribe((res: any) => {
+      console.log("resresresres: ", res);
+      
       const dialogRef = this.dialog.open(ViewInscritosProcessoSeletivoComponent, {
         width: '750px',
         data: { title: title, users: res.enrolled, idProcesso: id },

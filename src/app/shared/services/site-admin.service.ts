@@ -13,6 +13,7 @@ export class SiteAdminService {
   private readonly URL_TESE_DISSERTACAO = '/api/projetos/tese-dissertacao';
   private readonly URL_PROCESSO_SELETIVO = `${this.URL_API_PPGE}/processo-seletivo`;
   private readonly URL_PAGE = `${this.URL_API_PPGE}/page`;
+  private readonly URL_PARECERISTAS = `${this.URL_API_PPGE}/parecerista`;
 
   constructor(
     private http: HttpClient
@@ -21,7 +22,7 @@ export class SiteAdminService {
   getUserByIdOnlyProcesso(idUser, idProcesso) {
     let params = new HttpParams();
     params = params.set("idProcesso", idProcesso);
-    return this.http.get(`${this.URL_API_USER}/${idUser}`, { params });
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/detalhe/${idUser}`, { params });
   }
 
   getTitleLinhaPesquisa() {
@@ -159,6 +160,14 @@ export class SiteAdminService {
   }
   /* Fim Tese DISSERTACAO */
   /* Processo Seletivo */
+
+  registrarParecer(idInscricao, idProcesso, formulario) {
+    let params = new HttpParams()
+      .set("idInscricao", idInscricao)
+      .set("idProcesso", idProcesso);
+    return this.http.post(`${this.URL_PROCESSO_SELETIVO}/parecer`,{formulario}, {params});
+  }
+
   cadastrarProcessoSeletivo(form: any) {
     const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
     return this.http.post(`${this.URL_PROCESSO_SELETIVO}`, { formulario: form }, { headers });
@@ -184,5 +193,59 @@ export class SiteAdminService {
   atualizarProcessoAtivo(checked, id) {
     return this.http.post(`${this.URL_PROCESSO_SELETIVO}/ativo/${id}`, { isAtivo: checked });
   }
+  
+  getProcessosSeletivoTitle() {
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/headers`);
+
+  }
+  
+  getInscritosProcessoById(idProcesso) {
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/${idProcesso}`);
+
+  }
+
+  vincularParecerista(idInscricao, idParecerista, idProcesso) {
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/inscritos/vincular-parecerista`, {idInscricao, idParecerista, idProcesso});
+  }
+
+  detalharInscricao(idInscricao, idProcesso) {
+    let params = new HttpParams();
+    params = params.set("idProcesso", idProcesso);
+    params = params.set("idInscricao", idInscricao);
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/parecer/detalhe`, {params});
+  }
+  
+  detalharAllInscricoes(idProcesso) {
+    let params = new HttpParams();
+    params = params.set("idProcesso", idProcesso);
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/parecer/all`, {params});
+
+  }
   /* Fim Processo Seletivo */
+
+  /* Parecerista */
+
+  cadastrarParecerista(email) {
+    return this.http.post(`${this.URL_PARECERISTAS}`, {email});
+  }
+
+  removerParecerista(idUser) {
+    return this.http.delete(`${this.URL_PARECERISTAS}/${idUser}`);
+  }
+
+  listarPareceristas() {
+    return this.http.get(`${this.URL_PARECERISTAS}`);
+  }
+
+  adicionarCoordenador(idUser) {
+    return this.http.post(`${this.URL_PARECERISTAS}/coordenador/${idUser}`,{});
+
+  }
+
+  removerCoordenador(idUser) {
+    return this.http.delete(`${this.URL_PARECERISTAS}/coordenador/${idUser}`);
+
+  }
+
+  /* Fim Parecerista */
 }

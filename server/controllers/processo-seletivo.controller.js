@@ -2,6 +2,7 @@
 const ProcessoSeletivoModel = require('../models/processo-seletivo.model');
 const UserController = require('./user.controller')
 const S3Uploader = require('./aws.controller');
+const { getErrorByStatus, getSuccessByStatus } = require('../service/error.service');
 
 module.exports = {
   getProcessoSeletivo,
@@ -14,16 +15,105 @@ module.exports = {
   deleteProcessoSeletivo,
   atualizarProcessoSeletivoAtivo,
   getProcessoSeletivoInscreverInfosById,
+  getUserInscricaoProcessoSeletivo,
+  getProcessoSeletivoHeaders,
+  vincularParecerista,
+  getParecerByUser,
+  registrarParecer,
+  getAllParecer,
 };
 
 
 
 /* Processo Seletivo */
 
+async function vincularParecerista(body) {
+  console.log("body: ", body)
+  try {
+    let processo = await ProcessoSeletivoModel
+      .findOneAndUpdate(
+        {_id: body.idProcesso, enrolled: {$elemMatch: {_id:body.idInscricao}}},
+        {$set: { "enrolled.$.parecerista": body.idParecerista }},
+        {upsert: false}
+      );
+
+    if(processo)
+      return getSuccessByStatus(200, "Parecerista vinculado com sucesso!");
+    else
+      return getErrorByStatus(404, "Processo ou inscrição não encontrado na base!")
+  } catch (error) {
+    console.log("ERROR> ", error)
+    return getErrorByStatus(500)
+    
+  }
+}
+
+async function getUserInscricaoProcessoSeletivo(idUser, req) {
+  return await ProcessoSeletivoModel
+    .findOne(
+      {_id: req.query.idProcesso},
+      {
+        _id: 1,
+        enrolled: {
+          $elemMatch: {idUser}
+        }
+      }
+    )
+    .populate({
+      path: "enrolled.idUser",
+      select: "fullname email socialname cpf rg rgEmissor passaporte dataNiver nacionalidade endereco bairro cep cidade estado celular telefone cargo empresa deficiencia cor genero",
+    })
+    .populate({
+      path: "enrolled.primeiroOrientador",
+      select: "fullName",
+    })
+    .populate({
+      path: "enrolled.segundoOrientador",
+      select: "fullName",
+    })
+    .populate({
+      path: "enrolled.linhaPesquisa",
+      select: `${req.query.language}.title`,
+    });
+}
+
+async function getParecerByUser(req) {
+  //req.query.idProcesso, req.query.idInscricao
+  console.log("req.query: ",req.query)
+  return await ProcessoSeletivoModel
+    .findOne(
+      {_id: req.query.idProcesso},
+      {
+        enrolled:{
+          $elemMatch: {_id:req.query.idInscricao}
+        }
+      }
+    );
+}
+
+async function getAllParecer(req) {
+  return await ProcessoSeletivoModel
+    .findOne(
+      {_id: req.query.idProcesso}, 
+      {'enrolled.parecer': 1}
+    ).populate({
+      path: "enrolled.idUser",
+      select: "fullname",
+    });
+}
+
+
 async function getProcessoSeletivo(req) {
   let whereClause = {};
   if (req.query.isAtivo != undefined) whereClause.isAtivo = req.query.isAtivo;
   return await ProcessoSeletivoModel.find(whereClause, { enrolled: 0 })
+    .sort({
+      createAt: -1
+    });
+}
+
+async function getProcessoSeletivoHeaders(req) {
+  return await ProcessoSeletivoModel.find({}, { title: 1 })
     .sort({
       createAt: -1
     });
@@ -60,19 +150,50 @@ async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, languag
   return ret;
 }
 
-async function getInscritosByProcessoSelectivo(idProcessoSeletivo) {
-  return await ProcessoSeletivoModel
-    .findOne({ _id: idProcessoSeletivo }, { enrolled: 1 })
-    .populate({ path: 'enrolled', select: 'fullname socialname' })
+async function getInscritosByProcessoSelectivo(idProcessoSeletivo, idParecerista) {
+  var whereClause = { 
+    _id: idProcessoSeletivo
+  }
+  if(idParecerista) {
+    whereClause.enrolled = { $elemMatch: {parecerista: idParecerista} }
+  }
+  let processo = await ProcessoSeletivoModel
+    .findOne(
+      whereClause, 
+      { 
+        'enrolled._id': 1, 
+        'enrolled.idUser': 1, 
+        'enrolled.parecerista': 1, 
+        'enrolled.parecer': 1 
+      }
+    )
+    .populate({ path: 'enrolled.idUser', select: 'fullname socialname' })
+    .populate({ path: 'enrolled.parecerista', select: 'fullname' })
     .sort({
       createAt: -1
     });
 
+  if(processo) {
+    const result = {
+      _id: processo._id,
+      enrolled: processo.enrolled.map((e) => (
+        {
+          _id: e._id, 
+          idUser: e.idUser, 
+          parecerista: e.parecerista, 
+          parecer: e.parecer
+        }
+      )),
+    }
+    return result
+  } else {
+    return {_id: idProcessoSeletivo, enrolled: []}
+  }
 }
 
 async function getMinhaInscricoesProcessoSelectivo(idUser) {
   return await ProcessoSeletivoModel
-    .find({ enrolled: idUser }, { _id: 1 })
+    .find({ enrolled: {$elemMatch:{idUser}} }, { _id: 1 })
     .sort({
       createAt: -1
     });
@@ -83,6 +204,18 @@ async function insertProcessoSeletivo(req, idUser) {
   let form = req.body.formulario;
   form.user = idUser;
   return await new ProcessoSeletivoModel(form).save();
+}
+
+async function registrarParecer(req) {
+  const idProcesso = req.query.idProcesso;
+  const idInscricao = req.query.idInscricao;
+  const form = req.body.formulario;
+
+  return ProcessoSeletivoModel.findOneAndUpdate(
+    { _id: idProcesso, enrolled: {$elemMatch: {_id: idInscricao}} },
+    {$set: { "enrolled.$.parecer": form }},
+    {upsert: false}
+  );
 }
 
 async function atualizarProcessoSeletivoAtivo(req, idProcesso) {
@@ -102,11 +235,11 @@ async function subscribeProcessoSeletivo(req) {
     if(retUpload.temErro) throw retUpload.mensagem;
     formulario.files = retUpload;
 
-    await UserController.subscribeProcessoSeletivo(req.user._id, formulario);
+    await UserController.subscribeProcessoSeletivo(req.user._id, req.params.id);
     await ProcessoSeletivoModel.findOneAndUpdate({
       _id: req.params.id, isAtivo: true
     },
-      { $addToSet: { enrolled: req.user._id } },
+      { $addToSet: { enrolled: {idUser: req.user._id, ...formulario, idProcesso:null} } },
       { upsert: false }
     );
   } catch (e) {
@@ -168,7 +301,7 @@ async function unsubscribeProcessoSeletivo(idProcessoSeletivo, idUser) {
     await ProcessoSeletivoModel.findOneAndUpdate({
       _id: idProcessoSeletivo
     },
-      { $pull: { enrolled: idUser } },
+      { $pull: { enrolled: {idUser} } },
       { upsert: false }
     );
   } catch (e) {
