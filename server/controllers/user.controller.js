@@ -4,6 +4,8 @@ const UserModel = require('../models/user.model');
 const User = require('../models/user.model');
 const { getErrorByStatus, getSuccessByStatus } = require('../service/error.service');
 const mongoose = require('mongoose');
+const linhaPesquisaService = require('../service/linha_pesquisa.service');
+const LinhaPesquisaModel = require('../models/linha-pesquisa.model');
 
 module.exports = {
   insert,
@@ -128,18 +130,29 @@ async function removerCoordenador(idUser) {
   }
 }
 
-async function cadastrarParecerista(email) {
+async function cadastrarParecerista(email, idLinhaPesquisa) {
   let response = getErrorByStatus(500);
+  console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: idLinhaPesquisa: ", idLinhaPesquisa);
   try {
     if(validateEmail(email)) {
+      // Adiciona permissao "parecerista" ao usuario
       let user = await UserModel.findOneAndUpdate(
           {email: email},
           {$addToSet: {roles: "parecerista"}}, 
           {upsert: false}
         );
+        
       if(user) {
+          
+        // Adiciona id do usuario na linha de pesquisa
+        await LinhaPesquisaModel.findOneAndUpdate(
+          {_id: idLinhaPesquisa},
+          {$addToSet: {avaliadores: user._id}}, 
+          {upsert: false}
+        );
+
         console.log("user: ", user)
-        response = getSuccessByStatus(200, "Parecerista cadastrado com sucesso!");
+        response = getSuccessByStatus(200, "Avaliador cadastrado com sucesso!");
       } else {
         response = getErrorByStatus(404, "Usuário não encontrado na base!");
       }
@@ -147,23 +160,40 @@ async function cadastrarParecerista(email) {
       response = getErrorByStatus(400);
     }
   } catch(ex) {
+    console.log(ex)
     response = getErrorByStatus(500);
   } finally {
     return response;
   }
 }
-async function removerParecerista(idUser) {
+async function removerParecerista(idUser, idLinhaPesquisa) {
   try {
-    let user = await UserModel.findOneAndUpdate(
-      {_id:idUser},
-      {$pullAll: {roles: ["coordenador", "parecerista"]}}, 
+    const linhaRemovida = await LinhaPesquisaModel.findOneAndUpdate(
+      {_id: idLinhaPesquisa},
+      {$pull: {avaliadores: idUser}}, 
       {upsert: false}
+    )
+
+    let linhaVinculada = await LinhaPesquisaModel.findOne(
+      {avaliadores: idUser},
+      {_id:1}
     );
-    if(user)
+    console.log("linhaVinculada: ", linhaVinculada)
+    let user;
+    if(!linhaVinculada) {
+      user = await UserModel.findOneAndUpdate(
+        {_id:idUser},
+        {$pullAll: {roles: ["coordenador", "parecerista"]}}, 
+        {upsert: false}
+      );
+    }
+
+    if(linhaRemovida || user)
       return getSuccessByStatus(200, "Parecerista removido com sucesso!");
     else
       return getErrorByStatus(404, "Usuário não encontrado na base!")
   } catch (error) {
+    console.log(error)
     return getErrorByStatus(500)
     
   }

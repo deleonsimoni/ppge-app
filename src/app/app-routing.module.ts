@@ -13,6 +13,8 @@ import { MatriculaComponent } from './informacoes-academica/matricula/matricula.
 import { ObjectiveComponent } from './objective/objective.component';
 import { ProcessoSeletivoComponent } from './processo-seletivo/processo-seletivo.component';
 import { TeseDissertacaoComponent } from './tese-dissertacao/tese-dissertacao.component';
+import { UserAreaComponent } from './user-area/user-area.component';
+import { AuthGuard } from './shared/guards';
 
 const routes: Routes = [
   {
@@ -79,6 +81,11 @@ const routes: Routes = [
     path: 'norma-pos-graduacao',
     component: NormaPosGraduacaoComponent,
     //canActivate: [AuthGuard],
+  },
+  {
+    path: 'area-usuario',
+    component: UserAreaComponent,
+    canActivate: [AuthGuard],
   },
 
   {

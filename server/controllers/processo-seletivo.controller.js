@@ -9,6 +9,7 @@ module.exports = {
   insertProcessoSeletivo,
   getInscritosByProcessoSelectivo,
   getMinhaInscricoesProcessoSelectivo,
+  getMinhaInscricoesDetalhadaProcessoSelectivo,
   subscribeProcessoSeletivo,
   unsubscribeProcessoSeletivo,
   updateProcessoSeletivo,
@@ -21,6 +22,8 @@ module.exports = {
   getParecerByUser,
   registrarParecer,
   getAllParecer,
+  getParecer,
+  inscricaoJustificar,
 };
 
 
@@ -88,7 +91,19 @@ async function getParecerByUser(req) {
           $elemMatch: {_id:req.query.idInscricao}
         }
       }
-    );
+    )
+    .populate({
+      path: "enrolled.primeiroOrientador",
+      select: "fullName",
+    })
+    .populate({
+      path: "enrolled.segundoOrientador",
+      select: "fullName",
+    })
+    .populate({
+      path: "enrolled.linhaPesquisa",
+      select: `${req.query.language}.title`,
+    });
 }
 
 async function getAllParecer(req) {
@@ -150,30 +165,81 @@ async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, languag
   return ret;
 }
 
-async function getInscritosByProcessoSelectivo(idProcessoSeletivo, idParecerista) {
+async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParecerista) {
   var whereClause = { 
     _id: idProcessoSeletivo
   }
+  var select = {};
   if(idParecerista) {
-    whereClause.enrolled = { $elemMatch: {parecerista: idParecerista} }
+    select.enrolled = { $elemMatch: {parecerista: idParecerista} }
   }
+  console.log("req.query: ", req.query)
+
+
+  if(req.query.filtroAprovacao) {
+    console.log("ENTROU: filtroAprovacao")
+    if(select.enrolled && select.enrolled.$elemMatch) 
+      select.enrolled.$elemMatch["parecer.aprovado"] = req.query.filtroAprovacao == 'aguardando' ? {$eq:null} : (req.query.filtroAprovacao == 'aprovado');
+    else {
+      select.enrolled = { 
+        $elemMatch: {
+          ["parecer.aprovado"]: req.query.filtroAprovacao == 'aguardando' ? 
+                                {$eq:null} : 
+                                (req.query.filtroAprovacao == 'aprovado')
+        } 
+      }
+    }
+  }
+
+  if(req.query.filtroHomologacao) {
+    console.log("ENTROU: filtroHomologacao")
+    if(select.enrolled && select.enrolled.$elemMatch)
+      select.enrolled.$elemMatch["parecer.homologado"] = req.query.filtroHomologacao == 'aguardando' ? {$eq:null} : (req.query.filtroHomologacao == 'homologado');
+    else {
+      select.enrolled = { 
+        $elemMatch: {
+          ["parecer.homologado"]: req.query.filtroHomologacao == 'aguardando' ? 
+                                    {$eq:null} : 
+                                    (req.query.filtroHomologacao == 'homologado')
+        } 
+      }
+    }
+  }
+
+
+
+  console.log("select: ", JSON.stringify(select) )
+  console.log("whereClause: ", JSON.stringify(whereClause) )
   let processo = await ProcessoSeletivoModel
     .findOne(
       whereClause, 
-      { 
-        'enrolled._id': 1, 
-        'enrolled.idUser': 1, 
-        'enrolled.parecerista': 1, 
-        'enrolled.parecer': 1 
-      }
+      select
+      // { 
+        
+      //   'enrolled._id': 1, 
+      //   'enrolled.idUser': 1, 
+      //   'enrolled.parecerista': 1, 
+      //   'enrolled.parecer': 1 , 
+      //   'enrolled.linhaPesquisa': 1 
+      // }
     )
     .populate({ path: 'enrolled.idUser', select: 'fullname socialname' })
     .populate({ path: 'enrolled.parecerista', select: 'fullname' })
+    .populate({ 
+      path: 'enrolled.linhaPesquisa', 
+      select: 'avaliadores ',
+      populate: {
+        path: `avaliadores ${req.query.language}.title`,
+        select: "email fullname roles"
+      }
+    })
+    // .populate({ path: 'enrolled.linhaPesquisa.avaliadores', select: 'email fullname roles' })
     .sort({
       createAt: -1
     });
 
   if(processo) {
+    processo.enrolled = processo.enrolled ? processo.enrolled : [];
     const result = {
       _id: processo._id,
       enrolled: processo.enrolled.map((e) => (
@@ -181,7 +247,9 @@ async function getInscritosByProcessoSelectivo(idProcessoSeletivo, idParecerista
           _id: e._id, 
           idUser: e.idUser, 
           parecerista: e.parecerista, 
-          parecer: e.parecer
+          parecer: e.parecer, 
+          possiveisAvaliadores: e.linhaPesquisa.avaliadores,
+          titleLinhaPesquisa: e.linhaPesquisa[req.query.language].title
         }
       )),
     }
@@ -191,9 +259,40 @@ async function getInscritosByProcessoSelectivo(idProcessoSeletivo, idParecerista
   }
 }
 
+async function inscricaoJustificar(idUser, req) {
+  const idProcesso = req.query.idProcesso;
+  const idInscricao = req.query.idInscricao;
+  const justificativa = req.body.justificativa;
+  console.log("idProcesso: ", idProcesso)
+  console.log("idInscricao: ", idInscricao)
+  console.log("justificativa: ", justificativa)
+  return ProcessoSeletivoModel.findOneAndUpdate(
+    { _id: idProcesso, enrolled: {$elemMatch: {_id: idInscricao}} },
+    {$set: { "enrolled.$.justificativa": justificativa }},
+    {upsert: false}
+  );
+
+}
+
 async function getMinhaInscricoesProcessoSelectivo(idUser) {
   return await ProcessoSeletivoModel
     .find({ enrolled: {$elemMatch:{idUser}} }, { _id: 1 })
+    .sort({
+      createAt: -1
+    });
+
+}
+
+async function getMinhaInscricoesDetalhadaProcessoSelectivo(idUser) {
+  console.log("ENTROu")
+  return await ProcessoSeletivoModel
+    .find(
+      { enrolled: {$elemMatch:{idUser}} }, 
+      { 
+        title: 1,
+        'enrolled.$': 1,
+      }
+    )
     .sort({
       createAt: -1
     });
@@ -210,11 +309,23 @@ async function registrarParecer(req) {
   const idProcesso = req.query.idProcesso;
   const idInscricao = req.query.idInscricao;
   const form = req.body.formulario;
-
+  console.log("form: ", form)
   return ProcessoSeletivoModel.findOneAndUpdate(
     { _id: idProcesso, enrolled: {$elemMatch: {_id: idInscricao}} },
     {$set: { "enrolled.$.parecer": form }},
     {upsert: false}
+  );
+}
+
+async function getParecer(req) {
+  const idProcesso = req.query.idProcesso;
+  const idInscricao = req.query.idInscricao;
+
+  return ProcessoSeletivoModel.findOne(
+    { _id: idProcesso, enrolled: {$elemMatch: {_id: idInscricao}} },
+    {
+      "enrolled.$": 1,
+    }
   );
 }
 

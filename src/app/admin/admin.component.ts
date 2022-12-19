@@ -11,7 +11,6 @@ export class AdminComponent implements OnInit {
 
   constructor(authService: AuthService){
     let test = authService.getUser();
-    console.log("USERUSERUSERUSERUSERUSERUSERUSER: ",test);
     test.subscribe(user => {
       console.log("AAAAA: ", user)
       this.menu = [
@@ -19,7 +18,7 @@ export class AdminComponent implements OnInit {
         { name: 'Corpo Docente', path: '/admin/corpo-docente', permitido: user.isAdmin },
         { name: 'Tese e Dissertação', path: '/admin/tese-dissertacao', permitido: user.isAdmin },
         { name: 'Processo Seletivo', path: '/admin/processo-seletivo', permitido: user.isAdmin },
-        { name: 'Pareceristas/Coordenadores', path: '/admin/pareceristas', permitido: user.isAdmin || user.isCoordenador },
+        { name: 'Avaliadores/Coordenadores', path: '/admin/pareceristas', permitido: user.isAdmin || user.isCoordenador },
         { name: 'Inscrições/Pareceristas', path: '/admin/inscritos', permitido: user.isAdmin || user.isCoordenador || user.isParecerista },
         { name: 'Ranking', path: '/admin/rank', permitido: user.isAdmin || user.isCoordenador || user.isParecerista },
     

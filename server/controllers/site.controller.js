@@ -250,7 +250,7 @@ async function getCorpoDocente(req) {
       }
     })
     .sort({
-      createAt: -1
+      fullName: 1
     });
 
   ret = ret.map(data => (

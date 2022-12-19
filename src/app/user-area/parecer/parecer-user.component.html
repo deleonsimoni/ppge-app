@@ -22,7 +22,7 @@
               </div>
               <div class="col-3 p-2">
                 <label class="mr-1" style="font-size: 12px;">(até {{formatDecimal(question.maxNota)}} p.)</label>
-                <input class="input-nota" type="number" [formControlName]="'question-'+question.numer">
+                <input [attr.disabled]="true" class="input-nota" type="number" [formControlName]="'question-'+question.numer">
               </div>
             </div>
     
@@ -33,7 +33,7 @@
       <div class="col-12 mt-3">
         <div class="row justify-content-center">
           <div class="col-auto">
-            <mat-radio-group class="example-radio-group w-100" formControlName="homologado" >
+            <mat-radio-group [attr.disabled]="true" class="example-radio-group w-100" formControlName="homologado" >
               <mat-radio-button class="example-radio-button mr-3" [value]="true">Homologação Aprovada</mat-radio-button>
               <mat-radio-button class="example-radio-button mr-3" [value]="false">Homologação Reprovado</mat-radio-button>
             </mat-radio-group>
@@ -63,7 +63,7 @@
               </div>
               <div class="col-3 p-2">
                 <label class="mr-1" style="font-size: 12px;">(até {{formatDecimal(question.maxNota)}} p.)</label>
-                <input class="input-nota" type="number" [formControlName]="'question-'+question.numer">
+                <input [attr.disabled]="true" class="input-nota" type="number" [formControlName]="'question-'+question.numer">
               </div>
             </div>
     
@@ -74,7 +74,7 @@
       <div class="col-12 mt-3">
         <div class="row justify-content-center">
           <div class="col-auto">
-            <mat-radio-group class="example-radio-group w-100" formControlName="aprovado" >
+            <mat-radio-group [attr.disabled]="true" class="example-radio-group w-100" formControlName="aprovado" >
               <mat-radio-button class="example-radio-button mr-3" [value]="true">Inscrição Aprovada</mat-radio-button>
               <mat-radio-button class="example-radio-button mr-3" [value]="false">Inscrição Reprovada</mat-radio-button>
             </mat-radio-group>
@@ -88,5 +88,4 @@
 <hr class="mt-0">
 <div mat-dialog-actions>
   <button mat-button mat-dialog-close>Fechar</button>
-  <button mat-raised-button color="primary" style="background-color: green;" (click)="register()">Finalizar parecer</button>
 </div>

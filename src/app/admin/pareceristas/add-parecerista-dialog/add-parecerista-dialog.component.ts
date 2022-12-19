@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, of, take } from 'rxjs';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-parecerista-dialog',
@@ -18,10 +19,12 @@ export class AddPareceristaDialogComponent {
     public dialogRef: MatDialogRef<AddPareceristaDialogComponent>,
     private toastr: ToastrService,
     private siteService: SiteAdminService,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { 
     this.formParecerista = this.builder.group({
       email: [null, [Validators.required]],
     });
+    console.log("AAAAA:::::::: this.data", this.data)
   }
     
   onNoClick(): void {
@@ -32,7 +35,7 @@ export class AddPareceristaDialogComponent {
     const email = new String(this.formParecerista.value.email).trim();
     if(this.validateEmail(email)) {
       this.siteService
-        .cadastrarParecerista(email)
+        .cadastrarParecerista(email, this.data.idLinhaPesquisa)
         .pipe(take(1))
         .pipe(catchError((data) => of(data.error)))
         .subscribe((data: any) => {

@@ -37,6 +37,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from './shared/services';
 import { SharedModule } from './shared/shared.module';
 import { TeseDissertacaoModule } from './tese-dissertacao/tese-dissertacao.module';
+import { UserAreaModule } from './user-area/user-area.module';
 
 export function appInitializerFactory(authService: AuthService) {
   return () => authService.checkTheUserOnTheFirstLoad();
@@ -69,6 +70,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     AngularEditorModule,
     BrowserModule,
     ProcessoSeletivoModule,
+    UserAreaModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

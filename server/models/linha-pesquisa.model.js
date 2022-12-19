@@ -14,6 +14,13 @@ const LinhaPesquisaSchema = new mongoose.Schema(
       }
     ],
 
+    avaliadores: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ],
+
     "pt-br": {
 
       navTitle: {

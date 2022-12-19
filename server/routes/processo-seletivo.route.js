@@ -21,6 +21,7 @@ router.get(
     passport.authenticate('jwt', {session: false}), 
     (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'parecerista'])
   ], 
+  setLocation, 
   asyncHandler(getInscritosByProcessoSelectivo)
 );
 
@@ -30,7 +31,7 @@ router.get('/processo-seletivo/inscritos/detalhe/:idUser', [passport.authenticat
 
 router.get('/processo-seletivo/inscritos/parecer/detalhe', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'parecerista'])], asyncHandler(getParecerByUser));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'parecerista'])], setLocation, asyncHandler(getParecerByUser));
 
 router.get('/processo-seletivo/inscritos/parecer/all', [passport.authenticate('jwt', {
   session: false
@@ -41,9 +42,17 @@ router.put('/processo-seletivo/inscritos/vincular-parecerista', [passport.authen
   session: false
 }), requireAdmin], setLocation, asyncHandler(vincularParecerista));
 
+router.post('/processo-seletivo/minha-inscricoes/justificar', [passport.authenticate('jwt', {
+  session: false
+}), requireLogin], asyncHandler(inscricaoJustificar));
+
 router.get('/processo-seletivo/minha-inscricoes', [passport.authenticate('jwt', {
   session: false
 }), requireLogin], asyncHandler(getMinhaInscricoesProcessoSelectivo));
+
+router.get('/processo-seletivo/minha-inscricoes/detalhe', [passport.authenticate('jwt', {
+  session: false
+}), requireLogin], asyncHandler(getMinhaInscricoesDetalhadaProcessoSelectivo));
 
 router.post('/processo-seletivo', [passport.authenticate('jwt', {
   session: false
@@ -51,7 +60,11 @@ router.post('/processo-seletivo', [passport.authenticate('jwt', {
 
 router.post('/processo-seletivo/parecer', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['parecerista'])], asyncHandler(registrarParecer));
+}), requireLogin], asyncHandler(registrarParecer));
+
+router.get('/processo-seletivo/parecer', [passport.authenticate('jwt', {
+  session: false
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['parecerista'])], asyncHandler(getParecer));
 
 router.post('/processo-seletivo/ativo/:id', [passport.authenticate('jwt', {
   session: false
@@ -119,13 +132,25 @@ async function getInscritosByProcessoSelectivo(req, res) {
   if(req.user && req.user.roles.length == 1 && req.user.roles.indexOf('parecerista') == 0){
     idParecerista = req.user._id
   }
-  let response = await processoSeletivoCtrl.getInscritosByProcessoSelectivo(req.params.id, idParecerista);
+  let response = await processoSeletivoCtrl.getInscritosByProcessoSelectivo(req, req.params.id, idParecerista);
+  res.json(response);
+
+}
+
+async function inscricaoJustificar(req, res) {
+  let response = await processoSeletivoCtrl.inscricaoJustificar(req.user._id, req);
   res.json(response);
 
 }
 
 async function getMinhaInscricoesProcessoSelectivo(req, res) {
   let response = await processoSeletivoCtrl.getMinhaInscricoesProcessoSelectivo(req.user._id);
+  res.json(response);
+
+}
+
+async function getMinhaInscricoesDetalhadaProcessoSelectivo(req, res) {
+  let response = await processoSeletivoCtrl.getMinhaInscricoesDetalhadaProcessoSelectivo(req.user._id);
   res.json(response);
 
 }
@@ -137,6 +162,11 @@ async function insertProcessoSeletivo(req, res) {
 
 async function registrarParecer(req, res) {
   let response = await processoSeletivoCtrl.registrarParecer(req);
+  res.json(response);
+}
+
+async function getParecer(req, res) {
+  let response = await processoSeletivoCtrl.getParecer(req);
   res.json(response);
 }
 

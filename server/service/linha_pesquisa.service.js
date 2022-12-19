@@ -9,7 +9,19 @@ module.exports = {
   insertLinhaPesquisa,
   updateLinhaPesquisa,
   deleteLinhaPesquisa,
+  listarPareceristasByLinha
 };
+
+async function listarPareceristasByLinha(idLinhaPesquisa) {
+  const res = await LinhaPesquisaModel.findOne(
+    {_id: idLinhaPesquisa},
+    {avaliadores:1}
+  ).populate({
+    path: 'avaliadores',
+    select: 'fullname email roles',
+  });
+  return res.avaliadores ? res.avaliadores : [] ;
+}
 
 async function getLinhaPesquisa(req) {
   let whereClause = {};

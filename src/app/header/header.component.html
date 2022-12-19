@@ -133,6 +133,9 @@
           </ul>
         </li>
 
+        <li *ngIf="user" style="cursor: pointer;"><a [routerLink]="'area-usuario'">{{'area.usuario' | translate}}</a>
+        </li>
+
 
       </ul>
       <i class="bi bi-list mobile-nav-toggle d-none"></i>

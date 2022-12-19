@@ -83,7 +83,7 @@ export class CorpoDocenteComponent implements OnInit {
 
   edit(profile: any) {
     this.alternarForm(true);
-    this.logo = this.pipeImage.transform(profile.imagePathS3);
+    this.logo = profile.imagePathS3;
     this.form.patchValue({ ...profile })
   }
 

@@ -116,16 +116,19 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
           ref: 'User',
         },
         parecer: {
-          abacaxi: {
-            type: String,
-          },
-          nota: {
-            type: Number,
-          },
           aprovado: {
             type: Boolean,
-          }
-        }
+          },
+          homologado: {
+            type: Boolean,
+          },
+          notasHomologacao: {
+            type: mongoose.Schema.Types.Mixed,
+          },
+        },
+        justificativa: {
+          type: String,
+        },
       }
     ],
 

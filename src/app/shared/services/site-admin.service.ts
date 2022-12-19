@@ -161,6 +161,14 @@ export class SiteAdminService {
   /* Fim Tese DISSERTACAO */
   /* Processo Seletivo */
 
+  getParecer(idInscricao, idProcesso) {
+    let params = new HttpParams()
+      .set("idInscricao", idInscricao)
+      .set("idProcesso", idProcesso);
+    
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/parecer`, {params});
+  }
+
   registrarParecer(idInscricao, idProcesso, formulario) {
     let params = new HttpParams()
       .set("idInscricao", idInscricao)
@@ -199,8 +207,17 @@ export class SiteAdminService {
 
   }
   
-  getInscritosProcessoById(idProcesso) {
-    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/${idProcesso}`);
+  getInscritosProcessoById(idProcesso, filtroAprovacao=null, filtroHomologacao=null) {
+    let params = new HttpParams()
+
+    if(filtroAprovacao && filtroAprovacao != 'todos') {
+      params = params.set("filtroAprovacao", filtroAprovacao);
+    }
+    if(filtroHomologacao && filtroHomologacao != 'todos'){
+      params = params.set("filtroHomologacao", filtroHomologacao);
+    }
+
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/${idProcesso}`, {params});
 
   }
 
@@ -225,16 +242,23 @@ export class SiteAdminService {
 
   /* Parecerista */
 
-  cadastrarParecerista(email) {
-    return this.http.post(`${this.URL_PARECERISTAS}`, {email});
+  cadastrarParecerista(email, idLinhaPesquisa) {
+    return this.http.post(`${this.URL_PARECERISTAS}`, {email, idLinhaPesquisa});
   }
 
-  removerParecerista(idUser) {
-    return this.http.delete(`${this.URL_PARECERISTAS}/${idUser}`);
+  removerParecerista(idUser, idLinhaPesquisa) {
+    let params = new HttpParams();
+    params = params.set("idLinhaPesquisa", idLinhaPesquisa)
+
+    return this.http.delete(`${this.URL_PARECERISTAS}/${idUser}`, {params});
   }
 
-  listarPareceristas() {
-    return this.http.get(`${this.URL_PARECERISTAS}`);
+  listarPareceristas(idLinhaPesquisa: string = null) {
+    let params = new HttpParams();
+    if(idLinhaPesquisa) {
+      params = params.set("idLinhaPesquisa", idLinhaPesquisa)
+    }
+    return this.http.get(`${this.URL_PARECERISTAS}`, {params});
   }
 
   adicionarCoordenador(idUser) {

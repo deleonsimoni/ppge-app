@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { ToastrService } from 'ngx-toastr';
@@ -63,6 +63,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
       banca: [null, [Validators.required]],
       ingresso: [null, [Validators.required]],
       linkTitulo: [null, [Validators.required]],
+      palavrasChave: new FormArray([]),
     });
   }
 
@@ -74,15 +75,36 @@ export class TeseDissertacaoAdminComponent implements OnInit {
       this.carregando = false;
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
     });
+    this.addContentLine();
+  }
+
+  public addContentLine(content = null) {
+    const control = <FormArray>this.form.controls['palavrasChave'];
+    if(content != null) {
+      control.push(new FormControl(content, Validators.required));
+    } else {
+      control.push(new FormControl('', Validators.required));
+    }
+  }
+  
+  public removeContentLine(index) {
+    const teste = <FormArray>this.form.controls['palavrasChave'];
+    teste.removeAt(index);
+  }
+
+  get getFormPalavrasChave() {
+    return this.form.controls['palavrasChave']
   }
 
   public register() {
+    console.log("form: ", this.form.value);
+    
     if (this.form.valid) {
 
       if (this.form.value._id) {
         this.siteService.atualizarTeseDissertacao(this.form.value)
           .subscribe((res: any) => {
-            this.toastr.success('Histórico alterado com sucesso', 'Sucesso');
+            this.toastr.success('Tese/Dissertação alterado com sucesso', 'Sucesso');
             this.getPerTipo(res.tipo);
             this.limparForm();
           }, (err: any) => {
@@ -91,7 +113,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
       } else {
         this.siteService.cadastrarTeseDissertacao(this.form.value)
           .subscribe((res: any) => {
-            this.toastr.success('Histórico cadastrado', 'Sucesso');
+            this.toastr.success('Tese/Dissertação cadastrado', 'Sucesso');
             this.getPerTipo(res.tipo);
             this.limparForm();
           }, (err: any) => {
@@ -124,6 +146,12 @@ export class TeseDissertacaoAdminComponent implements OnInit {
       this.getPerTipo(resposta.tipo);
     } else if (resposta.acao === 'editar') {
       this.form.patchValue(resposta.obj);
+      const formArray = <FormArray>this.form.controls['palavrasChave'];
+      formArray.clear();
+      console.log("resposta: ", resposta)
+      resposta.obj.palavrasChave.forEach(element => {
+        this.addContentLine(element)
+      });
     }
   }
 

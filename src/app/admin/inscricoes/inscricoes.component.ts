@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { User } from '@app/shared/interfaces';
 import { AuthService } from '@app/shared/services';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
-import { TypeGraduateEnum } from '@app/shared/shared.model';
+import { TypeGraduateEnum, TypeOpcaoVagaEnum, typeOpcaoVagaEnumToSubscription } from '@app/shared/shared.model';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, merge, Observable, of, take } from 'rxjs';
 import { DialogParecerData, ParecerComponent } from './parecer/parecer.component';
@@ -21,6 +21,9 @@ export class InscricoesComponent implements OnInit {
     // Update after login/register/logout
     this.authService.getUser()
   );
+  typeOpcaoVagaEnum = TypeOpcaoVagaEnum;
+  typeOpcaoVagaEnumToSubscription = typeOpcaoVagaEnumToSubscription;
+
   myUser: User = <User>{};
   typeGraduateEnum = TypeGraduateEnum;
 
@@ -34,6 +37,9 @@ export class InscricoesComponent implements OnInit {
 
   idProcessoSelecionado = null;
 
+  filtroHomologacao = null;
+  filtroAprovacao = null;
+
   constructor(
     private siteService: SiteAdminService,
     private toastr: ToastrService,
@@ -43,15 +49,13 @@ export class InscricoesComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("A")
-    this.listarPareceristas();
+    // this.listarPareceristas();
     this.siteService.getProcessosSeletivoTitle().subscribe((data: any) => {
       console.log("data: ", data)
       this.listProcessoSeletivo = data;
     });
     this.user$.subscribe(user => {
-      console.log("UUUUUUUUUUUUUUUUUUUUUU: ", user);
       this.myUser = user;
-      console.log("22222222222222222222: ", this.myUser);
     })
   }
 
@@ -68,12 +72,25 @@ export class InscricoesComponent implements OnInit {
     });
   }
 
-  listarPareceristas() {
-    this.siteService.listarPareceristas().subscribe((data: any) => {
-      console.log("listarPareceristas: data: ", data)
-      this.listPareceristas = data;
-    })
+  getInscricoesByFiltro(filtroAprovacao, filtroHomologacao) {
+    if(filtroAprovacao) 
+      this.filtroAprovacao = filtroAprovacao;
+    if(filtroHomologacao)
+      this.filtroHomologacao = filtroHomologacao;
+    
+    this.siteService.getInscritosProcessoById(this.idProcessoSelecionado, this.filtroAprovacao, this.filtroHomologacao).subscribe((data: any) => {
+      console.log("getInscricoes: data: ", data)
+      this.listInscritos = data.enrolled;
+    });
+
   }
+
+  // listarPareceristas() {
+  //   this.siteService.listarPareceristas().subscribe((data: any) => {
+  //     console.log("listarPareceristas: data: ", data)
+  //     this.listPareceristas = data;
+  //   })
+  // }
 
   vincularParecerista(inscricoes) {
     console.log("salvarParecerista(): inscricoes:", inscricoes);
@@ -103,10 +120,12 @@ export class InscricoesComponent implements OnInit {
     }
   }
 
-  selecionarPareceristaNoInscrito(idParecerista, index) {
+  selecionarPareceristaNoInscrito(idParecerista, index, idInscricao) {
     console.log("selecionarPareceristaNoInscrito(): idParecerista: ", idParecerista);
     console.log("selecionarPareceristaNoInscrito(): index: ", index);
-    const pareceristaSelecionado = this.listPareceristas.find(p => p._id==idParecerista);
+    console.log("selecionarPareceristaNoInscrito(): idInscricao: ", idInscricao);
+    const inscricao = this.listInscritos.find(ins => ins._id == idInscricao);
+    const pareceristaSelecionado = inscricao.possiveisAvaliadores.find(p => p._id==idParecerista);
     if(pareceristaSelecionado)
       this.listInscritos[index].parecerista = {_id:idParecerista, fullname: pareceristaSelecionado.fullname,};
     console.log("this.listInscritos[index].parecerista: ", this.listInscritos[index].parecerista);
@@ -114,7 +133,12 @@ export class InscricoesComponent implements OnInit {
   }
 
   verificarAprovacao(aprovado) {
-    return typeof aprovado != 'boolean' ? 'Não avaliado' : aprovado ? 'Aprovado'  : 'Reprovado';
+    return typeof aprovado != 'boolean' ? 'Não avaliado' : aprovado ? 'Inscrição Aprovada'  : 'Inscrição Reprovada';
+  }
+
+  verificarHomologacao(homologado) {
+    return typeof homologado != 'boolean' ? 'Não homologado' : homologado ? 'Homologação Aprovada'  : 'Homologação Reprovada';
+
   }
 
   openModalParecer(idInscricao) {

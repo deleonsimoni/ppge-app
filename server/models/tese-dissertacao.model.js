@@ -45,6 +45,11 @@ const TeseDissertacaoSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    palavrasChave: [
+        {
+            type: String,
+        }
+    ],
     createdAt: {
         type: Date,
         default: Date.now,

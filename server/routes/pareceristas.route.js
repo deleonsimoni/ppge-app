@@ -5,6 +5,7 @@ const requireAdmin = require('../middleware/require-admin');
 const requireLogin = require('../middleware/require-login');
 const userCtrl = require('../controllers/user.controller');
 const requireAllowedRoles = require('../middleware/require-allowed-roles');
+const linhaPesquisaService = require('../service/linha_pesquisa.service');
 
 const router = express.Router();
 module.exports = router;
@@ -31,18 +32,25 @@ router.get('/', [passport.authenticate('jwt', {
 }), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'parecerista'])], asyncHandler(listarPareceristas));
 
 async function cadastrarParecerista(req, res) {
-  const response = await userCtrl.cadastrarParecerista(req.body.email);
+  const response = await userCtrl.cadastrarParecerista(req.body.email, req.body.idLinhaPesquisa);
   console.log("response: ", response)
   res.status(response.status).json(response);
 }
 
 async function removerParecerista(req, res) {
-  const response = await userCtrl.removerParecerista(req.params.id);
+  const response = await userCtrl.removerParecerista(req.params.id, req.query.idLinhaPesquisa);
   res.json(response);
 }
 
 async function listarPareceristas(req, res) {
-  const response = await userCtrl.listarPareceristas();
+  console.log("req.query: ", req.query)
+  let response;
+  if(req.query.idLinhaPesquisa) {
+    console.log("ENTROu")
+    response = await linhaPesquisaService.listarPareceristasByLinha(req.query.idLinhaPesquisa);
+  } else {
+    response = await userCtrl.listarPareceristas();
+  }
   res.json(response);
 }
 

@@ -1,13 +1,20 @@
 <div class="container pb-5">
   <div class="row justify-content-between">
     <div class="section-header" mat-dialog-title>
-      <h2>Pareceristas/Coordenadores</h2>
+      <h2>Avaliadores/Coordenadores</h2>
     </div>
   </div>
-  <div class="row justify-content-end mb-5">
+  <mat-form-field appearance="fill" class="mb-3 w-100">
+    <mat-label>Selecione a Linha de Pesquisa</mat-label>
+    <mat-select (selectionChange)="selecionarLinhaPesquisa($event.value)">
+      <mat-option *ngFor="let linha of listLinhaPesquisa" [value]="linha._id">{{linha.title}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="row justify-content-end mb-5" *ngIf="idLinhaPesquisaSelecionada">
     <div class="col-auto">
       <button type="button" (click)="abrirModalAddParecerista()" mat-raised-button
-          color="primary">Adicionar Parecerista</button>
+          color="primary">Adicionar Avaliador</button>
 
     </div>
   </div>

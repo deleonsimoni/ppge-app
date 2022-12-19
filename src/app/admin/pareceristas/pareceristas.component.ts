@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
@@ -12,6 +13,9 @@ import { AddPareceristaDialogComponent } from './add-parecerista-dialog/add-pare
 })
 export class PareceristasComponent implements OnInit {
   listPareceristas: any = [];
+  listLinhaPesquisa: any = [];
+
+  idLinhaPesquisaSelecionada: string;
   constructor(
     private toastr: ToastrService,
     public dialog: MatDialog,
@@ -19,21 +23,35 @@ export class PareceristasComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.listarPareceristas()
+    this.getTitleLinhaPesquisa();
+    // this.listarPareceristas();
+  }
+
+  selecionarLinhaPesquisa(idLinhaPesquisa) {
+    this.idLinhaPesquisaSelecionada = idLinhaPesquisa;
+    this.listarPareceristas(this.idLinhaPesquisaSelecionada);
+
+  }
+
+  public getTitleLinhaPesquisa() {
+    this.siteService.getTitleLinhaPesquisa().subscribe(data => {
+      this.listLinhaPesquisa = data;
+    })
   }
 
   abrirModalAddParecerista() {
-    const dialogRef = this.dialog.open(AddPareceristaDialogComponent,{width: '750px'});
+    const dialogRef = this.dialog.open(AddPareceristaDialogComponent,{width: '750px', data:{idLinhaPesquisa: this.idLinhaPesquisaSelecionada}});
+    
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if(data && data.refresh)
-        this.listarPareceristas();
+        this.listarPareceristas(this.idLinhaPesquisaSelecionada);
 
     })
   }
 
-  listarPareceristas() {
-    console.log("listarPareceristas");
-    this.siteService.listarPareceristas().subscribe((data:  any) => {
+  listarPareceristas(idLinhaPesquisa) {
+    console.log("listarPareceristas: ", idLinhaPesquisa);
+    this.siteService.listarPareceristas(idLinhaPesquisa).subscribe((data:  any) => {
       console.log("RETORNO: ", data);
       this.listPareceristas = data;
     });
@@ -70,7 +88,7 @@ export class PareceristasComponent implements OnInit {
     console.log("removerPermissoes: idUser: ", idUser);
     
     this.siteService
-      .removerParecerista(idUser)
+      .removerParecerista(idUser, this.idLinhaPesquisaSelecionada)
       .pipe(take(1))
       .pipe(catchError((data) => of(data.error)))
       .subscribe((data: any) => {
@@ -79,7 +97,7 @@ export class PareceristasComponent implements OnInit {
           this.toastr.error(data.msg);
         } else {
           this.toastr.success(data.msg);
-          this.listarPareceristas();
+          this.listarPareceristas(this.idLinhaPesquisaSelecionada);
         }
       });
   }
