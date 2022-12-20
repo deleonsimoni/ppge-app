@@ -151,6 +151,7 @@ export class SiteAdminService {
     if (form.titulo) params = params.set('titulo', form.titulo)
     if (form.dataSala) params = params.set('dataSala', form.dataSala)
     if (form.banca) params = params.set('banca', form.banca)
+    if (form.metadados) params = params.set('metadados', form.metadados)
 
     return this.http.get(`${this.URL_TESE_DISSERTACAO}/get-filter/filter`, { params: params });
   }
@@ -165,15 +166,15 @@ export class SiteAdminService {
     let params = new HttpParams()
       .set("idInscricao", idInscricao)
       .set("idProcesso", idProcesso);
-    
-    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/parecer`, {params});
+
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/parecer`, { params });
   }
 
   registrarParecer(idInscricao, idProcesso, formulario) {
     let params = new HttpParams()
       .set("idInscricao", idInscricao)
       .set("idProcesso", idProcesso);
-    return this.http.post(`${this.URL_PROCESSO_SELETIVO}/parecer`,{formulario}, {params});
+    return this.http.post(`${this.URL_PROCESSO_SELETIVO}/parecer`, { formulario }, { params });
   }
 
   cadastrarProcessoSeletivo(form: any) {
@@ -201,41 +202,41 @@ export class SiteAdminService {
   atualizarProcessoAtivo(checked, id) {
     return this.http.post(`${this.URL_PROCESSO_SELETIVO}/ativo/${id}`, { isAtivo: checked });
   }
-  
+
   getProcessosSeletivoTitle() {
     return this.http.get(`${this.URL_PROCESSO_SELETIVO}/headers`);
 
   }
-  
-  getInscritosProcessoById(idProcesso, filtroAprovacao=null, filtroHomologacao=null) {
+
+  getInscritosProcessoById(idProcesso, filtroAprovacao = null, filtroHomologacao = null) {
     let params = new HttpParams()
 
-    if(filtroAprovacao && filtroAprovacao != 'todos') {
+    if (filtroAprovacao && filtroAprovacao != 'todos') {
       params = params.set("filtroAprovacao", filtroAprovacao);
     }
-    if(filtroHomologacao && filtroHomologacao != 'todos'){
+    if (filtroHomologacao && filtroHomologacao != 'todos') {
       params = params.set("filtroHomologacao", filtroHomologacao);
     }
 
-    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/${idProcesso}`, {params});
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/${idProcesso}`, { params });
 
   }
 
   vincularParecerista(idInscricao, idParecerista, idProcesso) {
-    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/inscritos/vincular-parecerista`, {idInscricao, idParecerista, idProcesso});
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/inscritos/vincular-parecerista`, { idInscricao, idParecerista, idProcesso });
   }
 
   detalharInscricao(idInscricao, idProcesso) {
     let params = new HttpParams();
     params = params.set("idProcesso", idProcesso);
     params = params.set("idInscricao", idInscricao);
-    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/parecer/detalhe`, {params});
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/parecer/detalhe`, { params });
   }
-  
+
   detalharAllInscricoes(idProcesso) {
     let params = new HttpParams();
     params = params.set("idProcesso", idProcesso);
-    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/parecer/all`, {params});
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/parecer/all`, { params });
 
   }
   /* Fim Processo Seletivo */
@@ -243,26 +244,26 @@ export class SiteAdminService {
   /* Parecerista */
 
   cadastrarParecerista(email, idLinhaPesquisa) {
-    return this.http.post(`${this.URL_PARECERISTAS}`, {email, idLinhaPesquisa});
+    return this.http.post(`${this.URL_PARECERISTAS}`, { email, idLinhaPesquisa });
   }
 
   removerParecerista(idUser, idLinhaPesquisa) {
     let params = new HttpParams();
     params = params.set("idLinhaPesquisa", idLinhaPesquisa)
 
-    return this.http.delete(`${this.URL_PARECERISTAS}/${idUser}`, {params});
+    return this.http.delete(`${this.URL_PARECERISTAS}/${idUser}`, { params });
   }
 
   listarPareceristas(idLinhaPesquisa: string = null) {
     let params = new HttpParams();
-    if(idLinhaPesquisa) {
+    if (idLinhaPesquisa) {
       params = params.set("idLinhaPesquisa", idLinhaPesquisa)
     }
-    return this.http.get(`${this.URL_PARECERISTAS}`, {params});
+    return this.http.get(`${this.URL_PARECERISTAS}`, { params });
   }
 
   adicionarCoordenador(idUser) {
-    return this.http.post(`${this.URL_PARECERISTAS}/coordenador/${idUser}`,{});
+    return this.http.post(`${this.URL_PARECERISTAS}/coordenador/${idUser}`, {});
 
   }
 
