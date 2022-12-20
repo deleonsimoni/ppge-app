@@ -32,22 +32,20 @@ export class UserAreaComponent implements OnInit {
 
   getMinhasIncricoes() {
     this.userAreaService.buscarMinhasInscricoes().subscribe((data: any) => {
-      console.log("data: ", data);
       this.minhasInscricoes = data;
     })
   }
 
   openModalDetalharAvaliacao(parecer) {
-    console.log("parecer: ", parecer)
 
     this.dialog.open(ParecerUserComponent, {
       width: '80%',
-      data: {parecer}
+      data: { parecer }
     })
   }
 
   detalharInscricao(inscricao) {
-    if(!this.inscricaoSelecionada || inscricao._id != this.inscricaoSelecionada._id) {
+    if (!this.inscricaoSelecionada || inscricao._id != this.inscricaoSelecionada._id) {
       this.flagDetalharInscricao = true;
       this.inscricaoSelecionada = inscricao;
     } else {
@@ -57,15 +55,14 @@ export class UserAreaComponent implements OnInit {
   }
 
   verificarHomologacao(homologado) {
-    return typeof homologado != 'boolean' ? 'Aguardando Homologação' : homologado ? 'Homologação Aprovada'  : 'Homologação Reprovada';
+    return typeof homologado != 'boolean' ? 'Aguardando Homologação' : homologado ? 'Homologação Aprovada' : 'Homologação Reprovada';
   }
 
   verificarAprovacao(aprovado) {
-    return typeof aprovado != 'boolean' ? 'Aguardando Avaliação' : aprovado ? 'Inscrição Aprovada'  : 'Inscrição Reprovada';
+    return typeof aprovado != 'boolean' ? 'Aguardando Avaliação' : aprovado ? 'Inscrição Aprovada' : 'Inscrição Reprovada';
   }
 
   openModalJustificar(idInscricao, idProcesso) {
-    console.log("openModalJustificar() ID: ", idInscricao);
 
     const dialogRef = this.dialog.open(JustificarDialogComponent, {
       width: '80%',
@@ -75,16 +72,16 @@ export class UserAreaComponent implements OnInit {
       }
     })
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
-      if(result && result.refresh) {
+      if (result && result.refresh) {
         this.getMinhasIncricoes();
       }
     })
 
-    
+
   }
 
-  private addInicioS3Url(toConcat):string {
-    if(toConcat && toConcat != '') {
+  private addInicioS3Url(toConcat): string {
+    if (toConcat && toConcat != '') {
       return 'https://ppge-public.s3.sa-east-1.amazonaws.com/'.concat(toConcat);
     } else {
       return '';

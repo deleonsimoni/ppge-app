@@ -64,7 +64,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
   }
 
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.getProcessoSeletivo();
     this.getTitleLinhaPesquisa();
     this.addContentLine();
@@ -85,7 +85,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
 
   public addContentLine(content = null) {
     const control = <FormArray>this.form.controls['content'];
-    if(content != null) {
+    if (content != null) {
       control.push(this.builder.group({
         contentTitle: new FormControl(content.contentTitle, Validators.required),
         contentLink: new FormControl(content.contentLink, Validators.required),
@@ -93,7 +93,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
     } else {
       control.push(this.initContentLine());
     }
-    
+
   }
   public removeContentLine(index) {
     const teste = <FormArray>this.form.controls['content'];
@@ -105,7 +105,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
   }
 
   public register() {
-    
+
     if (this.form.valid) {
       if (this.form.value._id) {
         this.siteService.atualizarProcessoSeletivo(this.form.value)
@@ -166,8 +166,8 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
 
   editar(obj) {
     this.getTitleLinhaPesquisa();
-    
-    this.form.patchValue({...obj, type: String(obj.type) });
+
+    this.form.patchValue({ ...obj, type: String(obj.type) });
     const formArray = <FormArray>this.form.controls['content'];
     formArray.clear();
     obj.content.forEach(element => {
@@ -184,12 +184,11 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
 
   inscritos(id, title) {
     this.siteService.listProcessoSeletivoInscritos(id).subscribe((res: any) => {
-      console.log("resresresres: ", res);
-      
+
       const dialogRef = this.dialog.open(ViewInscritosProcessoSeletivoComponent, {
         width: '750px',
         data: { title: title, users: res.enrolled, idProcesso: id },
-        
+
       });
     }, err => {
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
@@ -200,9 +199,9 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
     this.siteService.atualizarProcessoAtivo(event.checked, idProcesso).subscribe(() => {
       this.toastr.success('Visibilidade atualizada com sucesso.', 'Sucesso');
     },
-    err => {
-      this.toastr.error('Ocorreu um erro ao atualizar a visibilidade.', 'Atenção: ');
+      err => {
+        this.toastr.error('Ocorreu um erro ao atualizar a visibilidade.', 'Atenção: ');
 
-    });
+      });
   }
 }

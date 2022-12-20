@@ -16,12 +16,12 @@ router.get('/processo-seletivo', asyncHandler(getProcessoSeletivo));
 router.get('/processo-seletivo/headers', asyncHandler(getProcessoSeletivoHeaders));
 
 router.get(
-  '/processo-seletivo/inscritos/:id', 
+  '/processo-seletivo/inscritos/:id',
   [
-    passport.authenticate('jwt', {session: false}), 
+    passport.authenticate('jwt', { session: false }),
     (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'parecerista'])
-  ], 
-  setLocation, 
+  ],
+  setLocation,
   asyncHandler(getInscritosByProcessoSelectivo)
 );
 
@@ -105,7 +105,6 @@ async function getUserInscricaoProcessoSeletivo(req, res) {
 }
 
 async function getParecerByUser(req, res) {
-  console.log("AAAAAAAA> ", req.query);
   let parecer = await processoSeletivoCtrl.getParecerByUser(req);
   res.json(parecer);
 }
@@ -127,9 +126,8 @@ async function getProcessoSeletivoInscreverInfosById(req, res) {
 }
 
 async function getInscritosByProcessoSelectivo(req, res) {
-  console.log("req.user.roles: ", req.user.roles)
   var idParecerista = null;
-  if(req.user && req.user.roles.length == 1 && req.user.roles.indexOf('parecerista') == 0){
+  if (req.user && req.user.roles.length == 1 && req.user.roles.indexOf('parecerista') == 0) {
     idParecerista = req.user._id
   }
   let response = await processoSeletivoCtrl.getInscritosByProcessoSelectivo(req, req.params.id, idParecerista);

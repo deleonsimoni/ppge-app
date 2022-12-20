@@ -45,13 +45,11 @@ export class InscricoesComponent implements OnInit {
     private toastr: ToastrService,
     private authService: AuthService,
     public dialog: MatDialog
-    ) { }
+  ) { }
 
   ngOnInit(): void {
-    console.log("A")
     // this.listarPareceristas();
     this.siteService.getProcessosSeletivoTitle().subscribe((data: any) => {
-      console.log("data: ", data)
       this.listProcessoSeletivo = data;
     });
     this.user$.subscribe(user => {
@@ -60,26 +58,22 @@ export class InscricoesComponent implements OnInit {
   }
 
   getInscricoes(idProcesso) {
-    console.log("idProcesso: ", idProcesso);
     this.flagDetalharInscricao = false;
     this.inscricaoSelecionada = null;
     this.idProcessoSelecionado = idProcesso;
-    console.log("listProcessoSeletivolistProcessoSeletivo: ", this.listProcessoSeletivo);
-    
+
     this.siteService.getInscritosProcessoById(idProcesso).subscribe((data: any) => {
-      console.log("getInscricoes: data: ", data)
       this.listInscritos = data.enrolled;
     });
   }
 
   getInscricoesByFiltro(filtroAprovacao, filtroHomologacao) {
-    if(filtroAprovacao) 
+    if (filtroAprovacao)
       this.filtroAprovacao = filtroAprovacao;
-    if(filtroHomologacao)
+    if (filtroHomologacao)
       this.filtroHomologacao = filtroHomologacao;
-    
+
     this.siteService.getInscritosProcessoById(this.idProcessoSelecionado, this.filtroAprovacao, this.filtroHomologacao).subscribe((data: any) => {
-      console.log("getInscricoes: data: ", data)
       this.listInscritos = data.enrolled;
     });
 
@@ -93,26 +87,22 @@ export class InscricoesComponent implements OnInit {
   // }
 
   vincularParecerista(inscricoes) {
-    console.log("salvarParecerista(): inscricoes:", inscricoes);
 
     this.siteService.vincularParecerista(inscricoes._id, inscricoes.parecerista._id, this.idProcessoSelecionado)
       .pipe(take(1))
       .pipe(catchError((data) => of(data.error)))
       .subscribe((data: any) => {
-        console.log(data);
         data.hasError ? this.toastr.error(data.msg) : this.toastr.success(data.msg);
       });;
   }
 
   detalharInscricao(idInscricao) {
-    console.log("MY USER: detalharInscricao: ", this.myUser)
-    if(!this.inscricaoSelecionada || idInscricao != this.inscricaoSelecionada._id) {
+    if (!this.inscricaoSelecionada || idInscricao != this.inscricaoSelecionada._id) {
       this.siteService.detalharInscricao(idInscricao, this.idProcessoSelecionado)
         .subscribe((data: any) => {
-          if(data && data.enrolled[0])
-          this.flagDetalharInscricao = true;
+          if (data && data.enrolled[0])
+            this.flagDetalharInscricao = true;
           this.inscricaoSelecionada = data.enrolled[0];
-          console.log("inscricaoSelecionada: ", this.inscricaoSelecionada);
         })
     } else {
       this.flagDetalharInscricao = false;
@@ -121,23 +111,19 @@ export class InscricoesComponent implements OnInit {
   }
 
   selecionarPareceristaNoInscrito(idParecerista, index, idInscricao) {
-    console.log("selecionarPareceristaNoInscrito(): idParecerista: ", idParecerista);
-    console.log("selecionarPareceristaNoInscrito(): index: ", index);
-    console.log("selecionarPareceristaNoInscrito(): idInscricao: ", idInscricao);
     const inscricao = this.listInscritos.find(ins => ins._id == idInscricao);
-    const pareceristaSelecionado = inscricao.possiveisAvaliadores.find(p => p._id==idParecerista);
-    if(pareceristaSelecionado)
-      this.listInscritos[index].parecerista = {_id:idParecerista, fullname: pareceristaSelecionado.fullname,};
-    console.log("this.listInscritos[index].parecerista: ", this.listInscritos[index].parecerista);
-    
+    const pareceristaSelecionado = inscricao.possiveisAvaliadores.find(p => p._id == idParecerista);
+    if (pareceristaSelecionado)
+      this.listInscritos[index].parecerista = { _id: idParecerista, fullname: pareceristaSelecionado.fullname, };
+
   }
 
   verificarAprovacao(aprovado) {
-    return typeof aprovado != 'boolean' ? 'Não avaliado' : aprovado ? 'Inscrição Aprovada'  : 'Inscrição Reprovada';
+    return typeof aprovado != 'boolean' ? 'Não avaliado' : aprovado ? 'Inscrição Aprovada' : 'Inscrição Reprovada';
   }
 
   verificarHomologacao(homologado) {
-    return typeof homologado != 'boolean' ? 'Não homologado' : homologado ? 'Homologação Aprovada'  : 'Homologação Reprovada';
+    return typeof homologado != 'boolean' ? 'Não homologado' : homologado ? 'Homologação Aprovada' : 'Homologação Reprovada';
 
   }
 
@@ -150,14 +136,14 @@ export class InscricoesComponent implements OnInit {
       }
     })
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
-      if(result && result.refresh) {
+      if (result && result.refresh) {
         this.getInscricoes(this.idProcessoSelecionado)
       }
     })
   }
 
-  private addInicioS3Url(toConcat):string {
-    if(toConcat && toConcat != '') {
+  private addInicioS3Url(toConcat): string {
+    if (toConcat && toConcat != '') {
       return 'https://ppge-public.s3.sa-east-1.amazonaws.com/'.concat(toConcat);
     } else {
       return '';

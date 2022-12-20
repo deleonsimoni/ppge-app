@@ -28,7 +28,6 @@ export class ParecerComponent implements OnInit {
     private toastr: ToastrService,
     private siteAdminService: SiteAdminService,
   ) {
-    console.log(this.data);
     this.form = this.builder.group({
       homologado: [null, []],
       aprovado: [null, []],
@@ -40,12 +39,11 @@ export class ParecerComponent implements OnInit {
   ngOnInit(): void {
 
     this.montarFormulario();
-    console.log("FORM", this.form)
     this.getParecer();
   }
 
   formatDecimal(num) {
-    return Number(Number(num).toFixed(2)).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+    return Number(Number(num).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
   }
 
   montarFormulario() {
@@ -72,26 +70,22 @@ export class ParecerComponent implements OnInit {
     })
     this.form.setControl('notasAprovacao', notasAprovacaoForm);
     // fim do form de aprovacao
-    
+
   }
 
   getParecer() {
     this.siteAdminService.getParecer(this.data.idInscricao, this.data.idProcesso)
       .subscribe((data: any) => {
-        console.log("PARECER DADOSSS: ", data)
-        this.form.patchValue({...data.enrolled[0].parecer})
+        this.form.patchValue({ ...data.enrolled[0].parecer })
       })
   }
 
   register() {
-    console.log("register()", this.form.value)
-    if(this.form.valid) {
-      console.log("REGISTROUUUU: ", this.form.value)
+    if (this.form.valid) {
       this.siteAdminService
         .registrarParecer(this.data.idInscricao, this.data.idProcesso, this.form.value)
         .subscribe(data => {
-          console.log(data);
-          this.dialogRef.close({refresh: true});
+          this.dialogRef.close({ refresh: true });
         })
     } else {
       this.toastr.error("Preencha os campos corretamente!")

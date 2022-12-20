@@ -12,7 +12,7 @@ module.exports = {
   getByIdOnlyProcesso,
   subscribeProcessoSeletivo,
   unsubscribeProcessoSeletivo,
-  
+
   cadastrarParecerista,
   removerParecerista,
   listarPareceristas,
@@ -29,7 +29,7 @@ async function insert(user) {
 
 async function getByIdOnlyProcesso(idUser, req) {
   let userResult = await UserModel.findOne(
-    {_id: idUser},
+    { _id: idUser },
     {
       fullname: 1,
       email: 1,
@@ -53,45 +53,45 @@ async function getByIdOnlyProcesso(idUser, req) {
       cor: 1,
       genero: 1,
       processosSeletivo: {
-        $elemMatch: {idProcesso: req.query.idProcesso}
+        $elemMatch: { idProcesso: req.query.idProcesso }
       }
     }
   )
-  .populate({
-    path: "processosSeletivo.primeiroOrientador",
-    select: "fullName",
-  })
-  .populate({
-    path: "processosSeletivo.segundoOrientador",
-    select: "fullName",
-  })
-  .populate({
-    path: "processosSeletivo.linhaPesquisa",
-    select: `${req.query.language}.title`,
-  });
+    .populate({
+      path: "processosSeletivo.primeiroOrientador",
+      select: "fullName",
+    })
+    .populate({
+      path: "processosSeletivo.segundoOrientador",
+      select: "fullName",
+    })
+    .populate({
+      path: "processosSeletivo.linhaPesquisa",
+      select: `${req.query.language}.title`,
+    });
 
   return userResult
 }
 
 async function subscribeProcessoSeletivo(idUser, idProcesso) {
   return await UserModel.findOneAndUpdate(
-    {_id: idUser},
+    { _id: idUser },
     {
       $addToSet: {
-        processosSeletivo: {idProcesso}
+        processosSeletivo: { idProcesso }
       }
     },
-    {upsert: false}
+    { upsert: false }
   );
 }
 
 
 async function unsubscribeProcessoSeletivo(idProcessoSeletivo, idUser) {
   return await UserModel.findOneAndUpdate({
-      _id: idUser
-    },
-    {$pull: {processosSeletivo: idProcessoSeletivo}}, 
-    {upsert: false}
+    _id: idUser
+  },
+    { $pull: { processosSeletivo: idProcessoSeletivo } },
+    { upsert: false }
   );
 }
 
@@ -100,11 +100,11 @@ async function unsubscribeProcessoSeletivo(idProcessoSeletivo, idUser) {
 async function adicionarCoordenador(idUser) {
   try {
     let user = await UserModel.findOneAndUpdate(
-      {_id:idUser},
-      {$addToSet: {roles: "coordenador"}}, 
-      {upsert: false}
+      { _id: idUser },
+      { $addToSet: { roles: "coordenador" } },
+      { upsert: false }
     );
-    if(user)
+    if (user)
       return getSuccessByStatus(200, "Coordenador cadastrado com sucesso!");
     else
       return getErrorByStatus(404, "Usuário não encontrado na base!")
@@ -116,42 +116,40 @@ async function adicionarCoordenador(idUser) {
 async function removerCoordenador(idUser) {
   try {
     let user = await UserModel.findOneAndUpdate(
-      {_id:idUser},
-      {$pull: {roles: "coordenador"}}, 
-      {upsert: false}
+      { _id: idUser },
+      { $pull: { roles: "coordenador" } },
+      { upsert: false }
     );
-    if(user)
+    if (user)
       return getSuccessByStatus(200, "Coordenador removido com sucesso!");
     else
       return getErrorByStatus(404, "Usuário não encontrado na base!")
   } catch (error) {
     return getErrorByStatus(500)
-    
+
   }
 }
 
 async function cadastrarParecerista(email, idLinhaPesquisa) {
   let response = getErrorByStatus(500);
-  console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: idLinhaPesquisa: ", idLinhaPesquisa);
   try {
-    if(validateEmail(email)) {
+    if (validateEmail(email)) {
       // Adiciona permissao "parecerista" ao usuario
       let user = await UserModel.findOneAndUpdate(
-          {email: email},
-          {$addToSet: {roles: "parecerista"}}, 
-          {upsert: false}
-        );
-        
-      if(user) {
-          
+        { email: email },
+        { $addToSet: { roles: "parecerista" } },
+        { upsert: false }
+      );
+
+      if (user) {
+
         // Adiciona id do usuario na linha de pesquisa
         await LinhaPesquisaModel.findOneAndUpdate(
-          {_id: idLinhaPesquisa},
-          {$addToSet: {avaliadores: user._id}}, 
-          {upsert: false}
+          { _id: idLinhaPesquisa },
+          { $addToSet: { avaliadores: user._id } },
+          { upsert: false }
         );
 
-        console.log("user: ", user)
         response = getSuccessByStatus(200, "Avaliador cadastrado com sucesso!");
       } else {
         response = getErrorByStatus(404, "Usuário não encontrado na base!");
@@ -159,7 +157,7 @@ async function cadastrarParecerista(email, idLinhaPesquisa) {
     } else {
       response = getErrorByStatus(400);
     }
-  } catch(ex) {
+  } catch (ex) {
     console.log(ex)
     response = getErrorByStatus(500);
   } finally {
@@ -169,41 +167,40 @@ async function cadastrarParecerista(email, idLinhaPesquisa) {
 async function removerParecerista(idUser, idLinhaPesquisa) {
   try {
     const linhaRemovida = await LinhaPesquisaModel.findOneAndUpdate(
-      {_id: idLinhaPesquisa},
-      {$pull: {avaliadores: idUser}}, 
-      {upsert: false}
+      { _id: idLinhaPesquisa },
+      { $pull: { avaliadores: idUser } },
+      { upsert: false }
     )
 
     let linhaVinculada = await LinhaPesquisaModel.findOne(
-      {avaliadores: idUser},
-      {_id:1}
+      { avaliadores: idUser },
+      { _id: 1 }
     );
-    console.log("linhaVinculada: ", linhaVinculada)
     let user;
-    if(!linhaVinculada) {
+    if (!linhaVinculada) {
       user = await UserModel.findOneAndUpdate(
-        {_id:idUser},
-        {$pullAll: {roles: ["coordenador", "parecerista"]}}, 
-        {upsert: false}
+        { _id: idUser },
+        { $pullAll: { roles: ["coordenador", "parecerista"] } },
+        { upsert: false }
       );
     }
 
-    if(linhaRemovida || user)
+    if (linhaRemovida || user)
       return getSuccessByStatus(200, "Parecerista removido com sucesso!");
     else
       return getErrorByStatus(404, "Usuário não encontrado na base!")
   } catch (error) {
     console.log(error)
     return getErrorByStatus(500)
-    
+
   }
 }
 
 async function listarPareceristas() {
-  return await UserModel.find({roles: "parecerista"}, {fullname: 1, email: 1, roles: 1});
+  return await UserModel.find({ roles: "parecerista" }, { fullname: 1, email: 1, roles: 1 });
 }
 
-  
+
 function validateEmail(email) {
   return String(email)
     .toLowerCase()

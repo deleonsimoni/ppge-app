@@ -33,7 +33,6 @@ router.get('/', [passport.authenticate('jwt', {
 
 async function cadastrarParecerista(req, res) {
   const response = await userCtrl.cadastrarParecerista(req.body.email, req.body.idLinhaPesquisa);
-  console.log("response: ", response)
   res.status(response.status).json(response);
 }
 
@@ -43,10 +42,8 @@ async function removerParecerista(req, res) {
 }
 
 async function listarPareceristas(req, res) {
-  console.log("req.query: ", req.query)
   let response;
-  if(req.query.idLinhaPesquisa) {
-    console.log("ENTROu")
+  if (req.query.idLinhaPesquisa) {
     response = await linhaPesquisaService.listarPareceristasByLinha(req.query.idLinhaPesquisa);
   } else {
     response = await userCtrl.listarPareceristas();

@@ -29,19 +29,17 @@ export class ViewInscritosProcessoSeletivoComponent implements OnInit {
   typeGraduateEnum = TypeGraduateEnum;
 
   ngOnInit(): void {
-    console.log("MODAL: ", this.data)
-    this.data.users.forEach(u =>{
-      console.log("1 user -> ",u);
-      
+    this.data.users.forEach(u => {
+      console.log("1 user -> ", u);
+
     });
   }
 
   getUserInfo(idUser) {
     this.siteService.getUserByIdOnlyProcesso(idUser, this.data.idProcesso).subscribe((user: any) => {
-      console.log("useruseruser: ", user)
       this.infoUser = user.enrolled[0].idUser;
       this.infoUserProcesso = user.enrolled[0];
-      
+
       this.infoUserProcesso.files.pathComprovantePagamento;
       this.infoUserProcesso.files.pathLattes;
       this.infoUserProcesso.files.pathMemorial;
@@ -53,8 +51,8 @@ export class ViewInscritosProcessoSeletivoComponent implements OnInit {
     })
   }
 
-  private addInicioS3Url(toConcat):string {
-    if(toConcat && toConcat != '') {
+  private addInicioS3Url(toConcat): string {
+    if (toConcat && toConcat != '') {
       return 'https://ppge-public.s3.sa-east-1.amazonaws.com/'.concat(toConcat);
     } else {
       return '';
@@ -62,10 +60,10 @@ export class ViewInscritosProcessoSeletivoComponent implements OnInit {
   }
 
   voltar() {
-    this.flagShowInfoUser = false; 
-    this.infoUser={};
+    this.flagShowInfoUser = false;
+    this.infoUser = {};
   }
-  
+
   onNoClick(): void {
     this.dialogRef.close();
   }

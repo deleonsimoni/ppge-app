@@ -17,18 +17,14 @@ export class RankComponent implements OnInit {
 
   ngOnInit(): void {
     this.siteService.getProcessosSeletivoTitle().subscribe((data: any) => {
-      console.log("data: ", data)
       this.listProcessoSeletivo = data;
     });
   }
 
   detalharAllInscricoes(idProcesso) {
-    console.log("getInscricoes() idProcesso: ", idProcesso);
-    
+
     this.siteService.detalharAllInscricoes(idProcesso).subscribe((data: any) => {
-      console.log("getInscricoes: data: ", data)
       data.enrolled.forEach(inscricao => {
-        console.log("inscricao: ", inscricao);
         // let somatoria = 0;
         // let divisor = 0;
         // for(const property in inscricao.parecer) {
@@ -36,7 +32,7 @@ export class RankComponent implements OnInit {
         //   if(typeof inscricao.parecer[property] != 'boolean' && !isNaN(nota)) {
         //     console.log("somatoria aaaaaaaaaaaa: ",somatoria);
         //     console.log("nota bbbbbbbbbbbbb: ", nota);
-            
+
         //     somatoria = somatoria+nota;
         //     divisor++;
         //     console.log(`${property}: ${inscricao.parecer[property]} ===== somatoria: ${somatoria} ======divisor: ${divisor}`)
@@ -44,8 +40,7 @@ export class RankComponent implements OnInit {
         // }
         // inscricao.media = somatoria/divisor;
       })
-      this.listInscricoes = data.enrolled.sort((a, b) => b.parecer.nota-a.parecer.nota);
-      console.log("this.listInscricoes: ", this.listInscricoes)
+      this.listInscricoes = data.enrolled.sort((a, b) => b.parecer.nota - a.parecer.nota);
     });
   }
 

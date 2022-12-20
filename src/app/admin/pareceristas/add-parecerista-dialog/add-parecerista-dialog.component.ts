@@ -4,7 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, of, take } from 'rxjs';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-parecerista-dialog',
@@ -20,39 +20,37 @@ export class AddPareceristaDialogComponent {
     private toastr: ToastrService,
     private siteService: SiteAdminService,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) { 
+  ) {
     this.formParecerista = this.builder.group({
       email: [null, [Validators.required]],
     });
-    console.log("AAAAA:::::::: this.data", this.data)
   }
-    
+
   onNoClick(): void {
     this.dialogRef.close();
   }
 
   addParecerista() {
     const email = new String(this.formParecerista.value.email).trim();
-    if(this.validateEmail(email)) {
+    if (this.validateEmail(email)) {
       this.siteService
         .cadastrarParecerista(email, this.data.idLinhaPesquisa)
         .pipe(take(1))
         .pipe(catchError((data) => of(data.error)))
         .subscribe((data: any) => {
-          console.log(data);
-          if(data.hasError)
+          if (data.hasError)
             this.toastr.error(data.msg);
           else {
             this.toastr.success(data.msg);
-            this.dialogRef.close({refresh: true});
+            this.dialogRef.close({ refresh: true });
           }
         });
     } else {
       this.toastr.error('Email inválido!', 'Atenção: ')
     }
-    
+
   }
-  
+
   private validateEmail = (email) => {
     return String(email)
       .toLowerCase()

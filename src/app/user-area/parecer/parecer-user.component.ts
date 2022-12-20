@@ -27,10 +27,9 @@ export class ParecerUserComponent implements OnInit {
     public dialogRef: MatDialogRef<ParecerUserComponent>,
     private toastr: ToastrService,
   ) {
-    console.log(this.data);
     this.form = this.builder.group({
-      homologado: [{value: null, disabled: true}, []],
-      aprovado: [{value: null, disabled: true}, []],
+      homologado: [{ value: null, disabled: true }, []],
+      aprovado: [{ value: null, disabled: true }, []],
       notasHomologacao: [null, []],
       notasAprovacao: [null, []],
     });
@@ -39,11 +38,10 @@ export class ParecerUserComponent implements OnInit {
   ngOnInit(): void {
 
     this.montarFormulario();
-    console.log("FORM", this.form)
   }
 
   formatDecimal(num) {
-    return Number(Number(num).toFixed(2)).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+    return Number(Number(num).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
   }
 
   montarFormulario() {
@@ -52,7 +50,7 @@ export class ParecerUserComponent implements OnInit {
     this.formHomologTable.section.forEach(section => {
       let formAux = this.builder.group({});
       section.question.forEach(element => {
-        formAux.addControl(String(`question-${element.numer}`), new FormControl({value:'', disabled:true}, []))
+        formAux.addControl(String(`question-${element.numer}`), new FormControl({ value: '', disabled: true }, []))
       });
       notasHomologacaoForm.addControl(`section-${section.id}`, formAux);
     })
@@ -64,14 +62,14 @@ export class ParecerUserComponent implements OnInit {
     this.formApprovalTable.section.forEach(section => {
       let formAux = this.builder.group({});
       section.question.forEach(element => {
-        formAux.addControl(String(`question-${element.numer}`), new FormControl({value:'', disabled:true}, []))
+        formAux.addControl(String(`question-${element.numer}`), new FormControl({ value: '', disabled: true }, []))
       });
       notasAprovacaoForm.addControl(`section-${section.id}`, formAux);
     })
     this.form.setControl('notasAprovacao', notasAprovacaoForm);
     // fim do form de aprovacao
-    this.form.patchValue({...this.data.parecer})
-    
+    this.form.patchValue({ ...this.data.parecer })
+
   }
 
 

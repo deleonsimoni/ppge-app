@@ -20,7 +20,7 @@ export class PareceristasComponent implements OnInit {
     private toastr: ToastrService,
     public dialog: MatDialog,
     private siteService: SiteAdminService,
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.getTitleLinhaPesquisa();
@@ -40,44 +40,36 @@ export class PareceristasComponent implements OnInit {
   }
 
   abrirModalAddParecerista() {
-    const dialogRef = this.dialog.open(AddPareceristaDialogComponent,{width: '750px', data:{idLinhaPesquisa: this.idLinhaPesquisaSelecionada}});
-    
+    const dialogRef = this.dialog.open(AddPareceristaDialogComponent, { width: '750px', data: { idLinhaPesquisa: this.idLinhaPesquisaSelecionada } });
+
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
-      if(data && data.refresh)
+      if (data && data.refresh)
         this.listarPareceristas(this.idLinhaPesquisaSelecionada);
 
     })
   }
 
   listarPareceristas(idLinhaPesquisa) {
-    console.log("listarPareceristas: ", idLinhaPesquisa);
-    this.siteService.listarPareceristas(idLinhaPesquisa).subscribe((data:  any) => {
-      console.log("RETORNO: ", data);
+    this.siteService.listarPareceristas(idLinhaPesquisa).subscribe((data: any) => {
       this.listPareceristas = data;
     });
-  } 
+  }
 
   addCoordenador(event, idUser) {
-    console.log("addCoordenador: event: ", event);
-    console.log("addCoordenador: idUser: ", idUser);
-    if(event.checked) {
-      console.log("addCoordenador: ADICIONA", idUser);
+    if (event.checked) {
       this.siteService
         .adicionarCoordenador(idUser)
         .pipe(take(1))
         .pipe(catchError((data) => of(data.error)))
         .subscribe((data: any) => {
-          console.log(data);
           data.hasError ? this.toastr.error(data.msg) : this.toastr.success(data.msg);
         });
     } else {
-      console.log("addCoordenador: REMOVE", idUser);
       this.siteService
         .removerCoordenador(idUser)
         .pipe(take(1))
         .pipe(catchError((data) => of(data.error)))
         .subscribe((data: any) => {
-          console.log(data);
           data.hasError ? this.toastr.error(data.msg) : this.toastr.success(data.msg)
         });
 
@@ -85,15 +77,13 @@ export class PareceristasComponent implements OnInit {
   }
 
   removerPermissoes(idUser) {
-    console.log("removerPermissoes: idUser: ", idUser);
-    
+
     this.siteService
       .removerParecerista(idUser, this.idLinhaPesquisaSelecionada)
       .pipe(take(1))
       .pipe(catchError((data) => of(data.error)))
       .subscribe((data: any) => {
-        console.log(data);
-        if(data.hasError) {
+        if (data.hasError) {
           this.toastr.error(data.msg);
         } else {
           this.toastr.success(data.msg);

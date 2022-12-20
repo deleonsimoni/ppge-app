@@ -80,13 +80,13 @@ export class TeseDissertacaoAdminComponent implements OnInit {
 
   public addContentLine(content = null) {
     const control = <FormArray>this.form.controls['palavrasChave'];
-    if(content != null) {
+    if (content != null) {
       control.push(new FormControl(content, Validators.required));
     } else {
       control.push(new FormControl('', Validators.required));
     }
   }
-  
+
   public removeContentLine(index) {
     const teste = <FormArray>this.form.controls['palavrasChave'];
     teste.removeAt(index);
@@ -97,8 +97,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   }
 
   public register() {
-    console.log("form: ", this.form.value);
-    
+
     if (this.form.valid) {
 
       if (this.form.value._id) {
@@ -128,7 +127,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
 
   limparForm() {
     this.form.reset();
-    this.form.patchValue({pagina: 'tese/dissertacao'});
+    this.form.patchValue({ pagina: 'tese/dissertacao' });
   }
 
   getPerTipo(tipo: string) {
@@ -148,7 +147,6 @@ export class TeseDissertacaoAdminComponent implements OnInit {
       this.form.patchValue(resposta.obj);
       const formArray = <FormArray>this.form.controls['palavrasChave'];
       formArray.clear();
-      console.log("resposta: ", resposta)
       resposta.obj.palavrasChave.forEach(element => {
         this.addContentLine(element)
       });

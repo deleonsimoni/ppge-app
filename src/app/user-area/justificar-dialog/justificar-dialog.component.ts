@@ -22,7 +22,7 @@ export class JustificarDialogComponent implements OnInit {
     private toastr: ToastrService,
     public dialogRef: MatDialogRef<JustificarDialogComponent>,
   ) {
-    
+
     this.form = this.builder.group({
       justificativa: [null, [Validators.required]]
     });
@@ -32,22 +32,19 @@ export class JustificarDialogComponent implements OnInit {
   }
 
   register() {
-    console.log("register(): idInscricao: ", this.data.idInscricao);
-    console.log("register(): idProcesso: ", this.data.idProcesso);
-    console.log("register(): form: ", this.form.value);
-    if(this.form.valid) {
+    if (this.form.valid) {
       this.userAreaService
         .registrarJustificativa(this.data.idInscricao, this.data.idProcesso, this.form.value.justificativa)
         .pipe(take(1))
         .subscribe(data => {
           this.toastr.success('Justificativa cadastrada com sucesso!')
-          this.dialogRef.close({refresh: true})
+          this.dialogRef.close({ refresh: true })
         })
 
     } else {
       this.toastr.error('Preencha o formulário corretamente!')
     }
-    
+
   }
 
 }
