@@ -1,207 +1,217 @@
 <div class="container">
 
-  <div class="section-header">
-      <h2>Minhas Inscrições</h2>
-  </div>
+    <div class="section-header">
+        <h2>Minhas Inscrições</h2>
+    </div>
 </div>
 <div class="container mb-5">
 
-  <div *ngFor="let processo of minhasInscricoes; let i = index" class="row justify-content-between mb-3 px-2 card-inscricoes">
-    <div class="col pt-3 pb-2">
-      <h3>Processo Seletivo:</h3>
-      <h4>{{processo.title}}</h4>
-    </div>
-    <div class="col-md-auto pt-3 pb-2">
-
-      <div class="row justify-content-center">
-        <div class="col">
-          <p>
-            {{verificarHomologacao(processo?.enrolled[0]?.parecer?.homologado)}}
-          </p>
+    <div *ngFor="let processo of minhasInscricoes; let i = index"
+        class="row justify-content-between mb-3 px-2 card-inscricoes">
+        <div class="col pt-3 pb-2">
+            <h3>Processo Seletivo:</h3>
+            <h4>{{processo.title}}</h4>
         </div>
-      </div>
+        <div class="col-md-auto pt-3 pb-2">
 
-      <div *ngIf="processo?.enrolled[0]?.parecer?.homologado" class="row justify-content-center">
-        <div class="col">
-          <p>
-            {{verificarAprovacao(processo?.enrolled[0]?.parecer?.aprovado)}}
-          </p>
+            <div class="row justify-content-center">
+                <div class="col">
+                    <p>
+                        {{verificarHomologacao(processo?.enrolled[0]?.parecer?.homologado)}}
+                    </p>
+                </div>
+            </div>
+
+            <div *ngIf="processo?.enrolled[0]?.parecer?.homologado" class="row justify-content-center">
+                <div class="col">
+                    <p>
+                        {{verificarAprovacao(processo?.enrolled[0]?.parecer?.aprovado)}}
+                    </p>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <span (click)="detalharInscricao(processo?.enrolled[0])" matTooltip="Detalhar"
+                    matTooltipPosition="above"
+                    class="material-icons md-18 btn card-icon-action">{{this.flagDetalharInscricao &&
+                    this.inscricaoSelecionada?._id == processo?.enrolled[0]?._id ? 'remove' : 'add'}}</span>
+            </div>
+
+            <div class="row mb-3 justify-content-center">
+                <div class="col-auto">
+                    <button type="button" mat-raised-button color="primary"
+                        (click)="openModalDetalharAvaliacao(processo?.enrolled[0]?.parecer)">Ver Notas</button>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    <button
+                        *ngIf="(processo?.enrolled[0]?.parecer?.aprovado == false || processo?.enrolled[0]?.parecer?.homologado == false) && (!processo?.enrolled[0]?.justificativa || processo?.enrolled[0]?.justificativa == '')"
+                        style="background-color: green;" type="button" mat-raised-button color="primary"
+                        (click)="openModalJustificar(processo?.enrolled[0]?._id, processo?._id)">Solicitar
+                        Recurso</button>
+                    <p *ngIf="processo?.enrolled[0]?.justificativa">Recurso Solicitado</p>
+                </div>
+            </div>
+
         </div>
-      </div>
 
-      <div class="row justify-content-center">
-        <span (click)="detalharInscricao(processo?.enrolled[0])" matTooltip="Detalhar" matTooltipPosition="above" class="material-icons md-18 btn card-icon-action">{{this.flagDetalharInscricao && this.inscricaoSelecionada?._id == processo?.enrolled[0]?._id ? 'remove' : 'add'}}</span>
-      </div>
-
-      <div class="row mb-3 justify-content-center">
-        <div class="col-auto">
-          <button type="button" mat-raised-button
-              color="primary" (click)="openModalDetalharAvaliacao(processo?.enrolled[0]?.parecer)">Ver Notas</button>
-        </div>
-      </div>
-
-      <div class="row justify-content-center">
-        <div class="col-auto">
-          <button *ngIf="(processo?.enrolled[0]?.parecer?.aprovado == false || processo?.enrolled[0]?.parecer?.homologado == false) && (!processo?.enrolled[0]?.justificativa || processo?.enrolled[0]?.justificativa == '')" style="background-color: green;" type="button" mat-raised-button
-              color="primary" (click)="openModalJustificar(processo?.enrolled[0]?._id, processo?._id)">Justificar</button>
-          <p *ngIf="processo?.enrolled[0]?.justificativa">Justificado</p>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="col-12">
-      
-      <div *ngIf="this.flagDetalharInscricao && this.inscricaoSelecionada?._id == processo?.enrolled[0]?._id" class="row">
         <div class="col-12">
-          <hr>
-          <div class="row justify-content-center text-center">
-            <h2>Dados cadastrados no processo</h2>
-          </div>
-          <div class="row mt-3">
-              <div class="col-md-12">
-                  <label><strong>Linha de pesquisa</strong></label>
-                  <p>{{ inscricaoSelecionada?.linhaPesquisa['pt-br']?.title }}</p>
-              </div>
-          </div>
-          <div class="row mt-3">
-              <div class="col-md-6">
-                  <label><strong>Orientador</strong></label>
-                  <p>{{ inscricaoSelecionada?.primeiroOrientador?.fullName }}</p>
-              </div>
-              <div class="col-md-6" *ngIf="inscricaoSelecionada.tipoFormulario == typeGraduateEnum.MESTRADO">
-                  <label><strong>Segundo orientador</strong></label>
-                  <p>{{ inscricaoSelecionada?.segundoOrientador?.fullName }}</p>
-              </div>
-          </div>
-          <hr>
-          <div class="row mt-3">
-              <div class="col-md-12">
-                  <label><strong>Opção de vaga</strong></label>
-                  <p>{{ typeOpcaoVagaEnumToSubscription[inscricaoSelecionada.opcaoVaga] }}</p>
-              </div>
-              <div *ngIf="inscricaoSelecionada.opcaoVaga == typeOpcaoVagaEnum.COTAS_ACOES_AFIRMATIVAS" class="col-md-12">
-                  <label><strong>Descrição da cota</strong></label>
-                  <p>{{ typeDescricaoCota[inscricaoSelecionada.opcaoVagaCotaSub] }}</p>
-              </div>
-          </div>
-          <div class="row mt-3">
-              <div class="col-md-12">
-                  <label><strong>Provisão para caso de deficiência</strong></label>
-                  <p>{{ inscricaoSelecionada.deficienciaSub }}</p>
-              </div>
-          </div>
-          <hr>
-          <div class="row justify-content-center text-center">
-              <h2>Graduação</h2>
-          </div>
-          <div class="row">
-              <div class="col-md-6">
-                  <label><strong>Nome da graduação</strong></label>
-                  <p>{{ inscricaoSelecionada.graduacao.nome }}</p>
-              </div>
-              <div class="col-md-6">
-                  <label><strong>Nomde da instituição</strong></label>
-                  <p>{{ inscricaoSelecionada.graduacao.instituicao }}</p>
-              </div>
-              <div class="col-md-6">
-                  <label><strong>Ano de conclusão</strong></label>
-                  <p>{{ inscricaoSelecionada.graduacao.anoConclusao }}</p>
-              </div>
-              <div class="col-md-6">
-                  <label><strong>Aceitou termo</strong></label>
-                  <p>{{ inscricaoSelecionada.graduacao.termoNaoColacaoGrau ? "Sim" : "Não" }}</p>
-              </div>
-          </div>
-          <hr>
-          <div class="row justify-content-center text-center">
-              <h2>Pós-graduação</h2>
-          </div>
-          <div class="row">
-              <div class="col-md-6">
-                  <label><strong>Nome da pós-graduação</strong></label>
-                  <p>{{ inscricaoSelecionada.posGraduacao.nome }}</p>
-              </div>
-              <div class="col-md-6">
-                  <label><strong>Nomde da instituição</strong></label>
-                  <p>{{ inscricaoSelecionada.posGraduacao.instituicao }}</p>
-              </div>
-              <div class="col-md-6">
-                  <label><strong>Ano de conclusão</strong></label>
-                  <p>{{ inscricaoSelecionada.posGraduacao.anoConclusao }}</p>
-              </div>
-          </div>
-          <hr>
-          <div class="row justify-content-center text-center" *ngIf="inscricaoSelecionada.tipoFormulario == typeGraduateEnum.DOUTORADO">
-              <h2>Pós-graduação (mestrado)</h2>
-          </div>
-          <div class="row" *ngIf="inscricaoSelecionada.tipoFormulario == typeGraduateEnum.DOUTORADO">
-              <div class="col-md-6">
-                  <label><strong>Nome da pós-graduação</strong></label>
-                  <p>{{ inscricaoSelecionada.posGraduacao.nome }}</p>
-              </div>
-              <div class="col-md-6">
-                  <label><strong>Nomde da instituição</strong></label>
-                  <p>{{ inscricaoSelecionada.posGraduacao.instituicao }}</p>
-              </div>
-              <div class="col-md-6">
-                  <label><strong>Ano de conclusão</strong></label>
-                  <p>{{ inscricaoSelecionada.posGraduacao.anoConclusao }}</p>
-              </div>
-          </div>
-          <hr>
-          <div class="row mb-3">
-              <div class="col-md-6">
-                  <label class="mb-0"><strong>Currículo Lattes</strong></label>
-                  <br>
-                  <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathLattes)">
-                      <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
-                  </a>
-              </div>
-              <div class="col-md-6">
-                  <label class="mb-0"><strong>Comprovante de pagamento</strong></label>
-                  <br>
-                  <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathComprovantePagamento)">
-                      <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
-                  </a>
-              </div>
-          </div>
-          <div class="row mb-3" *ngIf="inscricaoSelecionada.tipoFormulario == typeGraduateEnum.MESTRADO">
-              <div class="col-md-6">
-                  <label class="mb-0"><strong>Pré-projeto</strong></label>
-                  <br>
-                  <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathPreProj)">
-                      <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
-                  </a>
-              </div>
-              <div class="col-md-6">
-                  <label class="mb-0"><strong>Memorial</strong></label>
-                  <br>
-                  <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathMemorial)">
-                      <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
-                  </a>
-              </div>
-          </div>
-          <div class="row mb-3" *ngIf="inscricaoSelecionada.tipoFormulario == typeGraduateEnum.DOUTORADO">
-              <div class="col-md-6">
-                  <label class="mb-0"><strong>Projeto de Tese</strong></label>
-                  <br>
-                  <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathProjetoTese)">
-                      <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
-                  </a>
-              </div>
-              <div class="col-md-6">
-                  <label class="mb-0"><strong>Principal publicação</strong></label>
-                  <br>
-                  <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathPrincipalPubli)">
-                      <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
-                  </a>
-              </div>
-          </div>
 
+            <div *ngIf="this.flagDetalharInscricao && this.inscricaoSelecionada?._id == processo?.enrolled[0]?._id"
+                class="row">
+                <div class="col-12">
+                    <hr>
+                    <div class="row justify-content-center text-center">
+                        <h2>Dados cadastrados no processo</h2>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label><strong>Linha de pesquisa</strong></label>
+                            <p>{{ inscricaoSelecionada?.linhaPesquisa['pt-br']?.title }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label><strong>Orientador</strong></label>
+                            <p>{{ inscricaoSelecionada?.primeiroOrientador?.fullName }}</p>
+                        </div>
+                        <div class="col-md-6" *ngIf="inscricaoSelecionada.tipoFormulario == typeGraduateEnum.MESTRADO">
+                            <label><strong>Segundo orientador</strong></label>
+                            <p>{{ inscricaoSelecionada?.segundoOrientador?.fullName }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label><strong>Opção de vaga</strong></label>
+                            <p>{{ typeOpcaoVagaEnumToSubscription[inscricaoSelecionada.opcaoVaga] }}</p>
+                        </div>
+                        <div *ngIf="inscricaoSelecionada.opcaoVaga == typeOpcaoVagaEnum.COTAS_ACOES_AFIRMATIVAS"
+                            class="col-md-12">
+                            <label><strong>Descrição da cota</strong></label>
+                            <p>{{ typeDescricaoCota[inscricaoSelecionada.opcaoVagaCotaSub] }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label><strong>Provisão para caso de deficiência</strong></label>
+                            <p>{{ inscricaoSelecionada.deficienciaSub }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row justify-content-center text-center">
+                        <h2>Graduação</h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label><strong>Nome da graduação</strong></label>
+                            <p>{{ inscricaoSelecionada.graduacao.nome }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label><strong>Nome da instituição</strong></label>
+                            <p>{{ inscricaoSelecionada.graduacao.instituicao }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label><strong>Ano de conclusão</strong></label>
+                            <p>{{ inscricaoSelecionada.graduacao.anoConclusao }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label><strong>Aceitou termo</strong></label>
+                            <p>{{ inscricaoSelecionada.graduacao.termoNaoColacaoGrau ? "Sim" : "Não" }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row justify-content-center text-center">
+                        <h2>Pós-graduação</h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label><strong>Nome da pós-graduação</strong></label>
+                            <p>{{ inscricaoSelecionada.posGraduacao.nome }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label><strong>Nome da instituição</strong></label>
+                            <p>{{ inscricaoSelecionada.posGraduacao.instituicao }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label><strong>Ano de conclusão</strong></label>
+                            <p>{{ inscricaoSelecionada.posGraduacao.anoConclusao }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row justify-content-center text-center"
+                        *ngIf="inscricaoSelecionada.tipoFormulario == typeGraduateEnum.DOUTORADO">
+                        <h2>Pós-graduação (mestrado)</h2>
+                    </div>
+                    <div class="row" *ngIf="inscricaoSelecionada.tipoFormulario == typeGraduateEnum.DOUTORADO">
+                        <div class="col-md-6">
+                            <label><strong>Nome da pós-graduação</strong></label>
+                            <p>{{ inscricaoSelecionada.posGraduacao.nome }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label><strong>Nome da instituição</strong></label>
+                            <p>{{ inscricaoSelecionada.posGraduacao.instituicao }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label><strong>Ano de conclusão</strong></label>
+                            <p>{{ inscricaoSelecionada.posGraduacao.anoConclusao }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="mb-0"><strong>Currículo Lattes</strong></label>
+                            <br>
+                            <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathLattes)">
+                                <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="mb-0"><strong>Comprovante de pagamento</strong></label>
+                            <br>
+                            <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathComprovantePagamento)">
+                                <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row mb-3" *ngIf="inscricaoSelecionada.tipoFormulario == typeGraduateEnum.MESTRADO">
+                        <div class="col-md-6">
+                            <label class="mb-0"><strong>Pré-projeto</strong></label>
+                            <br>
+                            <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathPreProj)">
+                                <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="mb-0"><strong>Memorial</strong></label>
+                            <br>
+                            <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathMemorial)">
+                                <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row mb-3" *ngIf="inscricaoSelecionada.tipoFormulario == typeGraduateEnum.DOUTORADO">
+                        <div class="col-md-6">
+                            <label class="mb-0"><strong>Projeto de Tese</strong></label>
+                            <br>
+                            <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathProjetoTese)">
+                                <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="mb-0"><strong>Principal publicação</strong></label>
+                            <br>
+                            <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathPrincipalPubli)">
+                                <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
 </div>

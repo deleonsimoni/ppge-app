@@ -83,17 +83,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                     <tr *ngFor="let di of datas; let i= index">
                                         <th scope="row">{{ di.type == 1 ? "Mestrado" : "Doutorado" }}</th>
                                         <th scope="row">{{ di.title }}</th>
                                         <th scope="row">
-                                            <span class="material-icons md-18 btn"
+                                            <span matTooltip="Excluir" matTooltipPosition="above"
+                                                class="material-icons md-18 btn"
                                                 (click)="apagar(di._id, di.title)">delete</span>
-                                            <span class="material-icons md-18 btn"
-                                                (click)="editar(di)">edit_square</span>
-                                            <span class="material-icons md-18 btn"
+                                            <span matTooltip="Editar" matTooltipPosition="above"
+                                                class="material-icons md-18 btn" (click)="editar(di)">edit_square</span>
+                                            <span matTooltip="Visualizar" matTooltipPosition="above"
+                                                class="material-icons md-18 btn"
                                                 (click)="visualizar(di.title, di.content)">preview</span>
-                                            <span class="material-icons md-18 btn"
+                                            <span matTooltip="Inscritos" matTooltipPosition="above"
+                                                class="material-icons md-18 btn"
                                                 (click)="inscritos(di._id, di.title)">group</span>
                                         </th>
                                         <th>

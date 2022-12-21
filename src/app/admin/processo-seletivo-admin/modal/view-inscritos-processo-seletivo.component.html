@@ -45,7 +45,7 @@
                 </div>
                 <div class="col-md-4">
                     <label><strong>Data de nascimento</strong></label>
-                    <p>{{ infoUser.dataNiver != null ? (infoUser.dataNiver | date: 'dd/MM/yyyy') : '-'  }}</p>
+                    <p>{{ infoUser.dataNiver != null ? (infoUser.dataNiver | date: 'dd/MM/yyyy') : '-' }}</p>
                 </div>
                 <div class="col-md-4">
                     <label><strong>Nacionalidade</strong></label>
@@ -99,7 +99,7 @@
             </div>
             <hr>
             <div class="row mt-3">
-    
+
                 <!-- Endereço -->
                 <div class="col-md-6">
                     <label><strong>Código postal</strong></label>
@@ -182,7 +182,7 @@
                     <p>{{ infoUserProcesso.graduacao.nome }}</p>
                 </div>
                 <div class="col-md-6">
-                    <label><strong>Nomde da instituição</strong></label>
+                    <label><strong>Nome da instituição</strong></label>
                     <p>{{ infoUserProcesso.graduacao.instituicao }}</p>
                 </div>
                 <div class="col-md-6">
@@ -204,7 +204,7 @@
                     <p>{{ infoUserProcesso.posGraduacao.nome }}</p>
                 </div>
                 <div class="col-md-6">
-                    <label><strong>Nomde da instituição</strong></label>
+                    <label><strong>Nome da instituição</strong></label>
                     <p>{{ infoUserProcesso.posGraduacao.instituicao }}</p>
                 </div>
                 <div class="col-md-6">
@@ -213,7 +213,8 @@
                 </div>
             </div>
             <hr>
-            <div class="row justify-content-center text-center" *ngIf="infoUserProcesso.tipoFormulario == typeGraduateEnum.DOUTORADO">
+            <div class="row justify-content-center text-center"
+                *ngIf="infoUserProcesso.tipoFormulario == typeGraduateEnum.DOUTORADO">
                 <h2>Pós-graduação (mestrado)</h2>
             </div>
             <div class="row" *ngIf="infoUserProcesso.tipoFormulario == typeGraduateEnum.DOUTORADO">
@@ -222,7 +223,7 @@
                     <p>{{ infoUserProcesso.posGraduacao.nome }}</p>
                 </div>
                 <div class="col-md-6">
-                    <label><strong>Nomde da instituição</strong></label>
+                    <label><strong>Nome da instituição</strong></label>
                     <p>{{ infoUserProcesso.posGraduacao.instituicao }}</p>
                 </div>
                 <div class="col-md-6">
@@ -283,7 +284,7 @@
         </div>
     </ng-template>
 </div>
-<hr>    
+<hr>
 <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">fechar</button>
 </div>

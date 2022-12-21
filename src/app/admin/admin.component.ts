@@ -18,7 +18,7 @@ export class AdminComponent implements OnInit {
         { name: 'Tese e Dissertação', path: '/admin/tese-dissertacao', permitido: user.isAdmin },
         { name: 'Processo Seletivo', path: '/admin/processo-seletivo', permitido: user.isAdmin },
         { name: 'Avaliadores/Coordenadores', path: '/admin/pareceristas', permitido: user.isAdmin || user.isCoordenador },
-        { name: 'Inscrições/Pareceristas', path: '/admin/inscritos', permitido: user.isAdmin || user.isCoordenador || user.isParecerista },
+        { name: 'Inscrições/Avaliadores', path: '/admin/inscritos', permitido: user.isAdmin || user.isCoordenador || user.isParecerista },
         { name: 'Ranking', path: '/admin/rank', permitido: user.isAdmin || user.isCoordenador || user.isParecerista },
 
       ]
