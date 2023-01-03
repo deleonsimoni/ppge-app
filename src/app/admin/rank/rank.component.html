@@ -16,17 +16,32 @@
       </mat-form-field>
     </div>
   </div>
-  <div *ngFor="let inscricoes of listInscricoes; let i = index" class="row justify-content-between mb-3 px-2 card-inscricoes">
-    <div class="col-auto p-3">
-      <h4><strong>Nome completo:</strong></h4>
-      <h4>{{inscricoes.idUser.fullname}}</h4>
+  <div *ngFor="let linhaPesquisa of listInscricoes" class="mb-5">
+    <h3>{{linhaPesquisa?.titleLinha}}</h3>
+
+    <table style="width: 100%;" mat-table [dataSource]="linhaPesquisa?.inscritos" class="mat-elevation-z8 demo-table">
+      <!-- Nome Completo Column -->
+      <ng-container matColumnDef="nome">
+        <th mat-header-cell *matHeaderCellDef>Nome Completo</th>
+        <td mat-cell *matCellDef="let element">{{element.fullname}}</td>
+      </ng-container>
+    
+      <!-- Nota Column -->
+      <ng-container matColumnDef="nota">
+        <th mat-header-cell *matHeaderCellDef>Nota</th>
+        <td mat-cell *matCellDef="let element">{{element.nota}}</td>
+      </ng-container>
       
-    </div>
-    <div class="col-auto p-3">
-      <h4><strong>Nota:</strong></h4>
-      <h4>{{inscricoes.parecer.nota}}</h4>
-      
-    </div>
+      <!-- Aprovado Column -->
+      <ng-container matColumnDef="aprovado">
+        <th mat-header-cell *matHeaderCellDef>Aprovado</th>
+        <td mat-cell *matCellDef="let element">{{element.aprovado ? 'SIM' : 'NÃO'}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
   </div>
 
 </div>

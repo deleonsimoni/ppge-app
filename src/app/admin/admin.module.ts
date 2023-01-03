@@ -25,6 +25,7 @@ import { TeseDissertacaoAdminComponent } from './tese-dissertacao-admin/tese-dis
 import { ComfirmDeleteComponent } from './tese-dissertacao-admin/tese-ou-dissertacao/confirm-delet.component';
 import { TeseOuDissertacaoComponent } from './tese-dissertacao-admin/tese-ou-dissertacao/tese-ou-dissertacao.component';
 import { RankComponent } from './rank/rank.component';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { RankComponent } from './rank/rank.component';
     SharedModule,
     MatCheckboxModule,
     MatRadioModule,
+    MatTableModule
   ],
   providers: [OnlyAdminUsersGuard, OnlyAllowedRolesUsersGuard],
 })

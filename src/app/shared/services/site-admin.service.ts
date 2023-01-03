@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { catchError, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -186,6 +187,12 @@ export class SiteAdminService {
     return this.http.get(this.URL_PROCESSO_SELETIVO);
   }
 
+  mudarEtapa(etapa, idProcesso) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/mudar-etapa`, {idProcesso, etapa});
+  }
+
   deletarProcessoSeletivo(id: any) {
     return this.http.delete(`${this.URL_PROCESSO_SELETIVO}/${id}`);
   }
@@ -208,14 +215,11 @@ export class SiteAdminService {
 
   }
 
-  getInscritosProcessoById(idProcesso, filtroAprovacao = null, filtroHomologacao = null) {
+  getInscritosProcessoById(idProcesso, filtroConsulta = null) {
     let params = new HttpParams()
 
-    if (filtroAprovacao && filtroAprovacao != 'todos') {
-      params = params.set("filtroAprovacao", filtroAprovacao);
-    }
-    if (filtroHomologacao && filtroHomologacao != 'todos') {
-      params = params.set("filtroHomologacao", filtroHomologacao);
+    if (filtroConsulta && filtroConsulta != 'todos') {
+      params = params.set("filtroConsulta", filtroConsulta);
     }
 
     return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/${idProcesso}`, { params });

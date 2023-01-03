@@ -17,6 +17,12 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
       required: true,
       default: 1
     },
+
+    etapa: {
+      type: String,
+      required: true,
+      default: 'inscricao'
+    },
     
     researchLine: [
       {
@@ -123,6 +129,9 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
             type: Boolean,
           },
           notasHomologacao: {
+            type: mongoose.Schema.Types.Mixed,
+          },
+          notasAprovacao: {
             type: mongoose.Schema.Types.Mixed,
           },
         },

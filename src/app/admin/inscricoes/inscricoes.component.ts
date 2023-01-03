@@ -37,8 +37,7 @@ export class InscricoesComponent implements OnInit {
 
   idProcessoSelecionado = null;
 
-  filtroHomologacao = null;
-  filtroAprovacao = null;
+  filtroConsulta = null;
 
   constructor(
     private siteService: SiteAdminService,
@@ -62,18 +61,18 @@ export class InscricoesComponent implements OnInit {
     this.inscricaoSelecionada = null;
     this.idProcessoSelecionado = idProcesso;
 
-    this.siteService.getInscritosProcessoById(idProcesso).subscribe((data: any) => {
+    this.siteService.getInscritosProcessoById(idProcesso, this.filtroConsulta).subscribe((data: any) => {
+      
       this.listInscritos = data.enrolled;
+      console.log("this.listInscritos: ",this.listInscritos);
     });
   }
 
-  getInscricoesByFiltro(filtroAprovacao, filtroHomologacao) {
-    if (filtroAprovacao)
-      this.filtroAprovacao = filtroAprovacao;
-    if (filtroHomologacao)
-      this.filtroHomologacao = filtroHomologacao;
+  getInscricoesByFiltro(filtroConsulta) {
+    if (filtroConsulta)
+      this.filtroConsulta = filtroConsulta;
 
-    this.siteService.getInscritosProcessoById(this.idProcessoSelecionado, this.filtroAprovacao, this.filtroHomologacao).subscribe((data: any) => {
+    this.siteService.getInscritosProcessoById(this.idProcessoSelecionado, this.filtroConsulta).subscribe((data: any) => {
       this.listInscritos = data.enrolled;
     });
 

@@ -20,25 +20,19 @@
     <div class="col-auto">
 
       <mat-form-field appearance="fill" class="mb-3 w-100">
-        <mat-label>Filtro Homologação</mat-label>
-        <mat-select (selectionChange)="getInscricoesByFiltro( null, $event.value )">
-          <mat-option value="todos">Todos</mat-option>
-          <mat-option value="aguardando">Aguardando Homologação</mat-option>
-          <mat-option value="homologado">Homologado</mat-option>
-          <mat-option value="reprovado">Homologação reprovado</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-    </div>
-    <div class="col-auto">
-
-      <mat-form-field appearance="fill" class="mb-3 w-100">
         <mat-label>Filtro Aprovação</mat-label>
-        <mat-select (selectionChange)="getInscricoesByFiltro( $event.value, null )">
+        <mat-select (selectionChange)="getInscricoesByFiltro( $event.value )">
           <mat-option value="todos">Todos</mat-option>
-          <mat-option value="aguardando">Aguardando aprovação</mat-option>
-          <mat-option value="aprovado">Aprovado</mat-option>
-          <mat-option value="reprovado">Não aprovado</mat-option>
+          <mat-optgroup label="Homologação">
+            <mat-option value="aguardandoHomolog">Aguardando Homologação</mat-option>
+            <mat-option value="reprovadoHomolog">Homologação reprovado</mat-option>
+            <mat-option value="homologadoHomolog">Homologado</mat-option>
+          </mat-optgroup>
+          <mat-optgroup label="Aprovação">
+            <mat-option value="aguardandoAprov">Aguardando aprovação</mat-option>
+            <mat-option value="reprovadoAprov">Não aprovado</mat-option>
+            <mat-option value="aprovadoAprov">Aprovado</mat-option>
+          </mat-optgroup>
         </mat-select>
       </mat-form-field>
 

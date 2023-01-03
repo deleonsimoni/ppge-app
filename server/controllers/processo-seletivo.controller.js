@@ -24,6 +24,7 @@ module.exports = {
   getAllParecer,
   getParecer,
   inscricaoJustificar,
+  mudarEtapa,
 };
 
 
@@ -105,14 +106,38 @@ async function getParecerByUser(req) {
 }
 
 async function getAllParecer(req) {
-  return await ProcessoSeletivoModel
+  let result = await ProcessoSeletivoModel
     .findOne(
       { _id: req.query.idProcesso },
-      { 'enrolled.parecer': 1 }
+      { 
+        'enrolled.parecer': 1,
+        'enrolled.linhaPesquisa': 1,
+      }
     ).populate({
       path: "enrolled.idUser",
       select: "fullname",
+    }).populate({
+      path: "enrolled.linhaPesquisa",
+      select: `${req.query.language}.title`
     });
+
+  if(result) {
+    result = {
+      _id: result._id,
+      enrolled: result.enrolled.map(enr => (
+        {
+          idUser: enr.idUser,
+          linhaPesquisa: {
+            _id: enr.linhaPesquisa._id,
+            title: enr.linhaPesquisa[req.query.language].title
+          },
+          parecer: enr.parecer,
+        }
+      ))
+    }
+  }
+
+  return result;
 }
 
 
@@ -164,56 +189,8 @@ async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, languag
 }
 
 async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParecerista) {
-  var whereClause = {
-    _id: idProcessoSeletivo
-  }
-  var select = {};
-  if (idParecerista) {
-    select.enrolled = { $elemMatch: { parecerista: idParecerista } }
-  }
-
-
-  if (req.query.filtroAprovacao) {
-    if (select.enrolled && select.enrolled.$elemMatch)
-      select.enrolled.$elemMatch["parecer.aprovado"] = req.query.filtroAprovacao == 'aguardando' ? { $eq: null } : (req.query.filtroAprovacao == 'aprovado');
-    else {
-      select.enrolled = {
-        $elemMatch: {
-          ["parecer.aprovado"]: req.query.filtroAprovacao == 'aguardando' ?
-            { $eq: null } :
-            (req.query.filtroAprovacao == 'aprovado')
-        }
-      }
-    }
-  }
-
-  if (req.query.filtroHomologacao) {
-    if (select.enrolled && select.enrolled.$elemMatch)
-      select.enrolled.$elemMatch["parecer.homologado"] = req.query.filtroHomologacao == 'aguardando' ? { $eq: null } : (req.query.filtroHomologacao == 'homologado');
-    else {
-      select.enrolled = {
-        $elemMatch: {
-          ["parecer.homologado"]: req.query.filtroHomologacao == 'aguardando' ?
-            { $eq: null } :
-            (req.query.filtroHomologacao == 'homologado')
-        }
-      }
-    }
-  }
-
   let processo = await ProcessoSeletivoModel
-    .findOne(
-      whereClause,
-      select
-      // { 
-
-      //   'enrolled._id': 1, 
-      //   'enrolled.idUser': 1, 
-      //   'enrolled.parecerista': 1, 
-      //   'enrolled.parecer': 1 , 
-      //   'enrolled.linhaPesquisa': 1 
-      // }
-    )
+    .findOne({_id: idProcessoSeletivo})
     .populate({ path: 'enrolled.idUser', select: 'fullname socialname' })
     .populate({ path: 'enrolled.parecerista', select: 'fullname' })
     .populate({
@@ -233,16 +210,40 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
     processo.enrolled = processo.enrolled ? processo.enrolled : [];
     const result = {
       _id: processo._id,
-      enrolled: processo.enrolled.map((e) => (
-        {
-          _id: e._id,
-          idUser: e.idUser,
-          parecerista: e.parecerista,
-          parecer: e.parecer,
-          possiveisAvaliadores: e.linhaPesquisa.avaliadores,
-          titleLinhaPesquisa: e.linhaPesquisa[req.query.language].title
-        }
-      )),
+      enrolled: processo.enrolled.filter((e) => {
+          flagReturn = true;
+          
+          if(idParecerista) flagReturn = e.parecerista && e.parecerista.equals(idParecerista)
+          console.log("AAAAAAAAAAAAAAAAAAAAAAAAAA: ", req.query)
+
+          if(req.query.filtroConsulta) {
+            console.log("--------------------------------APROVACAO-------------------------------- ");
+            console.log("req.query.filtroConsulta", req.query.filtroConsulta);
+            console.log("e.parecer.aprovado", e.parecer.aprovado);
+            console.log("------------------------------FIM APROVACAO------------------------------ ");
+            const statusAguardando = ["aguardandoHomolog","aguardandoAprov"]
+            if(statusAguardando.includes(req.query.filtroConsulta)) {
+              console.log("ENTROU statusAguardando")
+              flagReturn = flagReturn && (e.parecer == undefined || e.parecer.aprovado == undefined || e.parecer.homologado == undefined)
+            } else {
+              const flagAprov = e.parecer && e.parecer.aprovado == (req.query.filtroConsulta == 'aprovadoAprov')
+              const flagHomolog = e.parecer && e.parecer.homologado == (req.query.filtroConsulta == 'homologadoHomolog')
+              flagReturn = flagReturn && (flagAprov || flagHomolog);
+            }
+          }
+            
+          return flagReturn;
+          
+        }).map(e => (
+          {
+            _id: e._id,
+            idUser: e.idUser,
+            parecerista: e.parecerista,
+            parecer: e.parecer,
+            possiveisAvaliadores: e.linhaPesquisa.avaliadores,
+            titleLinhaPesquisa: e.linhaPesquisa[req.query.language].title
+          }
+        )),
     }
     return result
   } else {
@@ -313,6 +314,16 @@ async function getParecer(req) {
     {
       "enrolled.$": 1,
     }
+  );
+}
+
+async function mudarEtapa(body) {
+  const {idProcesso, etapa} = body;
+
+  return await ProcessoSeletivoModel.findOneAndUpdate(
+    { _id: idProcesso },
+    { etapa:etapa },
+    { upsert: false }
   );
 }
 

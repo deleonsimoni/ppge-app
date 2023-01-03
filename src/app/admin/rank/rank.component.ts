@@ -8,8 +8,14 @@ import { SiteAdminService } from '@app/shared/services/site-admin.service';
   encapsulation: ViewEncapsulation.None
 })
 export class RankComponent implements OnInit {
+  displayedColumns = [
+    "nome",
+    "nota",
+    "aprovado"
+  ]
+
   listProcessoSeletivo: any;
-  listInscricoes: any;
+  listInscricoes: any[] = [];
 
   constructor(
     private siteService: SiteAdminService,
@@ -24,23 +30,42 @@ export class RankComponent implements OnInit {
   detalharAllInscricoes(idProcesso) {
 
     this.siteService.detalharAllInscricoes(idProcesso).subscribe((data: any) => {
+      let dataExibir: any = {};
       data.enrolled.forEach(inscricao => {
-        // let somatoria = 0;
-        // let divisor = 0;
-        // for(const property in inscricao.parecer) {
-        //   const nota = parseFloat(inscricao.parecer[property]);
-        //   if(typeof inscricao.parecer[property] != 'boolean' && !isNaN(nota)) {
-        //     console.log("somatoria aaaaaaaaaaaa: ",somatoria);
-        //     console.log("nota bbbbbbbbbbbbb: ", nota);
+        const {parecer, linhaPesquisa} = inscricao;
+        if(!dataExibir[linhaPesquisa._id]) {
+          dataExibir[linhaPesquisa._id] = {titleLinha: linhaPesquisa.title, inscritos: []}
+        }
 
-        //     somatoria = somatoria+nota;
-        //     divisor++;
-        //     console.log(`${property}: ${inscricao.parecer[property]} ===== somatoria: ${somatoria} ======divisor: ${divisor}`)
-        //   }
-        // }
-        // inscricao.media = somatoria/divisor;
-      })
-      this.listInscricoes = data.enrolled.sort((a, b) => b.parecer.nota - a.parecer.nota);
+        let aux: any = {};
+        aux.titleLinhaPesquisa = linhaPesquisa.title
+        console.log("LINHA PESQUISA: ", linhaPesquisa.title)
+        if(parecer) {
+          let nota = 0;
+          if(parecer.notasHomologacao) {
+            Object.values(parecer.notasHomologacao).forEach(section => {
+              Object.values(section).forEach(question => {
+                nota+=question;
+              })
+            })
+          }
+
+          if(parecer.notasAprovacao) {
+            Object.values(parecer.notasAprovacao).forEach(section => {
+              Object.values(section).forEach(question => {
+                nota+=question;
+              })
+            })
+          }
+          console.log("NOTA: ", nota)
+          dataExibir[linhaPesquisa._id].inscritos.push({fullname: inscricao.idUser.fullname, nota, aprovado: parecer.aprovado})
+          dataExibir[linhaPesquisa._id].inscritos = dataExibir[linhaPesquisa._id].inscritos.sort((a, b) => Number(b.nota) - Number(a.nota))
+        }
+        
+      });
+      console.log("data: ", data);
+      console.log("APARECER: ", dataExibir);
+      this.listInscricoes = Object.values(dataExibir);
     });
   }
 

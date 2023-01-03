@@ -35,12 +35,16 @@ router.get('/processo-seletivo/inscritos/parecer/detalhe', [passport.authenticat
 
 router.get('/processo-seletivo/inscritos/parecer/all', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'parecerista'])], asyncHandler(getAllParecer));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'parecerista'])], setLocation, asyncHandler(getAllParecer));
 
 
 router.put('/processo-seletivo/inscritos/vincular-parecerista', [passport.authenticate('jwt', {
   session: false
 }), requireAdmin], setLocation, asyncHandler(vincularParecerista));
+
+router.put('/processo-seletivo/mudar-etapa', [passport.authenticate('jwt', {
+  session: false
+}), requireAdmin], setLocation, asyncHandler(mudarEtapa));
 
 router.post('/processo-seletivo/minha-inscricoes/justificar', [passport.authenticate('jwt', {
   session: false
@@ -117,6 +121,12 @@ async function getAllParecer(req, res) {
 async function vincularParecerista(req, res) {
   const response = await processoSeletivoCtrl.vincularParecerista(req.body);
   res.status(response.status).json(response);
+
+}
+
+async function mudarEtapa(req, res) {
+  const response = await processoSeletivoCtrl.mudarEtapa(req.body);
+  res.json(response);
 
 }
 

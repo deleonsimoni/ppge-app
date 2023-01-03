@@ -70,6 +70,18 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
     this.addContentLine();
   }
 
+  public mudarEtapa(value, idProcesso) {
+    console.log("VALOR: ", value);
+    this.siteService
+      .mudarEtapa(value, idProcesso)
+      .subscribe(
+        () => this.toastr.success('Etapa do Processo Seletivo alterado com sucesso', 'Sucesso'),
+        (err) => {
+          this.toastr.error('Ocorreu um erro ao atualizar etapa', 'Atenção: ');
+        }
+      );
+  }
+
   public getTitleLinhaPesquisa() {
     this.siteService.getTitleLinhaPesquisa().subscribe(data => {
       this.listLinhaPesquisa = data;
@@ -95,6 +107,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
     }
 
   }
+
   public removeContentLine(index) {
     const teste = <FormArray>this.form.controls['content'];
     teste.removeAt(index);
@@ -135,6 +148,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
   getProcessoSeletivo() {
     this.siteService.listProcessoSeletivo().subscribe((res: any) => {
       this.datas = res;
+      this.datas.forEach(console.log)
     }, err => {
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
     });

@@ -54,6 +54,8 @@ export class ProcessoSeletivoComponent implements OnInit {
 
   getProcessoSeletivo() {
     this.processoSeletivoService.getProcessoSeletivo().subscribe(arr => {
+      console.log("PROCESSO: ", arr);
+      
       this.processoSeletivo = arr;
     });
   }
