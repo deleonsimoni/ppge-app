@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 export interface DialogParecerData {
   idProcesso: string;
   idInscricao: string;
+  criterio: any;
 }
 
 @Component({
@@ -31,8 +32,9 @@ export class ParecerComponent implements OnInit {
     this.form = this.builder.group({
       homologado: [null, []],
       aprovado: [null, []],
-      notasHomologacao: [null, [Validators.required]],
-      notasAprovacao: [null, [Validators.required]],
+      step: [null, []]
+      // notasHomologacao: [null, [Validators.required]],
+      // notasAprovacao: [null, [Validators.required]],
     });
   }
 
@@ -46,29 +48,51 @@ export class ParecerComponent implements OnInit {
     return Number(Number(num).toFixed(2)).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
   }
 
+
   montarFormulario() {
     // form de homolohacao
-    let notasHomologacaoForm = this.builder.group({});
-    this.formHomologTable.section.forEach(section => {
-      let formAux = this.builder.group({});
-      section.question.forEach(element => {
-        formAux.addControl(String(`question-${element.numer}`), new FormControl('', []))
-      });
-      notasHomologacaoForm.addControl(`section-${section.id}`, formAux);
-    })
-    this.form.setControl('notasHomologacao', notasHomologacaoForm);
+    // let notasHomologacaoForm = this.builder.group({});
+    // this.formHomologTable.section.forEach(section => {
+    //   let formAux = this.builder.group({});
+    //   section.question.forEach(element => {
+    //     formAux.addControl(String(`question-${element._id}`), new FormControl('', []))
+    //   });
+    //   notasHomologacaoForm.addControl(`section-${section._id}`, formAux);
+    // })
+    // this.form.setControl('notasHomologacao', notasHomologacaoForm);
     // fim do form de homolohacao
 
     // form de aprovacao
-    let notasAprovacaoForm = this.builder.group({});
-    this.formApprovalTable.section.forEach(section => {
-      let formAux = this.builder.group({});
-      section.question.forEach(element => {
-        formAux.addControl(String(`question-${element.numer}`), new FormControl('', []))
-      });
-      notasAprovacaoForm.addControl(`section-${section.id}`, formAux);
+    let stepFormAux = this.builder.group({});
+    this.data.criterio?.step.forEach(step => {
+
+      let notasAprovacaoForm = this.builder.group({});
+      step.section.forEach(section => {
+        let formAux = this.builder.group({});
+        section.question.forEach(element => {
+          formAux.addControl(String(`question-${element._id}`), new FormControl('', []))
+        });
+        notasAprovacaoForm.addControl(`section-${section._id}`, formAux);
+      })
+      notasAprovacaoForm.addControl(`stepApproval`, new FormControl(null, []));
+      stepFormAux.addControl(`step-${step._id}`, notasAprovacaoForm);
+
     })
-    this.form.setControl('notasAprovacao', notasAprovacaoForm);
+    this.form.setControl('step', stepFormAux);
+    console.log("form: ", this.form.value);
+    
+
+
+    // let notasAprovacaoForm = this.builder.group({});
+    // this.formApprovalTable.section.forEach(section => {
+    //   let formAux = this.builder.group({});
+    //   section.question.forEach(element => {
+    //     formAux.addControl(String(`question-${element._id}`), new FormControl('', []))
+    //   });
+    //   notasAprovacaoForm.addControl(`section-${section._id}`, formAux);
+    // })
+    // this.form.setControl('notasAprovacao', notasAprovacaoForm);
+
     // fim do form de aprovacao
 
   }

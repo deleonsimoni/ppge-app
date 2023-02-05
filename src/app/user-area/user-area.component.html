@@ -40,7 +40,7 @@
             <div class="row mb-3 justify-content-center">
                 <div class="col-auto">
                     <button type="button" mat-raised-button color="primary"
-                        (click)="openModalDetalharAvaliacao(processo?.enrolled[0]?.parecer)">Ver Notas</button>
+                        (click)="openModalDetalharAvaliacao(processo?.enrolled[0]?.parecer, processo?.criterio)">Ver Notas</button>
                 </div>
             </div>
 
@@ -91,7 +91,7 @@
                         <div *ngIf="inscricaoSelecionada.opcaoVaga == typeOpcaoVagaEnum.COTAS_ACOES_AFIRMATIVAS"
                             class="col-md-12">
                             <label><strong>Descrição da cota</strong></label>
-                            <p>{{ typeDescricaoCota[inscricaoSelecionada.opcaoVagaCotaSub] }}</p>
+                            <p>{{ inscricaoSelecionada.opcaoVagaCotaSub }}</p>
                         </div>
                     </div>
                     <div class="row mt-3">

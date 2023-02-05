@@ -30,8 +30,7 @@ export class ParecerUserComponent implements OnInit {
     this.form = this.builder.group({
       homologado: [{ value: null, disabled: true }, []],
       aprovado: [{ value: null, disabled: true }, []],
-      notasHomologacao: [null, []],
-      notasAprovacao: [null, []],
+      step: [null, []]
     });
   }
 
@@ -45,28 +44,26 @@ export class ParecerUserComponent implements OnInit {
   }
 
   montarFormulario() {
-    // form de homolohacao
-    let notasHomologacaoForm = this.builder.group({});
-    this.formHomologTable.section.forEach(section => {
-      let formAux = this.builder.group({});
-      section.question.forEach(element => {
-        formAux.addControl(String(`question-${element.numer}`), new FormControl({ value: '', disabled: true }, []))
-      });
-      notasHomologacaoForm.addControl(`section-${section.id}`, formAux);
-    })
-    this.form.setControl('notasHomologacao', notasHomologacaoForm);
-    // fim do form de homolohacao
-
+    console.log("CRITERIO: ", this.data.criterio);
+    
     // form de aprovacao
-    let notasAprovacaoForm = this.builder.group({});
-    this.formApprovalTable.section.forEach(section => {
-      let formAux = this.builder.group({});
-      section.question.forEach(element => {
-        formAux.addControl(String(`question-${element.numer}`), new FormControl({ value: '', disabled: true }, []))
-      });
-      notasAprovacaoForm.addControl(`section-${section.id}`, formAux);
+    let stepFormAux = this.builder.group({});
+    this.data.criterio?.step.forEach(step => {
+
+      let notasAprovacaoForm = this.builder.group({});
+      step.section.forEach(section => {
+        let formAux = this.builder.group({});
+        section.question.forEach(element => {
+          formAux.addControl(String(`question-${element._id}`), new FormControl('', []))
+        });
+        notasAprovacaoForm.addControl(`section-${section._id}`, formAux);
+      })
+      notasAprovacaoForm.addControl(`stepApproval`, new FormControl(null, []));
+      stepFormAux.addControl(`step-${step._id}`, notasAprovacaoForm);
+
     })
-    this.form.setControl('notasAprovacao', notasAprovacaoForm);
+    this.form.setControl('step', stepFormAux);
+    console.log("form: ", this.form.value);
     // fim do form de aprovacao
     this.form.patchValue({ ...this.data.parecer })
 

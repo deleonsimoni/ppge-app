@@ -3,6 +3,7 @@ const ProcessoSeletivoModel = require('../models/processo-seletivo.model');
 const UserController = require('./user.controller')
 const S3Uploader = require('./aws.controller');
 const { getErrorByStatus, getSuccessByStatus } = require('../service/error.service');
+const { default: mongoose } = require('mongoose');
 
 module.exports = {
   getProcessoSeletivo,
@@ -25,6 +26,8 @@ module.exports = {
   getParecer,
   inscricaoJustificar,
   mudarEtapa,
+  salvarVinculoCriterio,
+  changeHomologInscricao
 };
 
 
@@ -158,7 +161,7 @@ async function getProcessoSeletivoHeaders(req) {
 }
 
 async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, language) {
-  let ret = await ProcessoSeletivoModel.findOne({ _id: idProcessoSeletivo }, { researchLine: 1 })
+  let ret = await ProcessoSeletivoModel.findOne({ _id: idProcessoSeletivo }, { researchLine: 1, vagas: 1 })
     .populate(
       {
         path: "researchLine",
@@ -176,19 +179,35 @@ async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, languag
   if (ret) {
     ret = {
       _id: ret._id,
-      researchLine: ret.researchLine.map(data => (
-        {
-          _id: data._id,
-          corpoDocente: data.corpoDocente,
-          title: data[language].title,
+      researchLine: ret.researchLine.map(data => {
+        let vagasText = ''
+        const vagalinha = ret.vagas?.find(v => v.idLinhaPesquisa == data._id)
+        if(vagalinha) {
+          console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: ", vagalinha.maxVaga)
+          vagasText += '('
+          vagasText += vagalinha.maxVaga + (vagalinha.maxVaga > 1 ? ' vagas' : ' vaga');
+          vagasText += ' / '
+          vagasText += vagalinha.maxVagaCota + (vagalinha.maxVagaCota > 1 ? ' vagas' : ' vaga');
+          vagasText += ')'
         }
-      ))
+
+        return (
+          {
+            _id: data._id,
+            corpoDocente: data.corpoDocente,
+            title: data[language].title + vagasText,
+          }
+        )
+      }),
+      vagas: ret.vagas,
     }
   }
   return ret;
 }
 
 async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParecerista) {
+
+
   let processo = await ProcessoSeletivoModel
     .findOne({_id: idProcessoSeletivo})
     .populate({ path: 'enrolled.idUser', select: 'fullname socialname' })
@@ -206,28 +225,25 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
       createAt: -1
     });
 
+  const statusAguardando = ["aguardandoHomolog","aguardandoAprov"];
+  const statusHomologa = ["reprovadoHomolog","homologadoHomolog"];
+  const statusAprov = ["reprovadoAprov","aprovadoAprov"];
   if (processo) {
     processo.enrolled = processo.enrolled ? processo.enrolled : [];
     const result = {
       _id: processo._id,
+      criterio: processo.criterio,
       enrolled: processo.enrolled.filter((e) => {
           flagReturn = true;
           
           if(idParecerista) flagReturn = e.parecerista && e.parecerista.equals(idParecerista)
-          console.log("AAAAAAAAAAAAAAAAAAAAAAAAAA: ", req.query)
 
           if(req.query.filtroConsulta) {
-            console.log("--------------------------------APROVACAO-------------------------------- ");
-            console.log("req.query.filtroConsulta", req.query.filtroConsulta);
-            console.log("e.parecer.aprovado", e.parecer.aprovado);
-            console.log("------------------------------FIM APROVACAO------------------------------ ");
-            const statusAguardando = ["aguardandoHomolog","aguardandoAprov"]
             if(statusAguardando.includes(req.query.filtroConsulta)) {
-              console.log("ENTROU statusAguardando")
-              flagReturn = flagReturn && (e.parecer == undefined || e.parecer.aprovado == undefined || e.parecer.homologado == undefined)
+              flagReturn = flagReturn && (e.parecer == undefined || (req.query.filtroConsulta == 'aguardandoAprov' && e.parecer.aprovado == undefined) || (req.query.filtroConsulta == 'aguardandoHomolog' && e.parecer.homologado == undefined))
             } else {
-              const flagAprov = e.parecer && e.parecer.aprovado == (req.query.filtroConsulta == 'aprovadoAprov')
-              const flagHomolog = e.parecer && e.parecer.homologado == (req.query.filtroConsulta == 'homologadoHomolog')
+              const flagAprov = e.parecer && statusAprov.includes(req.query.filtroConsulta) && e.parecer.aprovado == (req.query.filtroConsulta == 'aprovadoAprov')
+              const flagHomolog = e.parecer && statusHomologa.includes(req.query.filtroConsulta) && e.parecer.homologado == (req.query.filtroConsulta == 'homologadoHomolog')
               flagReturn = flagReturn && (flagAprov || flagHomolog);
             }
           }
@@ -273,15 +289,28 @@ async function getMinhaInscricoesProcessoSelectivo(idUser) {
 
 }
 
-async function getMinhaInscricoesDetalhadaProcessoSelectivo(idUser) {
+async function getMinhaInscricoesDetalhadaProcessoSelectivo(idUser, language) {
   return await ProcessoSeletivoModel
     .find(
       { enrolled: { $elemMatch: { idUser } } },
       {
         title: 1,
+        criterio: 1,
         'enrolled.$': 1,
       }
     )
+    .populate({
+      path: "enrolled.primeiroOrientador",
+      select: "fullName",
+    })
+    .populate({
+      path: "enrolled.segundoOrientador",
+      select: "fullName",
+    })
+    .populate({
+      path: 'enrolled.linhaPesquisa',
+      select: `${language}.title`,
+    })
     .sort({
       createAt: -1
     });
@@ -301,6 +330,15 @@ async function registrarParecer(req) {
   return ProcessoSeletivoModel.findOneAndUpdate(
     { _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } },
     { $set: { "enrolled.$.parecer": form } },
+    { upsert: false }
+  );
+}
+
+async function changeHomologInscricao(body) {
+  const {value, idInscricaoSelecionada, idProcessoSelecionado} = body;
+  return ProcessoSeletivoModel.findOneAndUpdate(
+    { _id: idProcessoSelecionado, enrolled: { $elemMatch: { _id: idInscricaoSelecionada } } },
+    { $set: { "enrolled.$.parecer.homologado": value } },
     { upsert: false }
   );
 }
@@ -348,8 +386,8 @@ async function subscribeProcessoSeletivo(req) {
     await ProcessoSeletivoModel.findOneAndUpdate({
       _id: req.params.id, isAtivo: true
     },
-      { $addToSet: { enrolled: { idUser: req.user._id, ...formulario, idProcesso: null } } },
-      { upsert: false }
+    { $addToSet: { enrolled: { idUser: req.user._id, ...formulario, idProcesso: null } } },
+    { upsert: false }
     );
   } catch (e) {
     console.log(e);
@@ -426,9 +464,27 @@ async function updateProcessoSeletivo(req, idUser) {
   return await ProcessoSeletivoModel.findOneAndUpdate({
     _id: form._id
   },
-    form, {
+  form, {
     upsert: true
   });
+}
+
+async function salvarVinculoCriterio(req) {
+  const criterio = req.body.criterio;
+  const idProcesso = req.params.id;
+  const retorno = await ProcessoSeletivoModel.findOneAndUpdate(
+    {_id: idProcesso, etapa: 'inscricao'},
+    {criterio},
+    {upsert: false}
+  )
+
+  if(retorno) {
+    console.log("ACHOU PROCESSO");
+    return getSuccessByStatus(200, "Critério vinculado com sucesso!");
+  }
+  else {
+    return getErrorByStatus(400, `Processo Seletivo não encontrado! Certifique-se que ele esteja na etapa de "Inscrição".`)
+  }
 }
 
 async function deleteProcessoSeletivo(id) {

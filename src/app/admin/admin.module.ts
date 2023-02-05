@@ -26,6 +26,10 @@ import { ComfirmDeleteComponent } from './tese-dissertacao-admin/tese-ou-dissert
 import { TeseOuDissertacaoComponent } from './tese-dissertacao-admin/tese-ou-dissertacao/tese-ou-dissertacao.component';
 import { RankComponent } from './rank/rank.component';
 import { MatTableModule } from '@angular/material/table';
+import { CriterioAvaliacaoComponent } from './criterio-avaliacao/criterio-avaliacao.component';
+import { CriterioAvaliacaoDialogComponent } from './processo-seletivo-admin/criterio-avaliacao-dialog/criterio-avaliacao-dialog.component';
+import { CriterioFormComponent } from './components/criterio-form/criterio-form.component';
+import { CotaAcaoAfirmativaComponent } from './cota-acao-afirmativa/cota-acao-afirmativa.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +48,11 @@ import { MatTableModule } from '@angular/material/table';
     AddPareceristaDialogComponent,
     InscricoesComponent,
     ParecerComponent,
-    RankComponent
+    RankComponent,
+    CriterioAvaliacaoComponent,
+    CriterioAvaliacaoDialogComponent,
+    CriterioFormComponent,
+    CotaAcaoAfirmativaComponent
   ],
   imports: [
     CommonModule,
@@ -54,7 +62,7 @@ import { MatTableModule } from '@angular/material/table';
     SharedModule,
     MatCheckboxModule,
     MatRadioModule,
-    MatTableModule
+    MatTableModule,
   ],
   providers: [OnlyAdminUsersGuard, OnlyAllowedRolesUsersGuard],
 })

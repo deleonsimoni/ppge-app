@@ -7,10 +7,19 @@ const setLocation = require('../middleware/set-location');
 const fileUpload = require('express-fileupload');
 const processoSeletivoRoutes = require('./processo-seletivo.route');
 const pareceristasoRoutes = require('./pareceristas.route');
+const criterioAvaliacaoRoutes = require('./criterio-avaliacao.route');
+const cotaAcaoAfirmativaRoutes = require('./cota-acao-afirmativa.route');
 
 const router = express.Router();
 module.exports = router;
 
+
+router.get('/page/linha_pesquisa/headers-professors', setLocation, asyncHandler(getHeadersLinhaPesquisaWithProfessors));
+
+async function getHeadersLinhaPesquisaWithProfessors(req, res) {
+  let response = await siteCtrl.getHeadersLinhaPesquisaWithProfessors(req);
+  res.json(response);
+}
 
 /* Page */
 router.get('/page/:selectedPage', setLocation, asyncHandler(getPage));
@@ -106,3 +115,5 @@ async function deleteCorpoDocente(req, res) {
 /* Fim Corpo Docente */
 router.use('/', processoSeletivoRoutes);
 router.use('/parecerista', pareceristasoRoutes);
+router.use('/criterio-avaliacao', criterioAvaliacaoRoutes);
+router.use('/cota-acao-afirmativa', cotaAcaoAfirmativaRoutes);

@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>Avaliação da inscrição</h1>
 <div class="pb-3" mat-dialog-content>
   <form role="form" class="reviewer container" [formGroup]="form">
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-12 text-center p-2" formGroupName="notasHomologacao">
         <h3>
           {{ formHomologTable.title }}
@@ -12,7 +12,7 @@
               {{ section.title }}
             </p>
           </div>
-          <div class="col-md-9 p-2" [formGroupName]="'section-'+section.id">
+          <div class="col-md-9 p-2" [formGroupName]="'section-'+section._id">
     
             <div class="row align-items-center" *ngFor="let question of section.question">
               <div class="col-9 p-2">
@@ -22,7 +22,7 @@
               </div>
               <div class="col-3 p-2">
                 <label class="mr-1" style="font-size: 12px;">(até {{formatDecimal(question.maxNota)}} p.)</label>
-                <input class="input-nota" type="number" [formControlName]="'question-'+question.numer">
+                <input class="input-nota" type="number" [formControlName]="'question-'+question._id">
               </div>
             </div>
     
@@ -40,9 +40,54 @@
           </div>
         </div>
       </div>
+    </div> -->
+
+    <div formGroupName="step">
+      <div *ngFor="let step of data.criterio?.step; let i = index" >
+        <div *ngIf="i == 0 || form.value.step['step-'+data.criterio?.step[i-1]?._id]?.stepApproval " class="row mt-5" [formGroupName]="'step-'+step._id">
+          <div class="col-12 text-center p-2">
+            <h3>
+              {{ formApprovalTable.title }}
+            </h3>
+            <div class="row align-items-center text-start border border-dark" *ngFor="let section of step.section">
+              <div class="col-md-3 p-2">
+                <p class="title-section-form">
+                  {{ section.title }}
+                </p>
+              </div>
+              <div class="col-md-9 p-2" [formGroupName]="'section-'+section._id">
+        
+                <div class="row align-items-center" *ngFor="let question of section.question">
+                  <div class="col-9 p-2">
+                    <p>
+                      {{question.text}}
+                    </p>
+                  </div>
+                  <div class="col-3 p-2">
+                    <label class="mr-1" style="font-size: 12px;">(até {{formatDecimal(question.maxNota)}} p.)</label>
+                    <input class="input-nota" type="number" [formControlName]="'question-'+question._id">
+                  </div>
+                </div>
+        
+              </div>
+            </div>
+          </div>
+    
+          <div class="col-12 mt-3">
+            <div class="row justify-content-center">
+              <div class="col-auto">
+                <mat-radio-group class="example-radio-group w-100" formControlName="stepApproval" >
+                  <mat-radio-button class="example-radio-button mr-3" [value]="true">Aprovar etapa</mat-radio-button>
+                  <mat-radio-button class="example-radio-button mr-3" [value]="false">Reprovar etapa</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="row mt-5" *ngIf="this.form.value.homologado">
+    <!-- <div class="row mt-5" *ngIf="this.form.value.homologado">
       <div class="col-12 text-center p-2" formGroupName="notasAprovacao">
         <h3>
           {{ formApprovalTable.title }}
@@ -53,7 +98,7 @@
               {{ section.title }}
             </p>
           </div>
-          <div class="col-md-9 p-2" [formGroupName]="'section-'+section.id">
+          <div class="col-md-9 p-2" [formGroupName]="'section-'+section._id">
     
             <div class="row align-items-center" *ngFor="let question of section.question">
               <div class="col-9 p-2">
@@ -63,7 +108,7 @@
               </div>
               <div class="col-3 p-2">
                 <label class="mr-1" style="font-size: 12px;">(até {{formatDecimal(question.maxNota)}} p.)</label>
-                <input class="input-nota" type="number" [formControlName]="'question-'+question.numer">
+                <input class="input-nota" type="number" [formControlName]="'question-'+question._id">
               </div>
             </div>
     
@@ -81,7 +126,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
   </form>
 </div>

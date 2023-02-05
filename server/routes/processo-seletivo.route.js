@@ -56,7 +56,7 @@ router.get('/processo-seletivo/minha-inscricoes', [passport.authenticate('jwt', 
 
 router.get('/processo-seletivo/minha-inscricoes/detalhe', [passport.authenticate('jwt', {
   session: false
-}), requireLogin], asyncHandler(getMinhaInscricoesDetalhadaProcessoSelectivo));
+}), requireLogin], setLocation, asyncHandler(getMinhaInscricoesDetalhadaProcessoSelectivo));
 
 router.post('/processo-seletivo', [passport.authenticate('jwt', {
   session: false
@@ -65,6 +65,10 @@ router.post('/processo-seletivo', [passport.authenticate('jwt', {
 router.post('/processo-seletivo/parecer', [passport.authenticate('jwt', {
   session: false
 }), requireLogin], asyncHandler(registrarParecer));
+
+router.put('/processo-seletivo/parecer/homologacao', [passport.authenticate('jwt', {
+  session: false
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['parecerista'])], asyncHandler(changeHomologInscricao));
 
 router.get('/processo-seletivo/parecer', [passport.authenticate('jwt', {
   session: false
@@ -91,6 +95,10 @@ router.put('/processo-seletivo/:id', [passport.authenticate('jwt', {
 router.delete('/processo-seletivo/:id', [passport.authenticate('jwt', {
   session: false
 }), requireAdmin], asyncHandler(deleteProcessoSeletivo));
+
+router.put('/processo-seletivo/criterio/:id', [passport.authenticate('jwt', {
+  session: false
+}), requireAdmin], asyncHandler(salvarVinculoCriterio));
 
 async function getProcessoSeletivo(req, res) {
   let response = await processoSeletivoCtrl.getProcessoSeletivo(req);
@@ -158,7 +166,7 @@ async function getMinhaInscricoesProcessoSelectivo(req, res) {
 }
 
 async function getMinhaInscricoesDetalhadaProcessoSelectivo(req, res) {
-  let response = await processoSeletivoCtrl.getMinhaInscricoesDetalhadaProcessoSelectivo(req.user._id);
+  let response = await processoSeletivoCtrl.getMinhaInscricoesDetalhadaProcessoSelectivo(req.user._id, req.query.language);
   res.json(response);
 
 }
@@ -170,6 +178,11 @@ async function insertProcessoSeletivo(req, res) {
 
 async function registrarParecer(req, res) {
   let response = await processoSeletivoCtrl.registrarParecer(req);
+  res.json(response);
+}
+
+async function changeHomologInscricao(req, res) {
+  let response = await processoSeletivoCtrl.changeHomologInscricao(req.body);
   res.json(response);
 }
 
@@ -196,6 +209,11 @@ async function unsubscribeProcessoSeletivo(req, res) {
 async function updateProcessoSeletivo(req, res) {
   let response = await processoSeletivoCtrl.updateProcessoSeletivo(req, req.user._id);
   res.json(response);
+}
+
+async function salvarVinculoCriterio(req, res) {
+  let response = await processoSeletivoCtrl.salvarVinculoCriterio(req);
+  res.status(response.status).json(response);
 }
 
 async function deleteProcessoSeletivo(req, res) {

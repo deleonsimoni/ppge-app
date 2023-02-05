@@ -35,6 +35,8 @@ module.exports = {
   insertNoticia,
   deleteNoticia,
   updateNoticia,
+
+  getHeadersLinhaPesquisaWithProfessors,
 };
 
 
@@ -127,7 +129,11 @@ const pagesFunctions = {
   },
 }
 
-
+/* Linha de pesquisa */
+async function getHeadersLinhaPesquisaWithProfessors(req) {
+  return await linhaPesquisaService.getHeadersLinhaPesquisaWithProfessors(req)
+}
+/* Fim linha pesquisa */
 
 /* Page */
 async function getPage(req) {

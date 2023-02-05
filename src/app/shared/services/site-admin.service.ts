@@ -15,6 +15,8 @@ export class SiteAdminService {
   private readonly URL_PROCESSO_SELETIVO = `${this.URL_API_PPGE}/processo-seletivo`;
   private readonly URL_PAGE = `${this.URL_API_PPGE}/page`;
   private readonly URL_PARECERISTAS = `${this.URL_API_PPGE}/parecerista`;
+  private readonly URL_CRITERIO = `${this.URL_API_PPGE}/criterio-avaliacao`;
+  private readonly URL_COTA = `${this.URL_API_PPGE}/cota-acao-afirmativa`;
 
   constructor(
     private http: HttpClient
@@ -27,7 +29,7 @@ export class SiteAdminService {
   }
 
   getTitleLinhaPesquisa() {
-    return this.http.get(`${this.URL_PAGE}/linha_pesquisa/headers`);
+    return this.http.get(`${this.URL_PAGE}/linha_pesquisa/headers-professors`);
   }
 
   listCorpoDocenteName() {
@@ -163,6 +165,11 @@ export class SiteAdminService {
   /* Fim Tese DISSERTACAO */
   /* Processo Seletivo */
 
+  changeHomologInscricao(value, idInscricaoSelecionada, idProcessoSelecionado) {
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/parecer/homologacao`, {value, idInscricaoSelecionada, idProcessoSelecionado});
+
+  }
+
   getParecer(idInscricao, idProcesso) {
     let params = new HttpParams()
       .set("idInscricao", idInscricao)
@@ -189,7 +196,6 @@ export class SiteAdminService {
 
   mudarEtapa(etapa, idProcesso) {
     const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     return this.http.put(`${this.URL_PROCESSO_SELETIVO}/mudar-etapa`, {idProcesso, etapa});
   }
 
@@ -243,6 +249,11 @@ export class SiteAdminService {
     return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/parecer/all`, { params });
 
   }
+
+  salvarVinculoCriterio(criterio, idProcessoSeletivo) {
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/criterio/${idProcessoSeletivo}`, {criterio})
+  }
+
   /* Fim Processo Seletivo */
 
   /* Parecerista */
@@ -277,4 +288,45 @@ export class SiteAdminService {
   }
 
   /* Fim Parecerista */
+
+  /* Criterio de avaliacao */
+  cadastrarCriterio(formulario) {
+    return this.http.post(`${this.URL_CRITERIO}`, {formulario});
+  }
+
+  atualizarCriterio(formulario) {
+    return this.http.put(`${this.URL_CRITERIO}/${formulario._id}`, {formulario});
+  }
+
+  getAllCriterios() {
+    return this.http.get(`${this.URL_CRITERIO}`);
+
+  }
+
+  deleteById(idCriterio) {
+    return this.http.delete(`${this.URL_CRITERIO}/${idCriterio}`);
+  }
+  /* Fim Criterio de avaliacao */
+
+
+  /* Cotas de Ação Afirmativa */
+
+  cadastrarCota(formulario) {
+    return this.http.post(`${this.URL_COTA}`, {formulario});
+  }
+
+  atualizarCota(formulario) {
+    return this.http.put(`${this.URL_COTA}/${formulario._id}`, {formulario});
+  }
+
+  getAllCotas() {
+    return this.http.get(`${this.URL_COTA}`);
+
+  }
+
+  deleteCotaById(idCota) {
+    return this.http.delete(`${this.URL_COTA}/${idCota}`);
+  }
+
+  /* Fim Cotas de Ação Afirmativa */
 }

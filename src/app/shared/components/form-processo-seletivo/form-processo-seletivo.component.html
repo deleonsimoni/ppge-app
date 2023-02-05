@@ -60,20 +60,9 @@
       <label id="example-radio-group-label"><strong>Sobre a política de ação afirmativa para negros(as), indígenas,
           quilombolas, pessoas com deficiência, pessoas travestis e transexuais, assinale uma das alternativas a seguir:
         </strong></label>
-      <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group ml-2"
+      <mat-radio-group aria-labelledby="example-radio-group-label" class="cota-radio-group ml-2"
         formControlName="opcaoVagaCotaSub">
-        <mat-radio-button class="example-radio-button" value="1">Sou negro(a) e OPTO por concorrer a uma vaga destinada
-          à política de ação afirmativa para Negros(as).</mat-radio-button>
-        <mat-radio-button class="example-radio-button" value="2">Sou Indígena e OPTO por concorrer a uma vaga destinada
-          à política de ação afirmativa para indígenas.</mat-radio-button>
-        <mat-radio-button class="example-radio-button" value="3">Possuo deficiência e OPTO por concorrer a uma vaga
-          destinada à política de ação afirmativa para pessoas com deficiências.</mat-radio-button>
-        <mat-radio-button class="example-radio-button" value="4">Sou Quilombola e OPTO por concorrer a uma vaga
-          destinada à política de ação afirmativa para Quilombolas. </mat-radio-button>
-        <mat-radio-button class="example-radio-button" value="5">Sou travesti e OPTO por concorrer a uma vaga destinada
-          à política de ação afirmativa para Pessoas travestis. </mat-radio-button>
-        <mat-radio-button class="example-radio-button" value="6">Sou transexual e OPTO por concorrer a uma vaga
-          destinada à política de ação afirmativa para pessoas transexuais.</mat-radio-button>
+        <mat-radio-button class="cota-radio-button" *ngFor="let cota of listCotas" [value]="cota.title">{{cota.title}}</mat-radio-button>
       </mat-radio-group>
     </div>
 

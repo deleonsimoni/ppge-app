@@ -9,7 +9,8 @@ module.exports = {
   insertLinhaPesquisa,
   updateLinhaPesquisa,
   deleteLinhaPesquisa,
-  listarPareceristasByLinha
+  listarPareceristasByLinha,
+  getHeadersLinhaPesquisaWithProfessors,
 };
 
 async function listarPareceristasByLinha(idLinhaPesquisa) {
@@ -60,6 +61,28 @@ async function getHeadersLinhaPesquisa(req) {
       _id: data._id, 
       title: data[req.query.language].title, 
       navTitle: data[req.query.language].navTitle 
+    }
+  ));
+  return ret;
+}
+async function getHeadersLinhaPesquisaWithProfessors(req) {
+  let ret = await LinhaPesquisaModel.find({}, {
+      [`${req.query.language}.title`]: 1,
+      [`${req.query.language}.navTitle`]: 1,
+    })
+    .populate({
+      path: 'avaliadores',
+      select: 'fullname'
+    })
+    .sort({
+      createAt: -1
+    })
+  ret = ret.map(data => (
+    {
+      _id: data._id, 
+      title: data[req.query.language].title, 
+      navTitle: data[req.query.language].navTitle , 
+      avaliadores: data.avaliadores,
     }
   ));
   return ret;

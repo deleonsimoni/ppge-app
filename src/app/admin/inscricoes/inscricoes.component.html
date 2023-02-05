@@ -24,9 +24,9 @@
         <mat-select (selectionChange)="getInscricoesByFiltro( $event.value )">
           <mat-option value="todos">Todos</mat-option>
           <mat-optgroup label="Homologação">
-            <mat-option value="aguardandoHomolog">Aguardando Homologação</mat-option>
-            <mat-option value="reprovadoHomolog">Homologação reprovado</mat-option>
-            <mat-option value="homologadoHomolog">Homologado</mat-option>
+            <mat-option value="aguardandoHomolog">Aguardando</mat-option>
+            <mat-option value="reprovadoHomolog">Indeferido</mat-option>
+            <mat-option value="homologadoHomolog">Deferido</mat-option>
           </mat-optgroup>
           <mat-optgroup label="Aprovação">
             <mat-option value="aguardandoAprov">Aguardando aprovação</mat-option>
@@ -96,6 +96,7 @@
         </div>
       </div>
     </div>
+
     <div class="col-12">
 
       <div *ngIf="this.flagDetalharInscricao && this.inscricaoSelecionada?._id == inscricoes._id" class="row">
@@ -128,7 +129,7 @@
             </div>
             <div *ngIf="inscricaoSelecionada.opcaoVaga == typeOpcaoVagaEnum.COTAS_ACOES_AFIRMATIVAS" class="col-md-12">
               <label><strong>Descrição da cota</strong></label>
-              <p>{{ typeDescricaoCota[inscricaoSelecionada.opcaoVagaCotaSub] }}</p>
+              <p>{{ inscricaoSelecionada.opcaoVagaCotaSub }}</p>
             </div>
           </div>
           <div class="row mt-3">
@@ -243,6 +244,18 @@
               <a [href]="addInicioS3Url(inscricaoSelecionada.files.pathPrincipalPubli)">
                 <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
               </a>
+            </div>
+          </div>
+          <hr>
+          <div class="row align-items-center mb-3">
+            <div class="col-auto">
+              <mat-radio-group [(ngModel)]="radioHomologValue" class="example-radio-group w-100">
+                <mat-radio-button class="example-radio-button mr-3" [value]="true">Deferido</mat-radio-button>
+                <mat-radio-button class="example-radio-button mr-3" [value]="false">Indeferido</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div class="col-auto">
+              <button (click)="changeHomolog()" style="background-color: green;" type="button" mat-raised-button color="primary">Salvar</button>
             </div>
           </div>
 

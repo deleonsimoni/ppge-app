@@ -15,6 +15,11 @@ function getErrorByStatus(status, msg) {
       status: 404,
       msg: msg || "Not found!" 
     },
+    403: {
+      hasError: true,
+      status: 403,
+      msg: msg || "Forbidden!" 
+    },
     400: {
       hasError: true,
       status: 400,

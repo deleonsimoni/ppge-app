@@ -4,6 +4,8 @@ import { OnlyAllowedRolesUsersGuard } from './admin-allowed-roles-guard';
 
 import { AdminComponent } from './admin.component';
 import { CorpoDocenteComponent } from './corpo-docente/corpo-docente.component';
+import { CotaAcaoAfirmativaComponent } from './cota-acao-afirmativa/cota-acao-afirmativa.component';
+import { CriterioAvaliacaoComponent } from './criterio-avaliacao/criterio-avaliacao.component';
 import { InscricoesComponent } from './inscricoes/inscricoes.component';
 import { PagesAdminComponent } from './pages-admin/pages-admin.component';
 import { PareceristasComponent } from './pareceristas/pareceristas.component';
@@ -49,6 +51,13 @@ const routes: Routes = [
         }
       },
       {
+        path: 'criterio-avaliacao', component: CriterioAvaliacaoComponent,
+        canActivate: [OnlyAllowedRolesUsersGuard],
+        data: {
+          roles: ['admin']
+        }
+      },
+      {
         path: 'pareceristas', component: PareceristasComponent,
         canActivate: [OnlyAllowedRolesUsersGuard],
         data: {
@@ -67,6 +76,13 @@ const routes: Routes = [
         canActivate: [OnlyAllowedRolesUsersGuard],
         data: {
           roles: ['admin', 'coordenador', 'parecerista']
+        }
+      },
+      {
+        path: 'cotas-acoes-afirmativas', component: CotaAcaoAfirmativaComponent,
+        canActivate: [OnlyAllowedRolesUsersGuard],
+        data: {
+          roles: ['admin']
         }
       }
     ],

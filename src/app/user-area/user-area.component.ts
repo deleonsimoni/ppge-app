@@ -36,11 +36,11 @@ export class UserAreaComponent implements OnInit {
     })
   }
 
-  openModalDetalharAvaliacao(parecer) {
+  openModalDetalharAvaliacao(parecer, criterio) {
 
     this.dialog.open(ParecerUserComponent, {
       width: '80%',
-      data: { parecer }
+      data: { parecer, criterio }
     })
   }
 
@@ -55,7 +55,7 @@ export class UserAreaComponent implements OnInit {
   }
 
   verificarHomologacao(homologado) {
-    return typeof homologado != 'boolean' ? 'Aguardando Homologação' : homologado ? 'Homologação Aprovada' : 'Homologação Reprovada';
+    return typeof homologado != 'boolean' ? 'Aguardando Homologação' : homologado ? 'Deferido' : 'Indeferido';
   }
 
   verificarAprovacao(aprovado) {

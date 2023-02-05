@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>Critério de avaliação do Processo: {{data?.titleProcesso}}</h1>
+<div mat-dialog-content>
+  <div class="container">
+    <div class="row">
+      <p class="mb-0 text-danger" *ngIf="data.etapaProcesso != 'inscricao'">Não é possível editar o Critério de Avaliação de um Processo fora da etapa de inscrição.</p>
+    </div>
+    <div class="row align-items-center">
+      <div class="col">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Selecione um critério</mat-label>
+          <mat-select (selectionChange)="selecionarCriterio($event.value)">
+            <mat-option *ngFor="let criterio of listCriterios" [value]="criterio._id">{{criterio.title}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-auto">
+        <button [disabled]="data.etapaProcesso != 'inscricao'" mat-raised-button color="primary" (click)="salvarVinculoCriterio()">Salvar vínculo</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="criterioSelecionado; else naoTemCriterio">
+    <div class="section-header">
+      <h2 style="font-size: 38px;" class="mb-0 mt-4">Critério de Avaliação do Processo Seletivo selecionado</h2>
+      <h3 class="edit-subtitle text-danger" *ngIf="flagEdited">*Critério editado, salve o vínculo para realizar a alteração ou feche a janela!</h3>
+    </div>
+    <app-criterio-form [criterio]="criterioSelecionado" [isEditable]="false"></app-criterio-form>
+  </div>
+  <ng-template #naoTemCriterio>
+    <div class="section-header">
+      <h2 style="font-size: 38px;" class="mb-0 mt-4">Não há Critério de Avaliação vinculado ao Processo Seletivo</h2>
+    </div>
+  </ng-template>
+</div>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Fechar</button>
+
+</mat-dialog-actions>

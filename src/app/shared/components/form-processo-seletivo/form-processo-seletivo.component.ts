@@ -21,6 +21,7 @@ export class FormProcessoSeletivoComponent implements OnInit {
   public listCorpoDocente: any = [];
   public typeGraduateEnum = TypeGraduateEnum;
   public typeOpcaoVagaEnum = TypeOpcaoVagaEnum;
+  public listCotas: any;
 
   fileLattes: FileList;
   fileComprovantePagamento: FileList;
@@ -43,7 +44,14 @@ export class FormProcessoSeletivoComponent implements OnInit {
     })
 
     this.getProcessoSeletivoInfosById();
+    this.getAllCotas();
     this.createForm();
+  }
+
+  getAllCotas() {
+    this.serviceFormProcesso.getAllCotas().subscribe(listCotas => {
+      this.listCotas = listCotas
+    })
   }
 
   public getFileNameLattes(): string {
@@ -111,10 +119,10 @@ export class FormProcessoSeletivoComponent implements OnInit {
       opcaoVagaCotaSub: [null, []],
       deficienciaSub: [null, []],
       graduacao: this.builder.group({
-        nome: [null, []],
-        instituicao: [null, []],
-        anoConclusao: [null, []],
-        termoNaoColacaoGrau: [null, []]
+        nome: [null, [Validators.required]],
+        instituicao: [null, [Validators.required]],
+        anoConclusao: [null, [Validators.required]],
+        termoNaoColacaoGrau: [null, [Validators.required]]
       }),
       posGraduacao: this.builder.group({
         nome: [null, []],
@@ -129,11 +137,11 @@ export class FormProcessoSeletivoComponent implements OnInit {
       groupForm = {
         ...groupForm,
         posGraduacaoMestrado: this.builder.group({
-          nome: [null, []],
-          instituicao: [null, []],
-          anoConclusao: [null, []],
-          tituloDissertacao: [null, []],
-          nomeOrientador: [null, []],
+          nome: [null, [Validators.required]],
+          instituicao: [null, [Validators.required]],
+          anoConclusao: [null, [Validators.required]],
+          tituloDissertacao: [null, [Validators.required]],
+          nomeOrientador: [null, [Validators.required]],
         }),
 
       };
@@ -154,6 +162,8 @@ export class FormProcessoSeletivoComponent implements OnInit {
     this.serviceFormProcesso.getProcessoSeletivoInfosById(this.idProcessoSeletivo)
       .subscribe((data: any) => {
         if (data) {
+          console.log("RETORNO: ",data);
+          
           this.listLinhaPesquisa = data.researchLine
         }
       });
@@ -164,6 +174,9 @@ export class FormProcessoSeletivoComponent implements OnInit {
   }
 
   register() {
+
+    console.log("FORMmmmm: ", this.form.value);
+    
 
     //TODO vai ter limite de tamanho?
 

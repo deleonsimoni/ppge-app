@@ -1,0 +1,56 @@
+
+<div class="container">
+  <div class="row justify-content-between">
+    <div class="section-header" mat-dialog-title>
+      <h2>Cotas de Ações Afirmativas</h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <form role="form" class="reviewer" [formGroup]="form" (ngSubmit)="register()">
+
+        <div class="form-row justify-content-center">
+          <div class="form-group col-md-12">
+            <h4>Título da cota</h4>
+            <input type="text" class="form-control" placeholder="Título da cota" formControlName="title" />
+          </div>
+        </div>
+
+        <div class="row justify-content-end m-4">
+          <button type="submit" mat-raised-button color="primary">
+            Submeter
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <div class="row text-center">
+    <div class="card-body">
+      <div class="text-center">
+          <table class="table">
+              <thead>
+                  <tr>
+                      <th scope="col">Título</th>
+                      <th scope="col">Ações</th>
+                  </tr>
+              </thead>
+              <tbody>
+    
+                  <tr *ngFor="let cota of listCotas; let i= index">
+                    <th scope="row">{{ cota.title }}</th>
+                    <th scope="row">
+                      <span matTooltip="Excluir" matTooltipPosition="above"
+                        class="material-icons md-18 btn" (click)="deleteById(cota._id, cota.title)">delete</span>
+                      <span matTooltip="Editar" matTooltipPosition="above"
+                        class="material-icons md-18 btn" (click)="editar(cota)">edit_square</span>
+                    </th>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+</div>

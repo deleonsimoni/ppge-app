@@ -30,29 +30,30 @@ export const typeDescricaoCota = {
 }
 
 export const formHomologTable = {
+  _id: null,
   title: "Trajetória acadêmica e profissional – análise do currículo (até 3,0 pontos)",
   section: [
     {
-      id: 1,
+      _id: null,
       title: "Trajetória Acadêmica e profissional",
       question: [
         {
-          numer: 1,
+          _id: null,
           text: "Participação em projetos de pesquisa (IC, extensão, PIBID etc.)",
           maxNota: 0.75
         },
         {
-          numer: 2,
+          _id: null,
           text: "Produção decorrente dessa participação (JITAC, eventos na área etc.)",
           maxNota: 0.75
         },
         {
-          numer: 3,
+          _id: null,
           text: "Experiência profissional na área educacional – gestão; movimentos sociais, entre outros.",
           maxNota: 0.75
         },
         {
-          numer: 4,
+          _id: null,
           text: "Experiência docente.",
           maxNota: 0.75
         }
@@ -62,45 +63,46 @@ export const formHomologTable = {
 }
 
 export const formApprovalTable = {
+  _id: null,
   title: "Pré-projeto e Memorial (Domínio da discussão apresentada no projeto e coerência entre o escrito e falado) (até 7,0 pontos)",
   section: [
     {
-      id: 1,
+      _id: null,
       title: "Articulação com PPGE/UFRJ, linha e orientadores, domínio da discussão apresentada no pré-projeto",
       question: [
         {
-          numer: 1,
+          _id: null,
           text: "Relevância à área educacional e justificativa para escolha do PPGE/UFRJ",
           maxNota: 1
         },
         {
-          numer: 2,
+          _id: null,
           text: "Articulação de tema e discussão teórico-metodológica do pré-projeto com a linha e projetos/produção dos  possíveis orientadores",
           maxNota: 2
         },
         {
-          numer: 3,
+          _id: null,
           text: "Apresentação do problema de pesquisa e questões a serem investigadas",
           maxNota: 1
         },
         {
-          numer: 4,
+          _id: null,
           text: "Coerência entre o tema, as questões e o referencial teórico",
           maxNota: 1
         },
         {
-          numer: 5,
+          _id: null,
           text: "Defesa da pertinência da metodologia proposta para o desenvolvimento do objeto de estudo ",
           maxNota: 1
         }
       ]
     },
     {
-      id: 2,
+      _id: null,
       title: "Disponibilidade de tempo",
       question: [
         {
-          numer: 1,
+          _id: null,
           text: "Disponibilidade de tempo para dedicação e desenvolvimento das atividades do mestrado",
           maxNota: 1
         },

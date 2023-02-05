@@ -47,6 +47,16 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
       }
     ],
 
+    vagas: [
+      {
+        type: mongoose.Schema.Types.Mixed,
+      }
+    ],
+
+    criterio: {
+      type: mongoose.Schema.Types.Mixed,
+    },
+
     enrolled: [
       {
         idUser: {
@@ -74,7 +84,7 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
           type: Number,
         },
         opcaoVagaCotaSub: {
-          type: Number,
+          type: String,
         },
         deficienciaSub: {
           type: String,
@@ -128,10 +138,7 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
           homologado: {
             type: Boolean,
           },
-          notasHomologacao: {
-            type: mongoose.Schema.Types.Mixed,
-          },
-          notasAprovacao: {
+          step: {
             type: mongoose.Schema.Types.Mixed,
           },
         },

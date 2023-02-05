@@ -30,6 +30,7 @@ export class InscricoesComponent implements OnInit {
   listPareceristas: any;
   listProcessoSeletivo: any;
   listInscritos: any;
+  criterioProcessoSelecionado: any;
 
   inscricaoSelecionada: any;
 
@@ -64,7 +65,11 @@ export class InscricoesComponent implements OnInit {
     this.siteService.getInscritosProcessoById(idProcesso, this.filtroConsulta).subscribe((data: any) => {
       
       this.listInscritos = data.enrolled;
+      this.criterioProcessoSelecionado = data.criterio;
+
       console.log("this.listInscritos: ",this.listInscritos);
+      console.log("criterio: ", data.criterio);
+      
     });
   }
 
@@ -99,13 +104,17 @@ export class InscricoesComponent implements OnInit {
     if (!this.inscricaoSelecionada || idInscricao != this.inscricaoSelecionada._id) {
       this.siteService.detalharInscricao(idInscricao, this.idProcessoSelecionado)
         .subscribe((data: any) => {
-          if (data && data.enrolled[0])
+          if (data && data.enrolled[0]){
             this.flagDetalharInscricao = true;
-          this.inscricaoSelecionada = data.enrolled[0];
+            this.inscricaoSelecionada = data.enrolled[0];
+            this.radioHomologValue = this.inscricaoSelecionada.parecer?.homologado
+
+          }
         })
     } else {
       this.flagDetalharInscricao = false;
       this.inscricaoSelecionada = null;
+      this.radioHomologValue = null
     }
   }
 
@@ -122,7 +131,7 @@ export class InscricoesComponent implements OnInit {
   }
 
   verificarHomologacao(homologado) {
-    return typeof homologado != 'boolean' ? 'Não homologado' : homologado ? 'Homologação Aprovada' : 'Homologação Reprovada';
+    return typeof homologado != 'boolean' ? 'Não homologado' : homologado ? 'Deferido' : 'Indeferido';
 
   }
 
@@ -131,7 +140,8 @@ export class InscricoesComponent implements OnInit {
       width: '80%',
       data: <DialogParecerData>{
         idInscricao: idInscricao,
-        idProcesso: this.idProcessoSelecionado
+        idProcesso: this.idProcessoSelecionado,
+        criterio: this.criterioProcessoSelecionado,
       }
     })
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
@@ -139,6 +149,31 @@ export class InscricoesComponent implements OnInit {
         this.getInscricoes(this.idProcessoSelecionado)
       }
     })
+  }
+
+  radioHomologValue
+  changeHomolog() {
+    console.log("radioHomologValue: ", this.radioHomologValue);
+    console.log("idInscricao: ", this.inscricaoSelecionada._id);
+    console.log("idProcesso: ", this.idProcessoSelecionado);
+    if(typeof this.radioHomologValue == 'boolean') {
+      this.siteService
+        .changeHomologInscricao(this.radioHomologValue, this.inscricaoSelecionada._id, this.idProcessoSelecionado)
+        .pipe(
+          take(1),
+          catchError(err => {
+            this.toastr.error(err.error?.msg || "Ocorreu um erro ao alterar status da homologação!");
+            throw err;
+          })
+        )
+        .subscribe(() => {
+          this.toastr.success("Status da homologação alterado com sucesso!")
+        })
+    } else {
+      this.toastr.error("É necessário selecionar Deferir/Indeferir para salvar!");
+
+    }
+    
   }
 
   private addInicioS3Url(toConcat): string {
