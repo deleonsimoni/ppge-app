@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { merge, Observable, take } from "rxjs";
 import { User } from '../shared/interfaces';
 import { AuthService } from "../shared/services";
 import { ProcessoSeletivoService } from "./processo-seletivo.service";
+import { RanklistDialogComponent } from "./ranklist-dialog/ranklist-dialog.component";
 
 @Component({
   selector: 'app-processo-seletivo',
@@ -31,6 +33,7 @@ export class ProcessoSeletivoComponent implements OnInit {
     private authService: AuthService,
     private toastr: ToastrService,
     private router: Router,
+    public dialog: MatDialog,
   ) {
     window.scroll({
       top: 0,
@@ -58,6 +61,18 @@ export class ProcessoSeletivoComponent implements OnInit {
       
       this.processoSeletivo = arr;
     });
+  }
+
+  listarRank(idProcesso) {
+    console.log("idProcesso: ", idProcesso);
+
+    this.dialog.open(RanklistDialogComponent, {
+      width: '80%',
+      data: {
+        idProcesso
+      }
+    });
+
   }
 
   iniciarInscricaoNoProcesso(idProcesso, type) {

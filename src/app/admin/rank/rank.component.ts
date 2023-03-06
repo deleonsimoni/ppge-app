@@ -1,5 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { RankViewDialogComponent } from '@app/shared/components/rank-view-dialog/rank-view-dialog.component';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
+import { ToastrService } from 'ngx-toastr';
+import { catchError, take } from 'rxjs';
 
 @Component({
   selector: 'app-rank',
@@ -8,6 +13,9 @@ import { SiteAdminService } from '@app/shared/services/site-admin.service';
   encapsulation: ViewEncapsulation.None
 })
 export class RankComponent implements OnInit {
+
+  isFinalRank = false;
+
   displayedColumns = [
     "nome",
     "nota",
@@ -17,8 +25,14 @@ export class RankComponent implements OnInit {
   listProcessoSeletivo: any;
   listInscricoes: any[] = [];
 
+  listRanks: any = [];
+
+  idProcessoSelecionado;
+
   constructor(
     private siteService: SiteAdminService,
+    private toastr: ToastrService,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -27,46 +41,69 @@ export class RankComponent implements OnInit {
     });
   }
 
-  detalharAllInscricoes(idProcesso) {
+  getAllRanks(idProcesso) {
+    this.idProcessoSelecionado = idProcesso;
+    this.siteService
+      .getAllRanks(idProcesso)
+      .pipe(
+        take(1),
+        catchError(e => {throw e})
+      )
+      .subscribe((data: any) => {
+        console.log("data: ", data);
+        this.listRanks = data?.listRank;
+      })
+  }
 
-    this.siteService.detalharAllInscricoes(idProcesso).subscribe((data: any) => {
-      let dataExibir: any = {};
-      data.enrolled.forEach(inscricao => {
-        const {parecer, linhaPesquisa} = inscricao;
-        if(!dataExibir[linhaPesquisa._id]) {
-          dataExibir[linhaPesquisa._id] = {titleLinha: linhaPesquisa.title, inscritos: []}
-        }
-
-        let aux: any = {};
-        aux.titleLinhaPesquisa = linhaPesquisa.title
-        console.log("LINHA PESQUISA: ", linhaPesquisa.title)
-        if(parecer) {
-          let nota = 0;
-          if(parecer.notasHomologacao) {
-            Object.values(parecer.notasHomologacao).forEach(section => {
-              Object.values(section).forEach(question => {
-                nota+=question;
-              })
-            })
-          }
-
-          if(parecer.notasAprovacao) {
-            Object.values(parecer.notasAprovacao).forEach(section => {
-              Object.values(section).forEach(question => {
-                nota+=question;
-              })
-            })
-          }
-          console.log("NOTA: ", nota)
-          dataExibir[linhaPesquisa._id].inscritos.push({fullname: inscricao.idUser.fullname, nota, aprovado: parecer.aprovado})
-          dataExibir[linhaPesquisa._id].inscritos = dataExibir[linhaPesquisa._id].inscritos.sort((a, b) => Number(b.nota) - Number(a.nota))
-        }
-        
-      });
-      console.log("data: ", data);
-      console.log("APARECER: ", dataExibir);
-      this.listInscricoes = Object.values(dataExibir);
+  apagar(idRank) {
+    console.log("apagar() idRank: ", idRank);
+    this.siteService
+    .deleteRankById(this.idProcessoSelecionado, idRank).pipe(
+      take(1),
+      catchError(e => {
+        this.toastr.error('Erro ao deletar resultado.', 'Erro');
+        throw e;
+      })
+    )
+    .subscribe(() => {
+      this.toastr.success('Resultado deletado com sucesso.', 'Sucesso');
+      this.getAllRanks(this.idProcessoSelecionado);
     });
+  }
+
+  visualizar(idRank) {
+    this.dialog.open(RankViewDialogComponent, {
+      width: '80%',
+      data: { idProcesso: this.idProcessoSelecionado, idRank }
+    });
+    
+  }
+
+  atualizarStatusRankAtivo(event: MatSlideToggleChange, idRank) {
+    this.siteService.atualizarStatusRankAtivo(event.checked, this.idProcessoSelecionado, idRank).subscribe(() => {
+        this.toastr.success('Visibilidade atualizada com sucesso.', 'Sucesso');
+      },
+      err => {
+        this.toastr.error('Ocorreu um erro ao atualizar a visibilidade.', 'Atenção: ');
+
+      });
+  }
+
+
+  gerarRank() {
+    if(this.idProcessoSelecionado) {
+      this.siteService.gerarRank(this.idProcessoSelecionado, this.isFinalRank)
+        .pipe(
+          take(1),
+          catchError(err => {
+            this.toastr.error("Ocorreu um erro ao gerar rank!", "Atenção");
+            throw err;
+          })
+        )
+        .subscribe(() => {
+          this.getAllRanks(this.idProcessoSelecionado);
+        })
+    }
   }
 
 }

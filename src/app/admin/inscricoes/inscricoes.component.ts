@@ -7,6 +7,7 @@ import { TypeGraduateEnum, TypeOpcaoVagaEnum, typeOpcaoVagaEnumToSubscription } 
 import { ToastrService } from 'ngx-toastr';
 import { catchError, merge, Observable, of, take } from 'rxjs';
 import { DialogParecerData, ParecerComponent } from './parecer/parecer.component';
+import { RecursoComponent } from './recurso/recurso.component';
 
 @Component({
   selector: 'app-inscricoes',
@@ -40,6 +41,9 @@ export class InscricoesComponent implements OnInit {
 
   filtroConsulta = null;
 
+  radioHomologValue;
+  justificaIndeferido;
+
   constructor(
     private siteService: SiteAdminService,
     private toastr: ToastrService,
@@ -67,9 +71,6 @@ export class InscricoesComponent implements OnInit {
       this.listInscritos = data.enrolled;
       this.criterioProcessoSelecionado = data.criterio;
 
-      console.log("this.listInscritos: ",this.listInscritos);
-      console.log("criterio: ", data.criterio);
-      
     });
   }
 
@@ -82,13 +83,6 @@ export class InscricoesComponent implements OnInit {
     });
 
   }
-
-  // listarPareceristas() {
-  //   this.siteService.listarPareceristas().subscribe((data: any) => {
-  //     console.log("listarPareceristas: data: ", data)
-  //     this.listPareceristas = data;
-  //   })
-  // }
 
   vincularParecerista(inscricoes) {
 
@@ -107,15 +101,48 @@ export class InscricoesComponent implements OnInit {
           if (data && data.enrolled[0]){
             this.flagDetalharInscricao = true;
             this.inscricaoSelecionada = data.enrolled[0];
+            console.log("inscricaoSelecionada: ", this.inscricaoSelecionada)
             this.radioHomologValue = this.inscricaoSelecionada.parecer?.homologado
+            this.justificaIndeferido = this.inscricaoSelecionada.parecer?.recursoHomolog?.justificaIndeferido
 
           }
         })
     } else {
       this.flagDetalharInscricao = false;
       this.inscricaoSelecionada = null;
-      this.radioHomologValue = null
+      this.radioHomologValue = null;
+      this.justificaIndeferido = null;
     }
+  }
+
+  responderJustificativaHomolog(justificativa, respostaJustificativa, recursoAceito) {
+
+    const idInscricao = this.inscricaoSelecionada._id, idProcesso = this.idProcessoSelecionado;
+    console.log("idInscricao: ", idInscricao);
+    console.log("idProcesso: ", idProcesso);
+    
+    const dref = this.dialog.open(RecursoComponent, {
+      width: '78%',
+      data: {
+        idInscricao,
+        idProcesso,
+        isHomolog: true,
+        flagJustView: !!respostaJustificativa,
+        recurso: {
+          justificativa,
+          respostaJustificativa,
+          recursoAceito
+        }
+      }
+    })
+    dref.afterClosed().pipe(take(1)).subscribe(result => {
+      if (result && result.refresh) {
+        console.log("ENTROU NO REFRESH");
+        
+        
+      }
+    })
+    
   }
 
   selecionarPareceristaNoInscrito(idParecerista, index, idInscricao) {
@@ -151,14 +178,15 @@ export class InscricoesComponent implements OnInit {
     })
   }
 
-  radioHomologValue
   changeHomolog() {
-    console.log("radioHomologValue: ", this.radioHomologValue);
-    console.log("idInscricao: ", this.inscricaoSelecionada._id);
-    console.log("idProcesso: ", this.idProcessoSelecionado);
     if(typeof this.radioHomologValue == 'boolean') {
+      if(this.radioHomologValue == false && (!this.justificaIndeferido || this.justificaIndeferido == "")) {
+        
+        this.toastr.error("É necessário justificar em caso de Indeferido!");
+        return;
+      }
       this.siteService
-        .changeHomologInscricao(this.radioHomologValue, this.inscricaoSelecionada._id, this.idProcessoSelecionado)
+        .changeHomologInscricao(this.radioHomologValue, this.inscricaoSelecionada._id, this.idProcessoSelecionado, this.justificaIndeferido)
         .pipe(
           take(1),
           catchError(err => {

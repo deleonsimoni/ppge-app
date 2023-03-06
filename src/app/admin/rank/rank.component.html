@@ -1,7 +1,7 @@
 <div class="container pb-5">
   <div class="row justify-content-between">
     <div class="section-header" mat-dialog-title>
-      <h2>Ranking</h2>
+      <h2>Resultado</h2>
     </div>
   </div>
   
@@ -10,38 +10,58 @@
       
       <mat-form-field appearance="fill" class="mb-3 w-100">
         <mat-label>Selecione um Processo Seletivo</mat-label>
-        <mat-select (selectionChange)="detalharAllInscricoes($event.value)">
+        <mat-select (selectionChange)="getAllRanks($event.value)">
           <mat-option *ngFor="let linha of listProcessoSeletivo" [value]="linha._id" >{{ linha.title }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
+
+    <div class="col-auto" *ngIf="idProcessoSelecionado">
+      <mat-radio-group class="example-radio-group w-100" [(ngModel)]="isFinalRank" >
+        <mat-radio-button class="example-radio-button mr-3" [value]="true">Resultado Final</mat-radio-button>
+        <mat-radio-button class="example-radio-button mr-3" [value]="false">Resultado Parcial</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div class="col-auto" *ngIf="idProcessoSelecionado">
+      <button style="background-color: green;" type="button" mat-raised-button color="primary"
+        (click)="gerarRank()">Gerar Resultado</button>
+    </div>
   </div>
-  <div *ngFor="let linhaPesquisa of listInscricoes" class="mb-5">
-    <h3>{{linhaPesquisa?.titleLinha}}</h3>
+  <div class="container" *ngIf="listRanks && listRanks.length > 0">
+    <div class="row text-center" data-aos-delay="200">
+      <div class="card-body">
+        <div class="text-center">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Titulo</th>
+                <th scope="col">Resultado Final</th>
+                <th scope="col">Ações</th>
+                <th scope="col">Ativo</th>
+              </tr>
+            </thead>
+            <tbody>
 
-    <table style="width: 100%;" mat-table [dataSource]="linhaPesquisa?.inscritos" class="mat-elevation-z8 demo-table">
-      <!-- Nome Completo Column -->
-      <ng-container matColumnDef="nome">
-        <th mat-header-cell *matHeaderCellDef>Nome Completo</th>
-        <td mat-cell *matCellDef="let element">{{element.fullname}}</td>
-      </ng-container>
-    
-      <!-- Nota Column -->
-      <ng-container matColumnDef="nota">
-        <th mat-header-cell *matHeaderCellDef>Nota</th>
-        <td mat-cell *matCellDef="let element">{{element.nota}}</td>
-      </ng-container>
-      
-      <!-- Aprovado Column -->
-      <ng-container matColumnDef="aprovado">
-        <th mat-header-cell *matHeaderCellDef>Aprovado</th>
-        <td mat-cell *matCellDef="let element">{{element.aprovado ? 'SIM' : 'NÃO'}}</td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
+              <tr *ngFor="let rank of listRanks; let i= index">
+                <th scope="row">{{ rank.title }}</th>
+                <th scope="row">{{ rank.isFinalRank ? "SIM" : "NÃO" }}</th>
+                <th scope="row">
+                  <span matTooltip="Excluir" matTooltipPosition="above" class="material-icons md-18 btn"
+                    (click)="apagar(rank._id)">delete</span>
+                  <span matTooltip="Visualizar" matTooltipPosition="above" class="material-icons md-18 btn"
+                    (click)="visualizar(rank._id)">preview</span>
+                </th>
+                <th>
+                  <mat-slide-toggle (change)="atualizarStatusRankAtivo($event, rank._id)"
+                    [checked]="rank.published"></mat-slide-toggle>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 
 </div>

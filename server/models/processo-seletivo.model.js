@@ -59,6 +59,10 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
 
     enrolled: [
       {
+        codInscricao: {
+          type: String,
+          required: true,
+        },
         idUser: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'User',
@@ -137,6 +141,20 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
           },
           homologado: {
             type: Boolean,
+          },
+          recursoHomolog: {
+            justificaIndeferido: {
+              type: String,
+            },
+            justificativa: {
+              type: String,
+            },
+            respostaJustificativa: {
+              type: String,
+            },
+            recursoAceito: {
+              type: Boolean
+            }
           },
           step: {
             type: mongoose.Schema.Types.Mixed,

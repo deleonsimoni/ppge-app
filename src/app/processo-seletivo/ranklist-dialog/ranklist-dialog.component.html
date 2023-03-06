@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>Lista de resultados</h1>
+
+<div class="pb-3" mat-dialog-content>
+  <div class="container">
+    <div class="row text-center">
+      <div class="card-body" *ngIf="listRanks && listRanks.length > 0; else blockEmpty">
+        <div class="text-center">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Titulo</th>
+                <th scope="col">Resultado Final</th>
+                <th scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngFor="let rank of listRanks; let i= index">
+                <th scope="row">{{ rank.title }}</th>
+                <th scope="row">{{ rank.isFinalRank ? "SIM" : "NÃO" }}</th>
+                <th scope="row">
+                  <span matTooltip="Visualizar" matTooltipPosition="above" class="material-icons md-18 btn"
+                    (click)="visualizar(rank._id)">preview</span>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <ng-template #blockEmpty>
+        <h3>Não há resultados para exibir</h3>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Fechar</button>
+</div>

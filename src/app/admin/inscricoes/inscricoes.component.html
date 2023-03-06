@@ -33,6 +33,11 @@
             <mat-option value="reprovadoAprov">Não aprovado</mat-option>
             <mat-option value="aprovadoAprov">Aprovado</mat-option>
           </mat-optgroup>
+          <mat-optgroup label="Recurso">
+            <mat-option value="recursoSolicitado">Solicitado</mat-option>
+            <mat-option value="recursoNaoAprovado">Não aprovado</mat-option>
+            <mat-option value="recursoAprovado">Aprovado</mat-option>
+          </mat-optgroup>
         </mat-select>
       </mat-form-field>
 
@@ -246,17 +251,34 @@
               </a>
             </div>
           </div>
-          <hr>
-          <div class="row align-items-center mb-3">
+          <div class="row align-items-center mb-3" *ngIf="inscricoes?.parecerista?._id == myUser._id">
+            <div class="col-12"><hr></div>
+            <div class="col-12">
+              <label class="mb-0"><strong>Homologação: </strong></label>
+            </div>
+
             <div class="col-auto">
               <mat-radio-group [(ngModel)]="radioHomologValue" class="example-radio-group w-100">
                 <mat-radio-button class="example-radio-button mr-3" [value]="true">Deferido</mat-radio-button>
                 <mat-radio-button class="example-radio-button mr-3" [value]="false">Indeferido</mat-radio-button>
               </mat-radio-group>
             </div>
+
             <div class="col-auto">
               <button (click)="changeHomolog()" style="background-color: green;" type="button" mat-raised-button color="primary">Salvar</button>
             </div>
+
+            <div class="col-auto ml-3" *ngIf="inscricaoSelecionada?.parecer?.recursoHomolog?.justificativa">
+              <button (click)="responderJustificativaHomolog(inscricaoSelecionada?.parecer?.recursoHomolog?.justificativa, inscricaoSelecionada?.parecer?.recursoHomolog?.respostaJustificativa, inscricaoSelecionada?.parecer?.recursoHomolog?.recursoAceito)" type="button" mat-raised-button color="primary">
+                {{inscricaoSelecionada?.parecer?.recursoHomolog?.respostaJustificativa ? "Visualizar recurso" : "Responder recurso"}}
+              </button>
+            </div>
+
+            <div class="col-12" *ngIf="radioHomologValue == false">
+              <label>Justifique: </label>
+              <textarea class="textarea mb-3" matInput [(ngModel)]="justificaIndeferido"></textarea>
+            </div>
+
           </div>
 
         </div>

@@ -33,14 +33,20 @@ export class UserAreaComponent implements OnInit {
   getMinhasIncricoes() {
     this.userAreaService.buscarMinhasInscricoes().subscribe((data: any) => {
       this.minhasInscricoes = data;
+      console.log("this.minhasInscricoes: ", this.minhasInscricoes)
     })
   }
 
-  openModalDetalharAvaliacao(parecer, criterio) {
+  openModalDetalharAvaliacao(parecer, criterio, idInscricao, idProcesso) {
 
-    this.dialog.open(ParecerUserComponent, {
+    const dialogRef = this.dialog.open(ParecerUserComponent, {
       width: '80%',
-      data: { parecer, criterio }
+      data: { parecer, criterio, idInscricao, idProcesso }
+    })
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if (result && result.refresh) {
+        this.getMinhasIncricoes();
+      }
     })
   }
 
@@ -62,23 +68,23 @@ export class UserAreaComponent implements OnInit {
     return typeof aprovado != 'boolean' ? 'Aguardando Avaliação' : aprovado ? 'Inscrição Aprovada' : 'Inscrição Reprovada';
   }
 
-  openModalJustificar(idInscricao, idProcesso) {
+  // openModalJustificar(idInscricao, idProcesso) {
 
-    const dialogRef = this.dialog.open(JustificarDialogComponent, {
-      width: '80%',
-      data: {
-        idInscricao,
-        idProcesso
-      }
-    })
-    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
-      if (result && result.refresh) {
-        this.getMinhasIncricoes();
-      }
-    })
+  //   const dialogRef = this.dialog.open(JustificarDialogComponent, {
+  //     width: '80%',
+  //     data: {
+  //       idInscricao,
+  //       idProcesso
+  //     }
+  //   })
+  //   dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+  //     if (result && result.refresh) {
+  //       this.getMinhasIncricoes();
+  //     }
+  //   })
 
 
-  }
+  // }
 
   private addInicioS3Url(toConcat): string {
     if (toConcat && toConcat != '') {

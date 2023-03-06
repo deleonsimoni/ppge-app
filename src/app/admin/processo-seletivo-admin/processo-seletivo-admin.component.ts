@@ -93,21 +93,21 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
           const linhaSelecionada = this.listLinhaPesquisa.find(linha => linha._id == idLinhaPesquisaSelecionada);
           
           
-          const arrayToForm = linhaSelecionada?.avaliadores.map(avaliador => {
+          const arrayToForm = linhaSelecionada?.corpoDocente.map(cd => {
             let maxVagaProf = null;
             let maxVagaCotaProf = null;
             if(vagas) {
               
-              console.log("avaliador: ", avaliador);
+              console.log("avaliador: ", cd);
               console.log("vagas.professors: ", vagas.professors);
-              const prof = vagas.professors?.find(prof => prof.idProfessor == avaliador._id)
+              const prof = vagas.professors?.find(prof => prof.idProfessor == cd._id)
               if(prof) {
                 maxVagaProf = prof.maxVaga;
                 maxVagaCotaProf = prof.maxVagaCota;
               }
             }
             return this.builder.group({
-              idProfessor: new FormControl(avaliador._id, Validators.required),
+              idProfessor: new FormControl(cd._id, Validators.required),
               maxVaga: new FormControl(maxVagaProf, Validators.required),
               maxVagaCota: new FormControl(maxVagaCotaProf, Validators.required),
             })
@@ -198,7 +198,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
   getProfessorName(idLinha, idProfessor) {
     const linhaSelecionada = this.listLinhaPesquisa.find(linha => linha._id == idLinha);
     if(linhaSelecionada) {
-      return linhaSelecionada.avaliadores?.find(ava => ava._id == idProfessor)?.fullname
+      return linhaSelecionada.corpoDocente?.find(ava => ava._id == idProfessor)?.fullName
     }
     return '';
   }

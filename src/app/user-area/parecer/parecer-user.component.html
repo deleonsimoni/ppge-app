@@ -1,6 +1,66 @@
 <h1 mat-dialog-title>Avaliação da inscrição</h1>
 <div class="pb-3" mat-dialog-content>
-  <form role="form" class="reviewer container" [formGroup]="form">
+  <div class="container">
+    <div class="row text-center" data-aos-delay="200">
+      <div class="card-body">
+        <div class="text-center">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="col-auto" scope="col">Etapa</th>
+                <th scope="col">Nome da Etapa</th>
+                <th class="col-2" scope="col">Nota da etapa</th>
+                <th class="col-auto" scope="col">Aprovado</th>
+                <th class="col-auto" scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td scope="row">-</td>
+                <td scope="row">Homologação</td>
+                <td scope="row">-</td>
+                <td scope="row">{{ getApproveHomolog() }}</td>
+                <td scope="row">
+                  <div *ngIf="verificaTemJustificativaHomolog(); else blockJustificar">
+                    <p *ngIf="verificaTemRespostaHomolog(); else blockVerResposta">Recurso solicitado</p>
+                    <ng-template #blockVerResposta>
+                      <p>Recurso respondido</p>
+                      <button (click)="abrirModalResposta(null, true)" type="button" mat-raised-button color="primary">Ver resposta</button>
+                    </ng-template>
+                  </div>
+                  <ng-template #blockJustificar>
+                    <button (click)="abrirModalJustificar(null, true)" *ngIf="getApproveHomolog() == 'Indeferido'" type="button" mat-raised-button color="primary">Solicitar recurso</button>
+                  </ng-template>
+
+                </td>
+              </tr>
+
+              <tr *ngFor="let criterioStep of criterioStepList; let i= index">
+                <td scope="row">{{ i+1 }}</td>
+                <td scope="row">{{ criterioStep.title }}</td>
+                <td>{{ getPartialScoreByStep(criterioStep._id) }}</td>
+                <td>{{ getApproveStep(criterioStep._id) }}</td>
+                <td scope="row">
+                  <div *ngIf="verificaTemJustificativa(criterioStep._id); else blockJustificar">
+                    <p *ngIf="verificaTemResposta(criterioStep._id); else blockVerResposta">Recurso solicitado</p>
+                    <ng-template #blockVerResposta>
+                      <p>Recurso respondido</p>
+                      <button (click)="abrirModalResposta(criterioStep._id)" type="button" mat-raised-button color="primary">Ver resposta</button>
+                    </ng-template>
+                  </div>
+                  <ng-template #blockJustificar>
+                    <button (click)="abrirModalJustificar(criterioStep._id)" *ngIf="getApproveStep(criterioStep._id) == 'NÃO'" type="button" mat-raised-button color="primary">Solicitar recurso</button>
+                  </ng-template>
+                  
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <form role="form" class="reviewer container" [formGroup]="form">
 
     <div formGroupName="step">
       <div *ngFor="let step of data.criterio?.step; let i = index" >
@@ -47,7 +107,7 @@
       </div>
     </div>
 
-  </form>
+  </form> -->
 </div>
 <hr class="mt-0">
 <div mat-dialog-actions>

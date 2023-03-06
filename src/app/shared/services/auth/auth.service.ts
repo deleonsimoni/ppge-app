@@ -15,6 +15,7 @@ interface AuthResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private readonly URL_API_PPGE = '/api/ppge';
   private user$ = new BehaviorSubject<User | null>(null);
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorage) { }
@@ -83,5 +84,13 @@ export class AuthService {
    */
   checkTheUserOnTheFirstLoad(): Promise<User | null> {
     return firstValueFrom(this.me());
+  }
+
+  recuperarSenha(form) {
+    return this.http.post(`/api/auth/forgotPassword`, form);
+  }
+
+  resetarSenha(form) {
+    return this.http.post(`/api/auth/resetPassword`, form);
   }
 }

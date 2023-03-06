@@ -1,9 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
-import { formApprovalTable, formHomologTable } from '@app/shared/shared.model';
 import { ToastrService } from 'ngx-toastr';
+import { take } from 'rxjs';
+import { RecursoComponent } from '../recurso/recurso.component';
 
 export interface DialogParecerData {
   idProcesso: string;
@@ -19,8 +20,8 @@ export interface DialogParecerData {
 export class ParecerComponent implements OnInit {
   form: FormGroup;
 
-  formHomologTable = formHomologTable;
-  formApprovalTable = formApprovalTable;
+  parecerSelected: any;
+
 
   constructor(
     private builder: FormBuilder,
@@ -28,13 +29,17 @@ export class ParecerComponent implements OnInit {
     public dialogRef: MatDialogRef<ParecerComponent>,
     private toastr: ToastrService,
     private siteAdminService: SiteAdminService,
+    public dialog: MatDialog,
   ) {
     this.form = this.builder.group({
       homologado: [null, []],
       aprovado: [null, []],
-      step: [null, []]
-      // notasHomologacao: [null, [Validators.required]],
-      // notasAprovacao: [null, [Validators.required]],
+      step: [null, []],
+      recursoHomolog: this.builder.group({
+        justificativa: [null, []], 
+        respostaJustificativa: [null, []],
+        recursoAceito: [null, []]
+      }),
     });
   }
 
@@ -50,19 +55,6 @@ export class ParecerComponent implements OnInit {
 
 
   montarFormulario() {
-    // form de homolohacao
-    // let notasHomologacaoForm = this.builder.group({});
-    // this.formHomologTable.section.forEach(section => {
-    //   let formAux = this.builder.group({});
-    //   section.question.forEach(element => {
-    //     formAux.addControl(String(`question-${element._id}`), new FormControl('', []))
-    //   });
-    //   notasHomologacaoForm.addControl(`section-${section._id}`, formAux);
-    // })
-    // this.form.setControl('notasHomologacao', notasHomologacaoForm);
-    // fim do form de homolohacao
-
-    // form de aprovacao
     let stepFormAux = this.builder.group({});
     this.data.criterio?.step.forEach(step => {
 
@@ -70,41 +62,77 @@ export class ParecerComponent implements OnInit {
       step.section.forEach(section => {
         let formAux = this.builder.group({});
         section.question.forEach(element => {
-          formAux.addControl(String(`question-${element._id}`), new FormControl('', []))
+          formAux.addControl(String(`question-${element._id}`), new FormControl(null, []))
         });
         notasAprovacaoForm.addControl(`section-${section._id}`, formAux);
       })
       notasAprovacaoForm.addControl(`stepApproval`, new FormControl(null, []));
+      notasAprovacaoForm.addControl(
+        'recurso', 
+        this.builder.group({
+          justificativa: [null, []], 
+          respostaJustificativa: [null, []], 
+          recursoAceito: [null, []], 
+        })
+      );
       stepFormAux.addControl(`step-${step._id}`, notasAprovacaoForm);
 
     })
     this.form.setControl('step', stepFormAux);
-    console.log("form: ", this.form.value);
     
 
-
-    // let notasAprovacaoForm = this.builder.group({});
-    // this.formApprovalTable.section.forEach(section => {
-    //   let formAux = this.builder.group({});
-    //   section.question.forEach(element => {
-    //     formAux.addControl(String(`question-${element._id}`), new FormControl('', []))
-    //   });
-    //   notasAprovacaoForm.addControl(`section-${section._id}`, formAux);
-    // })
-    // this.form.setControl('notasAprovacao', notasAprovacaoForm);
-
-    // fim do form de aprovacao
 
   }
 
   getParecer() {
     this.siteAdminService.getParecer(this.data.idInscricao, this.data.idProcesso)
       .subscribe((data: any) => {
+        console.log("data: ", data)
+        this.parecerSelected = data.enrolled[0].parecer;
+        console.log("this.parecerSelected: ", this.parecerSelected);
+        
         this.form.patchValue({ ...data.enrolled[0].parecer })
+        console.log("this.form.value: ", this.form.value);
+        
       })
   }
 
+  responderJustificativa(idStep, recurso) {
+
+    const justificativa = recurso?.justificativa, 
+      respostaJustificativa = recurso?.respostaJustificativa, 
+      recursoAceito = recurso?.recursoAceito,
+      idInscricao = this.data.idInscricao, 
+      idProcesso = this.data.idProcesso;
+      
+    
+    const dref = this.dialog.open(RecursoComponent, {
+      width: '78%',
+      data: {
+        idInscricao,
+        idProcesso,
+        idStep,
+        isHomolog: false,
+        flagJustView: !!respostaJustificativa,
+        recurso: {
+          justificativa,
+          respostaJustificativa,
+          recursoAceito
+        }
+      }
+    })
+    dref.afterClosed().pipe(take(1)).subscribe(result => {
+      if (result && result.refresh) {
+        console.log("ENTROU NO REFRESH");
+        this.dialogRef.close({refresh: true});
+        
+      }
+    })
+    
+  }
+
   register() {
+    
     if (this.form.valid) {
       this.siteAdminService
         .registrarParecer(this.data.idInscricao, this.data.idProcesso, this.form.value)

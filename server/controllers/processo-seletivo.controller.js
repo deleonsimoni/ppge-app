@@ -5,6 +5,8 @@ const S3Uploader = require('./aws.controller');
 const { getErrorByStatus, getSuccessByStatus } = require('../service/error.service');
 const { default: mongoose } = require('mongoose');
 
+const MESTRADO = 1, DOUTORADO = 2;
+
 module.exports = {
   getProcessoSeletivo,
   insertProcessoSeletivo,
@@ -25,6 +27,7 @@ module.exports = {
   getAllParecer,
   getParecer,
   inscricaoJustificar,
+  inscricaoJustificarHomolog,
   mudarEtapa,
   salvarVinculoCriterio,
   changeHomologInscricao
@@ -160,49 +163,127 @@ async function getProcessoSeletivoHeaders(req) {
     });
 }
 
+// async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, language) {
+//   let ret = await ProcessoSeletivoModel.findOne(
+//       { _id: idProcessoSeletivo }, 
+//       { 
+//         researchLine: 1, 
+//         vagas: 1,
+//         type: 1
+//       }
+//     )
+//     .populate(
+//       {
+//         path: "researchLine",
+//         select: `${language}.title corpoDocente`,
+//         populate: {
+//           path: "corpoDocente",
+//           select: "fullName"
+//         }
+//       }
+//     )
+//     .sort({
+//       createAt: -1
+//     });
+
+//   if (ret) {
+//     ret = {
+//       _id: ret._id,
+//       researchLine: ret.researchLine.map((linhaPesquisa, index) => {
+//         const vagalinha = ret.vagas?.find(v => v.idLinhaPesquisa == linhaPesquisa._id)
+//         let corpoAux = [... linhaPesquisa.corpoDocente];
+//         console.log("linhaPesquisa - "+index, corpoAux)
+//         if(vagalinha) {
+
+//           if(ret.type == MESTRADO) {
+//             // Tipo MESTRADO
+//             linhaPesquisa[language].title += buildTextVaga(vagalinha.maxVaga, vagalinha.maxVagaCota)
+//           } else if(ret.type == DOUTORADO) {
+//             // Tipo DOUTORADO
+//             console.log("ENTROU vagalinhavagalinhavagalinhavagalinha: ", vagalinha)
+//             console.log("ENTROU linhaPesquisa.corpoDocentelinhaPesquisa.corpoDocente: ", linhaPesquisa)
+            
+//             corpoAux.forEach(prof => {
+//               const vagaProf = vagalinha.professors?.find(p => p.idProfessor == prof.id);
+//               if(vagaProf && linhaPesquisa._id == vagalinha.idLinhaPesquisa) {
+//                 console.log("4444444444444444444444: ", vagaProf)
+//                 prof.fullName += buildTextVaga(vagaProf.maxVaga, vagaProf.maxVagaCota);
+//               }
+//             })
+//             console.log("LINHA FIM >>> ", corpoAux)
+//           }
+//         }
+
+//         return (
+//           {
+//             _id: linhaPesquisa._id,
+//             corpoDocente: corpoAux,
+//             title: linhaPesquisa[language].title,
+//           }
+//         )
+//       }),
+//       vagas: ret.vagas,
+//     }
+//   }
+//   return ret;
+// }
 async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, language) {
-  let ret = await ProcessoSeletivoModel.findOne({ _id: idProcessoSeletivo }, { researchLine: 1, vagas: 1 })
-    .populate(
-      {
-        path: "researchLine",
-        select: `${language}.title corpoDocente`,
-        populate: {
-          path: "corpoDocente",
-          select: "fullName"
-        }
-      }
-    )
-    .sort({
-      createAt: -1
-    });
+  const ret = await ProcessoSeletivoModel.findOne({ _id: idProcessoSeletivo }, { researchLine: 1, vagas: 1, type: 1 })
+    .populate({
+      path: 'researchLine',
+      select: `${language}.title corpoDocente`,
+      populate: {
+        path: 'corpoDocente',
+        select: 'fullName',
+      },
+    })
+    .sort({ createAt: -1 });
 
-  if (ret) {
-    ret = {
-      _id: ret._id,
-      researchLine: ret.researchLine.map(data => {
-        let vagasText = ''
-        const vagalinha = ret.vagas?.find(v => v.idLinhaPesquisa == data._id)
-        if(vagalinha) {
-          console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: ", vagalinha.maxVaga)
-          vagasText += '('
-          vagasText += vagalinha.maxVaga + (vagalinha.maxVaga > 1 ? ' vagas' : ' vaga');
-          vagasText += ' / '
-          vagasText += vagalinha.maxVagaCota + (vagalinha.maxVagaCota > 1 ? ' vagas' : ' vaga');
-          vagasText += ')'
-        }
-
-        return (
-          {
-            _id: data._id,
-            corpoDocente: data.corpoDocente,
-            title: data[language].title + vagasText,
-          }
-        )
-      }),
-      vagas: ret.vagas,
-    }
+  if (!ret) {
+    return ret;
   }
-  return ret;
+  const researchLine = ret.researchLine.map((linhaPesquisa) => {
+    const vagalinha = ret.vagas?.find((v) => v.idLinhaPesquisa == linhaPesquisa._id);
+    let corpoAux = [];
+    linhaPesquisa.corpoDocente.forEach(cdin => corpoAux.push({...cdin._doc}))
+    if (vagalinha) {
+      if (ret.type === MESTRADO) {
+        linhaPesquisa[language].title += buildTextVaga(vagalinha.maxVaga, vagalinha.maxVagaCota);
+      } else if (ret.type === DOUTORADO) {
+        corpoAux.forEach((prof) => {
+          const vagaProf = vagalinha.professors?.find((p) => p.idProfessor == prof._id);
+          if (vagaProf && linhaPesquisa._id == vagalinha.idLinhaPesquisa) {
+            prof.fullName += buildTextVaga(vagaProf.maxVaga, vagaProf.maxVagaCota);
+          }
+        });
+      }
+    }
+
+    return {
+      _id: linhaPesquisa._id,
+      corpoDocente: corpoAux,
+      title: linhaPesquisa[language].title,
+    };
+  });
+
+  return {
+    _id: ret._id,
+    researchLine,
+    vagas: ret.vagas,
+  };
+}
+
+function buildTextVaga(qtdVaga, qtdVagaCota) {
+  let textVaga = ' - ';
+
+  textVaga += "( ";
+  textVaga += (qtdVaga != undefined ? qtdVaga : 0) + " AC";
+  textVaga += " / ";
+  textVaga += (qtdVagaCota != undefined ? qtdVagaCota : 0) + " AA";
+  textVaga += " )";
+
+  return textVaga;
+
 }
 
 async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParecerista) {
@@ -228,6 +309,7 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
   const statusAguardando = ["aguardandoHomolog","aguardandoAprov"];
   const statusHomologa = ["reprovadoHomolog","homologadoHomolog"];
   const statusAprov = ["reprovadoAprov","aprovadoAprov"];
+  const statusRecurso = ["recursoSolicitado","recursoNaoAprovado","recursoAprovado"];
   if (processo) {
     processo.enrolled = processo.enrolled ? processo.enrolled : [];
     const result = {
@@ -239,10 +321,79 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
           if(idParecerista) flagReturn = e.parecerista && e.parecerista.equals(idParecerista)
 
           if(req.query.filtroConsulta) {
-            if(statusAguardando.includes(req.query.filtroConsulta)) {
-              flagReturn = flagReturn && (e.parecer == undefined || (req.query.filtroConsulta == 'aguardandoAprov' && e.parecer.aprovado == undefined) || (req.query.filtroConsulta == 'aguardandoHomolog' && e.parecer.homologado == undefined))
+
+            if(statusRecurso.includes(req.query.filtroConsulta)) {
+
+              if(e.parecer) {
+                let hasSolicitado, hasAprovado, hasReprovado;
+                hasSolicitado = hasAprovado = hasReprovado = false;
+
+                if(typeof e.parecer.recursoHomolog?.justificativa == 'string') {
+                  hasSolicitado = typeof e.parecer.recursoHomolog?.respostaJustificativa != 'string';
+                  hasAprovado = e.parecer.recursoHomolog?.recursoAceito == true;
+                  hasReprovado = e.parecer.recursoHomolog?.recursoAceito == false;
+                } 
+
+                const etapas = e.parecer?.step;
+                if(etapas) {
+                  Object.values(etapas).forEach((etapa, index) => {
+                    if(typeof etapa.recurso?.justificativa == 'string') {
+                      hasSolicitado = hasSolicitado || typeof etapa.recurso?.respostaJustificativa != 'string';
+                      hasAprovado = hasAprovado || etapa.recurso?.recursoAceito == true;
+                      hasReprovado = hasReprovado || etapa.recurso?.recursoAceito == false;
+                    }
+                  })
+                }
+                flagReturn = 
+                  (req.query.filtroConsulta == "recursoSolicitado" && hasSolicitado) ||
+                  (req.query.filtroConsulta == "recursoNaoAprovado" && hasReprovado) ||
+                  (req.query.filtroConsulta == "recursoAprovado" && hasAprovado && !hasSolicitado && !hasReprovado);
+
+                
+
+              } else {
+                flagReturn = false;
+              }
+
+            } else if(statusAguardando.includes(req.query.filtroConsulta)) {
+              let isWaitingApprove = false;
+
+              let hasUndefined = false;
+              let isAprovado = true;
+              const etapas = e.parecer?.step;
+              if(etapas) {
+                Object.values(etapas).forEach(etapa => {
+                  if(etapa.stepApproval == undefined) {
+                    hasUndefined = true;
+                  }
+                  isAprovado = isAprovado && etapa.stepApproval == true;
+                })
+                isWaitingApprove = isAprovado && !hasUndefined;
+              } else {
+                isWaitingApprove = true;
+              }
+
+
+              flagReturn = flagReturn && (e.parecer == undefined || (req.query.filtroConsulta == 'aguardandoAprov' && isWaitingApprove) || (req.query.filtroConsulta == 'aguardandoHomolog' && e.parecer.homologado == undefined))
             } else {
-              const flagAprov = e.parecer && statusAprov.includes(req.query.filtroConsulta) && e.parecer.aprovado == (req.query.filtroConsulta == 'aprovadoAprov')
+              let flagAprov = false;
+              let hasUndefined = false;
+              let isAprovado = true;
+              if(e.parecer && statusAprov.includes(req.query.filtroConsulta)) {
+                // e.parecer.aprovado == (req.query.filtroConsulta == 'aprovadoAprov');
+                const etapas = e.parecer.step;
+                if(etapas) {
+                  Object.values(etapas).forEach(etapa => {
+                    if(etapa.stepApproval == undefined) {
+                      hasUndefined = true;
+                    }
+                    isAprovado = isAprovado && etapa.stepApproval == true;
+                  })
+                } else {
+                  hasUndefined = true;
+                }
+              }
+              flagAprov = isAprovado == (req.query.filtroConsulta == 'aprovadoAprov') && ((req.query.filtroConsulta == 'aprovadoAprov' && !hasUndefined) || (req.query.filtroConsulta == 'reprovadoAprov')) 
               const flagHomolog = e.parecer && statusHomologa.includes(req.query.filtroConsulta) && e.parecer.homologado == (req.query.filtroConsulta == 'homologadoHomolog')
               flagReturn = flagReturn && (flagAprov || flagHomolog);
             }
@@ -266,15 +417,46 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
     return { _id: idProcessoSeletivo, enrolled: [] }
   }
 }
-
+const prefixoRecurso = ['justificativa', 'respostaJustificativa'];
 async function inscricaoJustificar(idUser, req) {
   const idProcesso = req.query.idProcesso;
   const idInscricao = req.query.idInscricao;
+  const idStep = req.query.idStep;
+  const prefixoRecursoRecebido = req.query.prefixoRecurso;
   const justificativa = req.body.justificativa;
+  const recursoAceito = req.body.recursoAceito;
+
+  if(!prefixoRecurso.includes(prefixoRecursoRecebido)) 
+    throw "Prefixo não reconhecido!";
+
+    let toSet = { [`enrolled.$.parecer.step.step-${idStep}.recurso.${prefixoRecursoRecebido}`]: justificativa };
+  if(typeof recursoAceito == 'boolean')
+    toSet[`enrolled.$.parecer.step.step-${idStep}.recurso.recursoAceito`] = recursoAceito;
+  return ProcessoSeletivoModel.findOneAndUpdate(
+    { _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } },
+    { $set:  toSet},
+    { upsert: false }
+  );
+
+}
+
+async function inscricaoJustificarHomolog(idUser, req) {
+  const idProcesso = req.query.idProcesso;
+  const idInscricao = req.query.idInscricao;
+  const prefixoRecursoRecebido = req.query.prefixoRecurso;
+  const justificativa = req.body.justificativa;
+  const recursoAceito = req.body.recursoAceito;
+
+  if(!prefixoRecurso.includes(prefixoRecursoRecebido)) 
+    throw "Prefixo não reconhecido!";
+  
+  let toSet = {[`enrolled.$.parecer.recursoHomolog.${prefixoRecursoRecebido}`]: justificativa,}
+  if(typeof recursoAceito == 'boolean')
+    toSet[`enrolled.$.parecer.recursoHomolog.recursoAceito`] = recursoAceito;
 
   return ProcessoSeletivoModel.findOneAndUpdate(
     { _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } },
-    { $set: { "enrolled.$.justificativa": justificativa } },
+    { $set: toSet},
     { upsert: false }
   );
 
@@ -329,16 +511,23 @@ async function registrarParecer(req) {
   const form = req.body.formulario;
   return ProcessoSeletivoModel.findOneAndUpdate(
     { _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } },
-    { $set: { "enrolled.$.parecer": form } },
+    { $set: { "enrolled.$.parecer": {...form} } },
     { upsert: false }
   );
 }
 
 async function changeHomologInscricao(body) {
-  const {value, idInscricaoSelecionada, idProcessoSelecionado} = body;
+  const {value, idInscricaoSelecionada, idProcessoSelecionado, justificaIndeferido} = body;
+
+  
   return ProcessoSeletivoModel.findOneAndUpdate(
     { _id: idProcessoSelecionado, enrolled: { $elemMatch: { _id: idInscricaoSelecionada } } },
-    { $set: { "enrolled.$.parecer.homologado": value } },
+    { 
+      $set: { 
+        "enrolled.$.parecer.homologado": value, 
+        "enrolled.$.parecer.recursoHomolog.justificaIndeferido": justificaIndeferido 
+      } 
+    },
     { upsert: false }
   );
 }
@@ -377,17 +566,22 @@ async function atualizarProcessoSeletivoAtivo(req, idProcesso) {
 
 async function subscribeProcessoSeletivo(req) {
   try {
+    const ramdom = Math.random().toString(36).slice(-4);
+    const nowHour = String(Date.now()).slice(-4);
+    const codInscricaoGerado = ramdom+nowHour;
+
     let formulario = JSON.parse(req.body.formulario);
     let retUpload = await uploadFilesProcessoSeletivo(req.files.fileArray, formulario.idProcesso, req.user._id, formulario.tipoFormulario);
     if (retUpload.temErro) throw retUpload.mensagem;
     formulario.files = retUpload;
+    formulario.codInscricao = codInscricaoGerado;
 
     await UserController.subscribeProcessoSeletivo(req.user._id, req.params.id);
     await ProcessoSeletivoModel.findOneAndUpdate({
-      _id: req.params.id, isAtivo: true
-    },
-    { $addToSet: { enrolled: { idUser: req.user._id, ...formulario, idProcesso: null } } },
-    { upsert: false }
+        _id: req.params.id, isAtivo: true
+      },
+      { $addToSet: { enrolled: { idUser: req.user._id, ...formulario, idProcesso: null } } },
+      { upsert: false }
     );
   } catch (e) {
     console.log(e);

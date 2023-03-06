@@ -9,6 +9,7 @@ const processoSeletivoRoutes = require('./processo-seletivo.route');
 const pareceristasoRoutes = require('./pareceristas.route');
 const criterioAvaliacaoRoutes = require('./criterio-avaliacao.route');
 const cotaAcaoAfirmativaRoutes = require('./cota-acao-afirmativa.route');
+const rankRoutes = require('./rank.route');
 
 const router = express.Router();
 module.exports = router;
@@ -117,3 +118,4 @@ router.use('/', processoSeletivoRoutes);
 router.use('/parecerista', pareceristasoRoutes);
 router.use('/criterio-avaliacao', criterioAvaliacaoRoutes);
 router.use('/cota-acao-afirmativa', cotaAcaoAfirmativaRoutes);
+router.use('/rank', rankRoutes);

@@ -24,8 +24,8 @@
                 <button *ngIf="ps.etapa == 'inscricao'" class="mt-2" type="button" (click)="iniciarInscricaoNoProcesso(ps._id, ps.type)" mat-raised-button color="primary">
                     Inscrever-se
                 </button>
+                <button type="button" mat-raised-button class="ml-2" (click)="listarRank(ps._id)">Ver resultados</button>
             </ng-template>
-            
         </div>
 
     </div>

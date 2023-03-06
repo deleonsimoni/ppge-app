@@ -15,12 +15,24 @@ export class UserAreaService {
     return this.http.get(`${this.URL_PROCESSO_SELETIVO}/minha-inscricoes/detalhe`);
   }
 
-  public registrarJustificativa(idInscricao, idProcesso, justificativa) {
+  public registrarJustificativa(idInscricao, idProcesso, idStep, justificativa) {
     const params = new HttpParams()
       .set('idInscricao', idInscricao)
+      .set('idStep', idStep)
+      .set('prefixoRecurso', 'justificativa')
       .set('idProcesso', idProcesso);
 
     return this.http.post(`${this.URL_PROCESSO_SELETIVO}/minha-inscricoes/justificar`, {justificativa}, {params});
+
+  }
+
+  public registrarJustificativaHomolog(idInscricao, idProcesso, justificativa) {
+    const params = new HttpParams()
+      .set('idInscricao', idInscricao)
+      .set('prefixoRecurso', 'justificativa')
+      .set('idProcesso', idProcesso);
+
+    return this.http.post(`${this.URL_PROCESSO_SELETIVO}/minha-inscricoes/justificar-homolog`, {justificativa}, {params});
 
   }
 }

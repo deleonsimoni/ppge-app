@@ -17,6 +17,7 @@ export class SiteAdminService {
   private readonly URL_PARECERISTAS = `${this.URL_API_PPGE}/parecerista`;
   private readonly URL_CRITERIO = `${this.URL_API_PPGE}/criterio-avaliacao`;
   private readonly URL_COTA = `${this.URL_API_PPGE}/cota-acao-afirmativa`;
+  private readonly URL_RANK = `${this.URL_API_PPGE}/rank`;
 
   constructor(
     private http: HttpClient
@@ -165,8 +166,33 @@ export class SiteAdminService {
   /* Fim Tese DISSERTACAO */
   /* Processo Seletivo */
 
-  changeHomologInscricao(value, idInscricaoSelecionada, idProcessoSelecionado) {
-    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/parecer/homologacao`, {value, idInscricaoSelecionada, idProcessoSelecionado});
+  // Recurso
+  
+
+  public registrarRespostaJustificativa(idInscricao, idProcesso, idStep, justificativa, recursoAceito) {
+    const params = new HttpParams()
+      .set('idInscricao', idInscricao)
+      .set('idStep', idStep)
+      .set('prefixoRecurso', 'respostaJustificativa')
+      .set('idProcesso', idProcesso);
+
+    return this.http.post(`${this.URL_PROCESSO_SELETIVO}/minha-inscricoes/justificar`, {justificativa, recursoAceito}, {params});
+
+  }
+
+  public registrarRespostaJustificativaHomolog(idInscricao, idProcesso, justificativa, recursoAceito) {
+    const params = new HttpParams()
+      .set('idInscricao', idInscricao)
+      .set('prefixoRecurso', 'respostaJustificativa')
+      .set('idProcesso', idProcesso);
+
+    return this.http.post(`${this.URL_PROCESSO_SELETIVO}/minha-inscricoes/justificar-homolog`, {justificativa, recursoAceito}, {params});
+
+  }
+  // FIM Recurso
+
+  changeHomologInscricao(value, idInscricaoSelecionada, idProcessoSelecionado, justificaIndeferido) {
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/parecer/homologacao`, {value, idInscricaoSelecionada, idProcessoSelecionado, justificaIndeferido});
 
   }
 
@@ -329,4 +355,22 @@ export class SiteAdminService {
   }
 
   /* Fim Cotas de Ação Afirmativa */
+
+  /* Rank */
+  gerarRank(idProcessoSeletivo, isFinalRank) {
+    return this.http.post(`${this.URL_RANK}/${idProcessoSeletivo}`, {isFinalRank});
+  }
+
+  getAllRanks(idProcessoSeletivo) {
+    return this.http.get(`${this.URL_RANK}/${idProcessoSeletivo}`);
+  }
+
+  atualizarStatusRankAtivo(checked, idProcessoSeletivo, idRank ) {
+    return this.http.post(`${this.URL_RANK}/status-rank/${idProcessoSeletivo}/${idRank}`, {checked});
+  }
+
+  deleteRankById(idProcessoSeletivo, idRank) {
+    return this.http.delete(`${this.URL_RANK}/${idProcessoSeletivo}/${idRank}`);
+  }
+  /* Fim Rank */
 }

@@ -50,6 +50,10 @@ router.post('/processo-seletivo/minha-inscricoes/justificar', [passport.authenti
   session: false
 }), requireLogin], asyncHandler(inscricaoJustificar));
 
+router.post('/processo-seletivo/minha-inscricoes/justificar-homolog', [passport.authenticate('jwt', {
+  session: false
+}), requireLogin], asyncHandler(inscricaoJustificarHomolog));
+
 router.get('/processo-seletivo/minha-inscricoes', [passport.authenticate('jwt', {
   session: false
 }), requireLogin], asyncHandler(getMinhaInscricoesProcessoSelectivo));
@@ -155,6 +159,12 @@ async function getInscritosByProcessoSelectivo(req, res) {
 
 async function inscricaoJustificar(req, res) {
   let response = await processoSeletivoCtrl.inscricaoJustificar(req.user._id, req);
+  res.json(response);
+
+}
+
+async function inscricaoJustificarHomolog(req, res) {
+  let response = await processoSeletivoCtrl.inscricaoJustificarHomolog(req.user._id, req);
   res.json(response);
 
 }

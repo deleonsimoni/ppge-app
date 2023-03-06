@@ -1,0 +1,50 @@
+<h1 mat-dialog-title>Resultado</h1>
+<div mat-dialog-content>
+  <div *ngFor="let linhaPesquisa of rankDetalhe?.listRankLinha" class="mb-5">
+    <h3>{{linhaPesquisa?.titleLinhaPesquisa}}</h3>
+
+    <table style="width: 100%;" mat-table [dataSource]="linhaPesquisa?.inscritosNaLinha" class="mat-elevation-z8 demo-table">
+
+      <ng-container matColumnDef="orientador">
+        <th mat-header-cell *matHeaderCellDef>Orientador/a</th>
+        <td mat-cell *matCellDef="let element">{{element.orientador}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="codInscricao">
+        <th mat-header-cell *matHeaderCellDef>Inscrição</th>
+        <td mat-cell *matCellDef="let element">{{element.codInscricao}}</td>
+      </ng-container>
+    
+      <ng-container matColumnDef="notas">
+        <th mat-header-cell *matHeaderCellDef>Notas</th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngFor="let nota of element.notasNaOrdem; let i = index">
+            {{i+1}}ª Fase: {{element.notasNaOrdem[i]}} <br />
+          </span>
+        </td>
+      </ng-container>
+    
+      <ng-container matColumnDef="mediaFinal">
+        <th mat-header-cell *matHeaderCellDef>Média Final</th>
+        <td mat-cell *matCellDef="let element">{{element.medialFinal}}</td>
+      </ng-container>
+    
+      <ng-container matColumnDef="situacao">
+        <th mat-header-cell *matHeaderCellDef>Situação</th>
+        <td mat-cell *matCellDef="let element">{{element.situacao}}</td>
+      </ng-container>
+      
+      <ng-container matColumnDef="opcaoVaga">
+        <th mat-header-cell *matHeaderCellDef>Opção de vaga</th>
+        <td mat-cell *matCellDef="let element">{{element.opcaoVaga}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+  </div>
+</div>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Fechar</button>
+</mat-dialog-actions>

@@ -11,48 +11,24 @@
         <div class="col pt-3 pb-2">
             <h3>Processo Seletivo:</h3>
             <h4>{{processo.title}}</h4>
+            <div class="row">
+                
+            </div>
         </div>
         <div class="col-md-auto pt-3 pb-2">
 
             <div class="row justify-content-center">
-                <div class="col">
-                    <p>
-                        {{verificarHomologacao(processo?.enrolled[0]?.parecer?.homologado)}}
-                    </p>
+                <div class="col-auto">
+                    <button type="button" mat-raised-button color="primary"
+                        (click)="openModalDetalharAvaliacao(processo?.enrolled[0]?.parecer, processo?.criterio, processo?.enrolled[0]?._id, processo?._id)">Acompanhar inscrição</button>
                 </div>
             </div>
 
-            <div *ngIf="processo?.enrolled[0]?.parecer?.homologado" class="row justify-content-center">
-                <div class="col">
-                    <p>
-                        {{verificarAprovacao(processo?.enrolled[0]?.parecer?.aprovado)}}
-                    </p>
-                </div>
-            </div>
-
-            <div class="row justify-content-center">
+            <div class="row mb-3 justify-content-center">
                 <span (click)="detalharInscricao(processo?.enrolled[0])" matTooltip="Detalhar"
                     matTooltipPosition="above"
                     class="material-icons md-18 btn card-icon-action">{{this.flagDetalharInscricao &&
                     this.inscricaoSelecionada?._id == processo?.enrolled[0]?._id ? 'remove' : 'add'}}</span>
-            </div>
-
-            <div class="row mb-3 justify-content-center">
-                <div class="col-auto">
-                    <button type="button" mat-raised-button color="primary"
-                        (click)="openModalDetalharAvaliacao(processo?.enrolled[0]?.parecer, processo?.criterio)">Ver Notas</button>
-                </div>
-            </div>
-
-            <div class="row justify-content-center">
-                <div class="col-auto">
-                    <button
-                        *ngIf="(processo?.enrolled[0]?.parecer?.aprovado == false || processo?.enrolled[0]?.parecer?.homologado == false) && (!processo?.enrolled[0]?.justificativa || processo?.enrolled[0]?.justificativa == '')"
-                        style="background-color: green;" type="button" mat-raised-button color="primary"
-                        (click)="openModalJustificar(processo?.enrolled[0]?._id, processo?._id)">Solicitar
-                        Recurso</button>
-                    <p *ngIf="processo?.enrolled[0]?.justificativa">Recurso Solicitado</p>
-                </div>
             </div>
 
         </div>

@@ -15,6 +15,8 @@ import { ProcessoSeletivoComponent } from './processo-seletivo/processo-seletivo
 import { TeseDissertacaoComponent } from './tese-dissertacao/tese-dissertacao.component';
 import { UserAreaComponent } from './user-area/user-area.component';
 import { AuthGuard } from './shared/guards';
+import { ResetSenhaComponent } from './reset-senha/reset-senha.component';
+import { EsqueciSenhaComponent } from './esqueci-senha/esqueci-senha.component';
 
 const routes: Routes = [
   {
@@ -86,6 +88,14 @@ const routes: Routes = [
     path: 'area-usuario',
     component: UserAreaComponent,
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'reset-senha',
+    component: ResetSenhaComponent
+  },
+  {
+    path: 'esqueci-senha',
+    component: EsqueciSenhaComponent
   },
 
   {

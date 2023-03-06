@@ -1,0 +1,43 @@
+<h1 mat-dialog-title>Solicitação de Recurso</h1>
+
+<div class="pb-3" mat-dialog-content>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 card-inscricoes py-3 px-4">
+        <h3>Recurso solicitado:</h3>
+        <p>{{data.recurso.justificativa}}</p>
+      </div>
+    </div>
+  </div>
+  <form *ngIf="!data.flagJustView; else blockView" role="form" class="reviewer container mt-4" [formGroup]="form">
+    <div class="row">
+      <mat-radio-group formControlName="recursoAceito" class="example-radio-group w-100">
+        <mat-radio-button class="example-radio-button mr-3" [value]="true">Aceitar recurso</mat-radio-button>
+        <mat-radio-button class="example-radio-button mr-3" [value]="false">Recusar recurso</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Resposta</mat-label>
+      <textarea style="color: black;" matInput formControlName="justificativa"></textarea>
+    </mat-form-field>
+  </form>
+
+  <ng-template #blockView>
+    <div class="container">
+      <div class="row mt-4">
+        <div class="col-auto">
+          <p class="text-white px-2 py-1 rounded" [ngClass]="data.recurso.recursoAceito ? 'bg-success' : 'bg-danger'" >{{data.recurso.recursoAceito ? 'Recurso aceito' : 'Recurso negado'}}</p>
+        </div>
+        <div class="col-12 card-inscricoes py-3 px-4">
+          <h3>Resposta ao recurso:</h3>
+          <p>{{data.recurso.respostaJustificativa}}</p>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Fechar</button>
+  <button *ngIf="!data.flagJustView" mat-raised-button color="primary" style="background-color: green;" (click)="register()">Enviar</button>
+</div>

@@ -6,12 +6,16 @@ const { getErrorByStatus, getSuccessByStatus } = require('../service/error.servi
 const mongoose = require('mongoose');
 const linhaPesquisaService = require('../service/linha_pesquisa.service');
 const LinhaPesquisaModel = require('../models/linha-pesquisa.model');
+const templateEmail = require('../config/templateEmails');
+const emailSender = require('../controllers/email.controller');
 
 module.exports = {
   insert,
   getByIdOnlyProcesso,
   subscribeProcessoSeletivo,
   unsubscribeProcessoSeletivo,
+  resetPassword,
+  generateNewPassword,
 
   cadastrarParecerista,
   removerParecerista,
@@ -23,9 +27,14 @@ module.exports = {
 async function insert(user) {
   user.hashedPassword = bcrypt.hashSync(user.password, 10);
   delete user.password;
-  return await new User(user).save();
-}
+  
+  let success = await new User(user).save();
 
+  if(success) {
+    let email = templateEmail.inscricaoSucesso;
+    emailSender.sendMailAWS(user.email, 'Bem-Vindo!', email);
+  }
+}
 
 async function getByIdOnlyProcesso(idUser, req) {
   let userResult = await UserModel.findOne(
@@ -164,6 +173,7 @@ async function cadastrarParecerista(email, idLinhaPesquisa) {
     return response;
   }
 }
+
 async function removerParecerista(idUser, idLinhaPesquisa) {
   try {
     const linhaRemovida = await LinhaPesquisaModel.findOneAndUpdate(
@@ -198,6 +208,43 @@ async function removerParecerista(idUser, idLinhaPesquisa) {
 
 async function listarPareceristas() {
   return await UserModel.find({ roles: "parecerista" }, { fullname: 1, email: 1, roles: 1 });
+}
+
+async function resetPassword(req, user) {
+  const hashString = bcrypt.hashSync(req.body.password, 10);
+
+  let response = {
+    status: 200,
+    message: `Senha alterada com sucesso.`
+  };
+
+  await User.findByIdAndUpdate(user._id, {
+    '$set': {
+      mailCodePassword: null,
+      hashedPassword: hashString
+    }
+  })
+
+  return response;
+
+}
+
+async function generateNewPassword(user) {
+  const randomstring = Math.random().toString(36).slice(-8);
+
+  let response = {
+    status: 200,
+    message: `Seu código para troca de senha foi enviado para seu email.`
+  };
+
+  await User.findOneAndUpdate({_id: user._id}, {
+    '$set': {
+      mailCodePassword: randomstring
+    }
+  })
+
+  return response;
+
 }
 
 

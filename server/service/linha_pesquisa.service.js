@@ -71,8 +71,8 @@ async function getHeadersLinhaPesquisaWithProfessors(req) {
       [`${req.query.language}.navTitle`]: 1,
     })
     .populate({
-      path: 'avaliadores',
-      select: 'fullname'
+      path: 'corpoDocente',
+      select: 'fullName'
     })
     .sort({
       createAt: -1
@@ -82,7 +82,7 @@ async function getHeadersLinhaPesquisaWithProfessors(req) {
       _id: data._id, 
       title: data[req.query.language].title, 
       navTitle: data[req.query.language].navTitle , 
-      avaliadores: data.avaliadores,
+      corpoDocente: data.corpoDocente,
     }
   ));
   return ret;

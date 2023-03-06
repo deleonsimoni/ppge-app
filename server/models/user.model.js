@@ -84,6 +84,10 @@ const UserSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    mailCodePassword: {
+      type: String,
+      select: false
+    },
     roles: [
       {
         type: String,
