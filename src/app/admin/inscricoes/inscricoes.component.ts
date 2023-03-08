@@ -67,7 +67,7 @@ export class InscricoesComponent implements OnInit {
     this.idProcessoSelecionado = idProcesso;
 
     this.siteService.getInscritosProcessoById(idProcesso, this.filtroConsulta).subscribe((data: any) => {
-      
+
       this.listInscritos = data.enrolled;
       this.criterioProcessoSelecionado = data.criterio;
 
@@ -98,7 +98,7 @@ export class InscricoesComponent implements OnInit {
     if (!this.inscricaoSelecionada || idInscricao != this.inscricaoSelecionada._id) {
       this.siteService.detalharInscricao(idInscricao, this.idProcessoSelecionado)
         .subscribe((data: any) => {
-          if (data && data.enrolled[0]){
+          if (data && data.enrolled[0]) {
             this.flagDetalharInscricao = true;
             this.inscricaoSelecionada = data.enrolled[0];
             console.log("inscricaoSelecionada: ", this.inscricaoSelecionada)
@@ -120,7 +120,7 @@ export class InscricoesComponent implements OnInit {
     const idInscricao = this.inscricaoSelecionada._id, idProcesso = this.idProcessoSelecionado;
     console.log("idInscricao: ", idInscricao);
     console.log("idProcesso: ", idProcesso);
-    
+
     const dref = this.dialog.open(RecursoComponent, {
       width: '78%',
       data: {
@@ -138,11 +138,11 @@ export class InscricoesComponent implements OnInit {
     dref.afterClosed().pipe(take(1)).subscribe(result => {
       if (result && result.refresh) {
         console.log("ENTROU NO REFRESH");
-        
-        
+
+
       }
     })
-    
+
   }
 
   selecionarPareceristaNoInscrito(idParecerista, index, idInscricao) {
@@ -179,9 +179,9 @@ export class InscricoesComponent implements OnInit {
   }
 
   changeHomolog() {
-    if(typeof this.radioHomologValue == 'boolean') {
-      if(this.radioHomologValue == false && (!this.justificaIndeferido || this.justificaIndeferido == "")) {
-        
+    if (typeof this.radioHomologValue == 'boolean') {
+      if (this.radioHomologValue == false && (!this.justificaIndeferido || this.justificaIndeferido == "")) {
+
         this.toastr.error("É necessário justificar em caso de Indeferido!");
         return;
       }
@@ -201,10 +201,10 @@ export class InscricoesComponent implements OnInit {
       this.toastr.error("É necessário selecionar Deferir/Indeferir para salvar!");
 
     }
-    
+
   }
 
-  private addInicioS3Url(toConcat): string {
+  addInicioS3Url(toConcat): string {
     if (toConcat && toConcat != '') {
       return 'https://ppge-public.s3.sa-east-1.amazonaws.com/'.concat(toConcat);
     } else {

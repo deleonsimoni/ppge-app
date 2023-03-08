@@ -51,7 +51,7 @@ export class ViewInscritosProcessoSeletivoComponent implements OnInit {
     })
   }
 
-  private addInicioS3Url(toConcat): string {
+  addInicioS3Url(toConcat): string {
     if (toConcat && toConcat != '') {
       return 'https://ppge-public.s3.sa-east-1.amazonaws.com/'.concat(toConcat);
     } else {
