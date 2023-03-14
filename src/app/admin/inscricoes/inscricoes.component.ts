@@ -22,6 +22,19 @@ export class InscricoesComponent implements OnInit {
     // Update after login/register/logout
     this.authService.getUser()
   );
+
+  tableColumsCoordenador = [
+    "etapa",
+    "avaliador1",
+    "avaliador2",
+    "media",
+    "approve",
+    "acoes",
+  ];
+
+  mediaFinal;
+
+
   typeOpcaoVagaEnum = TypeOpcaoVagaEnum;
   typeOpcaoVagaEnumToSubscription = typeOpcaoVagaEnumToSubscription;
 
@@ -67,10 +80,18 @@ export class InscricoesComponent implements OnInit {
     this.idProcessoSelecionado = idProcesso;
 
     this.siteService.getInscritosProcessoById(idProcesso, this.filtroConsulta).subscribe((data: any) => {
-      
+      data.enrolled.forEach(inscrito => {
+        inscrito.avaliacaoEtapas = this.getNotasByEtapaAndMedia(inscrito, data.criterio);
+        inscrito.mediaFinal = 0;
+        inscrito.avaliacaoEtapas.forEach( avaliacao => {
+          inscrito.mediaFinal += avaliacao.media
+        })
+
+        inscrito.mediaFinal = inscrito.mediaFinal/inscrito.avaliacaoEtapas.length;
+      })
       this.listInscritos = data.enrolled;
       this.criterioProcessoSelecionado = data.criterio;
-
+      
     });
   }
 
@@ -79,14 +100,73 @@ export class InscricoesComponent implements OnInit {
       this.filtroConsulta = filtroConsulta;
 
     this.siteService.getInscritosProcessoById(this.idProcessoSelecionado, this.filtroConsulta).subscribe((data: any) => {
+      data.enrolled.forEach(inscrito => {
+        inscrito.avaliacaoEtapas = this.getNotasByEtapaAndMedia(inscrito, data.criterio);
+        inscrito.mediaFinal = 0;
+        inscrito.avaliacaoEtapas.forEach( avaliacao => {
+          inscrito.mediaFinal += avaliacao.media
+        })
+      })
       this.listInscritos = data.enrolled;
     });
 
   }
 
+  calculaMedia(num1, num2) {
+    num1 = num1 ? Number(num1) : 0;
+    num2 = num2 ? Number(num2) : 0;
+    return (num1+num2)/2;
+  }
+
+  consolidarAvaliacao(isAprovado, step, inscricao) {
+
+    this.siteService.consolidarAvaliacao(this.idProcessoSelecionado, inscricao._id, step.idStep, step.media, isAprovado)
+      .pipe(
+        take(1),
+        catchError(e => {
+          this.toastr.error("Ocorreu um erro ao consolidar etapa");
+          throw e;
+        })
+      ).subscribe((data: any) => {
+        this.toastr.success(data.msg);
+        this.getInscricoesByFiltro(null);
+      });
+  }
+
+  getNotasByEtapaAndMedia(inscricao, criterio) {
+    
+    let notas = criterio?.step?.map(stepC => {
+      let prA, sgA;
+      if(inscricao.parecer?.avaliacoes) {
+        prA = inscricao.parecer.avaliacoes[`avaliador-${inscricao.parecerista?.primeiro?._id}`]?.step[`step-${stepC._id}`]?.totalNotaEtapa
+        sgA = inscricao.parecer.avaliacoes[`avaliador-${inscricao.parecerista?.segundo?._id}`]?.step[`step-${stepC._id}`]?.totalNotaEtapa
+      }
+
+      return ({
+        primeiroAvaliador: prA,
+        segundoAvaliador: sgA,
+        media: this.calculaMedia(prA, sgA),
+        idStep: stepC._id
+      });
+    });
+    return notas;
+  }
+
   vincularParecerista(inscricoes) {
 
-    this.siteService.vincularParecerista(inscricoes._id, inscricoes.parecerista._id, this.idProcessoSelecionado)
+    console.log("vincularParecerista() inscricoes: ", inscricoes)
+
+    if(!inscricoes.parecerista || !inscricoes.parecerista.primeiro?._id || !inscricoes.parecerista.segundo?._id) {
+      this.toastr.error("Selecione 2 avaliadores para salvar.", "Atenção!")
+      return;
+    }
+
+    let pareceristasSelecionados = {
+      primeiro: inscricoes.parecerista.primeiro._id,
+      segundo: inscricoes.parecerista.segundo._id,
+    };
+
+    this.siteService.vincularParecerista(inscricoes._id, pareceristasSelecionados, this.idProcessoSelecionado)
       .pipe(take(1))
       .pipe(catchError((data) => of(data.error)))
       .subscribe((data: any) => {
@@ -101,7 +181,6 @@ export class InscricoesComponent implements OnInit {
           if (data && data.enrolled[0]){
             this.flagDetalharInscricao = true;
             this.inscricaoSelecionada = data.enrolled[0];
-            console.log("inscricaoSelecionada: ", this.inscricaoSelecionada)
             this.radioHomologValue = this.inscricaoSelecionada.parecer?.homologado
             this.justificaIndeferido = this.inscricaoSelecionada.parecer?.recursoHomolog?.justificaIndeferido
 
@@ -115,11 +194,43 @@ export class InscricoesComponent implements OnInit {
     }
   }
 
+  responderJustificativa(idStep, recurso, idInscricao) {
+
+    const justificativa = recurso?.justificativa, 
+      respostaJustificativa = recurso?.respostaJustificativa, 
+      recursoAceito = recurso?.recursoAceito,
+      // idInscricao = this.data.idInscricao, 
+      idProcesso = this.idProcessoSelecionado;
+      
+    
+    const dref = this.dialog.open(RecursoComponent, {
+      width: '78%',
+      data: {
+        idInscricao,
+        idProcesso,
+        idStep,
+        isHomolog: false,
+        flagJustView: !!respostaJustificativa,
+        recurso: {
+          justificativa,
+          respostaJustificativa,
+          recursoAceito
+        }
+      }
+    })
+    dref.afterClosed().pipe(take(1)).subscribe(result => {
+      if (result && result.refresh) {
+        console.log("ENTROU NO REFRESH");
+        this.getInscricoes(this.idProcessoSelecionado);
+        
+      }
+    })
+    
+  }
+
   responderJustificativaHomolog(justificativa, respostaJustificativa, recursoAceito) {
 
     const idInscricao = this.inscricaoSelecionada._id, idProcesso = this.idProcessoSelecionado;
-    console.log("idInscricao: ", idInscricao);
-    console.log("idProcesso: ", idProcesso);
     
     const dref = this.dialog.open(RecursoComponent, {
       width: '78%',
@@ -138,6 +249,7 @@ export class InscricoesComponent implements OnInit {
     dref.afterClosed().pipe(take(1)).subscribe(result => {
       if (result && result.refresh) {
         console.log("ENTROU NO REFRESH");
+        this.getInscricoes(this.idProcessoSelecionado);
         
         
       }
@@ -145,12 +257,13 @@ export class InscricoesComponent implements OnInit {
     
   }
 
-  selecionarPareceristaNoInscrito(idParecerista, index, idInscricao) {
+  selecionarPareceristaNoInscrito(idParecerista, index, idInscricao, ordem) {
     const inscricao = this.listInscritos.find(ins => ins._id == idInscricao);
     const pareceristaSelecionado = inscricao.possiveisAvaliadores.find(p => p._id == idParecerista);
     if (pareceristaSelecionado)
-      this.listInscritos[index].parecerista = { _id: idParecerista, fullname: pareceristaSelecionado.fullname, };
+      this.listInscritos[index].parecerista[ordem] = { _id: idParecerista, fullname: pareceristaSelecionado.fullname, };
 
+      console.log("SELECIONADO: ", this.listInscritos[index])
   }
 
   verificarAprovacao(aprovado) {

@@ -144,20 +144,21 @@ export class ParecerUserComponent implements OnInit {
   getPartialScoreByStep(idStep) {
     let stringReturn = "N/A";
     let stepSelected = this.parecerStepList[`step-${idStep}`]
+    console.log("stepSelected: ", stepSelected)
 
     if(stepSelected && stepSelected.stepApproval != null) {
-      let notaSomada: number = 0;
-      Object.keys(stepSelected).forEach( keySection => {
-        if(keySection.startsWith("section-")) {
-          Object.keys(stepSelected[keySection]).forEach( keyQuestion => {
-            if(keyQuestion.startsWith("question-")) {
-              notaSomada += stepSelected[keySection][keyQuestion] != null ? stepSelected[keySection][keyQuestion] : 0;
-            }
+      let notaSomada: number = stepSelected.mediaStep;
+      // Object.keys(stepSelected).forEach( keySection => {
+      //   if(keySection.startsWith("section-")) {
+      //     Object.keys(stepSelected[keySection]).forEach( keyQuestion => {
+      //       if(keyQuestion.startsWith("question-")) {
+      //         notaSomada += stepSelected[keySection][keyQuestion] != null ? stepSelected[keySection][keyQuestion] : 0;
+      //       }
 
-          })
+      //     })
           
-        }
-      })
+      //   }
+      // })
       stringReturn = notaSomada.toFixed(2);
     }
     

@@ -106,31 +106,56 @@ async function unsubscribeProcessoSeletivo(idProcessoSeletivo, idUser) {
 
 /* Parecerista */
 
-async function adicionarCoordenador(idUser) {
+async function adicionarCoordenador(idUser, idLinhaPesquisa) {
   try {
     let user = await UserModel.findOneAndUpdate(
       { _id: idUser },
       { $addToSet: { roles: "coordenador" } },
       { upsert: false }
     );
-    if (user)
+    if (user) {
+      // Adiciona id do usuario na linha de pesquisa
+      await LinhaPesquisaModel.findOneAndUpdate(
+        { _id: idLinhaPesquisa },
+        { $addToSet: { coordenadores: idUser } },
+        { upsert: false }
+      );
+
       return getSuccessByStatus(200, "Coordenador cadastrado com sucesso!");
+    }
     else
       return getErrorByStatus(404, "Usuário não encontrado na base!")
   } catch (error) {
+    console.log("error: ", error)
     return getErrorByStatus(500)
   }
 }
 
-async function removerCoordenador(idUser) {
+async function removerCoordenador(idUser, idLinhaPesquisa) {
   try {
-    let user = await UserModel.findOneAndUpdate(
-      { _id: idUser },
-      { $pull: { roles: "coordenador" } },
+    const linhaRemovida = await LinhaPesquisaModel.findOneAndUpdate(
+      { _id: idLinhaPesquisa },
+      { $pull: { coordenadores: idUser } },
       { upsert: false }
+    )
+
+    let linhaVinculada = await LinhaPesquisaModel.findOne(
+      { coordenadores: idUser },
+      { _id: 1 }
     );
-    if (user)
+
+    let user;
+    if (!linhaVinculada) {
+      user = await UserModel.findOneAndUpdate(
+        { _id: idUser },
+        { $pull: { roles: "coordenador" } },
+        { upsert: false }
+      );
+    }
+
+    if (linhaRemovida || user) {
       return getSuccessByStatus(200, "Coordenador removido com sucesso!");
+    }
     else
       return getErrorByStatus(404, "Usuário não encontrado na base!")
   } catch (error) {
@@ -176,6 +201,8 @@ async function cadastrarParecerista(email, idLinhaPesquisa) {
 
 async function removerParecerista(idUser, idLinhaPesquisa) {
   try {
+    await this.removerCoordenador(idUser, idLinhaPesquisa);
+
     const linhaRemovida = await LinhaPesquisaModel.findOneAndUpdate(
       { _id: idLinhaPesquisa },
       { $pull: { avaliadores: idUser } },
@@ -190,7 +217,7 @@ async function removerParecerista(idUser, idLinhaPesquisa) {
     if (!linhaVinculada) {
       user = await UserModel.findOneAndUpdate(
         { _id: idUser },
-        { $pullAll: { roles: ["coordenador", "parecerista"] } },
+        { $pullAll: { roles: ["parecerista"] } },
         { upsert: false }
       );
     }

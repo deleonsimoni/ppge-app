@@ -21,6 +21,13 @@ const LinhaPesquisaSchema = new mongoose.Schema(
       }
     ],
 
+    coordenadores: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ],
+
     "pt-br": {
 
       navTitle: {

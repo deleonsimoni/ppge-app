@@ -50,9 +50,19 @@
       <div class="row">
         <div class="col-12">
           <mat-form-field appearance="fill" class="w-100">
-            <mat-label>Avaliador</mat-label>
-            <mat-select [disabled]="!myUser.isAdmin && !myUser.isCoordenador" [value]="inscricoes.parecerista?._id"
-              (selectionChange)="selecionarPareceristaNoInscrito($event.value, i, inscricoes._id)">
+            <mat-label>Avaliador 1</mat-label>
+            <mat-select [disabled]="!myUser.isAdmin && !myUser.isCoordenador" [value]="inscricoes.parecerista?.primeiro?._id"
+              (selectionChange)="selecionarPareceristaNoInscrito($event.value, i, inscricoes._id, 'primeiro')">
+              <mat-option *ngFor="let parecerista of inscricoes.possiveisAvaliadores" [value]="parecerista._id">{{
+                parecerista.email }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Avaliador 2</mat-label>
+            <mat-select [disabled]="!myUser.isAdmin && !myUser.isCoordenador" [value]="inscricoes.parecerista?.segundo?._id"
+              (selectionChange)="selecionarPareceristaNoInscrito($event.value, i, inscricoes._id, 'segundo')">
               <mat-option *ngFor="let parecerista of inscricoes.possiveisAvaliadores" [value]="parecerista._id">{{
                 parecerista.email }}</mat-option>
             </mat-select>
@@ -67,6 +77,69 @@
         <div class="col-auto">
           <p class="m-0 title">Linha de Pesquisa: </p>
           <p>{{inscricoes.titleLinhaPesquisa}}</p>
+        </div>
+      </div>
+      <div class="row">
+
+        <div class="col" *ngIf="myUser.isCoordenador && inscricoes.coordenadoresLinha?.indexOf(myUser._id) > -1">
+          
+          <div class="row">
+            <div class="col-12">
+              <table mat-table [dataSource]="inscricoes.avaliacaoEtapas" class="mat-elevation-z8 w-100 text-center">
+    
+                <ng-container matColumnDef="etapa">
+                  <th class="text-center p-0" mat-header-cell *matHeaderCellDef> Etapa </th>
+                  <td class="p-0" mat-cell *matCellDef="let element; let i = index"> {{i+1}} </td>
+                </ng-container>
+              
+                <ng-container matColumnDef="avaliador1">
+                  <th class="text-center p-0" mat-header-cell *matHeaderCellDef> Avaliador 1 </th>
+                  <td class="p-0" mat-cell *matCellDef="let element"> {{element.primeiroAvaliador != undefined ? element.primeiroAvaliador : "N/A" }} </td>
+                </ng-container>
+              
+                <ng-container matColumnDef="avaliador2">
+                  <th class="text-center p-0" mat-header-cell *matHeaderCellDef> Avaliador 2 </th>
+                  <td class="p-0" mat-cell *matCellDef="let element"> {{element.segundoAvaliador != undefined ? element.segundoAvaliador : "N/A" }} </td>
+                </ng-container>
+              
+                <ng-container matColumnDef="media">
+                  <th class="text-center p-0" mat-header-cell *matHeaderCellDef> Média </th>
+                  <td class="p-0" mat-cell *matCellDef="let element"> {{element.media}} </td>
+                </ng-container>
+              
+                <ng-container matColumnDef="approve">
+                  <th class="text-center p-0" mat-header-cell *matHeaderCellDef> Aprovado? </th>
+                  <td class="p-0" mat-cell *matCellDef="let element"> {{inscricoes.parecer?.step && inscricoes.parecer?.step['step-'+element.idStep]?.stepApproval != null ? (inscricoes.parecer?.step['step-'+element.idStep]?.stepApproval ? "SIM" : "NÃO") : "N/A"}} </td>
+                </ng-container>
+              
+                <ng-container matColumnDef="acoes">
+                  <th class="text-center p-0" mat-header-cell *matHeaderCellDef> Ações </th>
+                  <td class="p-0" mat-cell *matCellDef="let element"> 
+                    <span (click)="consolidarAvaliacao(true, element, inscricoes)" matTooltip="Aprovar" matTooltipPosition="above"
+                      class="material-icons md-18 btn card-icon-action p-0">done</span>
+                    <span (click)="consolidarAvaliacao(false, element, inscricoes)" matTooltip="Reprovar" matTooltipPosition="above"
+                      class="material-icons md-18 btn card-icon-action p-0">close</span>
+                    <div class="col-auto" *ngIf="inscricoes.parecer?.step && inscricoes.parecer?.step['step-'+element.idStep]?.recurso?.justificativa">
+                      <button type="button" mat-raised-button color="primary" (click)="responderJustificativa(element.idStep, inscricoes.parecer?.step['step-'+element.idStep]?.recurso, inscricoes._id)">
+                        {{inscricoes.parecer?.step['step-'+element.idStep]?.recurso?.respostaJustificativa ? "Visualizar recurso" : "Responder recurso"}}
+                      </button>
+                    </div>
+                    <!-- <span matTooltip="ver" matTooltipPosition="above"
+                      class="material-icons md-18 btn card-icon-action p-0">close</span> -->
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="mediaTotal">
+                  <td mat-footer-cell *matFooterCellDef> Media final: {{inscricoes.mediaFinal}} </td>
+                </ng-container>
+                
+              
+                <tr mat-header-row *matHeaderRowDef="tableColumsCoordenador"></tr>
+                <tr mat-row *matRowDef="let row; columns: tableColumsCoordenador;"></tr>
+                <tr mat-footer-row *matFooterRowDef="['mediaTotal']"></tr>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -95,7 +168,7 @@
           this.inscricaoSelecionada?._id == inscricoes._id ? 'remove' : 'add'}}</span>
       </div>
       <div class="row justify-content-center">
-        <div class="col-auto" *ngIf="inscricoes?.parecerista?._id == myUser._id">
+        <div class="col-auto" *ngIf="inscricoes?.parecerista?.primeiro?._id == myUser._id || inscricoes?.parecerista?.segundo?._id == myUser._id">
           <button style="background-color: green;" type="button" mat-raised-button color="primary"
             (click)="openModalParecer(inscricoes._id)">Avaliar</button>
         </div>
@@ -251,7 +324,7 @@
               </a>
             </div>
           </div>
-          <div class="row align-items-center mb-3" *ngIf="inscricoes?.parecerista?._id == myUser._id">
+          <div class="row align-items-center mb-3" *ngIf="myUser.isCoordenador && inscricoes.coordenadoresLinha?.indexOf(myUser._id) > -1">
             <div class="col-12"><hr></div>
             <div class="col-12">
               <label class="mb-0"><strong>Homologação: </strong></label>

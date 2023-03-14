@@ -81,17 +81,7 @@ function gerarRankPorProcesso(processoSeletivo, isFinalRank) {
     const etapas = inscrito?.parecer?.step;
     if(etapas) {
       Object.values(etapas).forEach(etapa => {
-        let notaEtapa = 0;
-
-        Object.keys(etapa).forEach(keySection => {
-          if(keySection.startsWith('section-')) {
-
-            Object.values(etapa[keySection]).forEach(notaSection => {
-              notaEtapa += typeof notaSection == 'number' ? notaSection : 0;
-            })
-
-          } 
-        })
+        let notaEtapa = typeof etapa.mediaStep == 'number' ? etapa.mediaStep : 0;
 
         isAprovado = isAprovado && etapa.stepApproval;
         notasNaOrdem.push(notaEtapa);

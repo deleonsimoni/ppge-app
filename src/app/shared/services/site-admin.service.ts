@@ -258,8 +258,8 @@ export class SiteAdminService {
 
   }
 
-  vincularParecerista(idInscricao, idParecerista, idProcesso) {
-    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/inscritos/vincular-parecerista`, { idInscricao, idParecerista, idProcesso });
+  vincularParecerista(idInscricao, pareceristas, idProcesso) {
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/inscritos/vincular-parecerista`, { idInscricao, pareceristas, idProcesso });
   }
 
   detalharInscricao(idInscricao, idProcesso) {
@@ -278,6 +278,10 @@ export class SiteAdminService {
 
   salvarVinculoCriterio(criterio, idProcessoSeletivo) {
     return this.http.put(`${this.URL_PROCESSO_SELETIVO}/criterio/${idProcessoSeletivo}`, {criterio})
+  }
+
+  consolidarAvaliacao(idProcesso, idInscricao, idStep, mediaStep, isApproveStep) {
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/${idProcesso}/inscricao/${idInscricao}/consolidar`, {idStep, mediaStep, isApproveStep})
   }
 
   /* Fim Processo Seletivo */
@@ -303,13 +307,16 @@ export class SiteAdminService {
     return this.http.get(`${this.URL_PARECERISTAS}`, { params });
   }
 
-  adicionarCoordenador(idUser) {
-    return this.http.post(`${this.URL_PARECERISTAS}/coordenador/${idUser}`, {});
+  adicionarCoordenador(idUser, idLinhaPesquisa) {
+    return this.http.post(`${this.URL_PARECERISTAS}/coordenador/${idUser}`, { idLinhaPesquisa });
 
   }
 
-  removerCoordenador(idUser) {
-    return this.http.delete(`${this.URL_PARECERISTAS}/coordenador/${idUser}`);
+  removerCoordenador(idUser, idLinhaPesquisa) {
+    let params = new HttpParams();
+    params = params.set("idLinhaPesquisa", idLinhaPesquisa)
+
+    return this.http.delete(`${this.URL_PARECERISTAS}/coordenador/${idUser}`, { params });
 
   }
 

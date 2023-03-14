@@ -11,6 +11,7 @@ module.exports = {
   deleteLinhaPesquisa,
   listarPareceristasByLinha,
   getHeadersLinhaPesquisaWithProfessors,
+  getIdLinhasByCoordenador,
 };
 
 async function listarPareceristasByLinha(idLinhaPesquisa) {
@@ -47,6 +48,10 @@ async function getLinhaPesquisa(req) {
   return ret;
 }
 
+async function getIdLinhasByCoordenador(idCoordenador) {
+  let result = await LinhaPesquisaModel.find({coordenadores: idCoordenador});
+  return result ? result.map(r => r._id) : [];
+}
 
 async function getHeadersLinhaPesquisa(req) {
   let ret = await LinhaPesquisaModel.find({}, {
@@ -65,10 +70,12 @@ async function getHeadersLinhaPesquisa(req) {
   ));
   return ret;
 }
+
 async function getHeadersLinhaPesquisaWithProfessors(req) {
   let ret = await LinhaPesquisaModel.find({}, {
       [`${req.query.language}.title`]: 1,
       [`${req.query.language}.navTitle`]: 1,
+      coordenadores: 1,
     })
     .populate({
       path: 'corpoDocente',
@@ -83,6 +90,7 @@ async function getHeadersLinhaPesquisaWithProfessors(req) {
       title: data[req.query.language].title, 
       navTitle: data[req.query.language].navTitle , 
       corpoDocente: data.corpoDocente,
+      coordenadores: data.coordenadores
     }
   ));
   return ret;

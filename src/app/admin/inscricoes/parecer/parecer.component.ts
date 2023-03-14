@@ -1,9 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { User } from '@app/shared/interfaces';
+import { AuthService } from '@app/shared/services';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { ToastrService } from 'ngx-toastr';
-import { take } from 'rxjs';
+import { catchError, merge, Observable, take } from 'rxjs';
 import { RecursoComponent } from '../recurso/recurso.component';
 
 export interface DialogParecerData {
@@ -18,12 +20,20 @@ export interface DialogParecerData {
   styleUrls: ['./parecer.component.scss']
 })
 export class ParecerComponent implements OnInit {
+  user$: Observable<User | null> = merge(
+    // Init on startup
+    this.authService.me(),
+    // Update after login/register/logout
+    this.authService.getUser()
+  );
   form: FormGroup;
 
   parecerSelected: any;
+  parecerConsolidadoSelected: any;
 
 
   constructor(
+    private authService: AuthService,
     private builder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogParecerData,
     public dialogRef: MatDialogRef<ParecerComponent>,
@@ -75,6 +85,7 @@ export class ParecerComponent implements OnInit {
           recursoAceito: [null, []], 
         })
       );
+      notasAprovacaoForm.addControl('totalNotaEtapa', new FormControl(null, []))
       stepFormAux.addControl(`step-${step._id}`, notasAprovacaoForm);
 
     })
@@ -88,11 +99,19 @@ export class ParecerComponent implements OnInit {
     this.siteAdminService.getParecer(this.data.idInscricao, this.data.idProcesso)
       .subscribe((data: any) => {
         console.log("data: ", data)
-        this.parecerSelected = data.enrolled[0].parecer;
-        console.log("this.parecerSelected: ", this.parecerSelected);
+        if(data.enrolled[0].parecer?.avaliacoes) {
+          this.user$
+            .pipe(
+              take(1),
+              catchError((e) => {throw e})
+            )
+            .subscribe(user => {
+              this.parecerConsolidadoSelected = data.enrolled[0].parecer;
+              this.parecerSelected = data.enrolled[0].parecer?.avaliacoes[`avaliador-${user._id}`];
+            })
+        }
         
-        this.form.patchValue({ ...data.enrolled[0].parecer })
-        console.log("this.form.value: ", this.form.value);
+        this.form.patchValue({ ...this.parecerSelected })
         
       })
   }
@@ -132,7 +151,10 @@ export class ParecerComponent implements OnInit {
   }
 
   register() {
-    
+    Object.keys(this.form.value.step).forEach((keyStep) => {
+      let retorno = this.getPartialScoreByStep(this.form.value.step[keyStep]);
+      this.form.value.step[keyStep].totalNotaEtapa = retorno;
+    })
     if (this.form.valid) {
       this.siteAdminService
         .registrarParecer(this.data.idInscricao, this.data.idProcesso, this.form.value)
@@ -142,6 +164,33 @@ export class ParecerComponent implements OnInit {
     } else {
       this.toastr.error("Preencha os campos corretamente!")
     }
+  }
+
+  getPartialScoreByStep(step) {
+    let notaSomada = undefined;
+    let stepSelected = step;
+
+    if(stepSelected) {
+      Object.keys(stepSelected).forEach( keySection => {
+        if(keySection.startsWith("section-")) {
+          Object.keys(stepSelected[keySection]).forEach( keyQuestion => {
+            if(keyQuestion.startsWith("question-")) {
+              if(stepSelected[keySection][keyQuestion] != null) {
+                if(notaSomada == undefined) {
+                  notaSomada = 0;
+                }
+                notaSomada += stepSelected[keySection][keyQuestion];
+              }
+            }
+
+          })
+          
+        }
+      })
+      
+    }
+    
+    return notaSomada;
   }
 
 

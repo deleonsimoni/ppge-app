@@ -4,7 +4,7 @@
 
     <div formGroupName="step">
       <div *ngFor="let step of data.criterio?.step; let i = index" >
-        <div *ngIf="i == 0 || form.value.step['step-'+data.criterio?.step[i-1]?._id]?.stepApproval " class="row mt-5" [formGroupName]="'step-'+step._id">
+        <div *ngIf="i == 0 || parecerConsolidadoSelected?.step['step-'+data.criterio?.step[i-1]?._id]?.stepApproval " class="row mt-5" [formGroupName]="'step-'+step._id">
           <div class="col-12 text-center p-2">
             <h3>
               {{ step.title }}
@@ -33,7 +33,7 @@
             </div>
           </div>
     
-          <div class="col-12 mt-3">
+          <!-- <div class="col-12 mt-3">
             <div class="row justify-content-center align-items-center">
               <div class="col-auto">
                 <mat-radio-group class="example-radio-group w-100" formControlName="stepApproval" >
@@ -47,7 +47,7 @@
                 </button>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

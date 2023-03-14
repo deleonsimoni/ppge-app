@@ -52,12 +52,12 @@ async function listarPareceristas(req, res) {
 }
 
 async function adicionarCoordenador(req, res) {
-  const response = await userCtrl.adicionarCoordenador(req.params.id);
+  const response = await userCtrl.adicionarCoordenador(req.params.id, req.body.idLinhaPesquisa);
   res.json(response);
 }
 
 async function removerCoordenador(req, res) {
-  const response = await userCtrl.removerCoordenador(req.params.id);
+  const response = await userCtrl.removerCoordenador(req.params.id, req.query.idLinhaPesquisa);
   res.json(response);
 }
 

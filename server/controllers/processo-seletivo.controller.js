@@ -30,24 +30,52 @@ module.exports = {
   inscricaoJustificarHomolog,
   mudarEtapa,
   salvarVinculoCriterio,
-  changeHomologInscricao
+  changeHomologInscricao,
+  consolidarAvaliacao,
 };
 
 
 
 /* Processo Seletivo */
 
+async function consolidarAvaliacao(idProcesso, idInscricao, body) {
+  try {
+    let processo = await ProcessoSeletivoModel
+      .findOneAndUpdate(
+        { _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } },
+        { $set: { 
+          [`enrolled.$.parecer.step.step-${body.idStep}.mediaStep`]: body.mediaStep,
+          [`enrolled.$.parecer.step.step-${body.idStep}.stepApproval`]: body.isApproveStep,
+        } },
+        { upsert: false }
+      );
+
+    if (processo)
+      return getSuccessByStatus(200, "Etapa consolidada com sucesso!");
+    else
+      return getErrorByStatus(404, "Processo ou inscrição não encontrado na base!")
+  } catch (error) {
+    console.log("ERROR> ", error)
+    return getErrorByStatus(500)
+
+  }
+
+}
+
 async function vincularParecerista(body) {
   try {
     let processo = await ProcessoSeletivoModel
       .findOneAndUpdate(
         { _id: body.idProcesso, enrolled: { $elemMatch: { _id: body.idInscricao } } },
-        { $set: { "enrolled.$.parecerista": body.idParecerista } },
+        { $set: { 
+          "enrolled.$.parecerista.primeiro": body.pareceristas.primeiro,
+          "enrolled.$.parecerista.segundo": body.pareceristas.segundo,
+        } },
         { upsert: false }
       );
 
     if (processo)
-      return getSuccessByStatus(200, "Parecerista vinculado com sucesso!");
+      return getSuccessByStatus(200, "Avaliadores vinculados com sucesso!");
     else
       return getErrorByStatus(404, "Processo ou inscrição não encontrado na base!")
   } catch (error) {
@@ -286,16 +314,17 @@ function buildTextVaga(qtdVaga, qtdVagaCota) {
 
 }
 
-async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParecerista) {
+async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParecerista, filterByLinha) {
 
 
   let processo = await ProcessoSeletivoModel
     .findOne({_id: idProcessoSeletivo})
     .populate({ path: 'enrolled.idUser', select: 'fullname socialname' })
-    .populate({ path: 'enrolled.parecerista', select: 'fullname' })
+    .populate({ path: 'enrolled.parecerista.primeiro', select: 'fullname' })
+    .populate({ path: 'enrolled.parecerista.segundo', select: 'fullname' })
     .populate({
       path: 'enrolled.linhaPesquisa',
-      select: 'avaliadores ',
+      select: 'avaliadores coordenadores',
       populate: {
         path: `avaliadores ${req.query.language}.title`,
         select: "email fullname roles"
@@ -318,7 +347,9 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
       enrolled: processo.enrolled.filter((e) => {
           flagReturn = true;
           
-          if(idParecerista) flagReturn = e.parecerista && e.parecerista.equals(idParecerista)
+          if(idParecerista) flagReturn = e.parecerista && (e.parecerista.primeiro?.equals(idParecerista) || e.parecerista.segundo?.equals(idParecerista))
+          else if(filterByLinha) flagReturn = !!filterByLinha.find(fbl => fbl.equals(e.linhaPesquisa?._id));
+          
 
           if(req.query.filtroConsulta) {
 
@@ -408,7 +439,9 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
             parecerista: e.parecerista,
             parecer: e.parecer,
             possiveisAvaliadores: e.linhaPesquisa.avaliadores,
-            titleLinhaPesquisa: e.linhaPesquisa[req.query.language].title
+            titleLinhaPesquisa: e.linhaPesquisa[req.query.language].title,
+            coordenadoresLinha: e.linhaPesquisa?.coordenadores,
+
           }
         )),
     }
@@ -417,6 +450,7 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
     return { _id: idProcessoSeletivo, enrolled: [] }
   }
 }
+
 const prefixoRecurso = ['justificativa', 'respostaJustificativa'];
 async function inscricaoJustificar(idUser, req) {
   const idProcesso = req.query.idProcesso;
@@ -505,13 +539,13 @@ async function insertProcessoSeletivo(req, idUser) {
   return await new ProcessoSeletivoModel(form).save();
 }
 
-async function registrarParecer(req) {
+async function registrarParecer(req, idUser) {
   const idProcesso = req.query.idProcesso;
   const idInscricao = req.query.idInscricao;
   const form = req.body.formulario;
   return ProcessoSeletivoModel.findOneAndUpdate(
     { _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } },
-    { $set: { "enrolled.$.parecer": {...form} } },
+    { $set: { [`enrolled.$.parecer.avaliacoes.avaliador-${idUser}`]: {...form} } },
     { upsert: false }
   );
 }
@@ -532,15 +566,15 @@ async function changeHomologInscricao(body) {
   );
 }
 
-async function getParecer(req) {
+async function getParecer(req, idUser) {
   const idProcesso = req.query.idProcesso;
   const idInscricao = req.query.idInscricao;
 
+  console.log("idUser: ", idUser)
+
   return ProcessoSeletivoModel.findOne(
     { _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } },
-    {
-      "enrolled.$": 1,
-    }
+    {'enrolled.$': 1,}
   );
 }
 

@@ -132,8 +132,14 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
           },
         },
         parecerista: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
+          primeiro: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+          },
+          segundo: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+          },
         },
         parecer: {
           aprovado: {
@@ -159,6 +165,9 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
           step: {
             type: mongoose.Schema.Types.Mixed,
           },
+          avaliacoes: {
+            type: mongoose.Schema.Types.Mixed,
+          }
         },
         justificativa: {
           type: String,

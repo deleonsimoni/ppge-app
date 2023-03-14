@@ -4,6 +4,7 @@ const asyncHandler = require('express-async-handler');
 const requireAdmin = require('../middleware/require-admin');
 const requireLogin = require('../middleware/require-login');
 const processoSeletivoCtrl = require('../controllers/processo-seletivo.controller');
+const linhaPesquisaService = require('../service/linha_pesquisa.service');
 const setLocation = require('../middleware/set-location');
 const fileUpload = require('express-fileupload');
 const requireAllowedRoles = require('../middleware/require-allowed-roles');
@@ -37,10 +38,13 @@ router.get('/processo-seletivo/inscritos/parecer/all', [passport.authenticate('j
   session: false
 }), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'parecerista'])], setLocation, asyncHandler(getAllParecer));
 
+router.put('/processo-seletivo/:idProcesso/inscricao/:idInscricao/consolidar', [passport.authenticate('jwt', {
+  session: false
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['coordenador'])], setLocation, asyncHandler(consolidarAvaliacao));
 
 router.put('/processo-seletivo/inscritos/vincular-parecerista', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], setLocation, asyncHandler(vincularParecerista));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador'])], setLocation, asyncHandler(vincularParecerista));
 
 router.put('/processo-seletivo/mudar-etapa', [passport.authenticate('jwt', {
   session: false
@@ -136,6 +140,11 @@ async function vincularParecerista(req, res) {
 
 }
 
+async function consolidarAvaliacao(req, res) {
+  const response = await processoSeletivoCtrl.consolidarAvaliacao(req.params.idProcesso, req.params.idInscricao, req.body);
+  res.status(response.status).json(response);
+}
+
 async function mudarEtapa(req, res) {
   const response = await processoSeletivoCtrl.mudarEtapa(req.body);
   res.json(response);
@@ -149,10 +158,19 @@ async function getProcessoSeletivoInscreverInfosById(req, res) {
 
 async function getInscritosByProcessoSelectivo(req, res) {
   var idParecerista = null;
-  if (req.user && req.user.roles.length == 1 && req.user.roles.indexOf('parecerista') == 0) {
-    idParecerista = req.user._id
+  var filterByLinha = null;
+
+  if(req.user) {
+    if (req.user.roles.length == 1 && req.user.roles.indexOf('parecerista') == 0) {
+      idParecerista = req.user._id
+    }
+    if (req.user.roles.indexOf('coordenador') > -1 && req.user.roles.indexOf('admin') == -1) {
+      filterByLinha = await linhaPesquisaService.getIdLinhasByCoordenador(req.user._id)
+    }
+
   }
-  let response = await processoSeletivoCtrl.getInscritosByProcessoSelectivo(req, req.params.id, idParecerista);
+
+  let response = await processoSeletivoCtrl.getInscritosByProcessoSelectivo(req, req.params.id, idParecerista, filterByLinha);
   res.json(response);
 
 }
@@ -187,7 +205,7 @@ async function insertProcessoSeletivo(req, res) {
 }
 
 async function registrarParecer(req, res) {
-  let response = await processoSeletivoCtrl.registrarParecer(req);
+  let response = await processoSeletivoCtrl.registrarParecer(req, req.user._id);
   res.json(response);
 }
 
@@ -197,7 +215,7 @@ async function changeHomologInscricao(req, res) {
 }
 
 async function getParecer(req, res) {
-  let response = await processoSeletivoCtrl.getParecer(req);
+  let response = await processoSeletivoCtrl.getParecer(req, req.user._id);
   res.json(response);
 }
 
