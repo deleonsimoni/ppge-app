@@ -22,6 +22,7 @@ export class PagesAdminComponent implements OnInit {
   dataExpansivel: any = null;
   listCorpoDocenteName: any = null;
   expansivel: boolean = false;
+  content;
   listUrlExpansivel: string[] = [
     'linha_pesquisa',
     'cursos',

@@ -65,10 +65,11 @@
                 </div>
                 <h4>Palavras-chave</h4>
                 <div formArrayName="palavrasChave">
-                    <div *ngFor="let contentLine of getFormPalavrasChave.controls; let i = index;">
+                    <div *ngFor="let contentLine of form.controls['palavrasChave']; let i = index;">
                         <div class="form-row justify-content-center">
                             <div class="form-group col-md-8">
-                                <input type="text" class="form-control" [formControlName]="i" placeholder="Palavra-chave"/>
+                                <input type="text" class="form-control" [formControlName]="i"
+                                    placeholder="Palavra-chave" />
                             </div>
                             <div class="col-md-4">
                                 <button type="button" (click)="removeContentLine(i)" mat-raised-button
@@ -79,7 +80,8 @@
                 </div>
                 <div class="row justify-content-start">
                     <div class="col-auto">
-                        <button class="add-button" type="button" (click)="addContentLine()" mat-raised-button>Adicionar palavra</button>
+                        <button class="add-button" type="button" (click)="addContentLine()" mat-raised-button>Adicionar
+                            palavra</button>
                     </div>
                 </div>
 

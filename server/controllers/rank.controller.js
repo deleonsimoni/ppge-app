@@ -15,7 +15,7 @@ const languageGlobal = "pt-br";
 async function gerarRank(idProcesso, isFinalRank) {
   try {
     let processoSeletivo = await ProcessoSeletivoModel.findOne(
-      {_id: idProcesso}
+      { _id: idProcesso }
     ).populate({
       path: "researchLine",
       select: `${languageGlobal}.title`,
@@ -23,15 +23,15 @@ async function gerarRank(idProcesso, isFinalRank) {
       path: "enrolled.primeiroOrientador",
       select: "fullName",
     });
-  
+
     console.log("processoSeletivo: ", JSON.stringify(processoSeletivo))
     const rankGerado = gerarRankPorProcesso(processoSeletivo, isFinalRank);
-  
-  
+
+
     return await RankModel.findOneAndUpdate(
-      {idProcesso},
+      { idProcesso },
       {
-        $addToSet: {listRank: {...rankGerado, isFinalRank}},
+        $addToSet: { listRank: { ...rankGerado, isFinalRank } },
         idProcesso,
         type: processoSeletivo.type,
         rankGerado,
@@ -39,7 +39,7 @@ async function gerarRank(idProcesso, isFinalRank) {
       },
       { upsert: true, new: true },
     )
-  } catch(e) {
+  } catch (e) {
     console.log("DEU RUIM AQUI: ")
     throw e;
   }
@@ -72,14 +72,20 @@ function gerarRankPorProcesso(processoSeletivo, isFinalRank) {
       maxVagaCota: qtdVagasDaLinhaCotaAA,
       inscritosNaLinha: []
     }
-    
+
   })
 
   processoSeletivo.enrolled.forEach(inscrito => {
     let notasNaOrdem = [];
     let isAprovado = true;
-    const etapas = inscrito?.parecer?.step;
-    if(etapas) {
+    let etapas;
+
+    if (inscrito.parecer && inscrito.parecer.step) {
+      etapas = inscrito.parecer.step;
+    }
+
+
+    if (etapas) {
       Object.values(etapas).forEach(etapa => {
         let notaEtapa = typeof etapa.mediaStep == 'number' ? etapa.mediaStep : 0;
 
@@ -91,13 +97,13 @@ function gerarRankPorProcesso(processoSeletivo, isFinalRank) {
     }
     const mediaNotas = gerarMediaNotas(notasNaOrdem);
     let situacao = '';
-    if(isAprovado) {
-      situacao += `Aprovada(o) e ${mediaNotas >= 7 ? '' : 'não ' }classificada(o)`
+    if (isAprovado) {
+      situacao += `Aprovada(o) e ${mediaNotas >= 7 ? '' : 'não '}classificada(o)`
     } else {
       situacao = 'Eliminado(a) do processo seletivo';
     }
     listLinhaAux[inscrito.linhaPesquisa].inscritosNaLinha.push({
-      orientador: inscrito.primeiroOrientador?.fullName,
+      orientador: inscrito.primeiroOrientador ? inscrito.primeiroOrientador.fullName : null,
       codInscricao: inscrito.codInscricao,
       notasNaOrdem,
       medialFinal: mediaNotas,
@@ -114,9 +120,9 @@ function gerarRankPorProcesso(processoSeletivo, isFinalRank) {
 }
 
 function gerarMediaNotas(arrayDeNotas) {
-  if(arrayDeNotas && Array.isArray(arrayDeNotas)) {
+  if (arrayDeNotas && Array.isArray(arrayDeNotas)) {
     let somatorio = 0;
-    arrayDeNotas.forEach(nota => somatorio+=nota);
+    arrayDeNotas.forEach(nota => somatorio += nota);
     return somatorio / arrayDeNotas.length;
   } else {
     return 0;
@@ -125,7 +131,7 @@ function gerarMediaNotas(arrayDeNotas) {
 
 async function getAllRanks(idProcesso, published) {
   console.log("publishedpublished: ", published)
-  if(!ObjectId.isValid(idProcesso))
+  if (!ObjectId.isValid(idProcesso))
     throw "Id do processo não é compatível com id do Mongo!";
 
   let query = [];
@@ -136,7 +142,7 @@ async function getAllRanks(idProcesso, published) {
     }
   });
 
-  if(published != null) {
+  if (published != null) {
     query.push({
       $project: {
         listRank: {
@@ -168,7 +174,7 @@ async function getAllRanks(idProcesso, published) {
 
 async function getDetalheRank(idProcesso, idRank) {
   return await RankModel.findOne(
-    {idProcesso },
+    { idProcesso },
     {
       listRank: { $elemMatch: { _id: idRank } },
       type: 1
@@ -178,7 +184,7 @@ async function getDetalheRank(idProcesso, idRank) {
 
 async function alterarStatusRank(idProcesso, idRank, isChecked) {
   return await RankModel.findOneAndUpdate(
-    {idProcesso, listRank: { $elemMatch: { _id: idRank } }},
+    { idProcesso, listRank: { $elemMatch: { _id: idRank } } },
     { $set: { "listRank.$.published": isChecked } },
     { upsert: false }
   )
@@ -186,7 +192,7 @@ async function alterarStatusRank(idProcesso, idRank, isChecked) {
 
 async function deletarRankById(idProcesso, idRank) {
   return await RankModel.findOneAndUpdate(
-    {idProcesso},
+    { idProcesso },
     { $pull: { listRank: { _id: idRank } } },
     { upsert: false }
   )

@@ -18,6 +18,8 @@ export class TeseDissertacaoComponent implements OnInit {
   isTipoPresent: boolean | false;
   filtros: any | undefined;
   metadados = [];
+  selectable = true;
+  addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   removable = true;
   public form: FormGroup;
