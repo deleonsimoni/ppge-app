@@ -106,6 +106,8 @@ export class InscricoesComponent implements OnInit {
         inscrito.avaliacaoEtapas.forEach( avaliacao => {
           inscrito.mediaFinal += avaliacao.media
         })
+        
+        inscrito.mediaFinal = inscrito.mediaFinal/inscrito.avaliacaoEtapas.length;
       })
       this.listInscritos = data.enrolled;
     });
