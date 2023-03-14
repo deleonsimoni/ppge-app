@@ -355,80 +355,59 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
           flagReturn = true;
           
           if(idParecerista) flagReturn = e.parecerista && ((e.parecerista.primeiro && e.parecerista.primeiro.equals(idParecerista)) || (e.parecerista.segundo && e.parecerista.segundo.equals(idParecerista)))
-          else if(filterByLinha) flagReturn = !!filterByLinha.find(fbl => fbl.equals(e.linhaPesquisa ? e.linhaPesquisa?._id : null));
+          else if(filterByLinha) flagReturn = !!filterByLinha.find(fbl => fbl.equals(e.linhaPesquisa ? e.linhaPesquisa._id : null));
           
 
-        if (idParecerista) flagReturn = e.parecerista && e.parecerista.equals(idParecerista)
+          if (idParecerista) flagReturn = e.parecerista && e.parecerista.equals(idParecerista)
 
-        if (req.query.filtroConsulta) {
+          if (req.query.filtroConsulta) {
 
-          if (statusRecurso.includes(req.query.filtroConsulta)) {
+            if (statusRecurso.includes(req.query.filtroConsulta)) {
 
-            if (e.parecer) {
-              let hasSolicitado, hasAprovado, hasReprovado;
-              hasSolicitado = hasAprovado = hasReprovado = false;
+              if (e.parecer) {
+                let hasSolicitado, hasAprovado, hasReprovado;
+                hasSolicitado = hasAprovado = hasReprovado = false;
 
-              if (e.parecer.recursoHomolog && typeof e.parecer.recursoHomolog.justificativa == 'string') {
-                hasSolicitado = typeof e.parecer.recursoHomolog.respostaJustificativa != 'string';
-                hasAprovado = e.parecer.recursoHomolog.recursoAceito == true;
-                hasReprovado = e.parecer.recursoHomolog.recursoAceito == false;
+                if (e.parecer.recursoHomolog && typeof e.parecer.recursoHomolog.justificativa == 'string') {
+                  hasSolicitado = typeof e.parecer.recursoHomolog.respostaJustificativa != 'string';
+                  hasAprovado = e.parecer.recursoHomolog.recursoAceito == true;
+                  hasReprovado = e.parecer.recursoHomolog.recursoAceito == false;
+                }
+
+                let etapas;
+                if (e.parecer) {
+                  etapas = e.parecer.step;
+                }
+
+                if (etapas) {
+                  Object.values(etapas).forEach((etapa, index) => {
+                    if (etapa.recurso && typeof etapa.recurso.justificativa == 'string') {
+                      hasSolicitado = hasSolicitado || typeof etapa.recurso.respostaJustificativa != 'string';
+                      hasAprovado = hasAprovado || etapa.recurso.recursoAceito == true;
+                      hasReprovado = hasReprovado || etapa.recurso.recursoAceito == false;
+                    }
+                  })
+                }
+                flagReturn =
+                  (req.query.filtroConsulta == "recursoSolicitado" && hasSolicitado) ||
+                  (req.query.filtroConsulta == "recursoNaoAprovado" && hasReprovado) ||
+                  (req.query.filtroConsulta == "recursoAprovado" && hasAprovado && !hasSolicitado && !hasReprovado);
+
+
+
+              } else {
+                flagReturn = false;
               }
 
+            } else if (statusAguardando.includes(req.query.filtroConsulta)) {
+              let isWaitingApprove = false;
+
+              let hasUndefined = false;
+              let isAprovado = true;
               let etapas;
               if (e.parecer) {
                 etapas = e.parecer.step;
               }
-
-              if (etapas) {
-                Object.values(etapas).forEach((etapa, index) => {
-                  if (etapa.recurso && typeof etapa.recurso.justificativa == 'string') {
-                    hasSolicitado = hasSolicitado || typeof etapa.recurso.respostaJustificativa != 'string';
-                    hasAprovado = hasAprovado || etapa.recurso.recursoAceito == true;
-                    hasReprovado = hasReprovado || etapa.recurso.recursoAceito == false;
-                  }
-                })
-              }
-              flagReturn =
-                (req.query.filtroConsulta == "recursoSolicitado" && hasSolicitado) ||
-                (req.query.filtroConsulta == "recursoNaoAprovado" && hasReprovado) ||
-                (req.query.filtroConsulta == "recursoAprovado" && hasAprovado && !hasSolicitado && !hasReprovado);
-
-
-
-            } else {
-              flagReturn = false;
-            }
-
-          } else if (statusAguardando.includes(req.query.filtroConsulta)) {
-            let isWaitingApprove = false;
-
-            let hasUndefined = false;
-            let isAprovado = true;
-            let etapas;
-            if (e.parecer) {
-              etapas = e.parecer.step;
-            }
-            if (etapas) {
-              Object.values(etapas).forEach(etapa => {
-                if (etapa.stepApproval == undefined) {
-                  hasUndefined = true;
-                }
-                isAprovado = isAprovado && etapa.stepApproval == true;
-              })
-              isWaitingApprove = isAprovado && !hasUndefined;
-            } else {
-              isWaitingApprove = true;
-            }
-
-
-            flagReturn = flagReturn && (e.parecer == undefined || (req.query.filtroConsulta == 'aguardandoAprov' && isWaitingApprove) || (req.query.filtroConsulta == 'aguardandoHomolog' && e.parecer.homologado == undefined))
-          } else {
-            let flagAprov = false;
-            let hasUndefined = false;
-            let isAprovado = true;
-            if (e.parecer && statusAprov.includes(req.query.filtroConsulta)) {
-              // e.parecer.aprovado == (req.query.filtroConsulta == 'aprovadoAprov');
-              const etapas = e.parecer.step;
               if (etapas) {
                 Object.values(etapas).forEach(etapa => {
                   if (etapa.stepApproval == undefined) {
@@ -436,17 +415,38 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
                   }
                   isAprovado = isAprovado && etapa.stepApproval == true;
                 })
+                isWaitingApprove = isAprovado && !hasUndefined;
               } else {
-                hasUndefined = true;
+                isWaitingApprove = true;
               }
+
+
+              flagReturn = flagReturn && (e.parecer == undefined || (req.query.filtroConsulta == 'aguardandoAprov' && isWaitingApprove) || (req.query.filtroConsulta == 'aguardandoHomolog' && e.parecer.homologado == undefined))
+            } else {
+              let flagAprov = false;
+              let hasUndefined = false;
+              let isAprovado = true;
+              if (e.parecer && statusAprov.includes(req.query.filtroConsulta)) {
+                // e.parecer.aprovado == (req.query.filtroConsulta == 'aprovadoAprov');
+                const etapas = e.parecer.step;
+                if (etapas) {
+                  Object.values(etapas).forEach(etapa => {
+                    if (etapa.stepApproval == undefined) {
+                      hasUndefined = true;
+                    }
+                    isAprovado = isAprovado && etapa.stepApproval == true;
+                  })
+                } else {
+                  hasUndefined = true;
+                }
+              }
+              flagAprov = isAprovado == (req.query.filtroConsulta == 'aprovadoAprov') && ((req.query.filtroConsulta == 'aprovadoAprov' && !hasUndefined) || (req.query.filtroConsulta == 'reprovadoAprov'))
+              const flagHomolog = e.parecer && statusHomologa.includes(req.query.filtroConsulta) && e.parecer.homologado == (req.query.filtroConsulta == 'homologadoHomolog')
+              flagReturn = flagReturn && (flagAprov || flagHomolog);
             }
-            flagAprov = isAprovado == (req.query.filtroConsulta == 'aprovadoAprov') && ((req.query.filtroConsulta == 'aprovadoAprov' && !hasUndefined) || (req.query.filtroConsulta == 'reprovadoAprov'))
-            const flagHomolog = e.parecer && statusHomologa.includes(req.query.filtroConsulta) && e.parecer.homologado == (req.query.filtroConsulta == 'homologadoHomolog')
-            flagReturn = flagReturn && (flagAprov || flagHomolog);
           }
             
           return flagReturn;
-          
         }).map(e => (
           {
             _id: e._id,
