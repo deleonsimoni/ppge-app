@@ -36,6 +36,7 @@ export class ViewInscritosProcessoSeletivoComponent implements OnInit {
   }
 
   getUserInfo(idUser) {
+    //FEITO
     this.siteService.getUserByIdOnlyProcesso(idUser, this.data.idProcesso).subscribe((user: any) => {
       this.infoUser = user.enrolled[0].idUser;
       this.infoUserProcesso = user.enrolled[0];

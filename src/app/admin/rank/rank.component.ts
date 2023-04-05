@@ -36,6 +36,7 @@ export class RankComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    //FEITO
     this.siteService.getProcessosSeletivoTitle().subscribe((data: any) => {
       this.listProcessoSeletivo = data;
     });
@@ -43,6 +44,7 @@ export class RankComponent implements OnInit {
 
   getAllRanks(idProcesso) {
     this.idProcessoSelecionado = idProcesso;
+    //FEITO
     this.siteService
       .getAllRanks(idProcesso)
       .pipe(
@@ -57,6 +59,7 @@ export class RankComponent implements OnInit {
 
   apagar(idRank) {
     console.log("apagar() idRank: ", idRank);
+    //FEITO
     this.siteService
     .deleteRankById(this.idProcessoSelecionado, idRank).pipe(
       take(1),
@@ -80,6 +83,7 @@ export class RankComponent implements OnInit {
   }
 
   atualizarStatusRankAtivo(event: MatSlideToggleChange, idRank) {
+    //FEITO
     this.siteService.atualizarStatusRankAtivo(event.checked, this.idProcessoSelecionado, idRank).subscribe(() => {
         this.toastr.success('Visibilidade atualizada com sucesso.', 'Sucesso');
       },
@@ -92,6 +96,7 @@ export class RankComponent implements OnInit {
 
   gerarRank() {
     if(this.idProcessoSelecionado) {
+      //FEITO
       this.siteService.gerarRank(this.idProcessoSelecionado, this.isFinalRank)
         .pipe(
           take(1),

@@ -20,7 +20,7 @@ router.get(
   '/processo-seletivo/inscritos/:id',
   [
     passport.authenticate('jwt', { session: false }),
-    (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'parecerista'])
+    (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'parecerista', 'gerenciador'])
   ],
   setLocation,
   asyncHandler(getInscritosByProcessoSelectivo)
@@ -28,7 +28,7 @@ router.get(
 
 router.get('/processo-seletivo/inscritos/detalhe/:idUser', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], setLocation, asyncHandler(getUserInscricaoProcessoSeletivo));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], setLocation, asyncHandler(getUserInscricaoProcessoSeletivo));
 
 router.get('/processo-seletivo/inscritos/parecer/detalhe', [passport.authenticate('jwt', {
   session: false
@@ -48,7 +48,7 @@ router.put('/processo-seletivo/inscritos/vincular-parecerista', [passport.authen
 
 router.put('/processo-seletivo/mudar-etapa', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], setLocation, asyncHandler(mudarEtapa));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], setLocation, asyncHandler(mudarEtapa));
 
 router.post('/processo-seletivo/minha-inscricoes/justificar', [passport.authenticate('jwt', {
   session: false
@@ -68,7 +68,7 @@ router.get('/processo-seletivo/minha-inscricoes/detalhe', [passport.authenticate
 
 router.post('/processo-seletivo', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], asyncHandler(insertProcessoSeletivo));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], asyncHandler(insertProcessoSeletivo));
 
 router.post('/processo-seletivo/parecer', [passport.authenticate('jwt', {
   session: false
@@ -84,7 +84,7 @@ router.get('/processo-seletivo/parecer', [passport.authenticate('jwt', {
 
 router.post('/processo-seletivo/ativo/:id', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], asyncHandler(atualizarProcessoSeletivoAtivo));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], asyncHandler(atualizarProcessoSeletivoAtivo));
 
 router.post('/processo-seletivo/inscrever/:id', [passport.authenticate('jwt', {
   session: false
@@ -98,15 +98,15 @@ router.delete('/processo-seletivo/inscrever/:id', [passport.authenticate('jwt', 
 
 router.put('/processo-seletivo/:id', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin, fileUpload()], asyncHandler(updateProcessoSeletivo));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador']), fileUpload()], asyncHandler(updateProcessoSeletivo));
 
 router.delete('/processo-seletivo/:id', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], asyncHandler(deleteProcessoSeletivo));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], asyncHandler(deleteProcessoSeletivo));
 
 router.put('/processo-seletivo/criterio/:id', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], asyncHandler(salvarVinculoCriterio));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], asyncHandler(salvarVinculoCriterio));
 
 async function getProcessoSeletivo(req, res) {
   let response = await processoSeletivoCtrl.getProcessoSeletivo(req);

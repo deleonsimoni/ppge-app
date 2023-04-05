@@ -33,6 +33,7 @@ export class AddPareceristaDialogComponent {
   addParecerista() {
     const email = new String(this.formParecerista.value.email).trim();
     if (this.validateEmail(email)) {
+      //FEITO
       this.siteService
         .cadastrarParecerista(email, this.data.idLinhaPesquisa)
         .pipe(take(1))

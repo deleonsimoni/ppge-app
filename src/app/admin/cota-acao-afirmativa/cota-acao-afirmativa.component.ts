@@ -37,6 +37,7 @@ export class CotaAcaoAfirmativaComponent implements OnInit {
   }
 
   getAllCotas() {
+    //FEITO
     this.siteService.getAllCotas().subscribe(listCotas => {
       this.listCotas = listCotas;
     });
@@ -49,6 +50,7 @@ export class CotaAcaoAfirmativaComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
+        //FEITO
         this.siteService
           .deleteCotaById(idCota)
           .pipe(

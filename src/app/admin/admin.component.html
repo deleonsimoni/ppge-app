@@ -9,11 +9,13 @@
 
                     <div [ngClass]="{'section-header': menu.length > 2}">
                         <ul class="nav nav-pills">
-                            <li class="nav-item m-2" *ngFor="let item of menu">
-                                <button *ngIf="item.permitido" mat-raised-button color="accent" [routerLink]="[item.path]">
-                                    {{item.name}}
-                                </button>
-                            </li>
+                            <ng-container  *ngFor="let item of menu">
+                                <li *ngIf="item.permitido" class="nav-item m-2">
+                                    <button mat-raised-button color="accent" [routerLink]="[item.path]">
+                                        {{item.name}}
+                                    </button>
+                                </li>
+                            </ng-container>
                         </ul>
                     </div>
 

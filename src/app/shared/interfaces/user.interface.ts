@@ -6,4 +6,5 @@ export interface User {
   isAdmin: boolean;
   isCoordenador: boolean;
   isParecerista: boolean;
+  isGerenciador: boolean;
 }

@@ -18,7 +18,7 @@ const routes: Routes = [
     path: '',
     canActivate: [OnlyAllowedRolesUsersGuard],
     data: {
-      roles: ['admin', 'parecerista', 'coordenador']
+      roles: ['admin', 'parecerista', 'coordenador', 'gerenciador']
     },
     component: AdminComponent,
     children: [
@@ -47,42 +47,42 @@ const routes: Routes = [
         path: 'processo-seletivo', component: ProcessoSeletivoAdminComponent,
         canActivate: [OnlyAllowedRolesUsersGuard],
         data: {
-          roles: ['admin']
+          roles: ['admin', 'gerenciador']
         }
       },
       {
         path: 'criterio-avaliacao', component: CriterioAvaliacaoComponent,
         canActivate: [OnlyAllowedRolesUsersGuard],
         data: {
-          roles: ['admin']
+          roles: ['admin', 'gerenciador']
         }
       },
       {
         path: 'pareceristas', component: PareceristasComponent,
         canActivate: [OnlyAllowedRolesUsersGuard],
         data: {
-          roles: ['admin', 'coordenador']
+          roles: ['admin', 'coordenador', 'gerenciador']
         }
       },
       {
         path: 'inscritos', component: InscricoesComponent,
         canActivate: [OnlyAllowedRolesUsersGuard],
         data: {
-          roles: ['admin', 'coordenador', 'parecerista']
+          roles: ['admin', 'coordenador', 'parecerista', 'gerenciador']
         }
       },
       {
         path: 'rank', component: RankComponent,
         canActivate: [OnlyAllowedRolesUsersGuard],
         data: {
-          roles: ['admin', 'coordenador', 'parecerista']
+          roles: ['admin', 'coordenador', 'parecerista', 'gerenciador']
         }
       },
       {
         path: 'cotas-acoes-afirmativas', component: CotaAcaoAfirmativaComponent,
         canActivate: [OnlyAllowedRolesUsersGuard],
         data: {
-          roles: ['admin']
+          roles: ['admin', 'gerenciador']
         }
       }
     ],

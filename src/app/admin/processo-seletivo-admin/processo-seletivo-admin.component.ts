@@ -140,6 +140,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
   }
 
   public mudarEtapa(value, idProcesso) {
+    //FEITO
     this.siteService
       .mudarEtapa(value, idProcesso)
       .subscribe(
@@ -157,6 +158,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
   }
 
   public getTitleLinhaPesquisa() {
+    //FEITO
     this.siteService.getTitleLinhaPesquisa().subscribe(data => {
       this.listLinhaPesquisa = data;
     })
@@ -206,6 +208,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
   public register() {
     if (this.form.valid) {
       if (this.form.value._id) {
+        //FEITO
         this.siteService.atualizarProcessoSeletivo(this.form.value)
           .subscribe((res: any) => {
             this.toastr.success('Processo Seletivo alterado com sucesso', 'Sucesso');
@@ -215,6 +218,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
             this.toastr.error('Ocorreu um erro ao atualizar', 'Atenção: ');
           });
       } else {
+        //FEITO
         this.siteService.cadastrarProcessoSeletivo(this.form.value)
           .subscribe((res: any) => {
             this.toastr.success('Processo Seletivo cadastrado', 'Sucesso');
@@ -253,6 +257,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        //FEITO
         this.siteService.deletarProcessoSeletivo(id).subscribe((res: any) => {
           this.getProcessoSeletivo();
         }, err => {
@@ -303,6 +308,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
   }
 
   inscritos(id, title) {
+    //FEITO
     this.siteService.listProcessoSeletivoInscritos(id).subscribe((res: any) => {
 
       const dialogRef = this.dialog.open(ViewInscritosProcessoSeletivoComponent, {
@@ -316,6 +322,7 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
   }
 
   atualizarProcessoAtivo(event: MatSlideToggleChange, idProcesso) {
+    //FEITO
     this.siteService.atualizarProcessoAtivo(event.checked, idProcesso).subscribe(() => {
       this.toastr.success('Visibilidade atualizada com sucesso.', 'Sucesso');
     },

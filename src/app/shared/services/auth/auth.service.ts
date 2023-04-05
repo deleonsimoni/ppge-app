@@ -51,6 +51,7 @@ export class AuthService {
       user.isAdmin = user.roles.includes('admin');
       user.isCoordenador = user.roles.includes('coordenador');
       user.isParecerista = user.roles.includes('parecerista');
+      user.isGerenciador = user.roles.includes('gerenciador');
     }
 
     this.user$.next(user);

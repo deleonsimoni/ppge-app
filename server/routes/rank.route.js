@@ -9,7 +9,7 @@ module.exports = router;
 
 router.post('/:idProcesso', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin'])], asyncHandler(gerarRank));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], asyncHandler(gerarRank));
 
 async function gerarRank(req, res) {
   let response = await rankCtrl.gerarRank(req.params.idProcesso, req.body.isFinalRank);
@@ -19,7 +19,7 @@ async function gerarRank(req, res) {
 
 router.post('/status-rank/:idProcesso/:idRank', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin'])], asyncHandler(alterarStatusRank));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], asyncHandler(alterarStatusRank));
 
 async function alterarStatusRank(req, res) {
   let response = await rankCtrl.alterarStatusRank(req.params.idProcesso, req.params.idRank, req.body.checked);
@@ -28,7 +28,7 @@ async function alterarStatusRank(req, res) {
 
 router.delete('/:idProcesso/:idRank', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin'])], asyncHandler(deletarRankById));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], asyncHandler(deletarRankById));
 async function deletarRankById(req, res) {
   let response = await rankCtrl.deletarRankById(req.params.idProcesso, req.params.idRank);
   res.json(response);

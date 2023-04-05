@@ -26,6 +26,7 @@ export class CriterioAvaliacaoDialogComponent implements OnInit {
   ngOnInit(): void {
     console.log("DATA: ", this.data);
     this.criterioSelecionado = this.data?.criterio;
+    //FEITO
     this.siteService.getAllCriterios().subscribe(listCriterios => {
       this.listCriterios = listCriterios;
     });
@@ -41,6 +42,7 @@ export class CriterioAvaliacaoDialogComponent implements OnInit {
 
   salvarVinculoCriterio() {
     if(this.criterioSelecionado) {
+      //FEITO
       this.siteService.salvarVinculoCriterio(this.criterioSelecionado, this.data.idProcessoSeletivo)
         .pipe(
           catchError(err => {

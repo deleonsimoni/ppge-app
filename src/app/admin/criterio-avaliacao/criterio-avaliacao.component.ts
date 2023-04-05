@@ -61,6 +61,7 @@ export class CriterioAvaliacaoComponent implements OnInit {
   }
 
   getAllCriterios() {
+    //FEITO
     this.siteService
       .getAllCriterios()
       .pipe(take(1))
@@ -78,6 +79,7 @@ export class CriterioAvaliacaoComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
+        //FEITO
         this.siteService
           .deleteById(idCriterio)
           .pipe(
@@ -100,6 +102,7 @@ export class CriterioAvaliacaoComponent implements OnInit {
     console.log("ON SUBMIT: ", this.form.value);
     if (this.form.valid) {
       if (this.form.value._id) {
+        //FEITO
         this.siteService.atualizarCriterio(this.form.value)
           .pipe(catchError(err => {
             this.toastr.error("Ocorreu um erro ao atualizar o critério!");
@@ -112,6 +115,7 @@ export class CriterioAvaliacaoComponent implements OnInit {
           })
 
       } else {
+        //FEITO
         this.siteService.cadastrarCriterio(this.form.value)
           .pipe(catchError(err => {
             this.toastr.error("Ocorreu um erro ao cadastrar o critério!");

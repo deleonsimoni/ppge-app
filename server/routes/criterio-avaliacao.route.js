@@ -10,7 +10,7 @@ module.exports = router;
 
 router.post('/', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin'])], asyncHandler(adicionarCriterio));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], asyncHandler(adicionarCriterio));
 
 async function adicionarCriterio(req, res) {
   let response = await criterioAvaliacaoCtrl.adicionarCriterio(req, req.user._id);
@@ -19,7 +19,7 @@ async function adicionarCriterio(req, res) {
 
 router.put('/:id', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin'])], asyncHandler(atualizarCriterio));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], asyncHandler(atualizarCriterio));
 
 async function atualizarCriterio(req, res) {
   let response = await criterioAvaliacaoCtrl.atualizarCriterio(req, req.user._id);
@@ -28,7 +28,7 @@ async function atualizarCriterio(req, res) {
 
 router.get('/', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin'])], asyncHandler(getAllCriterio));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], asyncHandler(getAllCriterio));
 
 async function getAllCriterio(req, res) {
   console.log("ENTROU ROUTE getAllCriterio")
@@ -38,7 +38,7 @@ async function getAllCriterio(req, res) {
 
 router.delete('/:idCriterio', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin'])], asyncHandler(deleteById));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], asyncHandler(deleteById));
 
 async function deleteById(req, res) {
   console.log("ENTROU ROUTE getAllCriterio")

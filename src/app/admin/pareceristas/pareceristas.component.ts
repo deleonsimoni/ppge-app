@@ -34,6 +34,7 @@ export class PareceristasComponent implements OnInit {
   }
 
   public getTitleLinhaPesquisa() {
+    //FEITO
     this.siteService.getTitleLinhaPesquisa().subscribe(data => {
       this.listLinhaPesquisa = data;
 
@@ -55,6 +56,7 @@ export class PareceristasComponent implements OnInit {
   }
 
   listarPareceristas(idLinhaPesquisa) {
+    //FEITO
     this.siteService.listarPareceristas(idLinhaPesquisa).subscribe((data: any) => {
       this.listPareceristas = data;
     });
@@ -62,6 +64,7 @@ export class PareceristasComponent implements OnInit {
 
   addCoordenador(event, idUser) {
     if (event.checked) {
+      //FEITO
       this.siteService
         .adicionarCoordenador(idUser, this.idLinhaPesquisaSelecionada)
         .pipe(take(1))
@@ -70,6 +73,7 @@ export class PareceristasComponent implements OnInit {
           data.hasError ? this.toastr.error(data.msg) : this.toastr.success(data.msg);
         });
     } else {
+      //FEITO
       this.siteService
         .removerCoordenador(idUser, this.idLinhaPesquisaSelecionada)
         .pipe(take(1))
@@ -83,6 +87,7 @@ export class PareceristasComponent implements OnInit {
 
   removerPermissoes(idUser) {
 
+    //FEITO
     this.siteService
       .removerParecerista(idUser, this.idLinhaPesquisaSelecionada)
       .pipe(take(1))

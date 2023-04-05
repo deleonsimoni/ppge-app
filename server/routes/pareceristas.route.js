@@ -13,23 +13,23 @@ module.exports = router;
 
 router.post('/coordenador/:id', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador'])], asyncHandler(adicionarCoordenador));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'gerenciador'])], asyncHandler(adicionarCoordenador));
 
 router.delete('/coordenador/:id', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador'])], asyncHandler(removerCoordenador));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'gerenciador'])], asyncHandler(removerCoordenador));
 
 router.post('/', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador'])], asyncHandler(cadastrarParecerista));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'gerenciador'])], asyncHandler(cadastrarParecerista));
 
 router.delete('/:id', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador'])], asyncHandler(removerParecerista));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'gerenciador'])], asyncHandler(removerParecerista));
 
 router.get('/', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'parecerista'])], asyncHandler(listarPareceristas));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador', 'parecerista', 'gerenciador'])], asyncHandler(listarPareceristas));
 
 async function cadastrarParecerista(req, res) {
   const response = await userCtrl.cadastrarParecerista(req.body.email, req.body.idLinhaPesquisa);
