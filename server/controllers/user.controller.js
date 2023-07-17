@@ -34,6 +34,7 @@ async function insert(user) {
     let email = templateEmail.inscricaoSucesso;
     emailSender.sendMailAWS(user.email, 'Bem-Vindo!', email);
   }
+  return success;
 }
 
 async function getByIdOnlyProcesso(idUser, req) {

@@ -2,14 +2,14 @@
     <div class="container">
 
         <div class="section-header">
-            <h2>{{matricula.textTitle}}</h2>
+            <h2>{{matricula.title}}</h2>
         </div>
 
     </div>
 
     <div class="container">
 
-        <div class="text-body" [innerHtml]="matricula.textBody"></div>
+        <div class="text-body" [innerHtml]="matricula.content | sanitizer"></div>
 
     </div>
 </section>

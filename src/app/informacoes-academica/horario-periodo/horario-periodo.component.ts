@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { HorarioPeriodoService } from "./horario-periodo.service";
+import { catchError } from "rxjs";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
     selector: 'app-horario-periodo',
@@ -9,9 +11,12 @@ import { HorarioPeriodoService } from "./horario-periodo.service";
   })
   export class HorarioPeriodoComponent implements OnInit {
   
-    horarioPeriodo: any;
+    horarioPeriodo: any = {};
   
-    constructor(private horarioPeriodoService: HorarioPeriodoService) {
+    constructor(
+      private horarioPeriodoService: HorarioPeriodoService,
+      private toastr: ToastrService,
+    ) {
       window.scroll({
         top: 0,
         left: 0
@@ -23,9 +28,16 @@ import { HorarioPeriodoService } from "./horario-periodo.service";
     }
   
     private getHorarioPeriodo() {
-      this.horarioPeriodoService.getHorarioPeriodo().subscribe(arr => {
-        this.horarioPeriodo = arr;
-      });
+      this.horarioPeriodoService.getHorarioPeriodo()
+        .pipe(
+          catchError(err => {
+            this.toastr.error("Ocorreu um erro ao carregar a página!", "Atenção");
+            throw err;
+          })
+        )
+        .subscribe(horarioPeriodo => {
+          this.horarioPeriodo = horarioPeriodo ?? {};
+        });
     }
   }
   

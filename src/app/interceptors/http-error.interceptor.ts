@@ -27,9 +27,9 @@ export class CatchErrorInterceptor implements HttpInterceptor {
       response.error?.message ?? response.error.statusText;
 
     if (text) {
-      this.snackBar.open(text, 'Close', {
-        duration: 2000,
-      });
+      // this.snackBar.open(text, 'Close', {
+      //   duration: 2000,
+      // });
     }
 
     return throwError(() => response);

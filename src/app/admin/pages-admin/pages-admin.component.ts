@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { ToastrService } from 'ngx-toastr';
-import { take } from 'rxjs';
+import { catchError, take } from 'rxjs';
 import { ComfirmDeleteProcessoComponent } from '../processo-seletivo-admin/modal/confirm-delet-processo.component';
 
 @Component({
@@ -175,11 +175,15 @@ export class PagesAdminComponent implements OnInit {
 
       } else {
         this.siteService.cadastrarPage(this.form.value, pageSelected)
+          .pipe(
+            catchError( err => {
+              this.toastr.error('Ocorreu um erro ao cadastrar', 'Atenção: ');
+              throw err;
+            })
+          )
           .subscribe((res: any) => {
             this.getInfoPage();
             this.toastr.success(`Página cadastrada`, 'Sucesso');
-          }, (err: any) => {
-            this.toastr.error('Ocorreu um erro ao cadastrar', 'Atenção: ');
           });
       }
 

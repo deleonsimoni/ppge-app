@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatriculaService } from './matricula.service';
+import { catchError } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-matricula',
@@ -9,9 +11,12 @@ import { MatriculaService } from './matricula.service';
 })
 export class MatriculaComponent implements OnInit {
 
-  matricula: any;
+  matricula: any = {};
 
-  constructor(private matriculaService: MatriculaService) {
+  constructor(
+    private matriculaService: MatriculaService,
+    private toastr: ToastrService,
+  ) {
     window.scroll({
       top: 0,
       left: 0
@@ -23,8 +28,15 @@ export class MatriculaComponent implements OnInit {
   }
 
   private getMatricula() {
-    this.matriculaService.getMatricula().subscribe(arr => {
-      this.matricula = arr;
-    });
+    this.matriculaService.getMatricula()
+      .pipe(
+        catchError(err => {
+          this.toastr.error("Ocorreu um erro ao carregar a página!", "Atenção");
+          throw err;
+        })
+      )
+      .subscribe(matricula => {
+        this.matricula = matricula ?? {};
+      });
   }
 }

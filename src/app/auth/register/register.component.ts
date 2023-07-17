@@ -88,6 +88,16 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
+    if (!form.password) {
+      this.toastr.error('É necessário colocar uma senha.', 'Atenção: ');
+      return;
+    }
+
+    if (!form.cfPassword) {
+      this.toastr.error('É repetir a senha.', 'Atenção: ');
+      return;
+    }
+
     if (!this.registerForm.value.celular) {
       this.toastr.error('Número de celular inválido.', 'Atenção: ');
       return;

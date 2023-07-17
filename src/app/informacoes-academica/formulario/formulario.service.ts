@@ -1,7 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { info as formulario } from './formulario';
 
 @Injectable({
     providedIn: "root"
@@ -13,6 +12,6 @@ import { info as formulario } from './formulario';
     ) { }
   
     public getFormulario(): Observable<any> {
-        return of(formulario);
+      return this.http.get(`/api/ppge/page/ia_formularios`);
     }
 }

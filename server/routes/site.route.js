@@ -25,6 +25,7 @@ async function getHeadersLinhaPesquisaWithProfessors(req, res) {
 /* Page */
 router.get('/page/:selectedPage', setLocation, asyncHandler(getPage));
 router.get('/page/:selectedPage/headers', setLocation, asyncHandler(getHeadersPage));
+router.get('/page/:selectedPage/paginated/headers', setLocation, asyncHandler(getHeadersPaginationPage));
 router.get('/page/:selectedPage/all-titles', asyncHandler(getAllTitlesPage));
 
 router.post('/page/:selectedPage', [passport.authenticate('jwt', {
@@ -46,6 +47,10 @@ async function getPage(req, res) {
 
 async function getHeadersPage(req, res) {
   let response = await siteCtrl.getHeadersPage(req);
+  res.json(response);
+}
+async function getHeadersPaginationPage(req, res) {
+  let response = await siteCtrl.getHeadersPaginationPage(req);
   res.json(response);
 }
 

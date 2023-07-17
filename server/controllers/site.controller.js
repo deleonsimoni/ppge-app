@@ -7,6 +7,10 @@ const historicoService = require('../service/historico.service');
 const objetivoService = require('../service/objetivo.service');
 const noticiaService = require('../service/noticias.service');
 const revistaService = require('../service/revistas.service');
+const iaCalendarioService = require('../service/ia-calendario.service');
+const iaHorarioPeriodoService = require('../service/ia-horario-periodo.service');
+const iaMatriculaService = require('../service/ia-matricula.service');
+const iaFormulariosService = require('../service/ia-formularios.service');
 
 const regrasCredenciamentoService = require('../service/regras-credenciamento.service');
 const regulamentoPpgeService = require('../service/regulamento-ppge.service');
@@ -19,6 +23,7 @@ const Noticia = require('../models/noticia.model');
 module.exports = {
   getPage,
   getHeadersPage,
+  getHeadersPaginationPage,
   getAllTitlesPage,
   insertPage,
   updatePage,
@@ -116,6 +121,7 @@ const pagesFunctions = {
   noticias: {
     get: async (req) => await noticiaService.getNoticias(req),
     getHeaders: async (req) => await noticiaService.getHeadersNoticias(req),
+    getHeadersPagination: async (req) => await noticiaService.getHeadersPaginationNoticias(req),
     update: async (req, idUser) => await noticiaService.updateNoticia(req, idUser),
     insert: async (req, idUser) => await noticiaService.insertNoticia(req, idUser),
     delete: async (id) => await noticiaService.deleteNoticia(id),
@@ -126,6 +132,30 @@ const pagesFunctions = {
     update: async (req, idUser) => await revistaService.updateRevistas(req, idUser),
     insert: async (req, idUser) => await revistaService.insertRevistas(req, idUser),
     delete: async (id) => await revistaService.deleteRevistas(id),
+  },
+  ia_calendario: {
+    get: async (req) => await iaCalendarioService.getIACalendario(req),
+    update: async (req, idUser) => await iaCalendarioService.updateIACalendario(req, idUser),
+    insert: async (req, idUser) => await iaCalendarioService.insertIACalendario(req, idUser),
+    delete: async (id) => await iaCalendarioService.deleteIACalendario(id),
+  },
+  ia_horario_periodo: {
+    get: async (req) => await iaHorarioPeriodoService.getIAHorarioPeriodo(req),
+    update: async (req, idUser) => await iaHorarioPeriodoService.updateIAHorarioPeriodo(req, idUser),
+    insert: async (req, idUser) => await iaHorarioPeriodoService.insertIAHorarioPeriodo(req, idUser),
+    delete: async (id) => await iaHorarioPeriodoService.deleteIAHorarioPeriodo(id),
+  },
+  ia_matricula: {
+    get: async (req) => await iaMatriculaService.getIAMatricula(req),
+    update: async (req, idUser) => await iaMatriculaService.updateIAMatricula(req, idUser),
+    insert: async (req, idUser) => await iaMatriculaService.insertIAMatricula(req, idUser),
+    delete: async (id) => await iaMatriculaService.deleteIAMatricula(id),
+  },
+  ia_formularios: {
+    get: async (req) => await iaFormulariosService.getIAFormularios(req),
+    update: async (req, idUser) => await iaFormulariosService.updateIAFormularios(req, idUser),
+    insert: async (req, idUser) => await iaFormulariosService.insertIAFormularios(req, idUser),
+    delete: async (id) => await iaFormulariosService.deleteIAFormularios(id),
   },
 }
 
@@ -142,6 +172,10 @@ async function getPage(req) {
 
 async function getHeadersPage(req) {
   return pagesFunctions[req.params.selectedPage].getHeaders(req);
+}
+
+async function getHeadersPaginationPage(req) {
+  return pagesFunctions[req.params.selectedPage].getHeadersPagination(req);
 }
 
 async function getAllTitlesPage(req) {

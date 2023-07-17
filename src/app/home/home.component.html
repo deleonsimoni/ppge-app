@@ -27,7 +27,7 @@
         <div class="d-flex">
             <section id="cta" class="cta">
                 <div class="container" data-aos="zoom-out">
-                    <div class="row g-5">
+                    <div class="row g-5 align-items-start">
                         <div
                             class="col-lg-8 col-md-6 content d-flex flex-column justify-content-center order-last order-md-first">
                             <h3>{{'apresentacao' | translate}}</h3>
@@ -59,36 +59,22 @@
                             </p>
                         </div>
 
-                        <div
-                            class="col-lg-4 col-md-6 content d-flex flex-column justify-content-center order-first order-md-first">
+                        <div class="col-lg-4 col-md-6 content d-flex flex-column justify-content-center order-first order-md-first">
                             <h3>{{'noticias' | translate}}</h3>
 
-                            <div class="d-flex align-items-center mt-4">
-                                <i class="bi bi-check2"></i>
-                                12/05/2022 - Mestrado
+                            <div *ngIf="isLoadingNews; else loadedBlock">
+                                <div class="loader" style="margin: 0 auto;"></div>
                             </div>
-                            <p style="text-align: justify; font-size: 15px;">Inscrições abertas, clique para participar.
-                            </p>
-                            <div class="d-flex align-items-center mt-4">
-                                <i class="bi bi-check2"></i>
-                                18/05/2022 - Mestrado
-                            </div>
-                            <p style="text-align: justify; font-size: 15px;">Resultado final CAPES PRINT
-                            </p>
+                            <ng-template #loadedBlock>
+                                <i *ngIf="pageNumber > 1" class="bi bi-chevron-compact-up cursor-pointer" (click)="previousPage()" style="font-size: 30px;"></i>
+                                <div *ngFor="let notice of news">
+                                    <div class="d-flex align-items-center mt-4">{{ notice.createdAt | date: 'dd/MM/yyyy' }} - {{notice.navTitle}}</div>
+                                    <p style="text-align: justify; font-size: 15px; margin-bottom: 0;">{{notice.title}}</p>
+                                    <div class="d-flex align-items-center"><a style="text-align: justify;" [routerLink]="'/noticia/'+notice._id">Continue lendo aqui ></a></div>
+                                </div>
 
-                            <div class="d-flex align-items-center mt-4">
-                                <i class="bi bi-check2"></i>
-                                24/05/2022 - Doutorado
-                            </div>
-                            <p style="text-align: justify; font-size: 15px;">Edital de bolsas de doutorado - turma 2022
-                            </p>
-
-                            <div class="d-flex align-items-center mt-4">
-                                <i class="bi bi-check2"></i>
-                                28/05/2022 - Doutorado
-                            </div>
-                            <p style="text-align: justify; font-size: 15px;">Inscrições abertas, clique para participar.
-                            </p>
+                                <i *ngIf="news.length == 4" class="bi bi-chevron-compact-down cursor-pointer" (click)="nextPage()" style="font-size: 30px;"></i>
+                            </ng-template>
 
 
                         </div>

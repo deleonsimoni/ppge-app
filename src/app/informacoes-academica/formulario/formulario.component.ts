@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormularioService } from './formulario.service';
+import { catchError } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-formulario',
@@ -9,9 +11,12 @@ import { FormularioService } from './formulario.service';
   })
   export class FormularioComponent implements OnInit {
 
-    formulario: any;
+    formulario: any = {};
 
-    constructor(private formularioService: FormularioService) {
+    constructor(
+      private formularioService: FormularioService,
+      private toastr: ToastrService,
+    ) {
       window.scroll({
         top: 0,
         left: 0
@@ -23,8 +28,15 @@ import { FormularioService } from './formulario.service';
     }
 
     getFormulario() {
-      this.formularioService.getFormulario().subscribe(arr => {
-        this.formulario = arr;
-      });
+      this.formularioService.getFormulario()
+        .pipe(
+          catchError(err => {
+            this.toastr.error("Ocorreu um erro ao carregar a página!", "Atenção");
+            throw err;
+          })
+        )
+        .subscribe(formulario => {
+          this.formulario = formulario ?? {};
+        });
     }
 }

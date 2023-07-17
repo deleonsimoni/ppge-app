@@ -1,7 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { info as matricula } from "./matricula";
 
 @Injectable({
     providedIn: "root"
@@ -13,6 +12,6 @@ import { info as matricula } from "./matricula";
     ) { }
   
     public getMatricula(): Observable<any> {
-        return of(matricula);
+      return this.http.get(`/api/ppge/page/ia_matricula`);
     }
 }

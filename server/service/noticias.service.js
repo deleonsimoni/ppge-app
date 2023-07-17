@@ -4,6 +4,7 @@ const NoticiasModel = require("../models/noticia.model");
 module.exports = {
   getNoticias,
   getHeadersNoticias,
+  getHeadersPaginationNoticias,
   insertNoticia,
   updateNoticia,
   deleteNoticia,
@@ -26,7 +27,8 @@ async function getNoticias(req) {
         _id: data._id, 
         title: data[req.query.language].title, 
         navTitle: data[req.query.language].navTitle, 
-        content: data[req.query.language].content  
+        content: data[req.query.language].content,
+        createdAt: data.createdAt,
       }
     ));
   }
@@ -45,6 +47,31 @@ async function getHeadersNoticias(req) {
       _id: data._id, 
       title: data[req.query.language].title, 
       navTitle: data[req.query.language].navTitle 
+    }
+  ));
+
+  return ret;
+}
+
+async function getHeadersPaginationNoticias(req) {
+  console.log("AQUIIIIIIII: ", req.query)
+  const pageNumber = req.query.pageNumber;
+  const pageSize = req.query.pageSize;
+  let ret = await NoticiasModel.find({}, {
+    [`${req.query.language}.title`]: 1,
+    [`${req.query.language}.navTitle`]: 1,
+    createdAt: 1,
+  }).sort({
+    createAt: -1
+  }).skip((pageNumber - 1) * pageSize)
+  .limit(pageSize);
+
+  ret = ret.map(data => (
+    {
+      _id: data._id, 
+      title: data[req.query.language].title, 
+      navTitle: data[req.query.language].navTitle,
+      createdAt: data.createdAt
     }
   ));
 

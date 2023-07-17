@@ -17,6 +17,7 @@ import { UserAreaComponent } from './user-area/user-area.component';
 import { AuthGuard } from './shared/guards';
 import { ResetSenhaComponent } from './reset-senha/reset-senha.component';
 import { EsqueciSenhaComponent } from './esqueci-senha/esqueci-senha.component';
+import { NoticeComponent } from './notice/notice.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,11 @@ const routes: Routes = [
   {
     path: 'historico',
     component: HistoricComponent,
+    //canActivate: [AuthGuard],
+  },
+  {
+    path: 'noticia/:idNoticia',
+    component: NoticeComponent,
     //canActivate: [AuthGuard],
   },
   {
