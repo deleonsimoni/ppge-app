@@ -329,7 +329,7 @@ async function updateCorpoDocente(req, idUser) {
     let fileName = 'images/corpo-docente/' + req.files.fileArray.name;
     await S3Uploader.uploadBase64(fileName, req.files.fileArray.data).then(async fileData => {
       console.log('Arquivo submetido para AWS ' + fileName);
-      form.imagePathS3 = fileName;
+      form.imagePathS3 = "https://ppge-public.s3.sa-east-1.amazonaws.com/"+fileName;
       retorno.temErro = false;
 
       return await CorpoDocenteModel.findOneAndUpdate({
@@ -364,7 +364,7 @@ async function insertCorpoDocente(req, idUser) {
     let fileName = 'images/corpo-docente/' + req.files.fileArray.name;
     await S3Uploader.uploadBase64(fileName, req.files.fileArray.data).then(async fileData => {
       console.log('Arquivo submetido para AWS ' + fileName);
-      form.imagePathS3 = fileName;
+      form.imagePathS3 = "https://ppge-public.s3.sa-east-1.amazonaws.com/"+fileName;
       retorno.temErro = false;
       return await new CorpoDocenteModel(form).save();
     }, err => {

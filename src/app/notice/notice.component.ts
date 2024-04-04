@@ -12,7 +12,7 @@ import { catchError, take } from 'rxjs';
 export class NoticeComponent implements OnInit {
   
   idNoticia = null;
-  notice = {};
+  notice: any = {};
 
   constructor(
     private serviceNotice: NoticeService,

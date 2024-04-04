@@ -49,7 +49,6 @@ export class CorpoDocenteComponent implements OnInit {
   getAllCorpoDocente() {
     this.siteAdminService.listCorpoDocente().subscribe(data => {
       this.listProfile = data;
-      this.listProfile.map(cd => cd.imagePathS3 ? cd.imagePathS3 = 'https://ppge-public.s3.sa-east-1.amazonaws.com/'.concat(cd.imagePathS3) : null);
     }, () => {
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
     })
@@ -131,6 +130,7 @@ export class CorpoDocenteComponent implements OnInit {
 
   alternarForm(isForm) {
     this.isForm = isForm;
+    this.imagePathS3 = null;
     this.form.reset();
     this.form.patchValue({ type: String(TypeProfileEnum.PROFESSOR) });
   }
