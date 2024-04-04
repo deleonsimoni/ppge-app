@@ -16,9 +16,23 @@
         <li class="dropdown"><a><span>{{'o.programa.horizontal' | translate}}</span> <i
               class="bi bi-chevron-down dropdown-indicator"></i></a>
           <ul>
-            <li><a class="active ">{{'o.programa.horizontal' | translate}}</a></li>
-            <li><a class="nav-link scrollto" [routerLink]="'historico'">{{'historico' | translate}}</a></li>
-            <li><a class="nav-link scrollto" [routerLink]="'objetivo'">{{'objetivos' | translate}}</a></li>
+            <li class="dropdown"><a><span>{{'o.programa.horizontal' | translate}}</span> <i
+                  class="bi bi-chevron-down dropdown-indicator"></i></a>
+              <ul>
+                <li><a class="nav-link scrollto" [routerLink]="'historico'">{{'historico' | translate}}</a></li>
+                <li><a class="nav-link scrollto" [routerLink]="'objetivo'">{{'objetivos' | translate}}</a></li>
+                <li><a class="nav-link scrollto" [routerLink]="'contato'">{{'contatos' | translate}}</a></li>
+              </ul>
+            </li>
+            
+            
+            <li class="dropdown"><a><span>{{'linhas.pesquisa' | translate}}</span> <i
+                  class="bi bi-chevron-down dropdown-indicator"></i></a>
+              <ul>
+                <li *ngFor="let item of headerData.linha_pesquisa; let i = index"><a class="nav-link scrollto"
+                    [routerLink]="['linhas-pesquisa/', item._id]">{{ item.navTitle }}</a></li>
+              </ul>
+            </li>
             <li class="dropdown"><a><span>{{'comissoes' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
@@ -47,14 +61,6 @@
               </ul>
             </li>
 
-            <li class="dropdown"><a><span>{{'linhas.pesquisa' | translate}}</span> <i
-                  class="bi bi-chevron-down dropdown-indicator"></i></a>
-              <ul>
-                <li *ngFor="let item of headerData.linha_pesquisa; let i = index"><a class="nav-link scrollto"
-                    [routerLink]="['linhas-pesquisa/', item._id]">{{ item.navTitle }}</a></li>
-              </ul>
-            </li>
-
             <li class="dropdown"><a><span>{{'cursos' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
@@ -71,8 +77,7 @@
               </ul>
             </li>
 
-            <li><a class="nav-link scrollto" [routerLink]="'contato'">{{'contatos' | translate}}</a></li>
-            <li><a class="nav-link scrollto" [routerLink]="'/auth/register'">Inscrição</a></li>
+            <li><a *ngIf="!user" class="nav-link scrollto" [routerLink]="'/auth/register'">Inscrição</a></li>
 
             <li><a *ngIf="!user" routerLink="/auth/login">Login</a></li>
 

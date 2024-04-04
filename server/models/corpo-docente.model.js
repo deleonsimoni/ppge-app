@@ -37,6 +37,11 @@ const CorpoDocenteSchema = new mongoose.Schema(
       required: false,
     },
 
+    lattes: {
+      type: String,
+      required: false,
+    },
+
     // Tipos 1-Professor / 2-Doutor
     type: {
       type: String,

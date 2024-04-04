@@ -303,6 +303,7 @@ async function getCorpoDocente(req) {
       facebook: data.facebook,
       instagram: data.instagram,
       linkedin: data.linkedin,
+      lattes: data.lattes,
       type: data.type,
       linhaPesquisa: data.listLinhaPesquisa.map(dataLinha => (dataLinha[req.query.language].title)),
     }

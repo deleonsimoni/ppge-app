@@ -36,6 +36,7 @@ export class CorpoDocenteComponent implements OnInit {
       facebook: [null, []],
       instagram: [null, []],
       linkedin: [null, []],
+      lattes: [null, []],
       imagePathS3: [null, []],
       type: [String(TypeProfileEnum.PROFESSOR), [Validators.required]],
     });

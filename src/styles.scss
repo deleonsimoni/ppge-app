@@ -2168,9 +2168,18 @@ section {
 /*--------------------------------------------------------------
 # Team Section
 --------------------------------------------------------------*/
+.team .team-member {
+ width: 100%;
+}
+
 .team .team-member .member-img {
   border-radius: 8px;
   overflow: hidden;
+  height: 300px;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .team .team-member .social {
@@ -2235,6 +2244,7 @@ section {
   font-size: 16px;
   font-weight: 400;
   color: var(--color-gray);
+  word-wrap: break-word;
 }
 
 .team .team-member .member-info p {
