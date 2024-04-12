@@ -16,47 +16,57 @@
         <li class="dropdown"><a><span>{{'o.programa.horizontal' | translate}}</span> <i
               class="bi bi-chevron-down dropdown-indicator"></i></a>
           <ul>
-            <li class="dropdown"><a><span>{{'o.programa.horizontal' | translate}}</span> <i
+            <li class="dropdown"><a><span>{{'informacoes.menu' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li><a class="nav-link scrollto" [routerLink]="'historico'">{{'historico' | translate}}</a></li>
-                <li><a class="nav-link scrollto" [routerLink]="'objetivo'">{{'objetivos' | translate}}</a></li>
-                <li><a class="nav-link scrollto" [routerLink]="'contato'">{{'contatos' | translate}}</a></li>
+                <li><a class="nav-link scrollto" (click)="closeMenu()" [routerLink]="'historico'">{{'historico' |
+                    translate}}</a></li>
+                <li><a class="nav-link scrollto" (click)="closeMenu()" [routerLink]="'objetivo'">{{'objetivos' |
+                    translate}}</a></li>
+                <li><a class="nav-link scrollto" (click)="closeMenu()" [routerLink]="'contato'">{{'contatos' |
+                    translate}}</a></li>
               </ul>
             </li>
-            
-            
+
+
             <li class="dropdown"><a><span>{{'linhas.pesquisa' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li *ngFor="let item of headerData.linha_pesquisa; let i = index"><a class="nav-link scrollto"
-                    [routerLink]="['linhas-pesquisa/', item._id]">{{ item.navTitle }}</a></li>
+                <li *ngFor="let item of headerData.linha_pesquisa; let i = index"><a (click)="closeMenu()"
+                    class="nav-link scrollto" [routerLink]="['linhas-pesquisa/', item._id]">{{ item.navTitle }}</a></li>
               </ul>
             </li>
             <li class="dropdown"><a><span>{{'comissoes' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li><a class="nav-link scrollto" [routerLink]="'comissoes/1'">{{'comissao.deliberativa.funcoes' |
+                <li><a class="nav-link scrollto" (click)="closeMenu()"
+                    [routerLink]="'comissoes/1'">{{'comissao.deliberativa.funcoes' |
                     translate}}</a></li>
-                <li><a class="nav-link scrollto" [routerLink]="'comissoes/2'">{{'comissao.gestao' | translate}}</a></li>
+                <li><a class="nav-link scrollto" (click)="closeMenu()" [routerLink]="'comissoes/2'">{{'comissao.gestao'
+                    | translate}}</a></li>
               </ul>
             </li>
             <li class="dropdown"><a><span>{{'agenda' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li><a class="nav-link scrollto" [routerLink]="'agenda/1'">{{'colegiado' | translate}}</a></li>
-                <li><a class="nav-link scrollto" [routerLink]="'agenda/2'">{{'comissao.deliberativa' | translate}}</a>
+                <li><a class="nav-link scrollto" (click)="closeMenu()" [routerLink]="'agenda/1'">{{'colegiado' |
+                    translate}}</a></li>
+                <li><a class="nav-link scrollto" (click)="closeMenu()"
+                    [routerLink]="'agenda/2'">{{'comissao.deliberativa' | translate}}</a>
                 </li>
-                <li><a class="nav-link scrollto" [routerLink]="'agenda/3'">{{'comissao.gestao' | translate}}</a></li>
+                <li><a class="nav-link scrollto" (click)="closeMenu()" [routerLink]="'agenda/3'">{{'comissao.gestao' |
+                    translate}}</a></li>
               </ul>
             </li>
 
             <li class="dropdown"><a><span>{{'regulamentos.normas.conhecimento' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li><a class="nav-link scrollto" [routerLink]="'regulamentos/1'">{{'regulamento.ppge' | translate}}</a>
+                <li><a class="nav-link scrollto" (click)="closeMenu()"
+                    [routerLink]="'regulamentos/1'">{{'regulamento.ppge' | translate}}</a>
                 </li>
-                <li><a class="nav-link scrollto" [routerLink]="'regulamentos/2'">{{'regras.credenciamento' |
+                <li><a class="nav-link scrollto" (click)="closeMenu()"
+                    [routerLink]="'regulamentos/2'">{{'regras.credenciamento' |
                     translate}}</a></li>
               </ul>
             </li>
@@ -64,24 +74,26 @@
             <li class="dropdown"><a><span>{{'cursos' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li *ngFor="let item of headerData.cursos; let i = index"><a class="nav-link scrollto"
-                    [routerLink]="['cursos/', item._id]">{{ item.navTitle }}</a></li>
+                <li *ngFor="let item of headerData.cursos; let i = index"><a (click)="closeMenu()"
+                    class="nav-link scrollto" [routerLink]="['cursos/', item._id]">{{ item.navTitle }}</a></li>
               </ul>
             </li>
 
-            <li *ngIf="user?.isAdmin || user?.isCoordenador || user?.isParecerista || user?.isGerenciador" class="dropdown">
+            <li *ngIf="user?.isAdmin || user?.isCoordenador || user?.isParecerista || user?.isGerenciador"
+              class="dropdown">
               <a><span>Administrador</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li><a class="nav-link scrollto" [routerLink]="'/admin'">Manter Site</a></li>
+                <li><a class="nav-link scrollto" (click)="closeMenu()" [routerLink]="'/admin'">Manter Site</a></li>
 
               </ul>
             </li>
 
-            <li><a *ngIf="!user" class="nav-link scrollto" [routerLink]="'/auth/register'">Inscrição</a></li>
+            <li><a *ngIf="!user" (click)="closeMenu()" class="nav-link scrollto"
+                [routerLink]="'/auth/register'">Inscrição</a></li>
 
-            <li><a *ngIf="!user" routerLink="/auth/login">Login</a></li>
+            <li><a *ngIf="!user" (click)="closeMenu()" routerLink="/auth/login">Login</a></li>
 
-            <li><a *ngIf="user" (click)="logout()">Sair</a></li>
+            <li><a *ngIf="user" (click)="closeMenu()" (click)="logout()">Sair</a></li>
 
 
           </ul>
@@ -91,13 +103,16 @@
               class="bi bi-chevron-down dropdown-indicator"></i></a>
           <ul>
             <li>
-              <a class="nav-link scrollto" [routerLink]="'corpo-docente/1'">{{'professores' | translate}}</a>
+              <a class="nav-link scrollto" (click)="closeMenu()" [routerLink]="'corpo-docente/1'">{{'professores' |
+                translate}}</a>
             </li>
             <li>
-              <a class="nav-link scrollto" [routerLink]="'corpo-docente/2'">{{'pos.doutorado' | translate}}</a>
+              <a class="nav-link scrollto" (click)="closeMenu()" [routerLink]="'corpo-docente/2'">{{'pos.doutorado' |
+                translate}}</a>
             </li>
             <li>
-              <a class="nav-link scrollto" [routerLink]="'norma-pos-graduacao'">{{'normas.pos.doutorado' |
+              <a class="nav-link scrollto" (click)="closeMenu()"
+                [routerLink]="'norma-pos-graduacao'">{{'normas.pos.doutorado' |
                 translate}}</a>
             </li>
           </ul>
@@ -108,31 +123,36 @@
         <li class="dropdown"><a><span>{{'teses.dissertacoes' | translate}}</span> <i
               class="bi bi-chevron-down dropdown-indicator"></i></a>
           <ul>
-            <li><a class="nav-link scrollto"
+            <li><a class="nav-link scrollto" (click)="closeMenu()"
                 [routerLink]="'tese-dissertacao'">{{'buscador.ano.orientador.palavras.titulo' | translate}}</a></li>
           </ul>
         </li>
 
-        <li style="cursor: pointer;"><a [routerLink]="'processo-seletivo'">{{'processos.seletivos' | translate}}</a>
+        <li style="cursor: pointer;"><a [routerLink]="'processo-seletivo'" (click)="closeMenu()">{{'processos.seletivos'
+            | translate}}</a>
         </li>
 
         <li class="dropdown megamenu"><a><span>{{'informacoes.academicas' | translate}}</span> <i
               class="bi bi-chevron-down dropdown-indicator"></i></a>
           <ul>
             <li>
-              <a class="nav-link scrollto" [routerLink]="'calendario'">{{'calendario' | translate}}</a>
+              <a class="nav-link scrollto" [routerLink]="'calendario'" (click)="closeMenu()">{{'calendario' |
+                translate}}</a>
 
             </li>
             <li>
-              <a class="nav-link scrollto" [routerLink]="'horario-periodo'">{{'horario.periodo' | translate}}</a>
+              <a class="nav-link scrollto" [routerLink]="'horario-periodo'" (click)="closeMenu()">{{'horario.periodo' |
+                translate}}</a>
 
             </li>
             <li>
-              <a class="nav-link scrollto" [routerLink]="'matricula'">{{'matricula' | translate}}</a>
+              <a class="nav-link scrollto" [routerLink]="'matricula'" (click)="closeMenu()">{{'matricula' |
+                translate}}</a>
 
             </li>
             <li>
-              <a class="nav-link scrollto" [routerLink]="'formulario'">{{'formulario' | translate}}</a>
+              <a class="nav-link scrollto" [routerLink]="'formulario'" (click)="closeMenu()">{{'formulario' |
+                translate}}</a>
 
             </li>
           </ul>

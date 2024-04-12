@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { User } from '@app/shared/interfaces';
@@ -31,6 +31,8 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     public translate: TranslateService,
     private headerService: HeaderService,
+    private elementRef: ElementRef
+
   ) { }
 
   ngOnInit(): void {
@@ -39,18 +41,30 @@ export class HeaderComponent implements OnInit {
     this.getHeaders();
   }
 
+  public closeMenu() {
+    const element = this.elementRef.nativeElement.querySelector('.mobile-nav-toggle');
+
+    // Verifica se o elemento foi encontrado
+    if (element) {
+      // Simula o clique no elemento
+      element.click();
+    } else {
+      console.error('Elemento não encontrado');
+    }
+  }
+
   public getHeaders() {
     this.listUrlHeaders.forEach((pageSelected, index) => {
       this.headerService.getHeaderPage(pageSelected, this.fromInitialsToLanguageCode[this.selectedCountryCode]).subscribe((data) => {
         this.headerData[pageSelected] = data;
-        
+
       });
     });
   }
-  
+
 
   public loadScript() {
-    let body = <HTMLDivElement> document.body;
+    let body = <HTMLDivElement>document.body;
     let script = document.createElement('script');
     script.innerHTML = '';
     script.src = "../../assets/js/ppge2.js";
@@ -59,7 +73,7 @@ export class HeaderComponent implements OnInit {
     body.appendChild(script);
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.loadScript();
   }
   logout(): void {

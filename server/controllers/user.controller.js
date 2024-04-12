@@ -27,10 +27,10 @@ module.exports = {
 async function insert(user) {
   user.hashedPassword = bcrypt.hashSync(user.password, 10);
   delete user.password;
-  
+
   let success = await new User(user).save();
 
-  if(success) {
+  if (success) {
     let email = templateEmail.inscricaoSucesso;
     emailSender.sendMailAWS(user.email, 'Bem-Vindo!', email);
   }
@@ -265,11 +265,14 @@ async function generateNewPassword(user) {
     message: `Seu código para troca de senha foi enviado para seu email.`
   };
 
-  await User.findOneAndUpdate({_id: user._id}, {
+  await User.findOneAndUpdate({ _id: user._id }, {
     '$set': {
       mailCodePassword: randomstring
     }
   })
+
+  let email = templateEmail.esqueciSenha.replace("#senha#", randomstring);
+  emailSender.sendMailAWS(user.email, 'Recuperação de Senha', email);
 
   return response;
 
