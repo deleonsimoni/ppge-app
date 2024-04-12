@@ -68,6 +68,15 @@ export class CriterioAvaliacaoComponent implements OnInit {
       .subscribe(data => {
         console.log("DATA: ", data)
         this.listCriterio = data;
+        this.listCriterio.forEach(criterio => {
+          criterio.step.forEach(step => {
+            step.section.forEach(section => {
+              section.question.forEach(question => {
+                question.maxNota = String(question.maxNota).replaceAll('.', ',');
+              })
+            })
+          });
+        })
       });
   }
 
@@ -99,11 +108,11 @@ export class CriterioAvaliacaoComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log("ON SUBMIT: ", this.form.value);
+    let criterios = this.changeMaxNotaStringToNumber({...this.form.value});
     if (this.form.valid) {
       if (this.form.value._id) {
         //FEITO
-        this.siteService.atualizarCriterio(this.form.value)
+        this.siteService.atualizarCriterio(criterios)
           .pipe(catchError(err => {
             this.toastr.error("Ocorreu um erro ao atualizar o critério!");
             throw err;
@@ -116,7 +125,7 @@ export class CriterioAvaliacaoComponent implements OnInit {
 
       } else {
         //FEITO
-        this.siteService.cadastrarCriterio(this.form.value)
+        this.siteService.cadastrarCriterio(criterios)
           .pipe(catchError(err => {
             this.toastr.error("Ocorreu um erro ao cadastrar o critério!");
             throw err;
@@ -132,6 +141,21 @@ export class CriterioAvaliacaoComponent implements OnInit {
       this.toastr.error('Preencha corretamente o formulário!', 'Atenção: ');
     }
     
+  }
+
+  changeMaxNotaStringToNumber(criterios) {
+    criterios.step.forEach(step => {
+      step.section.forEach(section => {
+        section.question.forEach(question => {
+          question.maxNota = Number(question.maxNota.replaceAll(',', '.'));
+        })
+      })
+    });
+    return criterios;
+  }
+
+  changeMaxNotaNumberToString(criterios) {
+    return criterios;
   }
 
   get getFormStep() {
@@ -214,7 +238,7 @@ export class CriterioAvaliacaoComponent implements OnInit {
   public initQuestionLine() {
     return this.builder.group({
       text: new FormControl('', Validators.required),
-      maxNota: new FormControl(0, Validators.required),
+      maxNota: new FormControl('0', Validators.required),
     });
   }
 
@@ -250,7 +274,7 @@ export class CriterioAvaliacaoComponent implements OnInit {
   }
 
   validateNumber(event) {
-    const pattern = /^[0-9]+(\.[0-9]{0,2})?$/;
+    const pattern = /^[0-9]+(\,[0-9]{0,2})?$/;
     let inputChar = String.fromCharCode(event.charCode);
     let input = event.target.value+inputChar;
     if (!pattern.test(input) ) {

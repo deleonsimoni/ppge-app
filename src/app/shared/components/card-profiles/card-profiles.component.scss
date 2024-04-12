@@ -14,6 +14,10 @@ $main-class: ".profile-card";
   cursor: pointer;
   position: relative;
 
+  &__data {
+    word-break: break-word;
+  }
+
   &__image {
     width: 100%;
     border-radius: 4px;

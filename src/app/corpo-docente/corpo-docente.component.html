@@ -5,15 +5,13 @@
         <div class="section-header">
             <h2 *ngIf="tipoDocente == 1">Professores</h2>
             <h2 *ngIf="tipoDocente == 2">Pós-Doutorandos</h2>
-
-            <p>Conheça mais sobre os profissionais que atuam na faculdade.</p>
         </div>
 
         <div class="row gy-5">
             <div *ngFor="let profile of listProfile" class="col-xl-4 col-md-6 d-flex" data-aos="zoom-in"
                 data-aos-delay="200">
                 <div class="team-member">
-                    <div class="member-img" style="background-image: url('{{profile.imagePathS3}}');">
+                    <div class="member-img" style="background-image: url('{{getImagePath(profile.imagePathS3)}}');">
                     </div>
                     <div class="member-info">
                         <div class="social">
@@ -25,7 +23,8 @@
                         <h4>{{ profile.fullName }}</h4>
 
                         <span>{{ profile.academicFormation }}</span>
-                        <span *ngIf="profile.lattes">Maiores informações: <a href="{{ profile.lattes }}" target="_blank">{{ profile.lattes }}</a></span>
+                        <span *ngIf="profile?.linhaPesquisa?.length > 0">Linha(s) de pesquisa: {{ profile?.linhaPesquisa?.join('. ') }} </span>
+                        <span *ngIf="profile.lattes"><a href="{{ profile.lattes }}" target="_blank">Acesso Lattes</a></span>
 
                     </div>
                 </div>

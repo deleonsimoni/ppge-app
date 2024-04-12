@@ -102,8 +102,6 @@ export class ProcessoSeletivoComponent implements OnInit {
     let { 
       fileLattes, 
       filePreProjeto, 
-      fileComprovantePagamento, 
-      fileMemorial, 
       fileProjetoTese, 
       filePrincipalPubli, 
       formRetorno 
@@ -111,8 +109,6 @@ export class ProcessoSeletivoComponent implements OnInit {
     const files = {
       fileLattes: fileLattes ? fileLattes[0] : null, 
       filePreProjeto: filePreProjeto ? filePreProjeto[0] : null, 
-      fileComprovantePagamento: fileComprovantePagamento ? fileComprovantePagamento[0] : null, 
-      fileMemorial: fileMemorial ? fileMemorial[0] : null, 
       fileProjetoTese: fileProjetoTese ? fileProjetoTese[0] : null, 
       filePrincipalPubli: filePrincipalPubli ? filePrincipalPubli[0] : null, 
     }

@@ -79,11 +79,6 @@ export class FormProcessoSeletivoComponent implements OnInit {
     return fileName;
   }
 
-  public getFileNameComprovantePagamento(): string {
-    const fileName = this.fileComprovantePagamento ? this.fileComprovantePagamento[0].name : 'PDF Comprovante de Pagamento';
-    return fileName;
-  }
-
   public setFileNameProjetoTese(files: FileList): void {
     this.fileProjetoTese = files;
   }
@@ -184,21 +179,13 @@ export class FormProcessoSeletivoComponent implements OnInit {
       this.toastr.error('É necessário selecionar o Curriculo Lattes', 'Atenção');
       return;
     }
-    if (!this.fileComprovantePagamento) {
-      this.toastr.error('É necessário selecionar o Comprovante de Pagamento', 'Atenção');
-      return;
-    }
 
     if(this.type == TypeGraduateEnum.MESTRADO) {
       if (!this.filePreProjeto) {
         this.toastr.error('É necessário selecionar o Pré-projeto', 'Atenção');
         return;
       }
-      if (!this.fileMemorial) {
-        // tslint:disable-next-line: align
-        this.toastr.error('É necessário selecionar o Memorial', 'Atenção');
-        return;
-      }
+      
     } else if(this.type == TypeGraduateEnum.DOUTORADO) {
       if (!this.fileProjetoTese) {
         this.toastr.error('É necessário selecionar o Projeto de Tese', 'Atenção');
@@ -216,8 +203,6 @@ export class FormProcessoSeletivoComponent implements OnInit {
     this.inscrever.emit({
       fileLattes: this.fileLattes, 
       filePreProjeto: this.filePreProjeto, 
-      fileComprovantePagamento: this.fileComprovantePagamento, 
-      fileMemorial: this.fileMemorial, 
       fileProjetoTese: this.fileProjetoTese, 
       filePrincipalPubli: this.filePrincipalPubli, 
       formRetorno: this.form

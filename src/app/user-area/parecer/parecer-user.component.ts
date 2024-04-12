@@ -128,7 +128,6 @@ export class ParecerUserComponent implements OnInit {
       }
     } else {
       this.toastr.clear();
-      this.toastr.error("Ocorreu um erro, recarregue a página e tente novamente", "Atenção!");
     }
     return stringReturn;
 
@@ -137,7 +136,7 @@ export class ParecerUserComponent implements OnInit {
   ngOnInit(): void {
     console.log("DATA CHEGADA: ", this.data);
     this.criterioStepList = this.data.criterio.step;
-    this.parecerStepList = this.data.parecer.step ? this.data.parecer.step : {};
+    this.parecerStepList = this.data.parecer?.step ? this.data.parecer.step : {};
     this.montarFormulario();
   }
 

@@ -22,11 +22,9 @@ export class ProcessoSeletivoService {
 
     const formData: FormData = new FormData();
     formData.append('fileArray', files.fileLattes);
-    formData.append('fileArray', files.fileComprovantePagamento);
 
     if(formulario.tipoFormulario == TypeGraduateEnum.MESTRADO) {
       formData.append('fileArray', files.filePreProjeto);
-      formData.append('fileArray', files.fileMemorial);
     } else if(formulario.tipoFormulario == TypeGraduateEnum.DOUTORADO) {
       formData.append('fileArray', files.fileProjetoTese);
       formData.append('fileArray', files.filePrincipalPubli);

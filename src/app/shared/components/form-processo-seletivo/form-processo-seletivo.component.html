@@ -111,7 +111,7 @@
         <label><strong>Pós-graduação {{type == typeGraduateEnum.DOUTORADO ? "(especialização)" : ""}}</strong></label>
         <div class="row mb-3 ml-2">
           <div class="col">
-            <label><strong>Informar a graduação</strong></label>
+            <label><strong>Informar a pós-graduação</strong></label>
             <input type="text" formControlName="nome" class="form-control">
           </div>
         </div>
@@ -133,7 +133,7 @@
         <label><strong>Pós-graduação (mestrado)</strong></label>
         <div class="row mb-3 ml-2">
           <div class="col">
-            <label><strong>Informar a graduação</strong></label>
+            <label><strong>Informar a pós-graduação</strong></label>
             <input type="text" formControlName="nome" class="form-control">
           </div>
         </div>
@@ -173,12 +173,6 @@
           (change)="setFileNameLattes($event.target.files)" #fileInput>
         <p class="file-subtitle">* Anexe aqui em formato PDF seu Currículo Lattes.</p>
       </div>
-      <div class="col-lg-4 mb-3 pl-4">
-        <label><strong>Comprovante de pagamento</strong></label><br>
-        <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
-           (change)="setFileNameComprovantePagamento($event.target.files)" #fileInput>
-        <p class="file-subtitle">* Anexe aqui em formato PDF o comprovante de pagamento da taxa de inscrição.</p>
-      </div>
       <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
         <label><strong>Pré-Projeto de pesquisa</strong></label><br>
         <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
@@ -186,20 +180,6 @@
         <p class="file-subtitle">* Anexe aqui em formato PDF o Pré-Projeto de pesquisa. (Observe os itens exigidos:
           indicação de linha de pesquisa, dois possíveis orientadores/as, nome completo, título, introdução, objetivos,
           possíveis abordagens teórico-metodológicas, referências bibliográficas e a extensão de 8 a 10 páginas)</p>
-      </div>
-      <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
-        <label><strong>Memorial</strong></label><br>
-        <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
-           (change)="setFileNameMemorial($event.target.files)" #fileInput>
-        <p class="file-subtitle">
-          * Anexe aqui em formato PDF o Memorial. Observe os itens exigidos:
-          <br>I- nome completo;
-          <br>II- motivação para a realização do Mestrado;
-          <br>III- reflexões sobre a trajetória acadêmica e profissional da/o candidata/o e
-          <br>IV- justificativa para a escolha do PPGE-UFRJ e da Linha de Pesquisa que intenta
-          ingressar, bem como a articulação com projetos dos/as possíveis professoras/es
-          orientadoras/es selecionadas/os, com extensão máxima de 3 páginas.
-        </p>
       </div>
       <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
         <label><strong>Projeto de Tese</strong></label><br>

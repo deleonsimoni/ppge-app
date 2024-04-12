@@ -70,7 +70,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   ngOnInit(): void {
     this.siteService.listTeseDissertacao('1').subscribe((res: any) => {
       this.carregando = false;
-      this.datas = res;
+      this.datas = res ? res : [];
     }, err => {
       this.carregando = false;
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
@@ -133,7 +133,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   getPerTipo(tipo: string) {
     this.siteService.listTeseDissertacao(tipo).subscribe((res: any) => {
       this.carregando = false;
-      this.datas = res;
+      this.datas = res ? res : [];
     }, err => {
       this.carregando = false;
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');

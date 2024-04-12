@@ -233,46 +233,28 @@
             </div>
             <hr>
             <div class="row mb-3">
-                <div class="col-md-6">
+                <div class="col-md-6 mb-3">
                     <label class="mb-0"><strong>Currículo Lattes</strong></label>
                     <br>
                     <a [href]="addInicioS3Url(infoUserProcesso.files.pathLattes)">
                         <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
                     </a>
                 </div>
-                <div class="col-md-6">
-                    <label class="mb-0"><strong>Comprovante de pagamento</strong></label>
-                    <br>
-                    <a [href]="addInicioS3Url(infoUserProcesso.files.pathComprovantePagamento)">
-                        <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="row mb-3" *ngIf="infoUserProcesso.tipoFormulario == typeGraduateEnum.MESTRADO">
-                <div class="col-md-6">
+                <div class="col-md-6 mb-3" *ngIf="infoUserProcesso.tipoFormulario == typeGraduateEnum.MESTRADO">
                     <label class="mb-0"><strong>Pré-projeto</strong></label>
                     <br>
                     <a [href]="addInicioS3Url(infoUserProcesso.files.pathPreProj)">
                         <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
                     </a>
                 </div>
-                <div class="col-md-6">
-                    <label class="mb-0"><strong>Memorial</strong></label>
-                    <br>
-                    <a [href]="addInicioS3Url(infoUserProcesso.files.pathMemorial)">
-                        <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="row mb-3" *ngIf="infoUserProcesso.tipoFormulario == typeGraduateEnum.DOUTORADO">
-                <div class="col-md-6">
+                <div class="col-md-6 mb-3" *ngIf="infoUserProcesso.tipoFormulario == typeGraduateEnum.DOUTORADO">
                     <label class="mb-0"><strong>Projeto de Tese</strong></label>
                     <br>
                     <a [href]="addInicioS3Url(infoUserProcesso.files.pathProjetoTese)">
                         <i style="font-size: 35px;" class="bi bi-filetype-pdf"></i>
                     </a>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mb-3" *ngIf="infoUserProcesso.tipoFormulario == typeGraduateEnum.DOUTORADO">
                     <label class="mb-0"><strong>Principal publicação</strong></label>
                     <br>
                     <a [href]="addInicioS3Url(infoUserProcesso.files.pathPrincipalPubli)">

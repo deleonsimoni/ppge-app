@@ -15,7 +15,7 @@ export class AdminComponent implements OnInit {
       this.menu = [
         { name: 'Administrar Páginas', path: '/admin/administrar-paginas', permitido: user.isAdmin },
         { name: 'Corpo Docente', path: '/admin/corpo-docente', permitido: user.isAdmin },
-        { name: 'Tese e Dissertação', path: '/admin/tese-dissertacao', permitido: user.isAdmin },
+        { name: 'Teses e Dissertações', path: '/admin/tese-dissertacao', permitido: user.isAdmin },
         { name: 'Processo Seletivo', path: '/admin/processo-seletivo', permitido: user.isAdmin || user.isGerenciador },
         { name: 'Critério de Avaliação', path: '/admin/criterio-avaliacao', permitido: user.isAdmin || user.isGerenciador },
         { name: 'Avaliadores/Coordenadores', path: '/admin/pareceristas', permitido: user.isAdmin || user.isCoordenador || user.isGerenciador },

@@ -27,6 +27,10 @@ export class CorpoDocenteComponent implements OnInit {
     });
   }
 
+  getImagePath(imgUrl) {
+    return imgUrl?.includes('https:')? imgUrl : 'https://ppge-public.s3.sa-east-1.amazonaws.com/'+imgUrl
+  }
+
   getAllCorpoDocenteByTipo() {
     this.corpoDocenteService.getCorpoDocente(this.tipoDocente)
       .subscribe(data => {

@@ -357,9 +357,10 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
           if(idParecerista) flagReturn = e.parecerista && ((e.parecerista.primeiro && e.parecerista.primeiro.equals(idParecerista)) || (e.parecerista.segundo && e.parecerista.segundo.equals(idParecerista)))
           else if(filterByLinha) flagReturn = !!filterByLinha.find(fbl => fbl.equals(e.linhaPesquisa ? e.linhaPesquisa._id : null));
           
+          
 
-          if (idParecerista) flagReturn = e.parecerista && e.parecerista.equals(idParecerista)
-
+          //if (idParecerista) flagReturn = e.parecerista && e.parecerista.equals(idParecerista)
+          console.log("flagReturnflagReturnflagReturnflagReturnflagReturn ", e.parecerista)
           if (req.query.filtroConsulta) {
 
             if (statusRecurso.includes(req.query.filtroConsulta)) {
@@ -657,20 +658,14 @@ async function uploadFilesProcessoSeletivo(files, idProcesso, idUser, tipoFormul
         if (i == 0) {
           retorno.pathLattes = fileName;
         } else if (i == 1) {
-          retorno.pathComprovantePagamento = fileName;
-        } else if (i == 2) {
           retorno.pathPreProj = fileName;
-        } else if (i == 3) {
-          retorno.pathMemorial = fileName;
         }
       } else if (tipoFormulario == 2) { // DOUTORADO
         if (i == 0) {
           retorno.pathLattes = fileName;
         } else if (i == 1) {
-          retorno.pathComprovantePagamento = fileName;
-        } else if (i == 2) {
           retorno.pathProjetoTese = fileName;
-        } else if (i == 3) {
+        } else if (i == 2) {
           retorno.pathPrincipalPubli = fileName;
         }
 

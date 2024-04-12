@@ -1,7 +1,7 @@
 <div class="profile-card">
   <div class="row profile-card--blur-content">
     <div class="col-md-4">
-      <img class="profile-card__image" src="{{ profile.imagePathS3}}" alt="">
+      <img class="profile-card__image" src="{{ profile.imagePathS3?.includes('https:')? profile.imagePathS3 : 'https://ppge-public.s3.sa-east-1.amazonaws.com/'+profile.imagePathS3}}" alt="">
     </div>
     <div class="col-md-8">
       <div class="profile-card__data">
