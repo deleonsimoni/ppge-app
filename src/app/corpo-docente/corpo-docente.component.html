@@ -23,7 +23,7 @@
                         <h4>{{ profile.fullName }}</h4>
 
                         <span>{{ profile.academicFormation }}</span>
-                        <span *ngIf="profile?.linhaPesquisa?.length > 0">Linha(s) de pesquisa: {{ profile?.linhaPesquisa?.join('. ') }} </span>
+                        <span *ngIf="profile?.linhaPesquisa?.length > 0">Linha de Pesquisa: {{ profile?.linhaPesquisa?.join('. ') }} </span>
                         <span *ngIf="profile.lattes"><a href="{{ profile.lattes }}" target="_blank">Acesso Lattes</a></span>
 
                     </div>

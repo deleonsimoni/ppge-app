@@ -169,6 +169,7 @@ export class PagesAdminComponent implements OnInit {
           .subscribe((res: any) => {
             this.getInfoPage();
             this.toastr.success(`Página alterada com sucesso`, 'Sucesso');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           }, (err: any) => {
             this.toastr.error('Ocorreu um erro ao atualizar', 'Atenção: ');
           });
@@ -184,6 +185,7 @@ export class PagesAdminComponent implements OnInit {
           .subscribe((res: any) => {
             this.getInfoPage();
             this.toastr.success(`Página cadastrada`, 'Sucesso');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           });
       }
 

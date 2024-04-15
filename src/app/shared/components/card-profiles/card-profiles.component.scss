@@ -13,6 +13,7 @@ $main-class: ".profile-card";
   background-color: #fff;
   cursor: pointer;
   position: relative;
+  min-height: 170px;
 
   &__data {
     word-break: break-word;

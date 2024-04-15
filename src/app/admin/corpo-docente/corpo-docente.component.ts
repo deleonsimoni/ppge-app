@@ -82,13 +82,14 @@ export class CorpoDocenteComponent implements OnInit {
   }
 
   getImagePath(imgUrl) {
-    return imgUrl?.includes('https:')? imgUrl : 'https://ppge-public.s3.sa-east-1.amazonaws.com/'+imgUrl
+    return imgUrl?.includes('https:') || imgUrl?.startsWith("data:image") ? imgUrl : 'https://ppge-public.s3.sa-east-1.amazonaws.com/'+imgUrl
   }
 
   edit(profile: any) {
     this.alternarForm(true);
     this.logo = profile.imagePathS3;
     this.form.patchValue({ ...profile })
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
 
