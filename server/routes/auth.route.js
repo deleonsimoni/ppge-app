@@ -5,6 +5,8 @@ const userCtrl = require('../controllers/user.controller');
 const authCtrl = require('../controllers/auth.controller');
 const config = require('../config/config');
 const User = require('../models/user.model');
+const requireAdmin = require('../middleware/require-admin');
+const setLocation = require('../middleware/set-location');
 
 const router = express.Router();
 module.exports = router;
@@ -31,12 +33,18 @@ function login(req, res) {
   res.json({ user, token });
 }
 
+router.post('/changePassword', [passport.authenticate('jwt', {
+  session: false
+})], setLocation, asyncHandler(changePassword));
+async function changePassword(req, res) {
+  let response = await userCtrl.changePassword(req.user._id, req.body);
+
+  return res.status(response.status).send({ message: response.message });
+}
+
 router.post('/resetPassword', asyncHandler(resetPassword));
 async function resetPassword(req, res) {
 
-  console.log("req.body: ", req.body)
-
-  
   let user = await User.findOne({ mailCodePassword: req.body.mailCodePassword });
 
   if (!user) {

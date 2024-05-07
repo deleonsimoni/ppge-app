@@ -17,5 +17,6 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     BsDatepickerModule.forRoot(),
     AuthRoutingModule],
   declarations: [LoginComponent, RegisterComponent],
+  exports: [RegisterComponent]
 })
 export class AuthModule { }

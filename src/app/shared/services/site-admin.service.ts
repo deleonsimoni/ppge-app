@@ -380,4 +380,23 @@ export class SiteAdminService {
     return this.http.delete(`${this.URL_RANK}/${idProcessoSeletivo}/${idRank}`);
   }
   /* Fim Rank */
+
+  /* Gerenciar Usuários */
+
+  pesquisarUsuarios(nameSearch) {
+    let params = new HttpParams();
+    if(nameSearch && nameSearch.trim() != '') {
+      params = params.set("nameSearch", nameSearch.trim());
+    }
+
+    return this.http.get(`${this.URL_API_USER}/all/users`, {params});
+  }
+
+  adicionarOuRemoverAdmin(idUser, isAdicionarAdmin) {
+    const params = new HttpParams()
+      .set('isAdicionarAdmin', isAdicionarAdmin);
+    return this.http.get(`${this.URL_API_USER}/adicionar-remover-admin/${idUser}`, {params});
+  }
+
+  /* FIM Gerenciar Usuários */
 }

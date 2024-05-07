@@ -15,6 +15,7 @@ import { CardProfilesComponent } from './card-profiles/card-profiles.component';
 import { FormProcessoSeletivoComponent } from './form-processo-seletivo/form-processo-seletivo.component';
 import { FormProcessoSeletivoService } from './form-processo-seletivo/form-processo-seletivo.service';
 import { RankViewDialogComponent } from './rank-view-dialog/rank-view-dialog.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 
 
@@ -23,6 +24,7 @@ import { RankViewDialogComponent } from './rank-view-dialog/rank-view-dialog.com
     CardProfilesComponent,
     FormProcessoSeletivoComponent,
     RankViewDialogComponent,
+    ConfirmDialogComponent,
 
   ],
   imports: [

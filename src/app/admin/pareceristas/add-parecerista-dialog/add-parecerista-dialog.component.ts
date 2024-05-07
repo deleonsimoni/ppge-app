@@ -5,6 +5,7 @@ import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, of, take } from 'rxjs';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { C } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-add-parecerista-dialog',
@@ -13,6 +14,8 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class AddPareceristaDialogComponent {
   formParecerista: any;
+
+  listUser: any = [];
 
   constructor(
     private builder: FormBuilder,
@@ -24,6 +27,29 @@ export class AddPareceristaDialogComponent {
     this.formParecerista = this.builder.group({
       email: [null, [Validators.required]],
     });
+  }
+
+  selecionarUsuario(email) {
+    this.listUser = []
+    this.formParecerista.get('email').setValue(email);
+  }
+
+  getUserByName(name) {
+    if(name.length > 2) {
+      this.siteService
+        .pesquisarUsuarios(name)
+        .pipe(
+          catchError(err => {
+            throw err;
+          })
+        )
+        .subscribe(data => {
+          this.listUser = data;
+        })
+    } else {
+      this.listUser = []
+    }
+    
   }
 
   onNoClick(): void {

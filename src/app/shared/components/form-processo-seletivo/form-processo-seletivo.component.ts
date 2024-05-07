@@ -48,6 +48,10 @@ export class FormProcessoSeletivoComponent implements OnInit {
     this.createForm();
   }
 
+  clearSegundoOrientador() {
+    this.form.get('segundoOrientador')?.setValue(null)
+  }
+
   getAllCotas() {
     this.serviceFormProcesso.getAllCotas().subscribe(listCotas => {
       this.listCotas = listCotas
@@ -157,8 +161,6 @@ export class FormProcessoSeletivoComponent implements OnInit {
     this.serviceFormProcesso.getProcessoSeletivoInfosById(this.idProcessoSeletivo)
       .subscribe((data: any) => {
         if (data) {
-          console.log("RETORNO: ",data);
-          
           this.listLinhaPesquisa = data.researchLine
         }
       });
@@ -169,9 +171,6 @@ export class FormProcessoSeletivoComponent implements OnInit {
   }
 
   register() {
-
-    console.log("FORMmmmm: ", this.form.value);
-    
 
     //TODO vai ter limite de tamanho?
 

@@ -12,6 +12,7 @@ import { PareceristasComponent } from './pareceristas/pareceristas.component';
 import { ProcessoSeletivoAdminComponent } from './processo-seletivo-admin/processo-seletivo-admin.component';
 import { RankComponent } from './rank/rank.component';
 import { TeseDissertacaoAdminComponent } from './tese-dissertacao-admin/tese-dissertacao-admin.component';
+import { GerenciarUsuariosComponent } from './gerenciar-usuarios/gerenciar-usuarios.component';
 
 const routes: Routes = [
   {
@@ -83,6 +84,13 @@ const routes: Routes = [
         canActivate: [OnlyAllowedRolesUsersGuard],
         data: {
           roles: ['admin', 'gerenciador']
+        }
+      },
+      {
+        path: 'gerenciar-usuarios', component: GerenciarUsuariosComponent,
+        canActivate: [OnlyAllowedRolesUsersGuard],
+        data: {
+          roles: ['admin']
         }
       }
     ],

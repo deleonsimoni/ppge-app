@@ -7,6 +7,10 @@ import { ParecerUserComponent } from './parecer/parecer-user.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { JustificarDialogComponent } from './justificar-dialog/justificar-dialog.component';
+import { AuthModule } from '@app/auth/auth.module';
+import { EditPasswordDialogComponent } from './edit-password-dialog/edit-password-dialog.component';
+import { FormsModule } from '@angular/forms';
+import { NgxMaskModule } from 'ngx-mask';
 
 
 
@@ -14,15 +18,18 @@ import { JustificarDialogComponent } from './justificar-dialog/justificar-dialog
   declarations: [
     UserAreaComponent,
     ParecerUserComponent,
-    JustificarDialogComponent
+    JustificarDialogComponent,
+    EditPasswordDialogComponent
   ],
   imports: [
     CommonModule, 
     BrowserModule, 
     SharedModule,
+    NgxMaskModule.forRoot(),
     MatCheckboxModule,
     MatRadioModule,
-
+    AuthModule,
+    FormsModule,
   ]
 })
 export class UserAreaModule { }

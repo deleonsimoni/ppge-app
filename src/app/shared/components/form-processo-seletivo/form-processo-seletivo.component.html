@@ -20,7 +20,7 @@
             disponibilidade para orientação"}} </strong></label>
         <mat-form-field style="width: 100% !important;" appearance="fill" class="mb-3">
           <mat-label>Selecione o Orientador</mat-label>
-          <mat-select formControlName="primeiroOrientador">
+          <mat-select formControlName="primeiroOrientador" (selectionChange)="clearSegundoOrientador()">
             <mat-option *ngFor="let corpoDocente of listCorpoDocente" [value]="corpoDocente._id">
               {{corpoDocente.fullName}}</mat-option>
           </mat-select>
@@ -31,7 +31,7 @@
         <mat-form-field style="width: 100% !important;" appearance="fill" class="mb-3">
           <mat-label>Selecione o Orientador</mat-label>
           <mat-select formControlName="segundoOrientador">
-            <mat-option *ngFor="let corpoDocente of listCorpoDocente" [value]="corpoDocente._id">
+            <mat-option *ngFor="let corpoDocente of listCorpoDocente" [value]="corpoDocente._id" [disabled]="form.get('primeiroOrientador').value === corpoDocente._id">
               {{corpoDocente.fullName}}</mat-option>
           </mat-select>
         </mat-form-field>

@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="section-header">
-                    <h2 mt-2>Dados Pessoais</h2>
+                    <h2 mt-2>{{user && user._id ? 'Editar ' : ''}}Dados Pessoais</h2>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -28,10 +28,10 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <input type="email" class="form-control" name="email" id="email" placeholder="Email"
-                            data-rule="email" data-msg="Please enter a valid email" formControlName="email" />
+                            data-rule="email" data-msg="Please enter a valid email" formControlName="email"/>
                         <div class="validation"></div>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-6" *ngIf="!this.user || !this.user._id">
                         <input type="email" class="form-control" name="repeatEmail" id="repeatEmail"
                             placeholder="Repita o email" data-rule="repeatEmail" data-msg="Please enter a valid email"
                             formControlName="repeatEmail" />
@@ -39,7 +39,7 @@
                     </div>
                 </div>
 
-                <div class="form-row">
+                <div class="form-row" *ngIf="!this.user || !this.user._id">
                     <div class="form-group col-md-6">
                         <input type="password" name="password" class="form-control" id="password" placeholder="Senha"
                             formControlName="password" />
@@ -162,6 +162,9 @@
                     <div class="form-group col-md-6">
 
                         <select placeholder="Estado" formControlName="estado" class="form-control">
+                            <option value=null>
+                                Estado
+                            </option>
                             <option *ngFor="let state of states" value={{state}}>
                                 {{state}}
                             </option>
@@ -191,7 +194,7 @@
 
 
 
-                <div class="col-md-12 pt-4">
+                <div class="col-md-12 pt-4" *ngIf="!this.user || !this.user._id">
                     <hr>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="id" id="termo" [value]="true"
@@ -207,7 +210,7 @@
                 <div class="text-center pt-5">
 
                     <div *ngIf="!carregando" class="text-center pt-5"><button class="m-4 btn btn-secondary"
-                            type="submit">Realizar Inscrição</button></div>
+                            type="submit">{{user && user._id ? 'Confirmar Edição' : 'Realizar Inscrição' }}</button></div>
                     <div *ngIf="carregando" class="text-center pt-5"><button><i
                                 class="fas fa-spinner fa-pulse"></i>Aguarde...</button></div>
                 </div>

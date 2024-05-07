@@ -15,7 +15,11 @@ module.exports = {
   subscribeProcessoSeletivo,
   unsubscribeProcessoSeletivo,
   resetPassword,
+  changePassword,
   generateNewPassword,
+
+  getAllUsers,
+  adicionarOuRemoverAdmin,
 
   cadastrarParecerista,
   removerParecerista,
@@ -25,16 +29,107 @@ module.exports = {
 };
 
 async function insert(user) {
-  user.hashedPassword = bcrypt.hashSync(user.password, 10);
-  delete user.password;
+  let success;
+  if(!user || !user._id) {
+    user.hashedPassword = bcrypt.hashSync(user.password, 10);
+    delete user.password;
+  
+    success = await new User(user).save();
+  
+    if (success) {
+      let email = templateEmail.inscricaoSucesso;
+      emailSender.sendMailAWS(user.email, 'Bem-Vindo!', email);
+    }
+  } else {
+    // Edit AQUI!
 
-  let success = await new User(user).save();
+    success = await User.findOneAndUpdate({ _id: user._id }, {
+      '$set': {
+        fullname: user.fullname,
+        socialname: user.socialname,
+        dataNiver: user.dataNiver,
+        rg: user.rg,
+        cpf: user.cpf,
+        rgEmissor: user.rgEmissor,
+        passaporte: user.passaporte,
+        nacionalidade: user.nacionalidade,
+        endereco: user.endereco,
+        bairro: user.bairro,
+        cep: user.cep,
+        cidade: user.cidade,
+        estado: user.estado,
+        celular: user.celular,
+        telefone: user.telefone,
+        cargo: user.cargo,
+        empresa: user.empresa,
+        deficiencia: user.deficiencia,
+        cor: user.cor,
+        genero: user.genero,
+      }
+    },{ upsert: false });
 
-  if (success) {
-    let email = templateEmail.inscricaoSucesso;
-    emailSender.sendMailAWS(user.email, 'Bem-Vindo!', email);
+
+      success.fullname = user.fullname;
+      success.socialname = user.socialname;
+      success.dataNiver = user.dataNiver;
+      success.rg = user.rg;
+      success.cpf = user.cpf;
+      success.rgEmissor = user.rgEmissor;
+      success.passaporte = user.passaporte;
+      success.nacionalidade = user.nacionalidade;
+      success.endereco = user.endereco;
+      success.bairro = user.bairro;
+      success.cep = user.cep;
+      success.cidade = user.cidade;
+      success.estado = user.estado;
+      success.celular = user.celular;
+      success.telefone = user.telefone;
+      success.cargo = user.cargo;
+      success.empresa = user.empresa;
+      success.deficiencia = user.deficiencia;
+      success.cor = user.cor;
+      success.genero = user.genero;
+    
+    
   }
   return success;
+}
+
+async function getAllUsers(req) {
+  const regex = new RegExp('^' + req.query.nameSearch);
+  return await UserModel.find(
+    { fullname: regex }, 
+    {
+      _id: 1,
+      fullname: 1,
+      email: 1,
+      roles: 1,
+    }
+  );
+}
+
+async function adicionarOuRemoverAdmin(req) {
+
+  let queryAddOrRemove;
+  if(req.query.isAdicionarAdmin == "true") {
+    queryAddOrRemove = { "$addToSet": { roles: "admin" } }
+  } else {
+    queryAddOrRemove = { "$pull": { roles: "admin" } }
+  }
+  
+  let user = await UserModel.findOneAndUpdate(
+    { _id: req.params.id },
+    queryAddOrRemove,
+    { upsert: false }
+  );
+
+  if(user) {
+    return {status: 200, message: "Admin atualizado com sucesso!"};
+  } else {
+    return {status: 400, message: "Erro ao atualizar admin!"};
+  }
+  
+
 }
 
 async function getByIdOnlyProcesso(idUser, req) {
@@ -255,6 +350,37 @@ async function resetPassword(req, user) {
 
   return response;
 
+}
+
+async function changePassword(idUser, body) {
+  let response = {status: 200, message:"Senha alterada com sucesso!"}
+
+  let user = await User.findOne({ _id: idUser });
+  if(!user) {
+    return {status: 400, message:"Usuário não encontrado!"};
+  }
+
+  if(!bcrypt.compareSync(body.senha, user.hashedPassword)) {
+    return {status: 401, message:"Senha atual inválida!"};
+  }
+
+  if(body.novaSenha.length < 6) {
+    return {status: 401, message:"A nova senha tem que ter no mínimo 6 dígitos!"};
+  }
+
+  if(body.novaSenha != body.reNovaSenha) {
+    return {status: 401, message:"Nova senha não confere com 'Repetir Senha'!"};
+  }
+  
+  const hashString = bcrypt.hashSync(body.novaSenha, 10);
+  await User.updateOne({_id: user._id}, {
+    '$set': {
+      hashedPassword: hashString
+    }
+  })
+
+
+  return {status: 200, message:"sucesso"}
 }
 
 async function generateNewPassword(user) {

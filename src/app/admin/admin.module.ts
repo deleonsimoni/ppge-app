@@ -31,6 +31,7 @@ import { CriterioAvaliacaoDialogComponent } from './processo-seletivo-admin/crit
 import { CriterioFormComponent } from './components/criterio-form/criterio-form.component';
 import { CotaAcaoAfirmativaComponent } from './cota-acao-afirmativa/cota-acao-afirmativa.component';
 import { RecursoComponent } from './inscricoes/recurso/recurso.component';
+import { GerenciarUsuariosComponent } from './gerenciar-usuarios/gerenciar-usuarios.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { RecursoComponent } from './inscricoes/recurso/recurso.component';
     CriterioAvaliacaoDialogComponent,
     CriterioFormComponent,
     CotaAcaoAfirmativaComponent,
-    RecursoComponent
+    RecursoComponent,
+    GerenciarUsuariosComponent
   ],
   imports: [
     CommonModule,

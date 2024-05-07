@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   FormGroup,
@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '@app/shared/services';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalTermoUsoComponent } from '@app/modals/modal-termo-uso/modal-termo-uso.component';
+import { User } from '@app/shared/interfaces';
 
 @Component({
   selector: 'app-register',
@@ -20,7 +21,8 @@ import { ModalTermoUsoComponent } from '@app/modals/modal-termo-uso/modal-termo-
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-
+  @Input() user: any;
+  @Output() callBackEdit = new EventEmitter<User>();
 
   public registerForm: FormGroup;
   public carregando = false;
@@ -37,45 +39,55 @@ export class RegisterComponent implements OnInit {
     private rota: Router,
     private dialog: MatDialog,
     private toastr: ToastrService) {
-    this.createForm();
   }
 
 
   ngOnInit(): void {
+    // if(this.user && !this.user._id) {
+    //   this.toastr.error('ID do usuário não encontrado!', 'Atenção');
+    // }
+    this.createForm();
 
   }
 
   private createForm(): void {
+    
     this.registerForm = this.builder.group({
-      fullname: [null, [Validators.required]],
-      socialname: [null, []],
-      email: [null, [Validators.required, Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
-      repeatEmail: [null, [Validators.required, Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
-      password: [null, [Validators.required, Validators.minLength(6)]],
-      cfPassword: [null, [Validators.required, Validators.minLength(6)]],
-      dataNiver: [null, [Validators.required]],
+      _id: [this.user?._id ?? null],
+      fullname: [this.user?._id ? this.user?.fullname : null, [Validators.required]],
+      socialname: [this.user?._id ? this.user?.socialname : null, []],
+      email: [{value: this.user?._id ? this.user?.email : null, disabled: this.user?._id}, [Validators.required, Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
+      
+      dataNiver: [this.user?._id ? new Date(this.user?.dataNiver) : null, [Validators.required]],
+      rg: [this.user?._id ? this.user?.rg : null, [Validators.required]],
+      cpf: [this.user?._id ? this.user?.cpf : null, [Validators.required]],
+      rgEmissor: [this.user?._id ? this.user?.rgEmissor : null, [Validators.required]],
 
-      rg: [null, [Validators.required]],
-      cpf: [null, [Validators.required]],
-      rgEmissor: [null, [Validators.required]],
-      passaporte: [null, []],
-      nacionalidade: [null, [Validators.required]],
-      endereco: [null, [Validators.required]],
-      bairro: [null, [Validators.required]],
-      cep: [null, [Validators.required]],
-      cidade: [null, [Validators.required]],
-      estado: [null, [Validators.required]],
-      celular: [null, [Validators.required]],
-      telefone: [null, []],
-      cargo: [null, []],
-      empresa: [null, []],
-      deficiencia: [null, []],
-      cor: [null, [Validators.required]],
-      genero: [null, [Validators.required]],
+      passaporte: [this.user?._id ? this.user?.passaporte : null, []],
+      nacionalidade: [this.user?._id ? this.user?.nacionalidade : null, [Validators.required]],
+      endereco: [this.user?._id ? this.user?.endereco : null, [Validators.required]],
+      bairro: [this.user?._id ? this.user?.bairro : null, [Validators.required]],
+      cep: [this.user?._id ? this.user?.cep : null, [Validators.required]],
+      cidade: [this.user?._id ? this.user?.cidade : null, [Validators.required]],
+      estado: [this.user?._id ? this.user?.estado : null, [Validators.required]],
+      celular: [this.user?._id ? this.user?.celular : null, [Validators.required]],
+      telefone: [this.user?._id ? this.user?.telefone : null, []],
+      cargo: [this.user?._id ? this.user?.cargo : null, []],
+      
+      empresa: [this.user?._id ? this.user?.empresa : null, []],
+      deficiencia: [this.user?._id ? this.user?.deficiencia : null, []],
+      cor: [this.user?._id ? this.user?.cor : null, [Validators.required]],
+      genero: [this.user?._id ? this.user?.genero : null, [Validators.required]],
 
 
-      icAcceptTerms: [false, [Validators.requiredTrue]]
     });
+
+    if(!this.user || !this.user._id) {
+      this.registerForm.addControl('repeatEmail', new FormControl(null, [Validators.required, Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]))
+      this.registerForm.addControl('password', new FormControl(null, [Validators.required, Validators.minLength(6)]))
+      this.registerForm.addControl('cfPassword', new FormControl(null, [Validators.required, Validators.minLength(6)]))
+      this.registerForm.addControl('icAcceptTerms', new FormControl(false, [Validators.requiredTrue]))
+    }
   }
 
 
@@ -83,18 +95,18 @@ export class RegisterComponent implements OnInit {
 
     const form = this.registerForm.value;
 
-    if (form.password != form.cfPassword) {
+    if ((!this.user || !this.user._id) && form.password != form.cfPassword) {
       this.toastr.error('Senhas divergentes.', 'Atenção: ');
       return;
     }
 
-    if (!form.password) {
+    if ((!this.user || !this.user._id) && this.user && this.user._id && !form.password) {
       this.toastr.error('É necessário colocar uma senha.', 'Atenção: ');
       return;
     }
 
-    if (!form.cfPassword) {
-      this.toastr.error('É repetir a senha.', 'Atenção: ');
+    if ((!this.user || !this.user._id) && !form.cfPassword) {
+      this.toastr.error('É necessário repetir a senha.', 'Atenção: ');
       return;
     }
 
@@ -140,12 +152,12 @@ export class RegisterComponent implements OnInit {
     }
 
 
-    if (!this.registerForm.value.icAcceptTerms) {
+    if ((!this.user || !this.user._id) && !this.registerForm.value.icAcceptTerms) {
       this.toastr.error('É necessário aceitar os termos para prosseguir.', 'Atenção: ');
       return;
     }
 
-    if (this.registerForm.value.repeatEmail != this.registerForm.value.email) {
+    if ((!this.user || !this.user._id) && this.registerForm.value.repeatEmail != this.registerForm.value.email) {
       this.toastr.error('Verifique o campo email e confirmação de email.', 'Atenção: ');
       return;
     }
@@ -158,14 +170,21 @@ export class RegisterComponent implements OnInit {
     //if (this.registerForm.valid && form != null) {
 
     this.carregando = true;
-    this.registerForm.value.email = this.registerForm.value.email.toLowerCase().trim();
+    if(!this.user || !this.user._id) {
+      this.registerForm.value.email = this.registerForm.value.email.toLowerCase().trim();
+    }
     this.registerForm.removeControl('cf-password');
 
     this.authService
       .register(form)
       .subscribe((res: any) => {
-        this.toastr.success('Cadastro realizado com sucesso.', 'Bem-vindo');
-        this.router.navigate(['']);
+        if(!this.user || !this.user._id) {
+          this.toastr.success('Cadastro realizado com sucesso.', 'Bem-vindo');
+          this.router.navigate(['']);
+        } else {
+          this.toastr.success('Dados alterados com sucesso.');
+          this.callBackEdit.emit(res);
+        }
       }, err => {
         this.carregando = false;
         if (err.status === 500) {

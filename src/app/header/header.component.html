@@ -158,7 +158,7 @@
           </ul>
         </li>
 
-        <li *ngIf="user && user.roles.length == 0" style="cursor: pointer;"><a
+        <li *ngIf="user" style="cursor: pointer;"><a
             [routerLink]="'area-usuario'">{{'area.usuario' | translate}}</a>
         </li>
 

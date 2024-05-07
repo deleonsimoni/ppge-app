@@ -3,14 +3,22 @@
   <form role="form" class="reviewer" [formGroup]="formParecerista" (ngSubmit)="addParecerista()">
     <div class="container">
       <div class="row">
+        <p class="mb-0 color-gray">*Digite o email completo para adicionar OU comece a digitar no mínimo 3 letras do nome para pesquisar e poder selecionar o usuário desejado! (Considere letras maiúsculas e acentuação)</p>
+      </div>
+      <div class="row">
         <div class="col mb-3">
-          <input type="email" name="email" class="form-control" placeholder="Email do usuário"
-            formControlName="email">
+          <input type="email" name="email" class="form-control" placeholder="Email/Nome do usuário"
+            formControlName="email" (input)="getUserByName($event.target.value)">
         </div>
         <div class="col-auto">
           <button type="submit" mat-raised-button
               color="accent" style="background: green;" >Adicionar Avaliador</button>
         </div>
+      </div>
+      <div class="row mb-3" *ngFor="let user of listUser">
+        <div class="col-4">{{user.fullname}}</div>
+        <div class="col">{{user.email}}</div>
+        <div class="col-auto"><button type="button" mat-raised-button color="primary" (click)="selecionarUsuario(user.email)" >Selecionar</button></div>
       </div>
     </div>
   </form>

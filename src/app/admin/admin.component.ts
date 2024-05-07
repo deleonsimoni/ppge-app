@@ -22,6 +22,7 @@ export class AdminComponent implements OnInit {
         { name: 'Inscrições/Avaliadores', path: '/admin/inscritos', permitido: user.isAdmin || user.isCoordenador || user.isParecerista },
         { name: 'Ranking', path: '/admin/rank', permitido: user.isAdmin || user.isCoordenador || user.isParecerista || user.isGerenciador },
         { name: 'Cotas de Ações Afirmativas', path: '/admin/cotas-acoes-afirmativas', permitido: user.isAdmin || user.isGerenciador },
+        { name: 'Gerenciar Usuários', path: '/admin/gerenciar-usuarios', permitido: user.isAdmin },
 
       ]
     })

@@ -6,6 +6,7 @@ import { Injectable } from "@angular/core";
 })
 export class UserAreaService { 
   private readonly URL_PROCESSO_SELETIVO = '/api/ppge/processo-seletivo';
+  private readonly URL_AUTH = '/api/auth';
 
   constructor(
     private http: HttpClient,
@@ -34,5 +35,9 @@ export class UserAreaService {
 
     return this.http.post(`${this.URL_PROCESSO_SELETIVO}/minha-inscricoes/justificar-homolog`, {justificativa}, {params});
 
+  }
+
+  public alterarSenha(senha, novaSenha, reNovaSenha) {
+    return this.http.post(`${this.URL_AUTH}/changePassword`, {senha, novaSenha, reNovaSenha});
   }
 }
