@@ -152,6 +152,7 @@ export class SiteAdminService {
     if (form.ano) params = params.set('ano', form.ano)
     if (form.ingresso) params = params.set('ingresso', form.ingresso)
     if (form.autor) params = params.set('autor', form.autor)
+    if (form.orientador) params = params.set('orientador', form.orientador)
     if (form.titulo) params = params.set('titulo', form.titulo)
     if (form.dataSala) params = params.set('dataSala', form.dataSala)
     if (form.banca) params = params.set('banca', form.banca)
@@ -167,7 +168,7 @@ export class SiteAdminService {
   /* Processo Seletivo */
 
   // Recurso
-  
+
 
   public registrarRespostaJustificativa(idInscricao, idProcesso, idStep, justificativa, recursoAceito) {
     const params = new HttpParams()
@@ -176,7 +177,7 @@ export class SiteAdminService {
       .set('prefixoRecurso', 'respostaJustificativa')
       .set('idProcesso', idProcesso);
 
-    return this.http.post(`${this.URL_PROCESSO_SELETIVO}/minha-inscricoes/justificar`, {justificativa, recursoAceito}, {params});
+    return this.http.post(`${this.URL_PROCESSO_SELETIVO}/minha-inscricoes/justificar`, { justificativa, recursoAceito }, { params });
 
   }
 
@@ -186,13 +187,13 @@ export class SiteAdminService {
       .set('prefixoRecurso', 'respostaJustificativa')
       .set('idProcesso', idProcesso);
 
-    return this.http.post(`${this.URL_PROCESSO_SELETIVO}/minha-inscricoes/justificar-homolog`, {justificativa, recursoAceito}, {params});
+    return this.http.post(`${this.URL_PROCESSO_SELETIVO}/minha-inscricoes/justificar-homolog`, { justificativa, recursoAceito }, { params });
 
   }
   // FIM Recurso
 
   changeHomologInscricao(value, idInscricaoSelecionada, idProcessoSelecionado, justificaIndeferido) {
-    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/parecer/homologacao`, {value, idInscricaoSelecionada, idProcessoSelecionado, justificaIndeferido});
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/parecer/homologacao`, { value, idInscricaoSelecionada, idProcessoSelecionado, justificaIndeferido });
 
   }
 
@@ -222,7 +223,7 @@ export class SiteAdminService {
 
   mudarEtapa(etapa, idProcesso) {
     const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
-    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/mudar-etapa`, {idProcesso, etapa});
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/mudar-etapa`, { idProcesso, etapa });
   }
 
   deletarProcessoSeletivo(id: any) {
@@ -277,11 +278,11 @@ export class SiteAdminService {
   }
 
   salvarVinculoCriterio(criterio, idProcessoSeletivo) {
-    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/criterio/${idProcessoSeletivo}`, {criterio})
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/criterio/${idProcessoSeletivo}`, { criterio })
   }
 
   consolidarAvaliacao(idProcesso, idInscricao, idStep, mediaStep, isApproveStep) {
-    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/${idProcesso}/inscricao/${idInscricao}/consolidar`, {idStep, mediaStep, isApproveStep})
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/${idProcesso}/inscricao/${idInscricao}/consolidar`, { idStep, mediaStep, isApproveStep })
   }
 
   /* Fim Processo Seletivo */
@@ -324,11 +325,11 @@ export class SiteAdminService {
 
   /* Criterio de avaliacao */
   cadastrarCriterio(formulario) {
-    return this.http.post(`${this.URL_CRITERIO}`, {formulario});
+    return this.http.post(`${this.URL_CRITERIO}`, { formulario });
   }
 
   atualizarCriterio(formulario) {
-    return this.http.put(`${this.URL_CRITERIO}/${formulario._id}`, {formulario});
+    return this.http.put(`${this.URL_CRITERIO}/${formulario._id}`, { formulario });
   }
 
   getAllCriterios() {
@@ -345,11 +346,11 @@ export class SiteAdminService {
   /* Cotas de Ação Afirmativa */
 
   cadastrarCota(formulario) {
-    return this.http.post(`${this.URL_COTA}`, {formulario});
+    return this.http.post(`${this.URL_COTA}`, { formulario });
   }
 
   atualizarCota(formulario) {
-    return this.http.put(`${this.URL_COTA}/${formulario._id}`, {formulario});
+    return this.http.put(`${this.URL_COTA}/${formulario._id}`, { formulario });
   }
 
   getAllCotas() {
@@ -365,15 +366,15 @@ export class SiteAdminService {
 
   /* Rank */
   gerarRank(idProcessoSeletivo, isFinalRank) {
-    return this.http.post(`${this.URL_RANK}/${idProcessoSeletivo}`, {isFinalRank});
+    return this.http.post(`${this.URL_RANK}/${idProcessoSeletivo}`, { isFinalRank });
   }
 
   getAllRanks(idProcessoSeletivo) {
     return this.http.get(`${this.URL_RANK}/${idProcessoSeletivo}`);
   }
 
-  atualizarStatusRankAtivo(checked, idProcessoSeletivo, idRank ) {
-    return this.http.post(`${this.URL_RANK}/status-rank/${idProcessoSeletivo}/${idRank}`, {checked});
+  atualizarStatusRankAtivo(checked, idProcessoSeletivo, idRank) {
+    return this.http.post(`${this.URL_RANK}/status-rank/${idProcessoSeletivo}/${idRank}`, { checked });
   }
 
   deleteRankById(idProcessoSeletivo, idRank) {
@@ -385,17 +386,17 @@ export class SiteAdminService {
 
   pesquisarUsuarios(nameSearch) {
     let params = new HttpParams();
-    if(nameSearch && nameSearch.trim() != '') {
+    if (nameSearch && nameSearch.trim() != '') {
       params = params.set("nameSearch", nameSearch.trim());
     }
 
-    return this.http.get(`${this.URL_API_USER}/all/users`, {params});
+    return this.http.get(`${this.URL_API_USER}/all/users`, { params });
   }
 
   adicionarOuRemoverAdmin(idUser, isAdicionarAdmin) {
     const params = new HttpParams()
       .set('isAdicionarAdmin', isAdicionarAdmin);
-    return this.http.get(`${this.URL_API_USER}/adicionar-remover-admin/${idUser}`, {params});
+    return this.http.get(`${this.URL_API_USER}/adicionar-remover-admin/${idUser}`, { params });
   }
 
   /* FIM Gerenciar Usuários */

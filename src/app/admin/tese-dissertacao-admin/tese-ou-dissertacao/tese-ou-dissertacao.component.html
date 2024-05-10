@@ -4,6 +4,7 @@
             <thead>
                 <tr>
                     <th scope="col">Autor</th>
+                    <th scope="col">Orientador</th>
                     <th scope="col">Titulo</th>
                     <th scope="col">Data/Sala</th>
                     <th scope="col">Banca</th>
@@ -15,13 +16,15 @@
             <tbody>
                 <tr *ngFor="let di of datas; let i= index">
                     <td scope="row">{{ di.autor }}</td>
+                    <td scope="row">{{ di.orientador }}</td>
                     <td scope="row">{{ di.titulo }}</td>
                     <td scope="row">{{ di.dataSala }}</td>
                     <td scope="row">{{ di.banca }}</td>
                     <td scope="row">{{ di.ingresso }}</td>
                     <td scope="row">{{ di.linkTitulo | breakString }}</td>
                     <td scope="row">
-                        <span class="material-icons md-18 btn" (click)="apagarTitulo(di._id, di.autor, di.titulo, di.tipo)">delete</span>
+                        <span class="material-icons md-18 btn"
+                            (click)="apagarTitulo(di._id, di.autor, di.titulo, di.tipo)">delete</span>
                         <span class="material-icons md-18 btn" (click)="editarTitulo(di)">edit_square</span>
                     </td>
                 </tr>

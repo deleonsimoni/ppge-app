@@ -17,6 +17,10 @@ const TeseDissertacaoSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    orientador: {
+        type: String,
+        required: true,
+    },
     autor: {
         type: String,
         required: true,
@@ -31,7 +35,7 @@ const TeseDissertacaoSchema = new mongoose.Schema({
     },
     banca: {
         type: String,
-        required: true,
+
     },
     ingresso: {
         type: String,
@@ -43,13 +47,16 @@ const TeseDissertacaoSchema = new mongoose.Schema({
     },
     linkTitulo: {
         type: String,
-        required: true,
+
     },
     palavrasChave: [
         {
             type: String,
         }
     ],
+    resumo: {
+        type: String,
+    },
     createdAt: {
         type: Date,
         default: Date.now,

@@ -16,6 +16,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   public form: FormGroup;
   carregando = false;
   datas: any[];
+  resumo;
 
   eventSubscriber: Subscription;
 
@@ -58,11 +59,13 @@ export class TeseDissertacaoAdminComponent implements OnInit {
       tipo: [null, [Validators.required]],
       ano: [null, [Validators.required]],
       autor: [null, [Validators.required]],
+      orientador: [null, [Validators.required]],
       titulo: [null, [Validators.required]],
       dataSala: [null, [Validators.required]],
-      banca: [null, [Validators.required]],
+      banca: [null, []],
       ingresso: [null, [Validators.required]],
-      linkTitulo: [null, [Validators.required]],
+      linkTitulo: [null, []],
+      resumo: [null, []],
       palavrasChave: new FormArray([]),
     });
   }

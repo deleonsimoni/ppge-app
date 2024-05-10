@@ -35,6 +35,14 @@
 
                     </div>
                 </div>
+
+                <div class="form-row justify-content-center">
+                    <div class="form-group col-md-12">
+                        <input type="text" name="orientador" class="form-control" id="orientador"
+                            placeholder="Orientador" formControlName="orientador" />
+
+                    </div>
+                </div>
                 <div class="form-row justify-content-center">
                     <div class="form-group col-md-12">
                         <input type="text" name="titulo" class="form-control" id="titulo" placeholder="Título"
@@ -63,6 +71,13 @@
 
                     </div>
                 </div>
+                <div class="form-row justify-content-center">
+                    <div class="form-group col-md-12">
+                        <angular-editor [placeholder]="'Resumo...'" formControlName="resumo" [(ngModel)]="resumo"
+                            [config]="editorConfig"></angular-editor>
+                    </div>
+                </div>
+
                 <h4>Palavras-chave</h4>
                 <div formArrayName="palavrasChave">
                     <div *ngFor="let contentLine of form.controls['palavrasChave'].controls; let i = index;">

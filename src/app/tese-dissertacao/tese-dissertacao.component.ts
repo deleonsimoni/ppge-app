@@ -33,10 +33,12 @@ export class TeseDissertacaoComponent implements OnInit {
       tipo: ['1'],
       ano: [null],
       autor: [null],
+      orientador: [null],
       titulo: [null],
       dataSala: [null],
       banca: [null],
       ingresso: [null],
+      resumo: [null],
       linkTitulo: [null],
     });
 
