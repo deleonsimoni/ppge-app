@@ -5,6 +5,7 @@ import { ConfirmDialogComponent } from '@app/shared/components/confirm-dialog/co
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, take } from 'rxjs';
+import { UserDetailDialogComponent } from './user-detail-dialog/user-detail-dialog.component';
 
 @Component({
   selector: 'app-gerenciar-usuarios',
@@ -12,6 +13,9 @@ import { catchError, take } from 'rxjs';
   styleUrls: ['./gerenciar-usuarios.component.scss']
 })
 export class GerenciarUsuariosComponent implements OnInit {
+
+  page: number = 1;
+  limit: number = 10;
 
   listUsers: any = [];
 
@@ -65,13 +69,14 @@ export class GerenciarUsuariosComponent implements OnInit {
   }
 
   pesquisarUsuarios() {
+    this.page = 1;
     if(this.form.value.nameSearch.trim().length < 3) {
       this.toastr.error('Digite pelo menos 3 caracteres para buscar!');
       return;
     }
 
     this.siteService
-      .pesquisarUsuarios(this.form.value.nameSearch)
+      .pesquisarUsuarios(this.form.value.nameSearch, this.page, this.limit)
       .pipe(
         catchError(err => {
           throw err;
@@ -81,5 +86,36 @@ export class GerenciarUsuariosComponent implements OnInit {
         this.listUsers = data;
       });
   }
+
+  onPagination(event) {
+    this.siteService
+      .pesquisarUsuarios(this.form.value.nameSearch, event.newPage, this.limit)
+      .pipe(
+        catchError(err => {
+          throw err;
+        })
+      )
+      .subscribe(data => {
+        this.listUsers = data;
+        this.page = event.newPage;
+        window.scroll({
+          top: 0,
+          left: 0
+        })
+      });
+  }
+
+  visualizarUsuario(user) {
+    const dialogRef = this.dialog.open(UserDetailDialogComponent, {
+      width: '750px',
+      data: { user }
+    });
+
+  }
+
+  getTextListRoles(roles) {
+    return roles?.map(r => r == 'parecerista' ? 'avaliador' : r).join(', ')
+  }
+
 
 }

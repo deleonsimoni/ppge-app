@@ -96,16 +96,47 @@ async function insert(user) {
 }
 
 async function getAllUsers(req) {
-  const regex = new RegExp('^' + req.query.nameSearch);
-  return await UserModel.find(
+  const regex = new RegExp('^' + req.query.nameSearch, 'i');
+  const query = UserModel.find(
     { fullname: regex }, 
     {
       _id: 1,
       fullname: 1,
       email: 1,
       roles: 1,
+      socialname: 1,
+      cpf: 1,
+      rg: 1,
+      rgEmissor: 1,
+      passaporte: 1,
+      dataNiver: 1,
+      nacionalidade: 1,
+      endereco: 1,
+      bairro: 1,
+      cep: 1,
+      cidade: 1,
+      estado: 1,
+      celular: 1,
+      telefone: 1,
+      cargo: 1,
+      empresa: 1,
+      deficiencia: 1,
+      cor: 1,
+      genero: 1,
+      
     }
-  );
+  ).sort({ fullname: 1 });
+
+  
+  if(req.query.page && req.query.limit) {
+    const page = parseInt(req.query.page) || 1; // Página atual, padrão é 1
+    const limit = parseInt(req.query.limit) || 10; // Limite de documentos por página, padrão é 10
+    const skip = (page - 1) * limit;
+
+    query.skip(skip).limit(limit);
+  }
+
+  return await query.exec();
 }
 
 async function adicionarOuRemoverAdmin(req) {

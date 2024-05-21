@@ -32,6 +32,8 @@ import { CriterioFormComponent } from './components/criterio-form/criterio-form.
 import { CotaAcaoAfirmativaComponent } from './cota-acao-afirmativa/cota-acao-afirmativa.component';
 import { RecursoComponent } from './inscricoes/recurso/recurso.component';
 import { GerenciarUsuariosComponent } from './gerenciar-usuarios/gerenciar-usuarios.component';
+import { UserDetailDialogComponent } from './gerenciar-usuarios/user-detail-dialog/user-detail-dialog.component';
+import { ComponentsModule } from '@app/shared/components/components.module';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,8 @@ import { GerenciarUsuariosComponent } from './gerenciar-usuarios/gerenciar-usuar
     CriterioFormComponent,
     CotaAcaoAfirmativaComponent,
     RecursoComponent,
-    GerenciarUsuariosComponent
+    GerenciarUsuariosComponent,
+    UserDetailDialogComponent
   ],
   imports: [
     CommonModule,
@@ -67,6 +70,7 @@ import { GerenciarUsuariosComponent } from './gerenciar-usuarios/gerenciar-usuar
     MatCheckboxModule,
     MatRadioModule,
     MatTableModule,
+    ComponentsModule,
   ],
   providers: [OnlyAdminUsersGuard, OnlyAllowedRolesUsersGuard],
 })

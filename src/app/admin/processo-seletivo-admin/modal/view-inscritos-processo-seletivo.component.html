@@ -9,7 +9,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let di of data.users">
-                <th scope="row">{{ di.idUser.fullname}}</th>
+                <th scope="row">{{ di.idUser.fullname?.toUpperCase()}}</th>
                 <th scope="row">
                     <span class="material-icons md-18 btn" (click)="getUserInfo(di.idUser._id)">description</span>
                 </th>
@@ -17,14 +17,7 @@
         </tbody>
     </table>
     <ng-template #infoUserBlock>
-        <div class="container">
-
-            <div class="row justify-content-end">
-                <div class="col-auto">
-                    <button type="button" (click)="voltar()" mat-raised-button color="primary">Voltar</button>
-                </div>
-            </div>
-            <hr>
+        <div class="container" style="word-break: break-all;">
             <div class="row justify-content-center text-center">
                 <h2>Dados cadastrais</h2>
             </div>
@@ -268,5 +261,6 @@
 </div>
 <hr>
 <div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">fechar</button>
+    <button mat-button (click)="onNoClick()">Fechar</button>
+    <button type="button" (click)="voltar()" mat-raised-button color="primary" *ngIf="flagShowInfoUser">Voltar</button>
 </div>

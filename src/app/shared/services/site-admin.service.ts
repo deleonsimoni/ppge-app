@@ -384,10 +384,14 @@ export class SiteAdminService {
 
   /* Gerenciar Usuários */
 
-  pesquisarUsuarios(nameSearch) {
+  pesquisarUsuarios(nameSearch, page = null, limit= null) {
     let params = new HttpParams();
     if (nameSearch && nameSearch.trim() != '') {
       params = params.set("nameSearch", nameSearch.trim());
+    }
+    if(page && limit) {
+      params = params.set("page", page);
+      params = params.set("limit", limit);
     }
 
     return this.http.get(`${this.URL_API_USER}/all/users`, { params });
