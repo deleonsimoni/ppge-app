@@ -107,6 +107,7 @@ export class ParecerComponent implements OnInit {
             .subscribe(user => {
               this.parecerConsolidadoSelected = data.enrolled[0].parecer;
               this.parecerSelected = data.enrolled[0].parecer?.avaliacoes[`avaliador-${user._id}`];
+              this.parecerSelected.step = this.changeNotaNumberToString(this.parecerSelected.step);
             })
         }
         
@@ -149,19 +150,60 @@ export class ParecerComponent implements OnInit {
   }
 
   register() {
-    Object.keys(this.form.value.step).forEach((keyStep) => {
-      let retorno = this.getPartialScoreByStep(this.form.value.step[keyStep]);
-      this.form.value.step[keyStep].totalNotaEtapa = retorno;
+    let formulario = {...this.form.value};
+    let step = this.changeNotaStringToNumber(formulario.step);
+    
+    Object.keys(step).forEach((keyStep) => {
+      let retorno = this.getPartialScoreByStep(step[keyStep]);
+      step[keyStep].totalNotaEtapa = retorno;
     })
+    formulario.step = step;
+    
     if (this.form.valid) {
       this.siteAdminService
-        .registrarParecer(this.data.idInscricao, this.data.idProcesso, this.form.value)
+        .registrarParecer(this.data.idInscricao, this.data.idProcesso, formulario)
         .subscribe(data => {
           this.dialogRef.close({ refresh: true });
         })
     } else {
       this.toastr.error("Preencha os campos corretamente!")
     }
+  }
+
+  changeNotaStringToNumber(listStep) {
+    Object.keys(listStep).forEach(key => {
+      if(key.startsWith('step-')) {
+        Object.keys(listStep[key]).forEach(keyStep => {
+          if(keyStep.startsWith('section-')) {
+            Object.keys(listStep[key][keyStep]).forEach(keySection => {
+              if(keySection.startsWith("question-")) {
+                listStep[key][keyStep][keySection] = listStep[key][keyStep][keySection] ? Number(listStep[key][keyStep][keySection].replaceAll(",", ".")) : listStep[key][keyStep][keySection];
+                
+              }
+            })
+          }
+        })
+      }
+    });
+    return listStep;
+  }
+
+  changeNotaNumberToString(listStep) {
+    Object.keys(listStep).forEach(key => {
+      if(key.startsWith('step-')) {
+        Object.keys(listStep[key]).forEach(keyStep => {
+          if(keyStep.startsWith('section-')) {
+            Object.keys(listStep[key][keyStep]).forEach(keySection => {
+              if(keySection.startsWith("question-")) {
+                listStep[key][keyStep][keySection] = listStep[key][keyStep][keySection] ? String(listStep[key][keyStep][keySection]).replaceAll(".", ",") : listStep[key][keyStep][keySection];
+                
+              }
+            })
+          }
+        })
+      }
+    });
+    return listStep;
   }
 
   getPartialScoreByStep(step) {
@@ -177,7 +219,7 @@ export class ParecerComponent implements OnInit {
                 if(notaSomada == undefined) {
                   notaSomada = 0;
                 }
-                notaSomada += stepSelected[keySection][keyQuestion];
+                notaSomada = this.preciseSum(notaSomada, stepSelected[keySection][keyQuestion]);
               }
             }
 
@@ -189,6 +231,11 @@ export class ParecerComponent implements OnInit {
     }
     
     return notaSomada;
+  }
+  
+  preciseSum(...values) {
+    const sum = values.reduce((acc, val) => acc + Math.round(val * 100), 0);
+    return sum / 100;
   }
 
   validateNumber(event, maxNota) {
