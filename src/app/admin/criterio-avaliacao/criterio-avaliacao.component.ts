@@ -39,23 +39,19 @@ export class CriterioAvaliacaoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("FORMULARIO: ", this.form.value);
-    console.log("FORMULARIO: ", this.form);
     this.getAllCriterios();
     
   }
 
   toggleEditar(isEdit, criterio = null) {
     this.limparForm()
-    if(isEdit) {
-      if(criterio) {
-        this.form.patchValue({ ...criterio });
-        const formArray = <FormArray>this.form.controls['step'];
-        formArray.clear();
-        criterio.step.forEach(cr => {
-          this.addStepLine(cr);
-        })
-      }
+    if(isEdit && criterio) {
+      this.form.patchValue({ ...criterio });
+      const formArray = <FormArray>this.form.controls['step'];
+      formArray.clear();
+      criterio.step.forEach(cr => {
+        this.addStepLine(cr);
+      })
     }
     this.flagEdit = isEdit;
   }
@@ -66,7 +62,6 @@ export class CriterioAvaliacaoComponent implements OnInit {
       .getAllCriterios()
       .pipe(take(1))
       .subscribe(data => {
-        console.log("DATA: ", data)
         this.listCriterio = data;
         this.listCriterio.forEach(criterio => {
           criterio.step.forEach(step => {

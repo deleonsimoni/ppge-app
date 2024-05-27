@@ -13,6 +13,7 @@ import { ProcessoSeletivoAdminComponent } from './processo-seletivo-admin/proces
 import { RankComponent } from './rank/rank.component';
 import { TeseDissertacaoAdminComponent } from './tese-dissertacao-admin/tese-dissertacao-admin.component';
 import { GerenciarUsuariosComponent } from './gerenciar-usuarios/gerenciar-usuarios.component';
+import { CriterioHomologacaoComponent } from './criterio-homologacao/criterio-homologacao.component';
 
 const routes: Routes = [
   {
@@ -53,6 +54,13 @@ const routes: Routes = [
       },
       {
         path: 'criterio-avaliacao', component: CriterioAvaliacaoComponent,
+        canActivate: [OnlyAllowedRolesUsersGuard],
+        data: {
+          roles: ['admin', 'gerenciador']
+        }
+      },
+      {
+        path: 'criterio-homologacao', component: CriterioHomologacaoComponent,
         canActivate: [OnlyAllowedRolesUsersGuard],
         data: {
           roles: ['admin', 'gerenciador']

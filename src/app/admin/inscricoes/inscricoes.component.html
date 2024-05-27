@@ -47,8 +47,19 @@
   <div *ngFor="let inscricoes of listInscritos; let i = index"
     class="row justify-content-between mb-3 px-2 card-inscricoes">
     <div class="col pt-3 pb-2">
-      <div class="row">
-        <div class="col-12">
+      <div class="row mb-3">
+        <div class="col-auto font-weight-bold">
+          Responsável Pela Homologação:
+        </div>
+        <div class="col-auto">
+          <mat-radio-group [disabled]="!myUser.isAdmin && !myUser.isCoordenador" aria-label="Selecione um responsável" (change)="onRespHomologChange($event, i)" [value]="inscricoes.responsavelHomologacao">
+            <mat-radio-button class="mr-2" value="primeiro">Avaliador 1</mat-radio-button>
+            <mat-radio-button value="segundo">Avaliador 2</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div class="row align-items-center">
+        <div class="col-10">
           <mat-form-field appearance="fill" class="w-100">
             <mat-label>Avaliador 1</mat-label>
             <mat-select [disabled]="!myUser.isAdmin && !myUser.isCoordenador" [value]="inscricoes.parecerista?.primeiro?._id"
@@ -58,7 +69,10 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="col-12">
+      </div>
+      
+      <div class="row align-items-center">
+        <div class="col-10">
           <mat-form-field appearance="fill" class="w-100">
             <mat-label>Avaliador 2</mat-label>
             <mat-select [disabled]="!myUser.isAdmin && !myUser.isCoordenador" [value]="inscricoes.parecerista?.segundo?._id"
@@ -69,6 +83,7 @@
           </mat-form-field>
         </div>
       </div>
+
       <div class="row">
         <div class="col-auto">
           <p class="m-0 title">Nome: </p>
@@ -166,6 +181,17 @@
         <span (click)="detalharInscricao(inscricoes._id)" matTooltip="Detalhar" matTooltipPosition="above"
           class="material-icons md-18 btn card-icon-action">{{this.flagDetalharInscricao &&
           this.inscricaoSelecionada?._id == inscricoes._id ? 'remove' : 'add'}}</span>
+      </div>
+      <div class="row justify-content-center mb-3">
+        <div class="col-auto" *ngIf="verificaIsResponsavelHomologacao(inscricoes, myUser)">
+          <button style="background-color: green;" type="button" mat-raised-button color="primary"
+            (click)="openModalHomologar(inscricoes._id)">Homologar</button>
+        </div>
+      </div>
+      <div class="col-auto mb-3" *ngIf="verificaIsResponsavelHomologacao(inscricoes, myUser) && inscricoes?.parecer?.recursoHomolog?.justificativa">
+        <button (click)="responderJustificativaHomolog(inscricoes._id, inscricoes?.parecer?.recursoHomolog?.justificativa, inscricoes?.parecer?.recursoHomolog?.respostaJustificativa, inscricoes?.parecer?.recursoHomolog?.recursoAceito)" type="button" mat-raised-button color="primary">
+          {{inscricoes?.parecer?.recursoHomolog?.respostaJustificativa ? "Visualizar recurso" : "Responder recurso"}}
+        </button>
       </div>
       <div class="row justify-content-center">
         <div class="col-auto" *ngIf="inscricoes?.parecerista?.primeiro?._id == myUser._id || inscricoes?.parecerista?.segundo?._id == myUser._id">
@@ -306,7 +332,7 @@
               </a>
             </div>
           </div>
-          <div class="row align-items-center mb-3" *ngIf="myUser.isCoordenador && inscricoes.coordenadoresLinha?.indexOf(myUser._id) > -1">
+          <!-- <div class="row align-items-center mb-3" *ngIf="myUser.isCoordenador && inscricoes.coordenadoresLinha?.indexOf(myUser._id) > -1">
             <div class="col-12"><hr></div>
             <div class="col-12">
               <label class="mb-0"><strong>Homologação: </strong></label>
@@ -334,7 +360,7 @@
               <textarea class="textarea mb-3" matInput [(ngModel)]="justificaIndeferido"></textarea>
             </div>
 
-          </div>
+          </div> -->
 
         </div>
       </div>

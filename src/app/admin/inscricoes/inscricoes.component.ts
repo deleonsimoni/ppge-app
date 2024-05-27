@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { catchError, merge, Observable, of, take } from 'rxjs';
 import { DialogParecerData, ParecerComponent } from './parecer/parecer.component';
 import { RecursoComponent } from './recurso/recurso.component';
+import { MatRadioChange } from '@angular/material/radio';
+import { DialogHomologacaoData, HomologacaoDialogComponent } from './homologacao-dialog/homologacao-dialog.component';
 
 @Component({
   selector: 'app-inscricoes',
@@ -45,6 +47,7 @@ export class InscricoesComponent implements OnInit {
   listProcessoSeletivo: any;
   listInscritos: any;
   criterioProcessoSelecionado: any;
+  criterioHomologacaoProcessoSelecionado: any;
 
   inscricaoSelecionada: any;
 
@@ -91,6 +94,7 @@ export class InscricoesComponent implements OnInit {
       })
       this.listInscritos = data.enrolled;
       this.criterioProcessoSelecionado = data.criterio;
+      this.criterioHomologacaoProcessoSelecionado = data.criterioHomologacao;
       
     });
   }
@@ -156,8 +160,6 @@ export class InscricoesComponent implements OnInit {
 
   vincularParecerista(inscricoes) {
 
-    console.log("vincularParecerista() inscricoes: ", inscricoes)
-
     if(!inscricoes.parecerista || !inscricoes.parecerista.primeiro?._id || !inscricoes.parecerista.segundo?._id) {
       this.toastr.error("Selecione 2 avaliadores para salvar.", "Atenção!")
       return;
@@ -166,6 +168,7 @@ export class InscricoesComponent implements OnInit {
     let pareceristasSelecionados = {
       primeiro: inscricoes.parecerista.primeiro._id,
       segundo: inscricoes.parecerista.segundo._id,
+      responsavelHomologacao: inscricoes.responsavelHomologacao,
     };
 
     this.siteService.vincularParecerista(inscricoes._id, pareceristasSelecionados, this.idProcessoSelecionado)
@@ -222,7 +225,6 @@ export class InscricoesComponent implements OnInit {
     })
     dref.afterClosed().pipe(take(1)).subscribe(result => {
       if (result && result.refresh) {
-        console.log("ENTROU NO REFRESH");
         this.getInscricoes(this.idProcessoSelecionado);
         
       }
@@ -230,9 +232,9 @@ export class InscricoesComponent implements OnInit {
     
   }
 
-  responderJustificativaHomolog(justificativa, respostaJustificativa, recursoAceito) {
+  responderJustificativaHomolog(idInscricao, justificativa, respostaJustificativa, recursoAceito) {
 
-    const idInscricao = this.inscricaoSelecionada._id, idProcesso = this.idProcessoSelecionado;
+    const idProcesso = this.idProcessoSelecionado;
     
     const dref = this.dialog.open(RecursoComponent, {
       width: '78%',
@@ -250,7 +252,6 @@ export class InscricoesComponent implements OnInit {
     })
     dref.afterClosed().pipe(take(1)).subscribe(result => {
       if (result && result.refresh) {
-        console.log("ENTROU NO REFRESH");
         this.getInscricoes(this.idProcessoSelecionado);
         
         
@@ -265,7 +266,6 @@ export class InscricoesComponent implements OnInit {
     if (pareceristaSelecionado)
       this.listInscritos[index].parecerista[ordem] = { _id: idParecerista, fullname: pareceristaSelecionado.fullname, };
 
-      console.log("SELECIONADO: ", this.listInscritos[index])
   }
 
   verificarAprovacao(aprovado) {
@@ -325,6 +325,33 @@ export class InscricoesComponent implements OnInit {
     } else {
       return '';
     }
+  }
+
+  onRespHomologChange(event: MatRadioChange, index) {
+    this.listInscritos[index].responsavelHomologacao = event.value;
+  }
+
+  verificaIsResponsavelHomologacao(inscricao, myUser) {
+    const idMyUser = myUser._id;
+    
+    return (inscricao?.parecerista[inscricao?.responsavelHomologacao]?._id == idMyUser || (myUser.isCoordenador && inscricao.coordenadoresLinha?.indexOf(myUser._id) > -1));
+  }
+
+  openModalHomologar(idInscricao) {
+    const dialogRef = this.dialog.open(HomologacaoDialogComponent, {
+      width: '80%',
+      data: <DialogHomologacaoData>{
+        idInscricao: idInscricao,
+        idProcesso: this.idProcessoSelecionado,
+        criterio: this.criterioHomologacaoProcessoSelecionado,
+      }
+    })
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if (result && result.refresh) {
+        this.getInscricoes(this.idProcessoSelecionado)
+      }
+    })
+
   }
 
 }

@@ -57,6 +57,10 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.Mixed,
     },
 
+    criterioHomologacao: {
+      type: mongoose.Schema.Types.Mixed,
+    },
+
     enrolled: [
       {
         codInscricao: {
@@ -141,12 +145,18 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
             ref: 'User',
           },
         },
+        responsavelHomologacao: {
+          type: String,
+        },
         parecer: {
           aprovado: {
             type: Boolean,
           },
           homologado: {
             type: Boolean,
+          },
+          homologacao: {
+            type: mongoose.Schema.Types.Mixed,
           },
           recursoHomolog: {
             justificaIndeferido: {

@@ -78,6 +78,14 @@ router.put('/processo-seletivo/parecer/homologacao', [passport.authenticate('jwt
   session: false
 }), (req, res, next) => requireAllowedRoles(req, res, next, ['parecerista'])], asyncHandler(changeHomologInscricao));
 
+router.put('/processo-seletivo/homologacao', [passport.authenticate('jwt', {
+  session: false
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['parecerista'])], asyncHandler(changeHomologInscricaoV2));
+
+router.get('/processo-seletivo/homologacao', [passport.authenticate('jwt', {
+  session: false
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['parecerista'])], asyncHandler(getHomologacaoV2));
+
 router.get('/processo-seletivo/parecer', [passport.authenticate('jwt', {
   session: false
 }), (req, res, next) => requireAllowedRoles(req, res, next, ['parecerista'])], asyncHandler(getParecer));
@@ -107,6 +115,10 @@ router.delete('/processo-seletivo/:id', [passport.authenticate('jwt', {
 router.put('/processo-seletivo/criterio/:id', [passport.authenticate('jwt', {
   session: false
 }), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], asyncHandler(salvarVinculoCriterio));
+
+router.put('/processo-seletivo/criterio-homologacao/:id', [passport.authenticate('jwt', {
+  session: false
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], asyncHandler(salvarVinculoCriterioHomologacao));
 
 async function getProcessoSeletivo(req, res) {
   let response = await processoSeletivoCtrl.getProcessoSeletivo(req);
@@ -214,6 +226,16 @@ async function changeHomologInscricao(req, res) {
   res.json(response);
 }
 
+async function changeHomologInscricaoV2(req, res) {
+  let response = await processoSeletivoCtrl.changeHomologInscricaoV2(req.body);
+  res.json(response);
+}
+
+async function getHomologacaoV2(req, res) {
+  let response = await processoSeletivoCtrl.getHomologacaoV2(req);
+  res.json(response);
+}
+
 async function getParecer(req, res) {
   let response = await processoSeletivoCtrl.getParecer(req, req.user._id);
   res.json(response);
@@ -241,6 +263,11 @@ async function updateProcessoSeletivo(req, res) {
 
 async function salvarVinculoCriterio(req, res) {
   let response = await processoSeletivoCtrl.salvarVinculoCriterio(req);
+  res.status(response.status).json(response);
+}
+
+async function salvarVinculoCriterioHomologacao(req, res) {
+  let response = await processoSeletivoCtrl.salvarVinculoCriterioHomologacao(req);
   res.status(response.status).json(response);
 }
 

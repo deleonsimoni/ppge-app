@@ -30,7 +30,10 @@ module.exports = {
   inscricaoJustificarHomolog,
   mudarEtapa,
   salvarVinculoCriterio,
+  salvarVinculoCriterioHomologacao,
   changeHomologInscricao,
+  changeHomologInscricaoV2,
+  getHomologacaoV2,
   consolidarAvaliacao,
 };
 
@@ -70,6 +73,7 @@ async function vincularParecerista(body) {
         { $set: { 
           "enrolled.$.parecerista.primeiro": body.pareceristas.primeiro,
           "enrolled.$.parecerista.segundo": body.pareceristas.segundo,
+          "enrolled.$.responsavelHomologacao": body.pareceristas.responsavelHomologacao,
         } },
         { upsert: false }
       );
@@ -351,6 +355,7 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
     const result = {
       _id: processo._id,
       criterio: processo.criterio,
+      criterioHomologacao: processo.criterioHomologacao,
       enrolled: processo.enrolled.filter((e) => {
           flagReturn = true;
           
@@ -453,6 +458,7 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
             _id: e._id,
             idUser: e.idUser,
             parecerista: e.parecerista,
+            responsavelHomologacao: e.responsavelHomologacao,
             parecer: e.parecer,
             possiveisAvaliadores: e.linhaPesquisa.avaliadores,
             titleLinhaPesquisa: e.linhaPesquisa[req.query.language].title,
@@ -579,6 +585,32 @@ async function changeHomologInscricao(body) {
       }
     },
     { upsert: false }
+  );
+}
+
+async function changeHomologInscricaoV2(body) {
+  const { idInscricao, idProcesso, formulario, deferido, justificaIndeferido } = body;
+
+
+  return ProcessoSeletivoModel.findOneAndUpdate(
+    { _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } },
+    {
+      $set: {
+        "enrolled.$.parecer.homologacao": formulario.questionHomolog,
+        "enrolled.$.parecer.homologado": deferido,
+        "enrolled.$.parecer.recursoHomolog.justificaIndeferido": justificaIndeferido
+      }
+    },
+    { upsert: false }
+  );
+}
+
+async function getHomologacaoV2(req) {
+  const { idInscricao, idProcesso } = req.query;
+
+  return ProcessoSeletivoModel.findOne(
+    { _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } },
+    {'enrolled.$': 1,}
   );
 }
 
@@ -718,6 +750,23 @@ async function salvarVinculoCriterio(req) {
 
   if (retorno) {
     console.log("ACHOU PROCESSO");
+    return getSuccessByStatus(200, "Critério vinculado com sucesso!");
+  }
+  else {
+    return getErrorByStatus(400, `Processo Seletivo não encontrado! Certifique-se que ele esteja na etapa de "Inscrição".`)
+  }
+}
+
+async function salvarVinculoCriterioHomologacao(req) {
+  const criterioHomologacao = req.body.criterioHomologacao;
+  const idProcesso = req.params.id;
+  const retorno = await ProcessoSeletivoModel.findOneAndUpdate(
+    { _id: idProcesso, etapa: 'inscricao' },
+    { criterioHomologacao },
+    { upsert: false }
+  )
+
+  if (retorno) {
     return getSuccessByStatus(200, "Critério vinculado com sucesso!");
   }
   else {

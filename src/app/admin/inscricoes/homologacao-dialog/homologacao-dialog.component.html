@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>Homologação da inscrição</h1>
+<div class="pb-3" mat-dialog-content>
+  
+  <form  role="form" class="reviewer container" [formGroup]="form">
+    <div *ngFor="let question of data?.criterio?.questions; let i = index" formGroupName="questionHomolog">
+      <div [formGroupName]="i" class="row">
+        <div class="col-10">
+          <input  type="text" class="form-control" [value]="question" formControlName="question">
+        </div>
+        <div class="col-2">
+          <mat-form-field appearance="fill" class="mb-3 w-100 py-0" >
+            <mat-label>Confere?</mat-label>
+            <mat-select formControlName="value" (selectionChange)="verificaIndeferido()">
+              <mat-option [value]="true">SIM</mat-option>
+              <mat-option [value]="false">NÃO</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="col-12" *ngIf="!deferido">
+    <label>Justifique: </label>
+    <textarea class="textarea mb-3" matInput [(ngModel)]="justificaIndeferido"></textarea>
+  </div>
+
+</div>
+<hr class="mt-0">
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Fechar</button>
+  <button mat-raised-button color="primary" style="background-color: green;" (click)="register()">Finalizar Homologação</button>
+</div>

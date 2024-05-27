@@ -8,6 +8,7 @@ const fileUpload = require('express-fileupload');
 const processoSeletivoRoutes = require('./processo-seletivo.route');
 const pareceristasoRoutes = require('./pareceristas.route');
 const criterioAvaliacaoRoutes = require('./criterio-avaliacao.route');
+const criteriHomologacaoRoutes = require('./criterio-homologacao.route');
 const cotaAcaoAfirmativaRoutes = require('./cota-acao-afirmativa.route');
 const rankRoutes = require('./rank.route');
 
@@ -122,5 +123,6 @@ async function deleteCorpoDocente(req, res) {
 router.use('/', processoSeletivoRoutes);
 router.use('/parecerista', pareceristasoRoutes);
 router.use('/criterio-avaliacao', criterioAvaliacaoRoutes);
+router.use('/criterio-homologacao', criteriHomologacaoRoutes);
 router.use('/cota-acao-afirmativa', cotaAcaoAfirmativaRoutes);
 router.use('/rank', rankRoutes);

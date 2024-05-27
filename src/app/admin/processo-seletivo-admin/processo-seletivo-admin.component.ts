@@ -10,6 +10,7 @@ import { CriterioAvaliacaoDialogComponent } from "./criterio-avaliacao-dialog/cr
 import { ComfirmDeleteProcessoComponent } from "./modal/confirm-delet-processo.component";
 import { ViewHtmlProcessoSeletivoComponent } from "./modal/view-html-processo-seletivo.component";
 import { ViewInscritosProcessoSeletivoComponent } from "./modal/view-inscritos-processo-seletivo.component";
+import { CriterioHomologacaoDialogComponent } from "./criterio-homologacao-dialog/criterio-homologacao-dialog.component";
 
 @Component({
   selector: 'app-processo-seletivo-admin',
@@ -98,8 +99,6 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
             let maxVagaCotaProf = null;
             if(vagas) {
               
-              console.log("avaliador: ", cd);
-              console.log("vagas.professors: ", vagas.professors);
               const prof = vagas.professors?.find(prof => prof.idProfessor == cd._id)
               if(prof) {
                 maxVagaProf = prof.maxVaga;
@@ -296,6 +295,19 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
 
   criterioAvaliacao(criterio, idProcessoSeletivo, titleProcesso, etapaProcesso) {
     const dialogRef = this.dialog.open(CriterioAvaliacaoDialogComponent, {
+      width: '1040px',
+      data: {criterio, idProcessoSeletivo, titleProcesso, etapaProcesso },
+      
+    })
+    dialogRef.afterClosed().subscribe(isEdited => {
+      if(isEdited) {
+        this.getProcessoSeletivo();
+      }
+    })
+  }
+
+  criterioHomologacao(criterio, idProcessoSeletivo, titleProcesso, etapaProcesso) {
+    const dialogRef = this.dialog.open(CriterioHomologacaoDialogComponent, {
       width: '1040px',
       data: {criterio, idProcessoSeletivo, titleProcesso, etapaProcesso },
       

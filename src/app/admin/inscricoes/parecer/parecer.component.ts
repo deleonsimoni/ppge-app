@@ -98,7 +98,6 @@ export class ParecerComponent implements OnInit {
   getParecer() {
     this.siteAdminService.getParecer(this.data.idInscricao, this.data.idProcesso)
       .subscribe((data: any) => {
-        console.log("data: ", data)
         if(data.enrolled[0].parecer?.avaliacoes) {
           this.user$
             .pipe(
@@ -142,7 +141,6 @@ export class ParecerComponent implements OnInit {
     })
     dref.afterClosed().pipe(take(1)).subscribe(result => {
       if (result && result.refresh) {
-        console.log("ENTROU NO REFRESH");
         this.dialogRef.close({refresh: true});
         
       }
@@ -191,6 +189,30 @@ export class ParecerComponent implements OnInit {
     }
     
     return notaSomada;
+  }
+
+  validateNumber(event, maxNota) {
+    const pattern = new RegExp(/^[0-9]+(\,[0-9]{0,2})?$/);
+    let inputChar = String.fromCharCode(event.charCode);
+    let input = event.target.value+inputChar;
+
+    let inputNumber = Number(input.replaceAll(",", "."));
+
+    if (!pattern.test(input)) {
+      // invalid character, prevent input
+      event.preventDefault();
+    } else if(inputNumber > maxNota) {
+      event.preventDefault();
+      event.target.value = String(maxNota).replaceAll(".", ",");
+    }
+  }
+
+  chamouOutro(event, maxNota) {
+    let inputNumber = Number(event.target.value.replaceAll(",", "."));
+    if(inputNumber > maxNota) {
+      event.preventDefault();
+      event.target.value = String(maxNota).replaceAll(".", ",");
+    }
   }
 
 

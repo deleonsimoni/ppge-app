@@ -125,6 +125,9 @@
                       <span matTooltip="Critério de avaliação" matTooltipPosition="above"
                         class="material-icons md-18 btn" [ngStyle]="di.criterio ? {} : {'color': 'red'}"
                         (click)="criterioAvaliacao(di.criterio, di._id, di.title, di.etapa)">fact_check</span>
+                      <span matTooltip="Critério de avaliação" matTooltipPosition="above"
+                        class="material-icons md-18 btn" [ngStyle]="di.criterioHomologacao ? {} : {'color': 'red'}"
+                        (click)="criterioHomologacao(di.criterioHomologacao, di._id, di.title, di.etapa)">checklist_rtl</span>
                     </th>
                     <th>
                       <mat-slide-toggle (change)="atualizarProcessoAtivo($event, di._id)"

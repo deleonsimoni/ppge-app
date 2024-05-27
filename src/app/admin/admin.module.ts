@@ -34,6 +34,9 @@ import { RecursoComponent } from './inscricoes/recurso/recurso.component';
 import { GerenciarUsuariosComponent } from './gerenciar-usuarios/gerenciar-usuarios.component';
 import { UserDetailDialogComponent } from './gerenciar-usuarios/user-detail-dialog/user-detail-dialog.component';
 import { ComponentsModule } from '@app/shared/components/components.module';
+import { CriterioHomologacaoComponent } from './criterio-homologacao/criterio-homologacao.component';
+import { CriterioHomologacaoDialogComponent } from './processo-seletivo-admin/criterio-homologacao-dialog/criterio-homologacao-dialog.component';
+import { HomologacaoDialogComponent } from './inscricoes/homologacao-dialog/homologacao-dialog.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +62,10 @@ import { ComponentsModule } from '@app/shared/components/components.module';
     CotaAcaoAfirmativaComponent,
     RecursoComponent,
     GerenciarUsuariosComponent,
-    UserDetailDialogComponent
+    UserDetailDialogComponent,
+    CriterioHomologacaoComponent,
+    CriterioHomologacaoDialogComponent,
+    HomologacaoDialogComponent
   ],
   imports: [
     CommonModule,

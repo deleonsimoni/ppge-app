@@ -16,6 +16,7 @@ export class SiteAdminService {
   private readonly URL_PAGE = `${this.URL_API_PPGE}/page`;
   private readonly URL_PARECERISTAS = `${this.URL_API_PPGE}/parecerista`;
   private readonly URL_CRITERIO = `${this.URL_API_PPGE}/criterio-avaliacao`;
+  private readonly URL_CRITERIO_HOMOLOGACAO = `${this.URL_API_PPGE}/criterio-homologacao`;
   private readonly URL_COTA = `${this.URL_API_PPGE}/cota-acao-afirmativa`;
   private readonly URL_RANK = `${this.URL_API_PPGE}/rank`;
 
@@ -212,6 +213,17 @@ export class SiteAdminService {
     return this.http.post(`${this.URL_PROCESSO_SELETIVO}/parecer`, { formulario }, { params });
   }
 
+  registrarHomologacao(idInscricao, idProcesso, formulario, deferido, justificaIndeferido) {
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/homologacao`, { idInscricao, idProcesso, formulario, deferido, justificaIndeferido });
+  }
+
+  getHomologacao(idInscricao, idProcesso) {
+    let params = new HttpParams()
+      .set("idInscricao", idInscricao)
+      .set("idProcesso", idProcesso);
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/homologacao`, { params });
+  }
+
   cadastrarProcessoSeletivo(form: any) {
     const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
     return this.http.post(`${this.URL_PROCESSO_SELETIVO}`, { formulario: form }, { headers });
@@ -281,6 +293,10 @@ export class SiteAdminService {
     return this.http.put(`${this.URL_PROCESSO_SELETIVO}/criterio/${idProcessoSeletivo}`, { criterio })
   }
 
+  salvarVinculoCriterioHomologacao(criterioHomologacao, idProcessoSeletivo) {
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/criterio-homologacao/${idProcessoSeletivo}`, { criterioHomologacao })
+  }
+
   consolidarAvaliacao(idProcesso, idInscricao, idStep, mediaStep, isApproveStep) {
     return this.http.put(`${this.URL_PROCESSO_SELETIVO}/${idProcesso}/inscricao/${idInscricao}/consolidar`, { idStep, mediaStep, isApproveStep })
   }
@@ -342,6 +358,25 @@ export class SiteAdminService {
   }
   /* Fim Criterio de avaliacao */
 
+  /* Criterio de homologacao */
+  cadastrarCriterioHomologacao(formulario) {
+    return this.http.post(`${this.URL_CRITERIO_HOMOLOGACAO}`, { formulario });
+  }
+
+  atualizarCriterioHomologacao(formulario) {
+    return this.http.put(`${this.URL_CRITERIO_HOMOLOGACAO}/${formulario._id}`, { formulario });
+  }
+
+  getAllCriteriosHomologacao() {
+    return this.http.get(`${this.URL_CRITERIO_HOMOLOGACAO}`);
+
+  }
+
+  deleteCriterioHomologacaoById(idCriterio) {
+    return this.http.delete(`${this.URL_CRITERIO_HOMOLOGACAO}/${idCriterio}`);
+  }
+
+  /* Fim Criterio de homologacao */
 
   /* Cotas de Ação Afirmativa */
 
