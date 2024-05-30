@@ -80,7 +80,7 @@
 
                 <h4>Palavras-chave</h4>
                 <div formArrayName="palavrasChave">
-                    <div *ngFor="let contentLine of form.controls['palavrasChave'].controls; let i = index;">
+                    <div *ngFor="let contentLine of form.controls['palavrasChave']['controls']; let i = index;">
                         <div class="form-row justify-content-center">
                             <div class="form-group col-md-8">
                                 <input type="text" class="form-control" [formControlName]="i"
