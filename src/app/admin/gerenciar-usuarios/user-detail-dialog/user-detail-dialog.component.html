@@ -1,121 +1,120 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <div mat-dialog-content>
 
-  <div class="container" style="word-break: break-all;">
-    <div class="row justify-content-center text-center">
-      <h2>Dados cadastrais</h2>
+    <div class="container" style="word-break: break-all;">
+        <div class="row justify-content-center text-center">
+            <h2>Dados cadastrais</h2>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <label><strong>Nome Completo</strong></label>
+                <p>{{data.user.fullname != null ? data.user.fullname : '-'}}</p>
+            </div>
+            <div class="col-md-6">
+                <label><strong>Nome social</strong></label>
+                <p>{{data.user.socialname != null ? data.user.socialname : '-'}}</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <label><strong>CPF</strong></label>
+                <p>{{data.user.cpf != null ? data.user.cpf : '-'}}</p>
+            </div>
+            <div class="col-md-4">
+                <label><strong>Data de nascimento</strong></label>
+                <p>{{ data.user.dataNiver != null ? (data.user.dataNiver | date: 'dd/MM/yyyy') : '-' }}</p>
+            </div>
+            <div class="col-md-4">
+                <label><strong>Nacionalidade</strong></label>
+                <p>{{data.user.nacionalidade != null ? data.user.nacionalidade : '-'}}</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <label><strong>Identidade</strong></label>
+                <p>{{data.user.rg != null ? data.user.rg : '-'}}</p>
+            </div>
+            <div class="col-md-4">
+                <label><strong>Órgão Emissor</strong></label>
+                <p>{{data.user.rgEmissor != null ? data.user.rgEmissor : '-'}}</p>
+            </div>
+            <div class="col-md-4">
+                <label><strong>Passaporte</strong></label>
+                <p>{{data.user.passaporte != null ? data.user.passaporte : '-'}}</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <label><strong>Cor</strong></label>
+                <p>{{data.user.cor != null ? data.user.cor : '-'}}</p>
+            </div>
+            <div class="col-md-6">
+                <label><strong>Gênero</strong></label>
+                <p>{{data.user.genero != null ? data.user.genero : '-'}}</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <label><strong>Possui alguma deficiência? Qual?</strong></label>
+                <p>{{data.user.deficiencia != null ? data.user.deficiencia : '-'}}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <label><strong>Email</strong></label>
+                <p>{{data.user.email != null ? data.user.email : '-'}}</p>
+            </div>
+            <div class="col-md-4">
+                <label><strong>Telefone</strong></label>
+                <p>{{data.user.telefone != null ? data.user.telefone : '-'}}</p>
+            </div>
+            <div class="col-md-4">
+                <label><strong>Celular</strong></label>
+                <p>{{data.user.celular != null ? data.user.celular : '-'}}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-3">
+
+            <!-- Endereço -->
+            <div class="col-md-6">
+                <label><strong>Código postal</strong></label>
+                <p>{{data.user.cep != null ? data.user.cep : '-'}}</p>
+            </div>
+            <div class="col-md-6">
+                <label><strong>Endereço</strong></label>
+                <p>{{data.user.endereco != null ? data.user.endereco : '-'}}</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <label><strong>Cidade</strong></label>
+                <p>{{data.user.cidade != null ? data.user.cidade : '-'}}</p>
+            </div>
+            <div class="col-md-4">
+                <label><strong>Estado</strong></label>
+                <p>{{data.user.estado != null ? data.user.estado : '-'}}</p>
+            </div>
+            <div class="col-md-4">
+                <label><strong>Bairro</strong></label>
+                <p>{{data.user.bairro != null ? data.user.bairro : '-'}}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <label><strong>"Ocupação atual / Cargo</strong></label>
+                <p>{{data.user.cargo != null ? data.user.cargo : '-'}}</p>
+            </div>
+            <div class="col-md-6">
+                <label><strong>Instituição / Empresa</strong></label>
+                <p>{{data.user.empresa != null ? data.user.empresa : '-'}}</p>
+            </div>
+        </div>
+
     </div>
-    <div class="row mt-3">
-      <div class="col-md-6">
-        <label><strong>Nome Completo</strong></label>
-        <p>{{data.user.fullname != null ? data.user.fullname : '-'}}</p>
-      </div>
-      <div class="col-md-6">
-        <label><strong>Nome social</strong></label>
-        <p>{{data.user.socialname != null ? data.user.socialname : '-'}}</p>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col-md-4">
-        <label><strong>CPF</strong></label>
-        <p>{{data.user.cpf != null ? data.user.cpf : '-'}}</p>
-      </div>
-      <div class="col-md-4">
-        <label><strong>Data de nascimento</strong></label>
-        <p>{{ data.user.dataNiver != null ? (data.user.dataNiver | date: 'dd/MM/yyyy') : '-' }}</p>
-      </div>
-      <div class="col-md-4">
-        <label><strong>Nacionalidade</strong></label>
-        <p>{{data.user.nacionalidade != null ? data.user.nacionalidade : '-'}}</p>
-      </div>
-    </div>
-    <div class="row mt-3">
-        <div class="col-md-4">
-            <label><strong>Identidade</strong></label>
-            <p>{{data.user.rg != null ? data.user.rg : '-'}}</p>
-        </div>
-        <div class="col-md-4">
-            <label><strong>Órgão Emissor</strong></label>
-            <p>{{data.user.rgEmissor != null ? data.user.rgEmissor : '-'}}</p>
-        </div>
-        <div class="col-md-4">
-            <label><strong>Passaporte</strong></label>
-            <p>{{data.user.passaporte != null ? data.user.passaporte : '-'}}</p>
-        </div>
-    </div>
-    <div class="row mt-3">
-        <div class="col-md-6">
-            <label><strong>Cor</strong></label>
-            <p>{{data.user.cor != null ? data.user.cor : '-'}}</p>
-        </div>
-        <div class="col-md-6">
-            <label><strong>Gênero</strong></label>
-            <p>{{data.user.genero != null ? data.user.genero : '-'}}</p>
-        </div>
-    </div>
-    <div class="row mt-3">
-        <div class="col-md-6">
-            <label><strong>Possui alguma deficiência? Qual?</strong></label>
-            <p>{{data.user.deficiencia != null ? data.user.deficiencia : '-'}}</p>
-        </div>
-    </div>
-    <hr>
-    <div class="row mt-3">
-        <div class="col-md-4">
-            <label><strong>Email</strong></label>
-            <p>{{data.user.email != null ? data.user.email : '-'}}</p>
-        </div>
-        <div class="col-md-4">
-            <label><strong>Telefone</strong></label>
-            <p>{{data.user.telefone != null ? data.user.telefone : '-'}}</p>
-        </div>
-        <div class="col-md-4">
-            <label><strong>Celular</strong></label>
-            <p>{{data.user.celular != null ? data.user.celular : '-'}}</p>
-        </div>
-    </div>
-    <hr>
-    <div class="row mt-3">
-  
-        <!-- Endereço -->
-        <div class="col-md-6">
-            <label><strong>Código postal</strong></label>
-            <p>{{data.user.cep != null ? data.user.cep : '-'}}</p>
-        </div>
-        <div class="col-md-6">
-            <label><strong>Endereço</strong></label>
-            <p>{{data.user.endereco != null ? data.user.endereco : '-'}}</p>
-        </div>
-    </div>
-    <div class="row mt-3">
-        <div class="col-md-4">
-            <label><strong>Cidade</strong></label>
-            <p>{{data.user.cidade != null ? data.user.cidade : '-'}}</p>
-        </div>
-        <div class="col-md-4">
-            <label><strong>Estado</strong></label>
-            <p>{{data.user.estado != null ? data.user.estado : '-'}}</p>
-        </div>
-        <div class="col-md-4">
-            <label><strong>Bairro</strong></label>
-            <p>{{data.user.bairro != null ? data.user.bairro : '-'}}</p>
-        </div>
-    </div>
-    <hr>
-    <div class="row mt-3">
-        <div class="col-md-6">
-            <label><strong>"Ocupação atual / Cargo</strong></label>
-            <p>{{data.user.cargo != null ? data.user.cargo : '-'}}</p>
-        </div>
-        <div class="col-md-6">
-            <label><strong>Instituição / Empresa</strong></label>
-            <p>{{data.user.empresa != null ? data.user.empresa : '-'}}</p>
-        </div>
-    </div>
-  
-  </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-button mat-dialog-close>Fechar</button>
+    <button mat-raised-button color="accent" mat-dialog-close>Fechar</button>
 </div>
-

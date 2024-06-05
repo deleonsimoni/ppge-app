@@ -28,6 +28,7 @@ async function getByIdOnlyProcesso(req, res) {
 router.get('/all/users', [passport.authenticate('jwt', {
   session: false
 }), requireAdmin], asyncHandler(getAllUsers));
+
 async function getAllUsers(req, res) {
   let listUser = await userCtrl.getAllUsers(req);
   res.json(listUser);
@@ -36,7 +37,8 @@ async function getAllUsers(req, res) {
 router.get('/adicionar-remover-admin/:id', [passport.authenticate('jwt', {
   session: false
 }), requireAdmin], asyncHandler(adicionarOuRemoverAdmin));
+
 async function adicionarOuRemoverAdmin(req, res) {
   let result = await userCtrl.adicionarOuRemoverAdmin(req);
-  res.status(result.status).send({message: result.message});
+  res.status(result.status).send({ message: result.message });
 }

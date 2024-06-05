@@ -25,11 +25,13 @@
                     <p *ngIf="verificaTemRespostaHomolog(); else blockVerResposta">Recurso solicitado</p>
                     <ng-template #blockVerResposta>
                       <p>Recurso respondido</p>
-                      <button (click)="abrirModalResposta(null, true)" type="button" mat-raised-button color="primary">Ver resposta</button>
+                      <button (click)="abrirModalResposta(null, true)" type="button" mat-raised-button
+                        color="primary">Ver resposta</button>
                     </ng-template>
                   </div>
                   <ng-template #blockJustificar>
-                    <button (click)="abrirModalJustificar(null, true)" *ngIf="getApproveHomolog() == 'Indeferido'" type="button" mat-raised-button color="primary">Solicitar recurso</button>
+                    <button (click)="abrirModalJustificar(null, true)" *ngIf="getApproveHomolog() == 'Indeferido'"
+                      type="button" mat-raised-button color="primary">Solicitar recurso</button>
                   </ng-template>
 
                 </td>
@@ -45,13 +47,16 @@
                     <p *ngIf="verificaTemResposta(criterioStep._id); else blockVerResposta">Recurso solicitado</p>
                     <ng-template #blockVerResposta>
                       <p>Recurso respondido</p>
-                      <button (click)="abrirModalResposta(criterioStep._id)" type="button" mat-raised-button color="primary">Ver resposta</button>
+                      <button (click)="abrirModalResposta(criterioStep._id)" type="button" mat-raised-button
+                        color="primary">Ver resposta</button>
                     </ng-template>
                   </div>
                   <ng-template #blockJustificar>
-                    <button (click)="abrirModalJustificar(criterioStep._id)" *ngIf="getApproveStep(criterioStep._id) == 'NÃO'" type="button" mat-raised-button color="primary">Solicitar recurso</button>
+                    <button (click)="abrirModalJustificar(criterioStep._id)"
+                      *ngIf="getApproveStep(criterioStep._id) == 'NÃO'" type="button" mat-raised-button
+                      color="primary">Solicitar recurso</button>
                   </ng-template>
-                  
+
                 </td>
               </tr>
             </tbody>
@@ -111,5 +116,5 @@
 </div>
 <hr class="mt-0">
 <div mat-dialog-actions>
-  <button mat-button mat-dialog-close>Fechar</button>
+  <button mat-raised-button color="accent" mat-dialog-close>Fechar</button>
 </div>

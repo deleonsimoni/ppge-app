@@ -30,21 +30,31 @@ export class GerenciarUsuariosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.siteService
+      .pesquisarUsuarios(null, this.page, this.limit)
+      .pipe(
+        catchError(err => {
+          throw err;
+        })
+      )
+      .subscribe(data => {
+        this.listUsers = data;
+      });
   }
 
   addAdmin(event, idUser, nameUser) {
     event.preventDefault();
     let user = this.listUsers.find(user => user._id == idUser);
     let indexAdminRole = user?.roles.indexOf('admin');
-    let isAdmin =  indexAdminRole != -1;
+    let isAdmin = indexAdminRole != -1;
     let textAddOrRm = isAdmin ? 'remover' : 'adicionar';
-    const dialogRef = this.dialog.open(ConfirmDialogComponent,  {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '750px',
       data: { title: `Tem certeza que você deseja ${textAddOrRm} "${nameUser}" como admin?` }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       if (result) {
-        
+
         this.siteService
           .adicionarOuRemoverAdmin(idUser, !isAdmin)
           .pipe(
@@ -56,13 +66,13 @@ export class GerenciarUsuariosComponent implements OnInit {
           .subscribe(data => {
             this.toastr.success(`Admin ${isAdmin ? 'removido' : 'adicionado'} com sucesso!`);
 
-            if(!isAdmin) {
+            if (!isAdmin) {
               user.roles.push('admin');
             } else {
               user.roles.splice(indexAdminRole, 1);
             }
           });
-        
+
       }
     })
 
@@ -70,7 +80,7 @@ export class GerenciarUsuariosComponent implements OnInit {
 
   pesquisarUsuarios() {
     this.page = 1;
-    if(this.form.value.nameSearch.trim().length < 3) {
+    if (this.form.value.nameSearch.trim().length < 3) {
       this.toastr.error('Digite pelo menos 3 caracteres para buscar!');
       return;
     }

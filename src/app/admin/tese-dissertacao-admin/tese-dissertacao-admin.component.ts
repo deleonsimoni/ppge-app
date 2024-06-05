@@ -55,7 +55,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   constructor(
     private builder: FormBuilder,
     private siteService: SiteAdminService,
-    private toastr: ToastrService, 
+    private toastr: ToastrService,
     private elementRef: ElementRef
   ) {
     this.form = this.builder.group({
@@ -142,6 +142,9 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   limparForm() {
     this.form.reset();
     this.form.patchValue({ pagina: 'tese/dissertacao' });
+    const control = <FormArray>this.form.controls['palavrasChave'];
+    control.clear();
+    this.addContentLine();
   }
 
   getPerTipo(tipo: string) {
@@ -168,10 +171,10 @@ export class TeseDissertacaoAdminComponent implements OnInit {
 
   // Função para rolar até a sessão
   scrollTo(elementId: string): void {
-      const element = this.elementRef.nativeElement.querySelector('#' + elementId);
-      if (element) {
-          const scrollTop = element.getBoundingClientRect().top + window.scrollY - 100;
-          window.scrollTo({ top: scrollTop, behavior: 'smooth' });
-      }
+    const element = this.elementRef.nativeElement.querySelector('#' + elementId);
+    if (element) {
+      const scrollTop = element.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({ top: scrollTop, behavior: 'smooth' });
+    }
   }
 }

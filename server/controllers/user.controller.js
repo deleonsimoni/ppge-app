@@ -30,12 +30,12 @@ module.exports = {
 
 async function insert(user) {
   let success;
-  if(!user || !user._id) {
+  if (!user || !user._id) {
     user.hashedPassword = bcrypt.hashSync(user.password, 10);
     delete user.password;
-  
+
     success = await new User(user).save();
-  
+
     if (success) {
       let email = templateEmail.inscricaoSucesso;
       emailSender.sendMailAWS(user.email, 'Bem-Vindo!', email);
@@ -66,69 +66,111 @@ async function insert(user) {
         cor: user.cor,
         genero: user.genero,
       }
-    },{ upsert: false });
+    }, { upsert: false });
 
 
-      success.fullname = user.fullname;
-      success.socialname = user.socialname;
-      success.dataNiver = user.dataNiver;
-      success.rg = user.rg;
-      success.cpf = user.cpf;
-      success.rgEmissor = user.rgEmissor;
-      success.passaporte = user.passaporte;
-      success.nacionalidade = user.nacionalidade;
-      success.endereco = user.endereco;
-      success.bairro = user.bairro;
-      success.cep = user.cep;
-      success.cidade = user.cidade;
-      success.estado = user.estado;
-      success.celular = user.celular;
-      success.telefone = user.telefone;
-      success.cargo = user.cargo;
-      success.empresa = user.empresa;
-      success.deficiencia = user.deficiencia;
-      success.cor = user.cor;
-      success.genero = user.genero;
-    
-    
+    success.fullname = user.fullname;
+    success.socialname = user.socialname;
+    success.dataNiver = user.dataNiver;
+    success.rg = user.rg;
+    success.cpf = user.cpf;
+    success.rgEmissor = user.rgEmissor;
+    success.passaporte = user.passaporte;
+    success.nacionalidade = user.nacionalidade;
+    success.endereco = user.endereco;
+    success.bairro = user.bairro;
+    success.cep = user.cep;
+    success.cidade = user.cidade;
+    success.estado = user.estado;
+    success.celular = user.celular;
+    success.telefone = user.telefone;
+    success.cargo = user.cargo;
+    success.empresa = user.empresa;
+    success.deficiencia = user.deficiencia;
+    success.cor = user.cor;
+    success.genero = user.genero;
+
+
   }
   return success;
 }
 
 async function getAllUsers(req) {
-  const regex = new RegExp('^' + req.query.nameSearch, 'i');
-  const query = UserModel.find(
-    { fullname: regex }, 
-    {
-      _id: 1,
-      fullname: 1,
-      email: 1,
-      roles: 1,
-      socialname: 1,
-      cpf: 1,
-      rg: 1,
-      rgEmissor: 1,
-      passaporte: 1,
-      dataNiver: 1,
-      nacionalidade: 1,
-      endereco: 1,
-      bairro: 1,
-      cep: 1,
-      cidade: 1,
-      estado: 1,
-      celular: 1,
-      telefone: 1,
-      cargo: 1,
-      empresa: 1,
-      deficiencia: 1,
-      cor: 1,
-      genero: 1,
-      
-    }
-  ).sort({ fullname: 1 });
+  let query;
 
-  
-  if(req.query.page && req.query.limit) {
+  if (req.query.nameSearch) {
+
+
+    const regex = new RegExp('^' + req.query.nameSearch, 'i');
+    query = UserModel.find(
+      {
+        $or: [
+          { fullname: regex },
+          { email: regex }
+        ]
+      },
+      {
+        _id: 1,
+        fullname: 1,
+        email: 1,
+        roles: 1,
+        socialname: 1,
+        cpf: 1,
+        rg: 1,
+        rgEmissor: 1,
+        passaporte: 1,
+        dataNiver: 1,
+        nacionalidade: 1,
+        endereco: 1,
+        bairro: 1,
+        cep: 1,
+        cidade: 1,
+        estado: 1,
+        celular: 1,
+        telefone: 1,
+        cargo: 1,
+        empresa: 1,
+        deficiencia: 1,
+        cor: 1,
+        genero: 1,
+
+      }
+    ).sort({ fullname: 1 });
+  } else {
+
+    query = UserModel.find(
+      {
+      },
+      {
+        _id: 1,
+        fullname: 1,
+        email: 1,
+        roles: 1,
+        socialname: 1,
+        cpf: 1,
+        rg: 1,
+        rgEmissor: 1,
+        passaporte: 1,
+        dataNiver: 1,
+        nacionalidade: 1,
+        endereco: 1,
+        bairro: 1,
+        cep: 1,
+        cidade: 1,
+        estado: 1,
+        celular: 1,
+        telefone: 1,
+        cargo: 1,
+        empresa: 1,
+        deficiencia: 1,
+        cor: 1,
+        genero: 1,
+
+      }
+    ).sort({ fullname: 1 });
+  }
+
+  if (req.query.page && req.query.limit) {
     const page = parseInt(req.query.page) || 1; // Página atual, padrão é 1
     const limit = parseInt(req.query.limit) || 10; // Limite de documentos por página, padrão é 10
     const skip = (page - 1) * limit;
@@ -142,24 +184,24 @@ async function getAllUsers(req) {
 async function adicionarOuRemoverAdmin(req) {
 
   let queryAddOrRemove;
-  if(req.query.isAdicionarAdmin == "true") {
+  if (req.query.isAdicionarAdmin == "true") {
     queryAddOrRemove = { "$addToSet": { roles: "admin" } }
   } else {
     queryAddOrRemove = { "$pull": { roles: "admin" } }
   }
-  
+
   let user = await UserModel.findOneAndUpdate(
     { _id: req.params.id },
     queryAddOrRemove,
     { upsert: false }
   );
 
-  if(user) {
-    return {status: 200, message: "Admin atualizado com sucesso!"};
+  if (user) {
+    return { status: 200, message: "Admin atualizado com sucesso!" };
   } else {
-    return {status: 400, message: "Erro ao atualizar admin!"};
+    return { status: 400, message: "Erro ao atualizar admin!" };
   }
-  
+
 
 }
 
@@ -384,34 +426,34 @@ async function resetPassword(req, user) {
 }
 
 async function changePassword(idUser, body) {
-  let response = {status: 200, message:"Senha alterada com sucesso!"}
+  let response = { status: 200, message: "Senha alterada com sucesso!" }
 
   let user = await User.findOne({ _id: idUser });
-  if(!user) {
-    return {status: 400, message:"Usuário não encontrado!"};
+  if (!user) {
+    return { status: 400, message: "Usuário não encontrado!" };
   }
 
-  if(!bcrypt.compareSync(body.senha, user.hashedPassword)) {
-    return {status: 401, message:"Senha atual inválida!"};
+  if (!bcrypt.compareSync(body.senha, user.hashedPassword)) {
+    return { status: 401, message: "Senha atual inválida!" };
   }
 
-  if(body.novaSenha.length < 6) {
-    return {status: 401, message:"A nova senha tem que ter no mínimo 6 dígitos!"};
+  if (body.novaSenha.length < 6) {
+    return { status: 401, message: "A nova senha tem que ter no mínimo 6 dígitos!" };
   }
 
-  if(body.novaSenha != body.reNovaSenha) {
-    return {status: 401, message:"Nova senha não confere com 'Repetir Senha'!"};
+  if (body.novaSenha != body.reNovaSenha) {
+    return { status: 401, message: "Nova senha não confere com 'Repetir Senha'!" };
   }
-  
+
   const hashString = bcrypt.hashSync(body.novaSenha, 10);
-  await User.updateOne({_id: user._id}, {
+  await User.updateOne({ _id: user._id }, {
     '$set': {
       hashedPassword: hashString
     }
   })
 
 
-  return {status: 200, message:"sucesso"}
+  return { status: 200, message: "sucesso" }
 }
 
 async function generateNewPassword(user) {
