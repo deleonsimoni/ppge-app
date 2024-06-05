@@ -33,9 +33,9 @@ async function getAllTeseDissertacao(req) {
         .sort({
             ano: -1
         });
-    
-    const page = parseInt(req?.query?.page) || 1; // Página atual, padrão é 1
-    const limit = parseInt(req?.query?.limit) || 10; // Limite de documentos por página, padrão é 10
+
+    const page = req && req.query && req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão é 1
+    const limit = req && req.query && req.query.page ? parseInt(req.query.limit) : 10; // Limite de documentos por página, padrão é 10
     const skip = (page - 1) * limit;
 
     query.skip(skip).limit(limit);
