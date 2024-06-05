@@ -33,7 +33,7 @@ async function updateTeseDissertacaoPage(req, res) {
 }
 
 async function getAllTeseDissertacao(req, res) {
-    let response = await teseDissertacaoCtrl.getAllTeseDissertacao(req.params.tipo);
+    let response = await teseDissertacaoCtrl.getAllTeseDissertacao(req);
     res.json(response);
 }
 

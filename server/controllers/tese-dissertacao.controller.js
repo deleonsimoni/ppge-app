@@ -9,7 +9,7 @@ module.exports = {
 }
 
 const functions = {
-      getPerTipo: async (tipo) => await teseDissertacaoService.getAllTeseDissertacao(tipo),
+      getPerTipo: async (req) => await teseDissertacaoService.getAllTeseDissertacao(req),
       update: async (req, idUser) => await teseDissertacaoService.updateTeseDissertacao(req, idUser),
       insert: async (req, idUser) => await teseDissertacaoService.insertTeseDissertacao(req, idUser),
       delete: async (id) => await teseDissertacaoService.deleteTeseDissertacao(id),
@@ -28,8 +28,8 @@ async function deleteTeseDissertacao(req, id) {
   return functions.delete(id);
 }
 
-async function getAllTeseDissertacao(tipo) {
-  return functions.getPerTipo(tipo);
+async function getAllTeseDissertacao(req) {
+  return functions.getPerTipo(req);
 }
 
 async function getFillTeseDissertacao(req) {

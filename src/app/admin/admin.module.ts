@@ -37,6 +37,8 @@ import { ComponentsModule } from '@app/shared/components/components.module';
 import { CriterioHomologacaoComponent } from './criterio-homologacao/criterio-homologacao.component';
 import { CriterioHomologacaoDialogComponent } from './processo-seletivo-admin/criterio-homologacao-dialog/criterio-homologacao-dialog.component';
 import { HomologacaoDialogComponent } from './inscricoes/homologacao-dialog/homologacao-dialog.component';
+import { ResumoDialogComponent } from './tese-dissertacao-admin/resumo-dialog/resumo-dialog.component';
+import { SanitizeModule } from '@app/shared/pipes/sanitize/sanitize.module';
 
 @NgModule({
   declarations: [
@@ -65,7 +67,8 @@ import { HomologacaoDialogComponent } from './inscricoes/homologacao-dialog/homo
     UserDetailDialogComponent,
     CriterioHomologacaoComponent,
     CriterioHomologacaoDialogComponent,
-    HomologacaoDialogComponent
+    HomologacaoDialogComponent,
+    ResumoDialogComponent
   ],
   imports: [
     CommonModule,
@@ -77,6 +80,7 @@ import { HomologacaoDialogComponent } from './inscricoes/homologacao-dialog/homo
     MatRadioModule,
     MatTableModule,
     ComponentsModule,
+    SanitizeModule
   ],
   providers: [OnlyAdminUsersGuard, OnlyAllowedRolesUsersGuard],
 })

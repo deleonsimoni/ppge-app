@@ -27,8 +27,20 @@ async function updateTeseDissertacao(req, idUser) {
 
 }
 
-async function getAllTeseDissertacao(tipo) {
-    return await TeseDissertacaoModel.find({ tipo: tipo });
+async function getAllTeseDissertacao(req) {
+    const query = TeseDissertacaoModel
+        .find({ tipo: req.params.tipo })
+        .sort({
+            ano: -1
+        });
+    
+    const page = parseInt(req?.query?.page) || 1; // Página atual, padrão é 1
+    const limit = parseInt(req?.query?.limit) || 10; // Limite de documentos por página, padrão é 10
+    const skip = (page - 1) * limit;
+
+    query.skip(skip).limit(limit);
+
+    return await query.exec();
 }
 
 async function deleteTeseDissertacao(id) {

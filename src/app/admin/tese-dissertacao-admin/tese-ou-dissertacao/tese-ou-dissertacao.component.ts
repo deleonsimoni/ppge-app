@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { SiteAdminService } from "@app/shared/services/site-admin.service";
 import { ToastrService } from "ngx-toastr";
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ComfirmDeleteComponent } from "./confirm-delet.component";
+import { ResumoDialogComponent } from "../resumo-dialog/resumo-dialog.component";
 
 
 @Component({
@@ -41,5 +42,17 @@ export class TeseOuDissertacaoComponent {
 
     editarTitulo(di) {
         this.resposta.emit({ "acao": "editar", obj: di });
+    }
+
+    openResumoDialog(teseDissertacao) {
+        this.dialog.open(ResumoDialogComponent, {
+            width: '750px',
+            data: { 
+                resumo: teseDissertacao?.resumo ?? "<span style='color: red'>Não há resumo cadastrado</span>", 
+                titulo: teseDissertacao?.titulo, 
+                palavrasChave: teseDissertacao?.palavrasChave
+            }
+        });
+
     }
 }

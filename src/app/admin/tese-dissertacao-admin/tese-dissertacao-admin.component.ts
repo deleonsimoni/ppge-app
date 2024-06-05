@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
@@ -13,9 +13,13 @@ import { Subscription } from 'rxjs';
 })
 export class TeseDissertacaoAdminComponent implements OnInit {
 
+  page: number = 1;
+  limit: number = 10;
+  tipo: string = '1';
+
   public form: FormGroup;
   carregando = false;
-  datas: any[];
+  datas: any[] = [];
   resumo;
 
   eventSubscriber: Subscription;
@@ -51,7 +55,8 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   constructor(
     private builder: FormBuilder,
     private siteService: SiteAdminService,
-    private toastr: ToastrService
+    private toastr: ToastrService, 
+    private elementRef: ElementRef
   ) {
     this.form = this.builder.group({
       _id: [],
@@ -71,14 +76,20 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.siteService.listTeseDissertacao('1').subscribe((res: any) => {
+    this.getTesesDissertacoes();
+    this.addContentLine();
+  }
+
+  getTesesDissertacoes(tipo = '1', page = 1, limit = 10) {
+    this.siteService.listTeseDissertacao(tipo, page, limit).subscribe((res: any) => {
+      this.tipo = tipo;
+      this.page = page;
       this.carregando = false;
       this.datas = res ? res : [];
     }, err => {
       this.carregando = false;
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
     });
-    this.addContentLine();
   }
 
   public addContentLine(content = null) {
@@ -134,13 +145,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   }
 
   getPerTipo(tipo: string) {
-    this.siteService.listTeseDissertacao(tipo).subscribe((res: any) => {
-      this.carregando = false;
-      this.datas = res ? res : [];
-    }, err => {
-      this.carregando = false;
-      this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
-    });
+    this.getTesesDissertacoes(tipo, 1, this.limit);
   }
 
   reciverFeedback(resposta) {
@@ -156,4 +161,17 @@ export class TeseDissertacaoAdminComponent implements OnInit {
     }
   }
 
+  onPagination(event) {
+    this.getTesesDissertacoes(this.tipo, event.newPage, this.limit);
+    this.scrollTo("teste-2");
+  }
+
+  // Função para rolar até a sessão
+  scrollTo(elementId: string): void {
+      const element = this.elementRef.nativeElement.querySelector('#' + elementId);
+      if (element) {
+          const scrollTop = element.getBoundingClientRect().top + window.scrollY - 100;
+          window.scrollTo({ top: scrollTop, behavior: 'smooth' });
+      }
+  }
 }

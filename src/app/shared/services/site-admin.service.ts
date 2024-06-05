@@ -133,8 +133,13 @@ export class SiteAdminService {
 
   /* Fim Corpo Docente */
   /* Tese DISSERTACAO */
-  listTeseDissertacao(tipo: string) {
-    return this.http.get(`${this.URL_TESE_DISSERTACAO}/${tipo}`);
+  listTeseDissertacao(tipo: string, page = null, limit= null) {
+    let params = new HttpParams();
+    if(page && limit) {
+      params = params.set("page", page);
+      params = params.set("limit", limit);
+    }
+    return this.http.get(`${this.URL_TESE_DISSERTACAO}/${tipo}`, { params });
   }
 
   cadastrarTeseDissertacao(form: any) {

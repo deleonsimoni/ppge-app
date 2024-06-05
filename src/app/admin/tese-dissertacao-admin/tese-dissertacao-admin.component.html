@@ -107,7 +107,7 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-12" id="teste-2">
             <section id="about" class="about">
                 <div class="container">
                     <div class="row text-center" data-aos-delay="200">
@@ -131,6 +131,23 @@
                                 <app-tese-ou-dissertacao [datas]="datas" (resposta)="reciverFeedback($event)">
                                 </app-tese-ou-dissertacao>
                             </div><!-- End Tab 2 Content -->
+
+                            
+                            <!-- <app-pagination 
+                                *ngIf="listUsers.length > 0 || page > 1" 
+                                [page]="page" 
+                                [qtdItems]="listUsers.length" 
+                                [limit]="limit"
+                                (onPagination)="onPagination($event)">
+                            </app-pagination> -->
+                            
+                            <app-pagination 
+                                *ngIf="datas.length > 0 || page > 1" 
+                                [page]="page" 
+                                [qtdItems]="datas.length" 
+                                [limit]="limit"
+                                (onPagination)="onPagination($event)">
+                            </app-pagination>
                         </div>
                     </div>
                 </div>
