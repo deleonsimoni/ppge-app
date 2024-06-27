@@ -1,0 +1,11 @@
+.card {
+  &-border {
+    border-radius: 15px;
+    border: 2px solid antiquewhite;
+  }
+
+  &-title {
+    font-size: 40px !important;
+
+  }
+}

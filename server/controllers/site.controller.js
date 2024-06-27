@@ -4,6 +4,7 @@ const agendaComissaoGestao = require('../service/agenda-comissao-gestao.service'
 const comissaoDeliberativaService = require('../service/comissao-deliberativa.service');
 const comissaoGestaoService = require('../service/comissao-gestao.service');
 const historicoService = require('../service/historico.service');
+const normasPosDoutoradoService = require('../service/normas-pos-doutorado.service');
 const objetivoService = require('../service/objetivo.service');
 const noticiaService = require('../service/noticias.service');
 const revistaService = require('../service/revistas.service');
@@ -11,6 +12,7 @@ const iaCalendarioService = require('../service/ia-calendario.service');
 const iaHorarioPeriodoService = require('../service/ia-horario-periodo.service');
 const iaMatriculaService = require('../service/ia-matricula.service');
 const iaFormulariosService = require('../service/ia-formularios.service');
+const homeApresentacaoService = require('../service/home-apresentacao.service');
 
 const regrasCredenciamentoService = require('../service/regras-credenciamento.service');
 const regulamentoPpgeService = require('../service/regulamento-ppge.service');
@@ -52,6 +54,12 @@ const pagesFunctions = {
     update: async (req, idUser) => await historicoService.updateHistorico(req, idUser),
     insert: async (req, idUser) => await historicoService.insertHistorico(req, idUser),
     delete: async (id) => await historicoService.deleteHistorico(id),
+  },
+  normas_pos_doutorado: {
+    get: async (req) => await normasPosDoutoradoService.getNormasPosDoutorado(req),
+    update: async (req, idUser) => await normasPosDoutoradoService.updateNormasPosDoutorado(req, idUser),
+    insert: async (req, idUser) => await normasPosDoutoradoService.insertNormasPosDoutorado(req, idUser),
+    delete: async (id) => await normasPosDoutoradoService.deleteNormasPosDoutorado(id),
   },
   objetivo: {
     get: async (req) => await objetivoService.getObjetivo(req),
@@ -156,6 +164,12 @@ const pagesFunctions = {
     update: async (req, idUser) => await iaFormulariosService.updateIAFormularios(req, idUser),
     insert: async (req, idUser) => await iaFormulariosService.insertIAFormularios(req, idUser),
     delete: async (id) => await iaFormulariosService.deleteIAFormularios(id),
+  },
+  home_apresentacao: {
+    get: async (req) => await homeApresentacaoService.getHomeApresentacao(req),
+    update: async (req, idUser) => await homeApresentacaoService.updateHomeApresentacao(req, idUser),
+    insert: async (req, idUser) => await homeApresentacaoService.insertHomeApresentacao(req, idUser),
+    delete: async (id) => await homeApresentacaoService.deleteHomeApresentacao(id),
   },
 }
 

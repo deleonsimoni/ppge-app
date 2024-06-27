@@ -444,4 +444,22 @@ export class SiteAdminService {
   }
 
   /* FIM Gerenciar Usuários */
+
+  /* Administrar home */
+
+  cadastrarApesentacaoHome(form) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.post(`${this.URL_PAGE}/home_apresentacao`, { formulario: form }, { headers });
+  }
+
+  atualizarApesentacaoHome(form) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.put(`${this.URL_PAGE}/home_apresentacao/${form._id}`, { formulario: form }, { headers });
+  }
+
+  getInfoHomeApresentacao() {
+    return this.http.get(`${this.URL_PAGE}/home_apresentacao`);
+  }
+
+  /* FIM Administrar home */
 }

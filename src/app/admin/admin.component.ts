@@ -13,6 +13,7 @@ export class AdminComponent implements OnInit {
     let user$ = authService.getUser();
     user$.subscribe(user => {
       this.menu = [
+        { name: 'Administrar Home', path: '/admin/administrar-home', permitido: user.isAdmin },
         { name: 'Administrar Páginas', path: '/admin/administrar-paginas', permitido: user.isAdmin },
         { name: 'Corpo Docente', path: '/admin/corpo-docente', permitido: user.isAdmin },
         { name: 'Teses e Dissertações', path: '/admin/tese-dissertacao', permitido: user.isAdmin },

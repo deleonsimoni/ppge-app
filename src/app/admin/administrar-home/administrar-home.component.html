@@ -1,0 +1,56 @@
+<div class="container mb-5">
+  <div class="row justify-content-between">
+    <div class="section-header" mat-dialog-title>
+      <h2>Administrar Home</h2>
+    </div>
+  </div>
+  
+  <div class="container card-border pb-5">
+    <form role="form" class="reviewer" [formGroup]="form" (ngSubmit)="register()">
+      <div class="row justify-content-between mt-3">
+        <div class="section-header" mat-dialog-title>
+          <h2 class="card-title">Apresentação</h2>
+        </div>
+      </div>
+
+      <div class="mb-5" formGroupName="pt-br">
+        <h3 class="text-center">PT-BR</h3>
+
+        <div class="form-row justify-content-center">
+          <div class="form-group col-md-12">
+            <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [config]="editorConfig">
+            </angular-editor>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-5" formGroupName="en-us">
+        <h3 class="text-center">EN-US</h3>
+
+        <div class="form-row justify-content-center">
+          <div class="form-group col-md-12">
+            <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [config]="editorConfig">
+            </angular-editor>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3" formGroupName="es-es">
+        <h3 class="text-center">ES-ES</h3>
+
+        <div class="form-row justify-content-center">
+          <div class="form-group col-md-12">
+            <angular-editor [placeholder]="'Conteúdo...'" formControlName="content" [config]="editorConfig">
+            </angular-editor>
+          </div>
+        </div>
+      </div>
+
+      <button class="w-100 " type="submit" mat-raised-button color="primary">
+        Submeter
+      </button>
+
+    </form>
+  </div>
+
+</div>

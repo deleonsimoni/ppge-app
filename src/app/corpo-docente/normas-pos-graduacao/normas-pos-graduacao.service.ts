@@ -13,6 +13,6 @@ import { info as normaPosGraduacao } from "./normas-pos-graduacao";
     ) { }
   
     public getNormaPosGraduacao(): Observable<any> {
-        return of(normaPosGraduacao);
+        return this.http.get(`/api/ppge/page/normas_pos_doutorado`);
     }
 }

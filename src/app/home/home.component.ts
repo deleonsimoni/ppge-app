@@ -8,7 +8,13 @@ import { catchError, take } from 'rxjs';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit {  
+  private fromInitialsToLanguageCode = {
+    br: 'pt-br',
+    us: 'en-us',
+    es: 'es-es'
+  }
+  homeApresentacaoInfo = {content: "<strong>BRENO</strong>"}
   pageNumber = 1;
   pageSize = 4;
   isLoadingNews = false;
@@ -23,6 +29,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getNoticias();
+    this.getHomeApresentacao();
     
     // this.siteService.getHome()
     //   .subscribe((res: any) => {
@@ -32,6 +39,24 @@ export class HomeComponent implements OnInit {
     //     console.log(err);
     //   });
 
+  }
+
+  getHomeApresentacao() {
+    
+    
+    this.siteService.getInfoHomeApresentacao()
+      .pipe(
+        catchError( err => {
+          this.toastr.error('Ocorreu um erro ao buscar "Apresentação"', 'Atenção: ');
+          throw err;
+        })
+      )
+      .subscribe((data: any) => {
+        
+        const languageStorage = localStorage.getItem('language');
+        const languageParsed = languageStorage ? this.fromInitialsToLanguageCode[languageStorage] : this.fromInitialsToLanguageCode.br;
+        this.homeApresentacaoInfo.content = data[languageParsed].content
+      });
   }
 
   getNoticias() {
@@ -47,7 +72,6 @@ export class HomeComponent implements OnInit {
           })
         )
         .subscribe(data => {
-          console.log("DATA: ", data);
           this.news = data;
           this.isLoadingNews = false;
         });

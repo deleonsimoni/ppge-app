@@ -41,6 +41,8 @@ import { UserAreaModule } from './user-area/user-area.module';
 import { ResetSenhaComponent } from './reset-senha/reset-senha.component';
 import { EsqueciSenhaComponent } from './esqueci-senha/esqueci-senha.component';
 import { NoticeModule } from './notice/notice.module';
+import { SanitizeModule } from './shared/pipes/sanitize/sanitize.module';
+import { NormaPosGraduacaoModule } from './corpo-docente/normas-pos-graduacao/normas-pos-graduacao.module';
 
 export function appInitializerFactory(authService: AuthService) {
   return () => authService.checkTheUserOnTheFirstLoad();
@@ -83,7 +85,9 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     }),
     HistoricModule,
     NoticeModule,
-    NgbModule
+    NgbModule,
+    NormaPosGraduacaoModule,
+    SanitizeModule,
 
   ],
   declarations: [

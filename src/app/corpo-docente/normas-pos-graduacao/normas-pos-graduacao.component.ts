@@ -9,6 +9,8 @@ import { NormaPosGraduacaoService } from "./normas-pos-graduacao.service";
   })
   export class NormaPosGraduacaoComponent implements OnInit {
 
+    public normasInfo: any = {};
+
     normaPosGraduacao: any;
 
     constructor(private normaPosGraduacaoService: NormaPosGraduacaoService) {
@@ -23,8 +25,8 @@ import { NormaPosGraduacaoService } from "./normas-pos-graduacao.service";
     }
 
     getNormaPosGraduacao() {
-    this.normaPosGraduacaoService.getNormaPosGraduacao().subscribe(arr => {
-        this.normaPosGraduacao = arr;
+    this.normaPosGraduacaoService.getNormaPosGraduacao().subscribe(normasInfo => {
+        this.normasInfo = normasInfo ? normasInfo : {};
       });
     }
 }

@@ -3,9 +3,14 @@ import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { NormaPosGraduacaoRoutingModule } from "./normas-pos-graduacao-routing.module";
 import { NormaPosGraduacaoComponent } from "./normas-pos-graduacao.component";
+import { SanitizeModule } from "@app/shared/pipes/sanitize/sanitize.module";
 
 @NgModule({
-    imports: [NormaPosGraduacaoRoutingModule, CommonModule, BrowserModule],
+    imports: [
+        CommonModule, 
+        BrowserModule,
+        SanitizeModule,
+    ],
     declarations: [NormaPosGraduacaoComponent],
     })
 export class NormaPosGraduacaoModule {}
