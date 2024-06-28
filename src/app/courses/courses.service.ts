@@ -15,4 +15,12 @@ export class CoursesService {
     params = _idPage ? params.set('_id', _idPage) : params;
     return this.http.get(`/api/ppge/page/cursos`, {params});
   }
+
+  public getHeaderPage(coursesType: string): Observable<any> {
+    let params = new HttpParams();
+    if(coursesType) {
+      params = params.set('coursesType', coursesType);
+    }
+    return this.http.get(`/api/ppge/page/cursos/headers`, {params});
+  }
 }

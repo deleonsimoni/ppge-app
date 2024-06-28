@@ -84,13 +84,31 @@
         </mat-select>
       </mat-form-field>
 
-      <!-- <div class="form-row justify-content-center">
-              <div class="conferencer-img">
-                  <img id="imageRender" height="100px" width="100px" src="../../assets/img/user.png" alt=""
-                      #imageRender>
-                  <button (click)="loadImage()"><i class="fas fa-camera"></i></button>
-              </div>
-          </div> -->
+      <!-- PARA CURSOS -->
+      <div *ngIf="form.value.selectPage === 'cursos' && ((!!dataExpansivel && dataExpansivel.length > 0) || !dataExpansivel)" class="form-row mb-3">
+        <div class="form-group col-md-4">
+          <mat-form-field appearance="fill" class="mb-3 w-100">
+            <mat-label>Selecione o Tipo do Curso</mat-label>
+            <mat-select formControlName="tipoCurso">
+              <mat-option [value]="typeGraduateEnum.MESTRADO">Mestrado</mat-option>
+              <mat-option [value]="typeGraduateEnum.DOUTORADO">Doutorado</mat-option>
+              <mat-option [value]="typeGraduateEnum.AMBOS">Ambos</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+          
+        <div class="form-group col-md-4">
+          <mat-form-field appearance="fill" class="mb-3 w-100">
+            <mat-label>Selecione o Bloco</mat-label>
+            <mat-select formControlName="tipoBloco">
+              <mat-option [value]="typeBlocoEnum.OBRIGATORIO">Obrigatório</mat-option>
+              <mat-option [value]="typeBlocoEnum.LIVRE_ESCOLHA">Livre Escolha</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- FIM PARA CURSOS -->
 
       <div *ngIf="!dataExpansivel">
 

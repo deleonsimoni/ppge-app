@@ -34,9 +34,15 @@ async function getCursos(req) {
 }
 
 async function getHeadersCursos(req) {
-  let ret = await CursosModel.find({}, {
+  let whereClause = {};
+  if(!!req.query.coursesType) {
+    whereClause.tipoCurso = Number(req.query.coursesType)
+  }
+  let ret = await CursosModel.find(whereClause, {
     [`${req.query.language}.title`]: 1,
     [`${req.query.language}.navTitle`]: 1,
+    tipoCurso: 1,
+    tipoBloco: 1,
   }).sort({
     createAt: -1
   });
@@ -44,7 +50,9 @@ async function getHeadersCursos(req) {
     {
       _id: data._id, 
       title: data[req.query.language].title, 
-      navTitle: data[req.query.language].navTitle 
+      navTitle: data[req.query.language].navTitle,
+      tipoCurso: data.tipoCurso,
+      tipoBloco: data.tipoBloco,
     }
   ));
 

@@ -40,8 +40,12 @@
             <li class="dropdown"><a><span>{{'cursos' | translate}}</span> <i
                   class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li *ngFor="let item of headerData.cursos; let i = index"><a (click)="closeMenu()"
-                    class="nav-link scrollto" [routerLink]="['cursos/', item._id]">{{ item.navTitle }}</a></li>
+                <li><a (click)="closeMenu()"
+                    class="nav-link scrollto" [routerLink]="'cursos/mestrado'">Mestrado</a></li>
+                <li><a (click)="closeMenu()"
+                    class="nav-link scrollto" [routerLink]="'cursos/doutorado'">Doutorado</a></li>
+                <li><a (click)="closeMenu()"
+                    class="nav-link scrollto" [routerLink]="'cursos/ementas'">Ementas e Programas</a></li>
               </ul>
             </li>
             <li class="dropdown"><a><span>{{'comissoes' | translate}}</span> <i

@@ -3,9 +3,18 @@
   border-radius: 15px;
   border: 2px solid antiquewhite;
 
-  a {
+  .link {
+    color: #6E222E;
     &:hover {
       text-decoration: underline !important;
+      cursor: pointer;
     }
   }
+
+  .body-content {
+    p {
+      margin-bottom: 0;
+    }
+  }
+  
 }

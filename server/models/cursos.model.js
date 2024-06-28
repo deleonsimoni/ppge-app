@@ -7,6 +7,14 @@ const CursosSchema = new mongoose.Schema(
       required: true
     },
 
+    tipoCurso: {
+      type: Number,
+    },
+
+    tipoBloco: {
+      type: Number,
+    },
+
     "pt-br": {
       navTitle: {
         type: String,

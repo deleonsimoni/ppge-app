@@ -6,6 +6,12 @@ export enum TypeProfileEnum {
 export enum TypeGraduateEnum {
   MESTRADO = 1,
   DOUTORADO = 2,
+  AMBOS = 3,
+}
+
+export enum TypeBlocoEnum {
+  OBRIGATORIO = 1,
+  LIVRE_ESCOLHA = 2,
 }
 
 export enum TypeOpcaoVagaEnum {

@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit {
 
   private listUrlHeaders = [
     'linha_pesquisa',
-    'cursos',
+    // 'cursos',
   ]
   private fromInitialsToLanguageCode = {
     br: 'pt-br',

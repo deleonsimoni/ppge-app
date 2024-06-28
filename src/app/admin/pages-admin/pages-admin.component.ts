@@ -6,6 +6,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, take } from 'rxjs';
 import { ComfirmDeleteProcessoComponent } from '../processo-seletivo-admin/modal/confirm-delet-processo.component';
+import { TypeBlocoEnum, TypeGraduateEnum } from '@app/shared/shared.model';
 
 @Component({
   selector: 'app-pages-admin',
@@ -15,6 +16,9 @@ import { ComfirmDeleteProcessoComponent } from '../processo-seletivo-admin/modal
 })
 export class PagesAdminComponent implements OnInit {
   @ViewChild('imageRender', { static: false }) imageRender: ElementRef;
+  
+  typeGraduateEnum = TypeGraduateEnum;
+  typeBlocoEnum = TypeBlocoEnum;
 
   public form: FormGroup;
   carregando = false;
@@ -76,6 +80,10 @@ export class PagesAdminComponent implements OnInit {
       youtube: [null, []],
       instagram: [null, []],
       twitter: [null, []],
+
+      /* Para pagina 'Cursos' */
+      tipoCurso: [null, []],
+      tipoBloco: [null, []],
 
       /* Para pagina 'Linha de Pesquisa' */
       corpoDocente: [null, []],

@@ -2,14 +2,38 @@
   <div class="container">
 
     <div class="section-header">
-      <h2>{{coursesInfo.title}}</h2>
+      <h2>{{courseTypeOptions[this.coursesType]?.title}}</h2>
     </div>
 
   </div>
 
   <div class="container">
-
-    <div class="text-body" [innerHtml]="coursesInfo.content"></div>
+    <div *ngIf="!flagViewCourse" class="text-body">
+      <div *ngIf="coursesType != 'ementas'" class="mb-3">
+        <div class="row"><h4>Disciplinas/Atividades Obrigatórias</h4></div>
+        <div *ngFor="let curso of listCursosObrigatorios" class="row pl-3"><p class="link" (click)="getCoursesService(curso._id)">{{curso.title}}</p ></div>
+      </div>
+      <div>
+        <div class="row"><h4>Disciplinas de Livre Escolha</h4></div>
+        <div *ngFor="let curso of listCursosLivreEscolha" class="row pl-3"><p class="link" (click)="getCoursesService(curso._id)">{{curso.title}}</p ></div>
+      </div>
+    </div>
+    
+    <div *ngIf="flagViewCourse" class="text-body">
+      <div class="row">
+        <div class="col-auto">
+          <button mat-raised-button color="primary" (click)="toggleViewCourse(false)">Voltar</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center section-header">
+          <h2 class="m-0">{{coursesInfo.title}}</h2>
+        </div>
+        <div class="col-12">
+          <div class="body-content" [innerHtml]="coursesInfo.content"></div>
+        </div>
+      </div>
+    </div>
 
   </div>
 </section>
