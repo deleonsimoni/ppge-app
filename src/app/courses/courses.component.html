@@ -9,13 +9,13 @@
 
   <div class="container">
     <div *ngIf="!flagViewCourse" class="text-body">
-      <div *ngIf="coursesType != 'ementas'" class="mb-3">
+      <div *ngIf="coursesType != 'ementas'" class="mb-5">
         <div class="row"><h4>Disciplinas/Atividades Obrigatórias</h4></div>
-        <div *ngFor="let curso of listCursosObrigatorios" class="row pl-3"><p class="link" (click)="getCoursesService(curso._id)">{{curso.title}}</p ></div>
+        <div *ngFor="let curso of listCursosObrigatorios" class="row pl-3"><p class="link mb-0" (click)="getCoursesService(curso._id)">{{curso.title}}</p ></div>
       </div>
       <div>
         <div class="row"><h4>Disciplinas de Livre Escolha</h4></div>
-        <div *ngFor="let curso of listCursosLivreEscolha" class="row pl-3"><p class="link" (click)="getCoursesService(curso._id)">{{curso.title}}</p ></div>
+        <div *ngFor="let curso of listCursosLivreEscolha" class="row pl-3"><p class="link mb-0" (click)="getCoursesService(curso._id)">{{curso.title}}</p ></div>
       </div>
     </div>
     

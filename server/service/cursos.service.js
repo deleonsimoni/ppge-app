@@ -36,7 +36,11 @@ async function getCursos(req) {
 async function getHeadersCursos(req) {
   let whereClause = {};
   if(!!req.query.coursesType) {
-    whereClause.tipoCurso = Number(req.query.coursesType)
+    whereClause.$or = [
+      {tipoCurso: Number(req.query.coursesType)},
+      {tipoCurso: 3},
+
+    ]
   }
   let ret = await CursosModel.find(whereClause, {
     [`${req.query.language}.title`]: 1,
