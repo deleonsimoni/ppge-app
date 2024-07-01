@@ -15,6 +15,7 @@ import { TeseDissertacaoAdminComponent } from './tese-dissertacao-admin/tese-dis
 import { GerenciarUsuariosComponent } from './gerenciar-usuarios/gerenciar-usuarios.component';
 import { CriterioHomologacaoComponent } from './criterio-homologacao/criterio-homologacao.component';
 import { AdministrarHomeComponent } from './administrar-home/administrar-home.component';
+import { ContatosComponent } from './contatos/contatos.component';
 
 const routes: Routes = [
   {
@@ -104,6 +105,13 @@ const routes: Routes = [
       },
       {
         path: 'administrar-home', component: AdministrarHomeComponent,
+        canActivate: [OnlyAllowedRolesUsersGuard],
+        data: {
+          roles: ['admin']
+        }
+      },
+      {
+        path: 'contato', component: ContatosComponent,
         canActivate: [OnlyAllowedRolesUsersGuard],
         data: {
           roles: ['admin']

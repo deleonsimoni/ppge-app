@@ -462,4 +462,25 @@ export class SiteAdminService {
   }
 
   /* FIM Administrar home */
+
+  /* Contatos */
+
+  cadastrarContatos(form) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.post(`${this.URL_PAGE}/contatos`, { formulario: form }, { headers });
+
+  }
+
+  atualizarContatos(form) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.put(`${this.URL_PAGE}/contatos/${form._id}`, { formulario: form }, { headers });
+
+  }
+
+  getInfoContatos() {
+    return this.http.get(`${this.URL_PAGE}/contatos`);
+  }
+
+  
+  /* FIM Contatos */
 }

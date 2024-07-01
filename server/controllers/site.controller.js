@@ -4,6 +4,7 @@ const agendaComissaoGestao = require('../service/agenda-comissao-gestao.service'
 const comissaoDeliberativaService = require('../service/comissao-deliberativa.service');
 const comissaoGestaoService = require('../service/comissao-gestao.service');
 const historicoService = require('../service/historico.service');
+const contatosService = require('../service/contatos.service');
 const normasPosDoutoradoService = require('../service/normas-pos-doutorado.service');
 const objetivoService = require('../service/objetivo.service');
 const noticiaService = require('../service/noticias.service');
@@ -49,6 +50,11 @@ module.exports = {
 
 
 const pagesFunctions = {
+  contatos: {
+    get: async (req) => await contatosService.getContatos(req),
+    update: async (req, idUser) => await contatosService.updateContatos(req, idUser),
+    insert: async (req, idUser) => await contatosService.insertContatos(req, idUser),
+  },
   historico: {
     get: async (req) => await historicoService.getHistorico(req),
     update: async (req, idUser) => await historicoService.updateHistorico(req, idUser),

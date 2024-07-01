@@ -40,6 +40,7 @@ import { HomologacaoDialogComponent } from './inscricoes/homologacao-dialog/homo
 import { ResumoDialogComponent } from './tese-dissertacao-admin/resumo-dialog/resumo-dialog.component';
 import { SanitizeModule } from '@app/shared/pipes/sanitize/sanitize.module';
 import { AdministrarHomeComponent } from './administrar-home/administrar-home.component';
+import { ContatosComponent } from './contatos/contatos.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { AdministrarHomeComponent } from './administrar-home/administrar-home.co
     CriterioHomologacaoDialogComponent,
     HomologacaoDialogComponent,
     ResumoDialogComponent,
-    AdministrarHomeComponent
+    AdministrarHomeComponent,
+    ContatosComponent
   ],
   imports: [
     CommonModule,

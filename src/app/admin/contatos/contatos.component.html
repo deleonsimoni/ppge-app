@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="row justify-content-between">
+      <div class="section-header" mat-dialog-title>
+          <h2>Administrar - Contato</h2>
+      </div>
+  </div>
+  
+  <div class="row justify-content-center">
+
+    <div class="col-md-12">
+      <form role="form" class="reviewer" [formGroup]="form" (ngSubmit)="register()">
+          <div class="form-row justify-content-center">
+
+              <div class="form-group col-md-5">
+                  <input type="text" name="email" class="form-control" id="email" placeholder="Email"
+                      formControlName="email" />
+              </div>
+          </div>
+          <div class="form-row justify-content-center">
+
+            <div class="form-group col-md-5">
+                <input type="text" name="telefone" class="form-control" id="telefone" placeholder="Telefone"
+                    formControlName="telefone" />
+
+            </div>
+          </div>
+          <div class="form-row justify-content-center">
+
+            <div class="form-group col-md-5">
+                <input type="text" name="endereco" class="form-control" id="endereco" placeholder="Endereco"
+                    formControlName="endereco" />
+
+            </div>
+          </div>
+
+          <div class="row justify-content-end m-4">
+              <button type="submit" mat-raised-button color="primary">
+                  Salvar
+              </button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
