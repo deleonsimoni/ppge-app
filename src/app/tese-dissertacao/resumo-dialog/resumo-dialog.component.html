@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Resumo do título: {{data.titulo}}</h1>
+<div mat-dialog-content>
+  <div class="text-body" [innerHtml]="data.resumo | sanitizer"></div>
+  <div class="mt-3" *ngIf="data?.palavrasChave?.length">Palavras-chave: {{getTextPalavrasChave()}}</div>
+</div>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Fechar</button>
+</mat-dialog-actions>
