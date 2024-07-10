@@ -58,6 +58,18 @@
           </mat-radio-group>
         </div>
       </div>
+      <div class="row mb-3">
+        <div class="col">
+          <p>
+            <strong>Status Homologação:</strong> {{verificarHomologacao(inscricoes.parecer?.homologado)}}
+          </p>
+        </div>
+        <div class="col">
+          <p>
+            <strong>Status Avaliação:</strong> {{verificarAprovacao(inscricoes.parecer?.aprovado)}}
+          </p>
+        </div>
+      </div>
       <div class="row align-items-center">
         <div class="col-10">
           <mat-form-field appearance="fill" class="w-100">
@@ -159,45 +171,30 @@
       </div>
     </div>
     <div class="col-md-auto pt-3 pb-2">
-      <div *ngIf="myUser.isAdmin || myUser.isCoordenador" class="row">
-        <span (click)="vincularParecerista(inscricoes)" matTooltip="Salvar" matTooltipPosition="above"
-          class="material-icons md-18 btn card-icon-action">save</span>
+      <div *ngIf="myUser.isAdmin || myUser.isCoordenador" class="row mb-3">
+        <button (click)="vincularParecerista(inscricoes)" type="button" mat-raised-button color="primary">
+          <mat-icon>save</mat-icon>
+          Salvar
+        </button>
       </div>
-      <div class="row justify-content-center">
-        <div class="col">
-          <p>
-            {{verificarHomologacao(inscricoes.parecer?.homologado)}}
-          </p>
-        </div>
+      <div class="row justify-content-center mb-3" *ngIf="verificaIsResponsavelHomologacao(inscricoes, myUser)">
+        <button type="button" mat-raised-button color="primary"
+          (click)="openModalHomologar(inscricoes._id)">Homologar</button>
       </div>
-      <div class="row justify-content-center">
-        <div class="col">
-          <p>
-            {{verificarAprovacao(inscricoes.parecer?.aprovado)}}
-          </p>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <span (click)="detalharInscricao(inscricoes._id)" matTooltip="Detalhar" matTooltipPosition="above"
-          class="material-icons md-18 btn card-icon-action">{{this.flagDetalharInscricao &&
-          this.inscricaoSelecionada?._id == inscricoes._id ? 'remove' : 'add'}}</span>
-      </div>
-      <div class="row justify-content-center mb-3">
-        <div class="col-auto" *ngIf="verificaIsResponsavelHomologacao(inscricoes, myUser)">
-          <button style="background-color: green;" type="button" mat-raised-button color="primary"
-            (click)="openModalHomologar(inscricoes._id)">Homologar</button>
-        </div>
-      </div>
-      <div class="col-auto mb-3" *ngIf="verificaIsResponsavelHomologacao(inscricoes, myUser) && inscricoes?.parecer?.recursoHomolog?.justificativa">
+      <div class="row justify-content-center mb-3" *ngIf="verificaIsResponsavelHomologacao(inscricoes, myUser) && inscricoes?.parecer?.recursoHomolog?.justificativa">
         <button (click)="responderJustificativaHomolog(inscricoes._id, inscricoes?.parecer?.recursoHomolog?.justificativa, inscricoes?.parecer?.recursoHomolog?.respostaJustificativa, inscricoes?.parecer?.recursoHomolog?.recursoAceito)" type="button" mat-raised-button color="primary">
           {{inscricoes?.parecer?.recursoHomolog?.respostaJustificativa ? "Visualizar recurso" : "Responder recurso"}}
         </button>
       </div>
-      <div class="row justify-content-center">
-        <div class="col-auto" *ngIf="inscricoes?.parecerista?.primeiro?._id == myUser._id || inscricoes?.parecerista?.segundo?._id == myUser._id">
-          <button style="background-color: green;" type="button" mat-raised-button color="primary"
+      <div class="row justify-content-center mb-3" *ngIf="inscricoes?.parecerista?.primeiro?._id == myUser._id || inscricoes?.parecerista?.segundo?._id == myUser._id">
+          <button type="button" mat-raised-button color="primary"
             (click)="openModalParecer(inscricoes._id)">Avaliar</button>
-        </div>
+      </div>
+      <div class="row justify-content-center mb-3">
+        <button (click)="detalharInscricao(inscricoes._id)" style="background-color: gray;" type="button" mat-raised-button color="primary">
+          <mat-icon>{{this.flagDetalharInscricao && this.inscricaoSelecionada?._id == inscricoes._id ? 'remove' : 'add'}}</mat-icon>
+          Detalhar
+        </button>
       </div>
     </div>
 
@@ -332,35 +329,6 @@
               </a>
             </div>
           </div>
-          <!-- <div class="row align-items-center mb-3" *ngIf="myUser.isCoordenador && inscricoes.coordenadoresLinha?.indexOf(myUser._id) > -1">
-            <div class="col-12"><hr></div>
-            <div class="col-12">
-              <label class="mb-0"><strong>Homologação: </strong></label>
-            </div>
-
-            <div class="col-auto">
-              <mat-radio-group [(ngModel)]="radioHomologValue" class="example-radio-group w-100">
-                <mat-radio-button class="example-radio-button mr-3" [value]="true">Deferido</mat-radio-button>
-                <mat-radio-button class="example-radio-button mr-3" [value]="false">Indeferido</mat-radio-button>
-              </mat-radio-group>
-            </div>
-
-            <div class="col-auto">
-              <button (click)="changeHomolog()" style="background-color: green;" type="button" mat-raised-button color="primary">Salvar</button>
-            </div>
-
-            <div class="col-auto ml-3" *ngIf="inscricaoSelecionada?.parecer?.recursoHomolog?.justificativa">
-              <button (click)="responderJustificativaHomolog(inscricaoSelecionada?.parecer?.recursoHomolog?.justificativa, inscricaoSelecionada?.parecer?.recursoHomolog?.respostaJustificativa, inscricaoSelecionada?.parecer?.recursoHomolog?.recursoAceito)" type="button" mat-raised-button color="primary">
-                {{inscricaoSelecionada?.parecer?.recursoHomolog?.respostaJustificativa ? "Visualizar recurso" : "Responder recurso"}}
-              </button>
-            </div>
-
-            <div class="col-12" *ngIf="radioHomologValue == false">
-              <label>Justifique: </label>
-              <textarea class="textarea mb-3" matInput [(ngModel)]="justificaIndeferido"></textarea>
-            </div>
-
-          </div> -->
 
         </div>
       </div>
