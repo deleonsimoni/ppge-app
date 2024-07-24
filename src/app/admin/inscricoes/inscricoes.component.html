@@ -188,7 +188,7 @@
       </div>
       <div class="row justify-content-center mb-3" *ngIf="inscricoes?.parecerista?.primeiro?._id == myUser._id || inscricoes?.parecerista?.segundo?._id == myUser._id">
           <button type="button" mat-raised-button color="primary"
-            (click)="openModalParecer(inscricoes._id)">Avaliar</button>
+            (click)="openModalParecer(inscricoes._id, inscricoes.idUser?.email)">Avaliar</button>
       </div>
       <div class="row justify-content-center mb-3">
         <button (click)="detalharInscricao(inscricoes._id)" style="background-color: gray;" type="button" mat-raised-button color="primary">

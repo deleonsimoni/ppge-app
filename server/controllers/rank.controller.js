@@ -79,6 +79,7 @@ function gerarRankPorProcesso(processoSeletivo, isFinalRank) {
     let notasNaOrdem = [];
     let isAprovado = true;
     let etapas;
+    let homologado = inscrito.parecer.homologado;
 
     if (inscrito.parecer && inscrito.parecer.step) {
       etapas = inscrito.parecer.step;
@@ -108,7 +109,8 @@ function gerarRankPorProcesso(processoSeletivo, isFinalRank) {
       notasNaOrdem,
       medialFinal: mediaNotas,
       situacao: situacao,
-      opcaoVaga: tipoVagaToText[inscrito.opcaoVaga]
+      opcaoVaga: tipoVagaToText[inscrito.opcaoVaga],
+      homologado: homologado,
     });
 
   });

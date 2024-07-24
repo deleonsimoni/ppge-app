@@ -25,9 +25,16 @@ export class ProcessoSeletivoService {
 
     if(formulario.tipoFormulario == TypeGraduateEnum.MESTRADO) {
       formData.append('fileArray', files.filePreProjeto);
+      formData.append('fileConclusaoGraduacao', files.fileConclusaoGraduacao);
+      formData.append('fileIndigena', files.fileIndigena);
+      formData.append('fileCondicaoDeficiencia', files.fileCondicaoDeficiencia);
+      formData.append('fileCondicaoDeficienciaDois', files.fileCondicaoDeficienciaDois);
+      formData.append('fileCertidaoNascimentoFilho', files.fileCertidaoNascimentoFilho);
+      formData.append('fileComprovanteResidencia', files.fileComprovanteResidencia);
     } else if(formulario.tipoFormulario == TypeGraduateEnum.DOUTORADO) {
       formData.append('fileArray', files.fileProjetoTese);
       formData.append('fileArray', files.filePrincipalPubli);
+      formData.append('fileComprovantePagamento', files.fileComprovantePagamento);
     }
     formData.append('formulario', JSON.stringify(formulario));
     return this.http.post(`${this.URL_PROCESSO_SELETIVO}/inscrever/${idProcesso}`, formData);

@@ -211,11 +211,11 @@ export class SiteAdminService {
     return this.http.get(`${this.URL_PROCESSO_SELETIVO}/parecer`, { params });
   }
 
-  registrarParecer(idInscricao, idProcesso, formulario) {
+  registrarParecer(idInscricao, idProcesso, formulario, emailInscrito) {
     let params = new HttpParams()
       .set("idInscricao", idInscricao)
       .set("idProcesso", idProcesso);
-    return this.http.post(`${this.URL_PROCESSO_SELETIVO}/parecer`, { formulario }, { params });
+    return this.http.post(`${this.URL_PROCESSO_SELETIVO}/parecer`, { formulario, emailInscrito }, { params });
   }
 
   registrarHomologacao(idInscricao, idProcesso, formulario, deferido, justificaIndeferido) {

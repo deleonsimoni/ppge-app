@@ -104,6 +104,13 @@ export class ProcessoSeletivoComponent implements OnInit {
       filePreProjeto, 
       fileProjetoTese, 
       filePrincipalPubli, 
+      fileConclusaoGraduacao,
+      fileIndigena,
+      fileCondicaoDeficiencia,
+      fileCondicaoDeficienciaDois,
+      fileCertidaoNascimentoFilho,
+      fileComprovanteResidencia,
+      fileComprovantePagamento,
       formRetorno 
     } = objectReturned;
     const files = {
@@ -111,6 +118,15 @@ export class ProcessoSeletivoComponent implements OnInit {
       filePreProjeto: filePreProjeto ? filePreProjeto[0] : null, 
       fileProjetoTese: fileProjetoTese ? fileProjetoTese[0] : null, 
       filePrincipalPubli: filePrincipalPubli ? filePrincipalPubli[0] : null, 
+      
+      fileConclusaoGraduacao: fileConclusaoGraduacao ? fileConclusaoGraduacao[0] : null,
+      fileIndigena: fileIndigena ? fileIndigena[0] : null,
+      fileCondicaoDeficiencia: fileCondicaoDeficiencia ? fileCondicaoDeficiencia[0] : null,
+      fileCondicaoDeficienciaDois: fileCondicaoDeficienciaDois ? fileCondicaoDeficienciaDois[0] : null,
+      fileCertidaoNascimentoFilho: fileCertidaoNascimentoFilho ? fileCertidaoNascimentoFilho[0] : null,
+      fileComprovanteResidencia: fileComprovanteResidencia ? fileComprovanteResidencia[0] : null,
+
+      fileComprovantePagamento: fileComprovantePagamento ? fileComprovantePagamento[0] : null,
     }
     if (formRetorno.valid) {
       this.processoSeletivoService.inscreverProcessoSeletivo(formRetorno.value.idProcesso, formRetorno.value, files)

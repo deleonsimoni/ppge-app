@@ -1,232 +1,440 @@
 <div class="container">
   <form [formGroup]="form" (ngSubmit)="register()" role="form" class="contactForm">
-
     <div class="section-header">
       <h2 mt-2>Dados para completar a inscrição</h2>
     </div>
-    <div class="row">
-      <div class="col-12">
-        <label><strong>Selecione a Linha de Pesquisa: </strong></label>
-        <mat-form-field style="width: 100% !important;" appearance="fill" class="mb-3">
-          <mat-label>Selecione a Linha de Pesquisa</mat-label>
-          <mat-select formControlName="linhaPesquisa" (selectionChange)="getCorpoDocenteByLinhaPesquisa()">
-            <mat-option *ngFor="let linha of listLinhaPesquisa" [value]="linha._id">{{linha.title}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-      </div>
-      <div class="col-6">
-        <label><strong>{{ type == typeGraduateEnum.MESTRADO ? "Primeira opção para orientação:" : "2- Professores com
-            disponibilidade para orientação"}} </strong></label>
-        <mat-form-field style="width: 100% !important;" appearance="fill" class="mb-3">
-          <mat-label>Selecione o Orientador</mat-label>
-          <mat-select formControlName="primeiroOrientador" (selectionChange)="clearSegundoOrientador()">
-            <mat-option *ngFor="let corpoDocente of listCorpoDocente" [value]="corpoDocente._id">
-              {{corpoDocente.fullName}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="col-6" *ngIf="type == typeGraduateEnum.MESTRADO">
-        <label><strong>Segunda opção para orientação: </strong></label>
-        <mat-form-field style="width: 100% !important;" appearance="fill" class="mb-3">
-          <mat-label>Selecione o Orientador</mat-label>
-          <mat-select formControlName="segundoOrientador">
-            <mat-option *ngFor="let corpoDocente of listCorpoDocente" [value]="corpoDocente._id" [disabled]="form.get('primeiroOrientador').value === corpoDocente._id">
-              {{corpoDocente.fullName}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+    <div class="row justify-content-center align-items-center mb-5">
+        <div (click)="passoInscricao = 1" class="col-auto mr-5 progress-step" [ngClass]="{'active': passoInscricao == 1}" >1</div>
+        <div (click)="passoInscricao = 2" class="col-auto mr-5 progress-step" [ngClass]="{'active': passoInscricao == 2}" >2</div>
+        <div (click)="passoInscricao = 3" class="col-auto mr-5 progress-step" [ngClass]="{'active': passoInscricao == 3}" >3</div>
 
     </div>
-
-    <div class="row mb-3">
-      <div class="col-12">
-        <label><strong>Opção de vaga: </strong></label>
-        <br>
-        <mat-radio-group class="example-radio-group w-100" formControlName="opcaoVaga"
-          (change)="limpaOpcaoVagaCotaSub()">
-          <mat-radio-button class="example-radio-button mr-3" [value]="typeOpcaoVagaEnum.AMPLA_CONCORRENCIA">Ampla
-            concorrência</mat-radio-button>
-          <mat-radio-button class="example-radio-button mr-3" [value]="typeOpcaoVagaEnum.COTAS_ACOES_AFIRMATIVAS">Cotas
-            de Ações Afirmativas</mat-radio-button>
-          <mat-radio-button class="example-radio-button mr-3" [value]="typeOpcaoVagaEnum.EXCLUSIVA_DOCENTE"
-            *ngIf="type == typeGraduateEnum.DOUTORADO">Programa de Qualificação Institucional da UFRJ (exclusiva para
-            docentes e técnicos administrativos em Educação)</mat-radio-button>
+    <div *ngIf="passoInscricao == 1">
+      <div class="row">
+        <div class="col-12">
+          <label><strong>Selecione a Linha de Pesquisa: </strong></label>
+          <mat-form-field style="width: 100% !important;" appearance="fill" class="mb-3">
+            <mat-label>Selecione a Linha de Pesquisa</mat-label>
+            <mat-select formControlName="linhaPesquisa" (selectionChange)="getCorpoDocenteByLinhaPesquisa()">
+              <mat-option *ngFor="let linha of listLinhaPesquisa" [value]="linha._id">{{linha.title}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+        </div>
+        <div class="col-6">
+          <label><strong>{{ type == typeGraduateEnum.MESTRADO ? "Primeira opção para orientação:" : "2- Professores com
+              disponibilidade para orientação"}} </strong></label>
+          <mat-form-field style="width: 100% !important;" appearance="fill" class="mb-3">
+            <mat-label>Selecione o Orientador</mat-label>
+            <mat-select formControlName="primeiroOrientador" (selectionChange)="clearSegundoOrientador()">
+              <mat-option *ngFor="let corpoDocente of listCorpoDocente" [value]="corpoDocente._id">
+                {{corpoDocente.fullName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-6" *ngIf="type == typeGraduateEnum.MESTRADO">
+          <label><strong>Segunda opção para orientação: </strong></label>
+          <mat-form-field style="width: 100% !important;" appearance="fill" class="mb-3">
+            <mat-label>Selecione o Orientador</mat-label>
+            <mat-select formControlName="segundoOrientador">
+              <mat-option *ngFor="let corpoDocente of listCorpoDocente" [value]="corpoDocente._id" [disabled]="form.get('primeiroOrientador').value === corpoDocente._id">
+                {{corpoDocente.fullName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+  
+      </div>
+  
+      <div class="row mb-3">
+        <div class="col-12">
+          <label><strong>Opção de vaga: </strong></label>
+          <br>
+          <mat-radio-group class="example-radio-group w-100" formControlName="opcaoVaga"
+            (change)="limpaOpcaoVagaCotaSub()">
+            <mat-radio-button class="example-radio-button mr-3" [value]="typeOpcaoVagaEnum.AMPLA_CONCORRENCIA">Ampla
+              concorrência</mat-radio-button>
+            <mat-radio-button class="example-radio-button mr-3" [value]="typeOpcaoVagaEnum.COTAS_ACOES_AFIRMATIVAS">Cotas
+              de Ações Afirmativas</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+  
+      <div *ngIf="form.value.opcaoVaga == typeOpcaoVagaEnum.COTAS_ACOES_AFIRMATIVAS" class="row mb-3">
+        <label id="example-radio-group-label"><strong>Sobre a política de ação afirmativa para negros(as), indígenas,
+            quilombolas, pessoas com deficiência, pessoas travestis e transexuais, assinale uma das alternativas a seguir:
+          </strong></label>
+        <mat-radio-group aria-labelledby="example-radio-group-label" class="cota-radio-group ml-2"
+          formControlName="opcaoVagaCotaSub">
+          <mat-radio-button class="cota-radio-button" *ngFor="let cota of listCotas" [value]="cota.title">{{cota.title}}</mat-radio-button>
         </mat-radio-group>
       </div>
+  
+      <div class="row mt-5">
+        <div class="col-12">
+          <label id="example-radio-group-label"><strong>Pessoa com deficiência?</strong></label>
+          <br>
+          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group w-100 ml-2"
+              formControlName="deficiencia">
+              <mat-radio-button class="cota-radio-button mr-3" [value]="true">Sim</mat-radio-button>
+              <mat-radio-button class="cota-radio-button mr-3" [value]="false">Não</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+  
+      <div class="row mb-5" *ngIf="type == typeGraduateEnum.MESTRADO">
+        <div class="col-12 mb-5">
+          <label><strong>Em caso de resposta afirmativa, qual deficiência?</strong></label>
+          <input type="text" formControlName="qualDeficiencia" class="form-control" />
+        </div>
+  
+        <div class="col-12">
+          <label id="example-radio-group-label"><strong>Em caso de deficiência, necessitará de atendimento especial ou recurso de
+            acessibilidade e tecnologia assistiva durante o processo seletivo?</strong></label>
+          <br>
+          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group w-100 ml-2"
+              formControlName="atendimentoEspecialDeficiencia">
+              <mat-radio-button class="cota-radio-button mr-3" [value]="true">Sim</mat-radio-button>
+              <mat-radio-button class="cota-radio-button mr-3" [value]="false">Não</mat-radio-button>
+          </mat-radio-group>
+        </div>
+  
+        <div class="col-12 mb-5">
+          <label><strong>Se sim, qual?</strong></label>
+          <input type="text" formControlName="deficienciaSub" class="form-control" />
+        </div>
+  
+        <div class="col-12 mb-5">
+          <label><strong>É mãe de filhos/as menores de 5 anos de idade? (Em caso afirmativo, por favor,
+            anexe a(s) certidão(ões) de nascimento ao final do formulário)</strong></label>
+          <br>
+          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group w-100 ml-2"
+              formControlName="isMaeFilhoMenorCinco">
+              <mat-radio-button class="cota-radio-button mr-3" [value]="true">Sim</mat-radio-button>
+              <mat-radio-button class="cota-radio-button mr-3" [value]="false">Não</mat-radio-button>
+          </mat-radio-group>
+  
+        </div>
+  
+        <div class="col-12 mb-5">
+          <label><strong>Reside a uma distância superior a 250 km do município do Rio de Janeiro e
+            deseja realizar a arguição em formato remoto? (Em caso afirmativo, por favor
+            anexe comprovante no final do formulário)</strong></label>
+          <br>
+          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group w-100 ml-2"
+              formControlName="resideDistanciaLonga">
+              <mat-radio-button class="cota-radio-button mr-3" [value]="true">Sim</mat-radio-button>
+              <mat-radio-button class="cota-radio-button mr-3" [value]="false">Não</mat-radio-button>
+          </mat-radio-group>
+  
+        </div>
+        <div class="col-12">
+          <label><strong>Declaração para candidatos/as que residem a uma distância superior a 250 km
+            do município do Rio de Janeiro e que solicitam a realização da arguição em
+            formato remoto.</strong></label><br>
+          <mat-checkbox style="white-space: normal;" formControlName="declaracaoResideDistanciaLonga">
+            Declaro que resido a uma distância superior a 250 km do município do Rio de Janeiro e comprometo-me a anexar o comprovante na seção - ANEXOS.
+          </mat-checkbox>
+        </div>
+        
+      </div>
+  
+      <div class="row justify-content-around">
+        <div formGroupName="graduacao" class="col-lg-4 mb-3">
+          <label><strong>Graduação</strong></label>
+          <div class="row mb-3 ml-2">
+            <div class="col">
+              <label><strong>Curso de Graduação*</strong></label>
+              <input type="text" formControlName="nome" class="form-control">
+            </div>
+          </div>
+          <div class="row mb-3 ml-2">
+            <div class="col">
+              <label><strong>Instituição*</strong></label>
+              <input type="text" formControlName="instituicao" class="form-control">
+            </div>
+          </div>
+          <div class="row mb-3 ml-2">
+            <div class="col">
+              <label><strong>Ano de início*</strong></label>
+              <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoInicio" class="form-control">
+            </div>
+          </div>
+          <div class="row mb-3 ml-2">
+            <div class="col">
+              <label><strong>Ano de conclusão*</strong></label>
+              <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoConclusao" class="form-control">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-checkbox style="white-space: normal; text-align: justify;" formControlName="termoNaoColacaoGrau">
+                Declaro que li o edital do Processo Seletivo do Mestrado e que me responsabilizo a
+                entregar no ato da matrícula Cópia do diploma de graduação, devidamente registrado,
+                ou revalidado na forma da lei, ou cópia da declaração de conclusão de curso reconhecido
+                pelas IES credenciadas pelo Ministério da Educação (MEC). Poderá ser aceito um termo
+                de compromisso de conclusão de curso de graduação, estando a matrícula condicionada
+                à apresentação da certidão de colação de grau no curso de graduação.
+              </mat-checkbox>
+            </div>
+          </div>
+        </div>
+        <div formGroupName="posGraduacao" class="col-lg-4 mb-3">
+          <label><strong>Pós-graduação {{type == typeGraduateEnum.DOUTORADO ? "(especialização)" : ""}}</strong></label>
+          <div class="row mb-3 ml-2">
+            <div class="col">
+              <label><strong>Curso de {{type == typeGraduateEnum.DOUTORADO ? "especialização" : "pós-graduação"}}*</strong></label>
+              <input type="text" formControlName="nome" class="form-control">
+            </div>
+          </div>
+          <div class="row mb-3 ml-2">
+            <div class="col">
+              <label><strong>instituição*</strong></label>
+              <input type="text" formControlName="instituicao" class="form-control">
+            </div>
+          </div>
+          <div class="row mb-3 ml-2">
+            <div class="col">
+              <label><strong>Ano de início*</strong></label>
+              <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoInicio" class="form-control">
+            </div>
+          </div>
+          <div class="row mb-3 ml-2">
+            <div class="col">
+              <label><strong>Ano de conclusão*</strong></label>
+              <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoConclusao" class="form-control">
+            </div>
+          </div>
+  
+        </div>
+        <div formGroupName="posGraduacaoMestrado" class="col-lg-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
+          <label><strong>Pós-graduação (mestrado)</strong></label>
+          <div class="row mb-3 ml-2">
+            <div class="col">
+              <label><strong>Curso de mestrado*</strong></label>
+              <input type="text" formControlName="nome" class="form-control">
+            </div>
+          </div>
+          <div class="row mb-3 ml-2">
+            <div class="col">
+              <label><strong>Instituição*</strong></label>
+              <input type="text" formControlName="instituicao" class="form-control">
+            </div>
+          </div>
+          <div class="row mb-3 ml-2">
+            <div class="col">
+              <label><strong>Ano de início*</strong></label>
+              <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoInicio" class="form-control">
+            </div>
+          </div>
+          <div class="row mb-3 ml-2">
+            <div class="col">
+              <label><strong>Ano de conclusão*</strong></label>
+              <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoConclusao" class="form-control">
+            </div>
+          </div>
+          <div class="row mb-3 ml-2">
+            <div class="col">
+              <label><strong>Título de dissertação</strong></label>
+              <input type="text" formControlName="tituloDissertacao" class="form-control">
+            </div>
+          </div>
+          <div class="row mb-3 ml-2">
+            <div class="col">
+              <label><strong>Nome do(a) orientador(a)</strong></label>
+              <input type="text" formControlName="nomeOrientador" class="form-control">
+            </div>
+          </div>
+  
+        </div>
+      </div>
+      
+      <div class="row mb-5" *ngIf="type == typeGraduateEnum.DOUTORADO">
+        <div class="col-12">
+          <label><strong>Informe aqui os dados (curso, instituição, ano de início e ano de conclusão) de
+            outros cursos de graduação ou de pós-graduação lato ou stricto-sensu
+            concluídos ou não.
+            </strong></label>
+          <input type="text" formControlName="outrosCursos" class="form-control" />
+
+        </div>
+      </div>
+  
+      <div class="row mb-5">
+        <label><strong>Termos</strong></label>
+        <div *ngIf="type == typeGraduateEnum.MESTRADO" class="col-12 pl-4">
+          <label><strong>Confirmação da Opção</strong></label><br>
+          <mat-checkbox style="white-space: normal;" formControlName="termoLeituraEdital">
+            Declaro que li o Edital de Seleção ao Curso de Mestrado, do Programa de Pós-Graduação
+            em Educação da UFRJ e concordo e aceito os termos relacionados à politica de ação
+            afirmativa.
+          </mat-checkbox>
+        </div>
+        <div class="col-12 pl-4">
+          <label><strong>Concordância com edital</strong></label><br>
+          <mat-checkbox style="white-space: normal;" formControlName="termoConcordanciaEdital">
+            Li e aceito todos os termos e itens do Edital de Seleção ao Curso de Mestrado
+            do Programa de Pós-Graduação em Educação da UFRJ.
+          </mat-checkbox>
+        </div>
+        <div class="col-12 pl-4">
+          <label><strong>Termo de responsabilidade pelas informações inseridas na inscrição</strong></label><br>
+          <mat-checkbox style="white-space: normal;" formControlName="termoResponsabilidadeInfo">
+            Declaro que todas as informações constantes na minha ficha de inscrição são
+            verídicas e sobre elas tenho plena responsabilidade e, caso solicitado,
+            entregarei toda a documentação comprobatória dessas informações.
+          </mat-checkbox>
+        </div>
+      </div>
+
     </div>
 
-    <div *ngIf="form.value.opcaoVaga == typeOpcaoVagaEnum.COTAS_ACOES_AFIRMATIVAS" class="row mb-3">
-      <label id="example-radio-group-label"><strong>Sobre a política de ação afirmativa para negros(as), indígenas,
-          quilombolas, pessoas com deficiência, pessoas travestis e transexuais, assinale uma das alternativas a seguir:
-        </strong></label>
-      <mat-radio-group aria-labelledby="example-radio-group-label" class="cota-radio-group ml-2"
-        formControlName="opcaoVagaCotaSub">
-        <mat-radio-button class="cota-radio-button" *ngFor="let cota of listCotas" [value]="cota.title">{{cota.title}}</mat-radio-button>
-      </mat-radio-group>
+    <div *ngIf="passoInscricao == 2">
+      <div class="row justify-content-center mb-5">
+        <h2>Perfil do(a) Candidato(a)</h2>
+        <p>Este questionário tem como objetivo traçar um perfil dos (as) candidatos (as) ao curso
+          de Mestrado. Sua participação é muito importante para nossa pesquisa. O
+          preenchimento é obrigatório, mas garantimos o seu anonimato.
+          </p>
+      </div>
+
+      <div class="row mb-5" formGroupName="perfilCandidato">
+        
+        <div class="col-12 mb-5" *ngFor="let question of questionsPerfilCandidato">
+          <div *ngIf="question.type == 'text'">
+            <label><strong>{{question.question}}</strong></label>
+            <input type="text" [formControlName]="question.varName" class="form-control" />
+          </div>
+          <div *ngIf="question.type == 'radio'">
+            <label><strong>{{question.question}}</strong></label>
+            <br>
+            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group w-100 ml-2" [formControlName]="question.varName">
+                <mat-radio-button *ngFor="let optionName of question.options" class="cota-radio-button mr-3" [value]="optionName">{{optionName}}</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div *ngIf="question.type == 'checkbox'">
+            <div [formArrayName]="question.varName">
+              <div *ngFor="let optionName of question.options; let i = index">
+                <label>
+                  <input type="checkbox" [formControlName]="optionName" />
+                  {{ optionName }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
-    <div class="row mb-5">
-      <div class="col-12">
-        <label><strong>Em caso de deficiência, que tipo de provisão necessitará durante a entrevista?</strong></label>
-        <input type="text" formControlName="deficienciaSub" class="form-control" />
-      </div>
-    </div>
+    <div *ngIf="passoInscricao == 3">
 
-    <div class="row justify-content-around mb-5">
-      <div formGroupName="graduacao" class="col-lg-4 mb-3">
-        <label><strong>Graduação</strong></label>
-        <div class="row mb-3 ml-2">
-          <div class="col">
-            <label><strong>Informar a graduação</strong></label>
-            <input type="text" formControlName="nome" class="form-control">
-          </div>
+      <div class="row mb-5">
+        <label><strong>Anexos</strong></label>
+        <div class="col-lg-4 mb-3 pl-4">
+          <label><strong>Currículo Lattes</strong></label><br>
+          <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
+            (change)="setFileNameLattes($event.target.files)" #fileInput>
+          <p class="file-subtitle">* Anexe aqui em formato PDF seu Currículo Lattes.</p>
         </div>
-        <div class="row mb-3 ml-2">
-          <div class="col">
-            <label><strong>Informar a instituição</strong></label>
-            <input type="text" formControlName="instituicao" class="form-control">
-          </div>
+        <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
+          <label><strong>Pré-Projeto de pesquisa</strong></label><br>
+          <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
+             (change)="setFileNamePreProjeto($event.target.files)" #fileInput>
+          <p class="file-subtitle">* Anexe aqui em formato PDF o Pré-Projeto de pesquisa. (Observe os itens exigidos:
+            indicação de linha de pesquisa, dois possíveis orientadores/as, nome completo, título, introdução, objetivos,
+            possíveis abordagens teórico-metodológicas, referências bibliográficas e a extensão de 8 a 10 páginas)</p>
         </div>
-        <div class="row mb-3 ml-2">
-          <div class="col">
-            <label><strong>Ano de conclusão</strong></label>
-            <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoConclusao" class="form-control">
-          </div>
+        <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
+          <label><strong>Projeto de Tese</strong></label><br>
+          <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
+          (change)="setFileNameProjetoTese($event.target.files)" #fileInput>
+          <p class="file-subtitle">* Anexe aqui o Projeto de Tese em formato PDF. (Observe os itens exigidos: nome do
+            candidato, linha de pesquisa, orientador escolhido, título do projeto, introdução, justificativa, objetivos,
+            referencial teórico-metodológico, referências bibliográficas e a extensão de até 20 folhas).</p>
         </div>
-        <div class="row">
-          <div class="col">
-            <mat-checkbox style="white-space: normal; text-align: justify;" formControlName="termoNaoColacaoGrau">
-              Declaro que li o edital do Processo Seletivo do Mestrado e que me responsabilizo a
-              entregar no ato da matrícula Cópia do diploma de graduação, devidamente registrado,
-              ou revalidado na forma da lei, ou cópia da declaração de conclusão de curso reconhecido
-              pelas IES credenciadas pelo Ministério da Educação (MEC). Poderá ser aceito um termo
-              de compromisso de conclusão de curso de graduação, estando a matrícula condicionada
-              à apresentação da certidão de colação de grau no curso de graduação.
-            </mat-checkbox>
-          </div>
+        <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
+          <label><strong>Principal publicação dos últimos 5 anos</strong></label><br>
+          <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
+          (change)="setFileNamePrincipalPubli($event.target.files)" #fileInput>
+          <p class="file-subtitle">* Anexe aqui o arquivo em formato PDF da publicação escolhida.</p>
         </div>
-      </div>
-      <div formGroupName="posGraduacao" class="col-lg-4 mb-3">
-        <label><strong>Pós-graduação {{type == typeGraduateEnum.DOUTORADO ? "(especialização)" : ""}}</strong></label>
-        <div class="row mb-3 ml-2">
-          <div class="col">
-            <label><strong>Informar a pós-graduação</strong></label>
-            <input type="text" formControlName="nome" class="form-control">
-          </div>
+        <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
+          <label><strong>Comprovante de pagamento</strong></label><br>
+          <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
+          (change)="setFileNameComprovantePagamento($event.target.files)" #fileInput>
+          <p class="file-subtitle">* Anexe aqui o comprovante de pagamento da taxa de inscrição em formato PDF.</p>
         </div>
-        <div class="row mb-3 ml-2">
-          <div class="col">
-            <label><strong>Informar a instituição</strong></label>
-            <input type="text" formControlName="instituicao" class="form-control">
-          </div>
+        
+        <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
+          <label><strong>Comprovante de conclusão de graduação</strong></label><br>
+          <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
+             (change)="setFileConclusaoGraduacao($event.target.files)" #fileInput>
+          <p class="file-subtitle">* Anexe aqui em formato PDF o comprovante de conclusão da graduação (diploma ou
+            declaração)
+            </p>
         </div>
-        <div class="row mb-3 ml-2">
-          <div class="col">
-            <label><strong>Ano de conclusão</strong></label>
-            <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoConclusao" class="form-control">
-          </div>
+        
+        <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
+          <label><strong>Comprovante da autodeclaração de candidatos/as indígenas</strong></label><br>
+          <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
+             (change)="setFileIndigena($event.target.files)" #fileInput>
+          <p class="file-subtitle">Anexe aqui em formato PDF a declaração assinada por liderança ou organização
+            indígena, indicando o vínculo à comunidade indígena a qual o/a optante pertence, além
+            de uma carta relatando sua trajetória (formação escolar, outros cursos, atuação junto à
+            comunidade ou em movimentos, experiência profissional etc.), com menção à
+            comunidade específica a qual está identificado/a, devidamente registrada pela
+            Fundação Nacional do Índio ou órgão equivalente.</p>
         </div>
-
-      </div>
-      <div formGroupName="posGraduacaoMestrado" class="col-lg-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
-        <label><strong>Pós-graduação (mestrado)</strong></label>
-        <div class="row mb-3 ml-2">
-          <div class="col">
-            <label><strong>Informar a pós-graduação</strong></label>
-            <input type="text" formControlName="nome" class="form-control">
-          </div>
+        
+        <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
+          <label><strong>Comprovantes da condição de pessoa com deficiência.</strong></label><br>
+          <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
+             (change)="setFileCondicaoDeficiencia($event.target.files)" #fileInput>
+          <p class="file-subtitle">Anexe aqui em formato PDF os documentos que comprovem a condição de pessoa
+            com deficiência, conforme estipulado nos itens 8.9, 8.11 e 8.12 do Edital de Seleção ao
+            Curso de Mestrado Turma 2024, do Programa de Pós-Graduação em Educação da
+            UFRJ.</p>
         </div>
-        <div class="row mb-3 ml-2">
-          <div class="col">
-            <label><strong>Informar a instituição</strong></label>
-            <input type="text" formControlName="instituicao" class="form-control">
-          </div>
+        
+        <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
+          <label><strong>Comprovantes da condição de pessoa com deficiência (pareceres e/ou
+            relatórios pedagógicos)</strong></label><br>
+          <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
+             (change)="setFileCondicaoDeficienciaDois($event.target.files)" #fileInput>
+          <p class="file-subtitle">Anexe aqui em formato PDF os documentos que comprovem a condição de pessoa
+            com deficiência, conforme estipulado no item 8.10 do Edital de Seleção ao Curso de
+            Mestrado Turma 2024, do Programa de Pós-Graduação em Educação da UFRJ.</p>
         </div>
-        <div class="row mb-3 ml-2">
-          <div class="col">
-            <label><strong>Ano de conclusão</strong></label>
-            <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoConclusao" class="form-control">
-          </div>
+        
+        <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
+          <label><strong>Parentalidade - Certidão de Nascimento</strong></label><br>
+          <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
+             (change)="setFileCertidaoNascimentoFilho($event.target.files)" #fileInput>
+          <p class="file-subtitle">Anexe aqui em formato PDF a certidão de nascimento de filhos/as até 5 anos no
+            momento da inscrição.
+            Somente para as candidatas mães que tiveram filhos por adoção e/ou gestação nos
+            últimos cinco anos, a contar da data de divulgação do edital de seleção</p>
         </div>
-        <div class="row mb-3 ml-2">
-          <div class="col">
-            <label><strong>Título de dissertação do mestrado</strong></label>
-            <input type="text" formControlName="tituloDissertacao" class="form-control">
-          </div>
+        
+        <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
+          <label><strong>Comprovante de residência</strong></label><br>
+          <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
+             (change)="setFileComprovanteResidencia($event.target.files)" #fileInput>
+          <p class="file-subtitle">* Anexe aqui, em formato PDF, conta de consumo no nome do/da candidato/a ou, caso
+            não possua, declaração segundo o modelo disponível no Anexo V do
+            edital (exclusivamente para candidatos/as que solicitaram a realização da arguição em
+            formato remoto).</p>
         </div>
-        <div class="row mb-3 ml-2">
-          <div class="col">
-            <label><strong>Nome do(a) orientador(a)</strong></label>
-            <input type="text" formControlName="nomeOrientador" class="form-control">
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="row mb-5">
-      <label><strong>Anexos</strong></label>
-      <div class="col-lg-4 mb-3 pl-4">
-        <label><strong>Currículo Lattes</strong></label><br>
-        <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
-          (change)="setFileNameLattes($event.target.files)" #fileInput>
-        <p class="file-subtitle">* Anexe aqui em formato PDF seu Currículo Lattes.</p>
-      </div>
-      <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.MESTRADO">
-        <label><strong>Pré-Projeto de pesquisa</strong></label><br>
-        <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
-           (change)="setFileNamePreProjeto($event.target.files)" #fileInput>
-        <p class="file-subtitle">* Anexe aqui em formato PDF o Pré-Projeto de pesquisa. (Observe os itens exigidos:
-          indicação de linha de pesquisa, dois possíveis orientadores/as, nome completo, título, introdução, objetivos,
-          possíveis abordagens teórico-metodológicas, referências bibliográficas e a extensão de 8 a 10 páginas)</p>
-      </div>
-      <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
-        <label><strong>Projeto de Tese</strong></label><br>
-        <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
-        (change)="setFileNameProjetoTese($event.target.files)" #fileInput>
-        <p class="file-subtitle">* Anexe aqui o Projeto de Tese em formato PDF. (Observe os itens exigidos: nome do
-          candidato, linha de pesquisa, orientador escolhido, título do projeto, introdução, justificativa, objetivos,
-          referencial teórico-metodológico, referências bibliográficas e a extensão de até 20 folhas).</p>
-      </div>
-      <div class="col-lg-4 mb-3 pl-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
-        <label><strong>Principal publicação dos últimos 5 anos</strong></label><br>
-        <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
-        (change)="setFileNamePrincipalPubli($event.target.files)" #fileInput>
-        <p class="file-subtitle">* Anexe aqui o arquivo em formato PDF da publicação escolhida.</p>
-      </div>
-    </div>
-
-    <div class="row mb-5">
-      <label><strong>Termos</strong></label>
-      <div *ngIf="type == typeGraduateEnum.MESTRADO" class="col-12 pl-4">
-        <label><strong>Confirmação da Opção</strong></label><br>
-        <mat-checkbox style="white-space: normal;" formControlName="termoLeituraEdital">
-          Declaro que li o Edital de Seleção ao Curso de Mestrado, do Programa de Pós-Graduação
-          em Educação da UFRJ e concordo e aceito os termos relacionados à politica de ação
-          afirmativa.
-        </mat-checkbox>
-      </div>
-      <div class="col-12 pl-4">
-        <label><strong>Concordância com edital</strong></label><br>
-        <mat-checkbox style="white-space: normal;" formControlName="termoConcordanciaEdital">
-          Li e aceito todos os termos e itens do Edital de Seleção ao Curso de Mestrado
-          do Programa de Pós-Graduação em Educação da UFRJ.
-        </mat-checkbox>
-      </div>
-      <div class="col-12 pl-4">
-        <label><strong>Termo de responsabilidade pelas informações inseridas na inscrição</strong></label><br>
-        <mat-checkbox style="white-space: normal;" formControlName="termoResponsabilidadeInfo">
-          Declaro que todas as informações constantes na minha ficha de inscrição são
-          verídicas e sobre elas tenho plena responsabilidade e, caso solicitado,
-          entregarei toda a documentação comprobatória dessas informações.
-        </mat-checkbox>
       </div>
     </div>
 
     <div class="row justify-content-center">
+      <div class="col-auto" *ngIf="passoInscricao > 1">
+        <button mat-raised-button color="primary" type="button" (click)="passoAnterior()">Passo anterior</button>
+      </div>
       <div class="col-auto">
-        <button style="background-color: green;" mat-raised-button color="primary">Inscrever-se</button>
+        <button style="background-color: green;" mat-raised-button color="primary">{{passoInscricao != 3 ? "Próximo passo" : "Finalizar Inscrição"}}</button>
       </div>
     </div>
 

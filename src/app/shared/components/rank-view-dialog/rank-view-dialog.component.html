@@ -16,6 +16,11 @@
         <td mat-cell *matCellDef="let element">{{element.codInscricao}}</td>
       </ng-container>
 
+      <ng-container matColumnDef="homologado">
+        <th mat-header-cell *matHeaderCellDef>Homologação</th>
+        <td mat-cell *matCellDef="let element">{{getTextHomologado(element.homologado)}}</td>
+      </ng-container>
+
       <ng-container matColumnDef="notas">
         <th mat-header-cell *matHeaderCellDef>Notas</th>
         <td mat-cell *matCellDef="let element">
@@ -27,7 +32,7 @@
 
       <ng-container matColumnDef="mediaFinal">
         <th mat-header-cell *matHeaderCellDef>Média Final</th>
-        <td mat-cell *matCellDef="let element">{{element.medialFinal}}</td>
+        <td mat-cell *matCellDef="let element">{{toNotRoundedFixed(element.medialFinal, 2)}}</td>
       </ng-container>
 
       <ng-container matColumnDef="situacao">

@@ -12,6 +12,7 @@ export interface DialogParecerData {
   idProcesso: string;
   idInscricao: string;
   criterio: any;
+  emailInscrito: string;
 }
 
 @Component({
@@ -158,10 +159,9 @@ export class ParecerComponent implements OnInit {
       step[keyStep].totalNotaEtapa = retorno;
     })
     formulario.step = step;
-    
     if (this.form.valid) {
       this.siteAdminService
-        .registrarParecer(this.data.idInscricao, this.data.idProcesso, formulario)
+        .registrarParecer(this.data.idInscricao, this.data.idProcesso, formulario, this.data.emailInscrito)
         .subscribe(data => {
           this.dialogRef.close({ refresh: true });
         })

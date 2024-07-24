@@ -19,6 +19,7 @@ export class RankViewDialogComponent implements OnInit {
   rankDetalhe: any = {};
   displayedColumns = [
     "codInscricao",
+    "homologado",
     "notas",
     "mediaFinal",
     "situacao",
@@ -50,5 +51,14 @@ export class RankViewDialogComponent implements OnInit {
         }
       })
   }
+
+  getTextHomologado(isHomologado) {
+    if(typeof isHomologado == "boolean") {
+      return isHomologado ? "Deferido" : "Indeferido";
+    } else {
+      return "N/A";
+    }
+  }
+  toNotRoundedFixed = (nr, fixed) => nr.toFixed(fixed + 3).slice(0, -3)
 
 }

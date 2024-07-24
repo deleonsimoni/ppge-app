@@ -36,103 +36,45 @@
                     <div class="row text-center mb-3">
                         <h3>Informações Básicas</h3>
                     </div>
-                    <div class="row justify-content-center mb-2">
-                        <div class="col-md-4">
-                            <strong>Nome:</strong> {{myUser.fullname}}
+                    <div class="row justify-content-md-center">
+                        <div class="col-auto">
+                            <p><strong>Nome:</strong> {{myUser.fullname}}</p>
+                            <p><strong>Email:</strong> {{myUser.email}}</p>
                         </div>
-                        <div class="col-md-4">
-                            <strong>Email:</strong> {{myUser.email}}
-                        </div>
-                    </div>
-                    <div class="row justify-content-center mb-2">
-                        <div class="col-md-4">
-                            <strong>Celular:</strong> {{myUser.celular}}
-                        </div>
-                        <div class="col-md-4">
-                            <strong>Telefone:</strong> {{myUser.telefone}}
+                        <div class="col-auto">
+                            <p><strong>Celular:</strong> {{myUser.celular}}</p>
+                            <p><strong>Telefone:</strong> {{myUser.telefone}}</p>
                         </div>
                     </div>
+
     
                     <div class="row text-center mt-4 mb-3">
                         <h3>Informações Complementares</h3>
                     </div>
-                    <div class="row justify-content-center mb-2">
-                        <div class="col-md-4">
-                            <strong>socialname:</strong> {{myUser.socialname}}
+                    <div class="row justify-content-md-center">
+                        <div class="col-auto">
+                            <p><strong>Nome Social:</strong> {{myUser.socialname}}</p>
+                            <p><strong>CPF:</strong> {{myUser.cpf}}</p>
+                            <p><strong>Identidade:</strong> {{myUser.rg}}</p>
+                            <p><strong>Órgão emissor:</strong> {{myUser.rgEmissor}}</p>
+                            <p><strong>Passaporte:</strong> {{myUser.passaporte}}</p>
+                            <p><strong>Data de Aniversário:</strong> {{myUser.dataNiver | date: 'dd/MM/yyyy'}}</p>
+                            <p><strong>Nacionalidade:</strong> {{myUser.nacionalidade}}</p>
+                            <p><strong>Endereço:</strong> {{myUser.endereco}}</p>
+                            <p><strong>Bairro:</strong> {{myUser.bairro}}</p>
+                            <p><strong>CEP:</strong> {{myUser.cep}}</p>
                         </div>
-                        <div class="col-md-4">
-                            <strong>cpf:</strong> {{myUser.cpf}}
+                        <div class="col-auto">
+                            <p><strong>Cidade:</strong> {{myUser.cidade}}</p>
+                            <p><strong>Estado:</strong> {{myUser.estado}}</p>
+                            <p><strong>Celular:</strong> {{myUser.celular}}</p>
+                            <p><strong>Telefone:</strong> {{myUser.telefone}}</p>
+                            <p><strong>Cargo:</strong> {{myUser.cargo}}</p>
+                            <p><strong>Empresa:</strong> {{myUser.empresa}}</p>
+                            <p><strong>Deficiência:</strong> {{myUser.deficiencia}}</p>
+                            <p><strong>Cor:</strong> {{myUser.cor}}</p>
+                            <p><strong>Gênero:</strong> {{myUser.genero}}</p>
                         </div>
-                    </div>
-                    <div class="row justify-content-center mb-2">
-                        <div class="col-md-4">
-                            <strong>rg:</strong> {{myUser.rg}}
-                        </div>
-                        <div class="col-md-4">
-                            <strong>rgEmissor:</strong> {{myUser.rgEmissor}}
-                        </div>
-                    </div>
-                    <div class="row justify-content-center mb-2">
-                        <div class="col-md-4">
-                            <strong>passaporte:</strong> {{myUser.passaporte}}
-                        </div>
-                        <div class="col-md-4">
-                            <strong>dataNiver:</strong> {{myUser.dataNiver | date: 'dd/MM/yyyy'}}
-                        </div>
-                    </div>
-                    <div class="row justify-content-center mb-2">
-                        <div class="col-md-4">
-                            <strong>nacionalidade:</strong> {{myUser.nacionalidade}}
-                        </div>
-                        <div class="col-md-4">
-                            <strong>endereco:</strong> {{myUser.endereco}}
-                        </div>
-                    </div>
-                    <div class="row justify-content-center mb-2">
-                        <div class="col-md-4">
-                            <strong>bairro:</strong> {{myUser.bairro}}
-                        </div>
-                        <div class="col-md-4">
-                            <strong>cep:</strong> {{myUser.cep}}
-                        </div>
-                    </div>
-                    <div class="row justify-content-center mb-2">
-                        <div class="col-md-4">
-                            <strong>cidade:</strong> {{myUser.cidade}}
-                        </div>
-                        <div class="col-md-4">
-                            <strong>estado:</strong> {{myUser.estado}}
-                        </div>
-                    </div>
-                    <div class="row justify-content-center mb-2">
-                        <div class="col-md-4">
-                            <strong>celular:</strong> {{myUser.celular}}
-                        </div>
-                        <div class="col-md-4">
-                            <strong>telefone:</strong> {{myUser.telefone}}
-                        </div>
-                    </div>
-                    <div class="row justify-content-center mb-2">
-                        <div class="col-md-4">
-                            <strong>cargo:</strong> {{myUser.cargo}}
-                        </div>
-                        <div class="col-md-4">
-                            <strong>empresa:</strong> {{myUser.empresa}}
-                        </div>
-                    </div>
-                    <div class="row justify-content-center mb-2">
-                        <div class="col-md-4">
-                            <strong>deficiencia:</strong> {{myUser.deficiencia}}
-                        </div>
-                        <div class="col-md-4">
-                            <strong>cor:</strong> {{myUser.cor}}
-                        </div>
-                    </div>
-                    <div class="row justify-content-center mb-2">
-                        <div class="col-md-4">
-                            <strong>genero:</strong> {{myUser.genero}}
-                        </div>
-                        <div class="col-md-4"></div>
                     </div>
                     
                     <div class="row justify-content-center mt-5">

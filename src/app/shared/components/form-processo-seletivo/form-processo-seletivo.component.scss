@@ -68,3 +68,24 @@ label {
   margin: 15px 0;
   align-items: flex-start;
 }
+
+.progress-step {
+  font-size: 17px;
+  width: 40px;
+  height: 40px;
+  border: solid 1px var(--color-secondary);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-secondary);
+  user-select: none;
+  cursor: pointer;
+
+  &.active {
+    width: 50px;
+    height: 50px;
+    background-color: var(--color-secondary);
+    color: white;
+  }
+}

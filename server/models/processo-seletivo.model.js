@@ -88,6 +88,27 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: 'CorpoDocente',
         },
+        deficiencia: {
+          type: Boolean,
+        },
+        qualDeficiencia: {
+          type: String,
+        },
+        atendimentoEspecialDeficiencia: {
+          type: Boolean,
+        },
+        deficienciaSub: {
+          type: String,
+        },
+        isMaeFilhoMenorCinco: {
+          type: Boolean,
+        },
+        resideDistanciaLonga: {
+          type: Boolean,
+        },
+        declaracaoResideDistanciaLonga: {
+          type: Boolean,
+        },
         opcaoVaga: {
           type: Number,
         },
@@ -105,6 +126,12 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
         },
         posGraduacaoMestrado: {
           type: mongoose.Schema.Types.Mixed,
+        },
+        perfilCandidato: {
+          type: mongoose.Schema.Types.Mixed,
+        },
+        outrosCursos: {
+          type: String,
         },
         termoConcordanciaEdital: {
           type: Boolean,
@@ -134,6 +161,27 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
           pathPrincipalPubli: {
             type: String,
           },
+          fileConclusaoGraduacao: {
+            type: String,
+          },
+          fileIndigena: {
+            type: String,
+          },
+          fileCondicaoDeficiencia: {
+            type: String,
+          },
+          fileCondicaoDeficienciaDois: {
+            type: String,
+          },
+          fileCertidaoNascimentoFilho: {
+            type: String,
+          },
+          fileComprovanteResidencia: {
+            type: String,
+          },
+          fileComprovantePagamento: {
+            type: String,
+          }
         },
         parecerista: {
           primeiro: {

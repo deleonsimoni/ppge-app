@@ -4,6 +4,8 @@ const UserController = require('./user.controller')
 const S3Uploader = require('./aws.controller');
 const { getErrorByStatus, getSuccessByStatus } = require('../service/error.service');
 const { default: mongoose } = require('mongoose');
+const templateEmail = require('../config/templateEmails');
+const emailSender = require('../controllers/email.controller');
 
 const MESTRADO = 1, DOUTORADO = 2;
 
@@ -78,8 +80,16 @@ async function vincularParecerista(body) {
         { upsert: false }
       );
 
-    if (processo)
+    if (processo) {
+      let primeiro = UserController.getById(body.pareceristas.primeiro);
+      let segundo = UserController.getById(body.pareceristas.segundo);
+      
+      let email = templateEmail.vinculoPareceristaProcessoSeletivo;
+      emailSender.sendMailAWS(primeiro.email, 'Processo Seletivo', email);
+      emailSender.sendMailAWS(segundo.email, 'Processo Seletivo', email);
+
       return getSuccessByStatus(200, "Avaliadores vinculados com sucesso!");
+    }
     else
       return getErrorByStatus(404, "Processo ou inscrição não encontrado na base!")
   } catch (error) {
@@ -330,7 +340,7 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
 
   let processo = await ProcessoSeletivoModel
     .findOne({ _id: idProcessoSeletivo })
-    .populate({ path: 'enrolled.idUser', select: 'fullname socialname' })
+    .populate({ path: 'enrolled.idUser', select: 'fullname socialname email' })
     .populate({ path: 'enrolled.parecerista.primeiro', select: 'fullname' })
     .populate({ path: 'enrolled.parecerista.segundo', select: 'fullname' })
     .populate({
@@ -565,11 +575,18 @@ async function registrarParecer(req, idUser) {
   const idProcesso = req.query.idProcesso;
   const idInscricao = req.query.idInscricao;
   const form = req.body.formulario;
-  return ProcessoSeletivoModel.findOneAndUpdate(
+  const emailInscrito = req.body.emailInscrito;
+
+  let parecer = await ProcessoSeletivoModel.findOneAndUpdate(
     { _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } },
     { $set: { [`enrolled.$.parecer.avaliacoes.avaliador-${idUser}`]: {...form} } },
     { upsert: false }
   );
+
+  
+  let email = templateEmail.atualizacaoParecerProcessoSeletivo;
+  emailSender.sendMailAWS(emailInscrito, 'Processo Seletivo', email);
+  return parecer;
 }
 
 async function changeHomologInscricao(body) {
@@ -653,7 +670,16 @@ async function subscribeProcessoSeletivo(req) {
     const codInscricaoGerado = ramdom + nowHour;
 
     let formulario = JSON.parse(req.body.formulario);
-    let retUpload = await uploadFilesProcessoSeletivo(req.files.fileArray, formulario.idProcesso, req.user._id, formulario.tipoFormulario);
+    filesWithName = {
+      fileConclusaoGraduacao: req.files.fileConclusaoGraduacao,
+      fileIndigena: req.files.fileIndigena,
+      fileCondicaoDeficiencia: req.files.fileCondicaoDeficiencia,
+      fileCondicaoDeficienciaDois: req.files.fileCondicaoDeficienciaDois,
+      fileCertidaoNascimentoFilho: req.files.fileCertidaoNascimentoFilho,
+      fileComprovanteResidencia: req.files.fileComprovanteResidencia,
+      fileComprovantePagamento: req.files.fileComprovantePagamento,
+    }
+    let retUpload = await uploadFilesProcessoSeletivo(req.files.fileArray, formulario.idProcesso, req.user._id, formulario.tipoFormulario, filesWithName);
     if (retUpload.temErro) throw retUpload.mensagem;
     formulario.files = retUpload;
     formulario.codInscricao = codInscricaoGerado;
@@ -665,6 +691,11 @@ async function subscribeProcessoSeletivo(req) {
       { $addToSet: { enrolled: { idUser: req.user._id, ...formulario, idProcesso: null } } },
       { upsert: false }
     );
+
+    let email = templateEmail.inscricaoProcessoSeletivo;
+    console.log("VERIFICAR EMAIL: req.user.email ", req.user.email);
+    emailSender.sendMailAWS(req.user.email, 'Processo Seletivo', email);
+
   } catch (e) {
     console.log(e);
     return 500;
@@ -672,16 +703,36 @@ async function subscribeProcessoSeletivo(req) {
   return 200;
 }
 
-async function uploadFilesProcessoSeletivo(files, idProcesso, idUser, tipoFormulario) {
+async function uploadFilesProcessoSeletivo(files, idProcesso, idUser, tipoFormulario, filesWithName) {
   let retorno = {
     pathLattes: '',
     pathMemorial: '',
     pathComprovantePagamento: '',
     pathProjetoTese: '',
-    pathPrincipalPubli: ''
+    pathPrincipalPubli: '',
+    fileConclusaoGraduacao: '',
+    fileIndigena: '',
+    fileCondicaoDeficiencia: '',
+    fileCondicaoDeficienciaDois: '',
+    fileCertidaoNascimentoFilho: '',
+    fileComprovanteResidencia: '',
+    fileComprovantePagamento: '',
   }
-
+  Object.keys(filesWithName).forEach(async fileChave => {
+    if(filesWithName[fileChave]) {
+      let fileNameNamed = `processo-seletivos/${idProcesso}/${idUser}/${Date.now()}${filesWithName[fileChave].name}`;
+      
+      await S3Uploader.uploadFile(fileNameNamed, filesWithName[fileChave].data).then(fileData => {
+        retorno[fileChave] = fileNameNamed;
+      }, err => {
+        console.log('Erro ao enviar o trabalho para AWS: ' + fileNameNamed);
+        retorno.temErro = true;
+        retorno.mensagem = 'Servidor momentaneamente inoperante. Tente novamente mais tarde.';
+      });
+    }
+  })
   let fileName;
+
   for (let i = 0; i < files.length; i++) {
 
     fileName = `processo-seletivos/${idProcesso}/${idUser}/${Date.now()}${files[i].name}`;
@@ -708,6 +759,7 @@ async function uploadFilesProcessoSeletivo(files, idProcesso, idUser, tipoFormul
       retorno.mensagem = 'Servidor momentaneamente inoperante. Tente novamente mais tarde.';
     });
   }
+  console.log("retorno: ", retorno)
   return retorno;
 
 }

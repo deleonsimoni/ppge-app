@@ -12,6 +12,7 @@ const emailSender = require('../controllers/email.controller');
 module.exports = {
   insert,
   getByIdOnlyProcesso,
+  getById,
   subscribeProcessoSeletivo,
   unsubscribeProcessoSeletivo,
   resetPassword,
@@ -249,6 +250,10 @@ async function getByIdOnlyProcesso(idUser, req) {
     });
 
   return userResult
+}
+
+async function getById(idUser) {
+  return await UserModel.findById(idUser);
 }
 
 async function subscribeProcessoSeletivo(idUser, idProcesso) {

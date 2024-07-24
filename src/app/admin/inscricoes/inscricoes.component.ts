@@ -277,13 +277,14 @@ export class InscricoesComponent implements OnInit {
 
   }
 
-  openModalParecer(idInscricao) {
+  openModalParecer(idInscricao, emailInscrito) {
     const dialogRef = this.dialog.open(ParecerComponent, {
       width: '80%',
       data: <DialogParecerData>{
         idInscricao: idInscricao,
         idProcesso: this.idProcessoSelecionado,
         criterio: this.criterioProcessoSelecionado,
+        emailInscrito,
       }
     })
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
