@@ -186,7 +186,7 @@
           {{inscricoes?.parecer?.recursoHomolog?.respostaJustificativa ? "Visualizar recurso" : "Responder recurso"}}
         </button>
       </div>
-      <div class="row justify-content-center mb-3" *ngIf="inscricoes?.parecerista?.primeiro?._id == myUser._id || inscricoes?.parecerista?.segundo?._id == myUser._id">
+      <div class="row justify-content-center mb-3" *ngIf="verificaIsResponsavelAvaliacao(inscricoes, myUser)">
           <button type="button" mat-raised-button color="primary"
             (click)="openModalParecer(inscricoes._id, inscricoes.idUser?.email)">Avaliar</button>
       </div>
@@ -333,5 +333,8 @@
         </div>
       </div>
     </div>
-  </div>
+  </div>    
+  <app-pagination *ngIf="listInscritos.length > 0 || page > 1" [page]="page" [qtdItems]="listInscritos.length" [limit]="limit"
+    (onPagination)="onPagination($event)">
+  </app-pagination>
 </div>

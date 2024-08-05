@@ -50,6 +50,10 @@ router.put('/processo-seletivo/mudar-etapa', [passport.authenticate('jwt', {
   session: false
 }), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], setLocation, asyncHandler(mudarEtapa));
 
+router.put('/processo-seletivo/mudar-etapa-avalicao', [passport.authenticate('jwt', {
+  session: false
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], setLocation, asyncHandler(mudarEtapaAvaliacao));
+
 router.post('/processo-seletivo/minha-inscricoes/justificar', [passport.authenticate('jwt', {
   session: false
 }), requireLogin], asyncHandler(inscricaoJustificar));
@@ -159,6 +163,12 @@ async function consolidarAvaliacao(req, res) {
 
 async function mudarEtapa(req, res) {
   const response = await processoSeletivoCtrl.mudarEtapa(req.body);
+  res.json(response);
+
+}
+
+async function mudarEtapaAvaliacao(req, res) {
+  const response = await processoSeletivoCtrl.mudarEtapaAvaliacao(req.body);
   res.json(response);
 
 }

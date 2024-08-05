@@ -9,4 +9,5 @@ module.exports = {
     esqueciSenha,
     inscricaoProcessoSeletivo,
     vinculoPareceristaProcessoSeletivo,
+    atualizacaoParecerProcessoSeletivo,
 };

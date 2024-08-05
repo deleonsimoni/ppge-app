@@ -32,6 +32,9 @@ export class ParecerComponent implements OnInit {
   parecerSelected: any;
   parecerConsolidadoSelected: any;
 
+  etapa: string;
+  etapaAvaliacao: number;
+
 
   constructor(
     private authService: AuthService,
@@ -56,7 +59,6 @@ export class ParecerComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.montarFormulario();
     this.getParecer();
   }
 
@@ -67,13 +69,13 @@ export class ParecerComponent implements OnInit {
 
   montarFormulario() {
     let stepFormAux = this.builder.group({});
-    this.data.criterio?.step.forEach(step => {
-
+    this.data.criterio?.step.forEach((step, indexStep) => {
+      
       let notasAprovacaoForm = this.builder.group({});
       step.section.forEach(section => {
         let formAux = this.builder.group({});
         section.question.forEach(element => {
-          formAux.addControl(String(`question-${element._id}`), new FormControl(null, []))
+          formAux.addControl(String(`question-${element._id}`), new FormControl({value: null, disabled: this.etapaAvaliacao != indexStep}, []))
         });
         notasAprovacaoForm.addControl(`section-${section._id}`, formAux);
       })
@@ -99,6 +101,9 @@ export class ParecerComponent implements OnInit {
   getParecer() {
     this.siteAdminService.getParecer(this.data.idInscricao, this.data.idProcesso)
       .subscribe((data: any) => {
+        this.etapa = data.etapa;
+        this.etapaAvaliacao = data.etapaAvaliacao;
+        this.montarFormulario();
         if(data.enrolled[0].parecer?.avaliacoes) {
           this.user$
             .pipe(
@@ -151,7 +156,7 @@ export class ParecerComponent implements OnInit {
   }
 
   register() {
-    let formulario = {...this.form.value};
+    let formulario = this.form.getRawValue();
     let step = this.changeNotaStringToNumber(formulario.step);
     
     Object.keys(step).forEach((keyStep) => {

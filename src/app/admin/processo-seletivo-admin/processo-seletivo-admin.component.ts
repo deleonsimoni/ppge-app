@@ -11,6 +11,8 @@ import { ComfirmDeleteProcessoComponent } from "./modal/confirm-delet-processo.c
 import { ViewHtmlProcessoSeletivoComponent } from "./modal/view-html-processo-seletivo.component";
 import { ViewInscritosProcessoSeletivoComponent } from "./modal/view-inscritos-processo-seletivo.component";
 import { CriterioHomologacaoDialogComponent } from "./criterio-homologacao-dialog/criterio-homologacao-dialog.component";
+import { take } from "rxjs";
+import { ConfirmDialogComponent } from "@app/shared/components/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-processo-seletivo-admin',
@@ -138,22 +140,74 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
     return this.form.controls['vagas'].controls[stepIndex].controls['professors']
   }
 
-  public mudarEtapa(value, idProcesso) {
-    //FEITO
-    this.siteService
-      .mudarEtapa(value, idProcesso)
-      .subscribe(
-        () => {
-          this.datas.forEach(d => {
-            if(d._id == idProcesso) 
-              d.etapa = value
-          })
-          this.toastr.success('Etapa do Processo Seletivo alterado com sucesso', 'Sucesso');
-        },
-        (err) => {
-          this.toastr.error('Ocorreu um erro ao atualizar etapa', 'Atenção: ');
-        }
-      );
+  public mudarEtapa(event, idProcesso) {
+    const value = event.value
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '750px',
+      data: { title: `Tem certeza que deseja alterar a etapa do processo seletivo?` }
+    });
+    
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if (result) {
+        //FEITO
+        this.siteService
+          .mudarEtapa(value, idProcesso)
+          .subscribe(
+            () => {
+              this.datas.forEach(d => {
+                if(d._id == idProcesso) 
+                  d.etapa = value
+              })
+              this.toastr.success('Etapa do Processo Seletivo alterado com sucesso', 'Sucesso');
+            },
+            (err) => {
+              this.toastr.error('Ocorreu um erro ao atualizar etapa', 'Atenção: ');
+            }
+          );
+      } else {
+        this.datas.forEach(d => {
+          if(d._id == idProcesso) {
+            event.source.writeValue(d.etapa)
+            event.source.close();
+          }
+        });
+      }
+    })
+  }
+
+  public mudarEtapaAvaliacao(event, idProcesso) {
+    const value = event.value
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '750px',
+      data: { title: `Tem certeza que deseja alterar a etapa de avaliação do processo seletivo?` }
+    });
+    
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if (result) {
+        //FEITO
+        this.siteService
+          .mudarEtapaAvaliacao(value, idProcesso)
+          .subscribe(
+            () => {
+              this.datas.forEach(d => {
+                if(d._id == idProcesso) 
+                  d.etapaAvaliacao = value
+              })
+              this.toastr.success('Etapa de Avaliação do Processo Seletivo alterado com sucesso', 'Sucesso');
+            },
+            (err) => {
+              this.toastr.error('Ocorreu um erro ao atualizar etapa avaliação', 'Atenção: ');
+            }
+          );
+      } else {
+        this.datas.forEach(d => {
+          if(d._id == idProcesso) {
+            event.source.writeValue(d.etapaAvaliacao)
+            event.source.close();
+          }
+        });
+      }
+    })
   }
 
   public getTitleLinhaPesquisa() {

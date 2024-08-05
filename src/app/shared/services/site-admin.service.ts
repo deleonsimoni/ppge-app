@@ -243,6 +243,11 @@ export class SiteAdminService {
     return this.http.put(`${this.URL_PROCESSO_SELETIVO}/mudar-etapa`, { idProcesso, etapa });
   }
 
+  mudarEtapaAvaliacao(etapa, idProcesso) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/mudar-etapa-avalicao`, { idProcesso, etapa });
+  }
+
   deletarProcessoSeletivo(id: any) {
     return this.http.delete(`${this.URL_PROCESSO_SELETIVO}/${id}`);
   }
@@ -252,8 +257,16 @@ export class SiteAdminService {
     return this.http.put(`${this.URL_PROCESSO_SELETIVO}/${form._id}`, { formulario: form }, { headers });
   }
 
-  listProcessoSeletivoInscritos(id) {
-    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/${id}`);
+  listProcessoSeletivoInscritos(id, searchText = null, page = null, limit= null) {
+    let params = new HttpParams();
+    if (searchText && searchText.trim() != '') {
+      params = params.set("searchText", searchText.trim());
+    }
+    if(page && limit) {
+      params = params.set("page", page);
+      params = params.set("limit", limit);
+    }
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/${id}`, {params});
   }
 
   atualizarProcessoAtivo(checked, id) {
@@ -265,11 +278,15 @@ export class SiteAdminService {
 
   }
 
-  getInscritosProcessoById(idProcesso, filtroConsulta = null) {
+  getInscritosProcessoById(idProcesso, filtroConsulta = null, page = null, limit = null) {
     let params = new HttpParams()
 
     if (filtroConsulta && filtroConsulta != 'todos') {
       params = params.set("filtroConsulta", filtroConsulta);
+    }
+    if(page && limit) {
+      params = params.set("page", page);
+      params = params.set("limit", limit);
     }
 
     return this.http.get(`${this.URL_PROCESSO_SELETIVO}/inscritos/${idProcesso}`, { params });

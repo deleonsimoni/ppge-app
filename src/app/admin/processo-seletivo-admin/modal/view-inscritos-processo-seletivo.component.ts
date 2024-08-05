@@ -1,7 +1,9 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, Inject, OnInit, ViewEncapsulation } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SiteAdminService } from "@app/shared/services/site-admin.service";
 import { typeDescricaoCota, TypeGraduateEnum, TypeOpcaoVagaEnum, typeOpcaoVagaEnumToSubscription } from "@app/shared/shared.model";
+import { ToastrService } from "ngx-toastr";
+import { catchError } from "rxjs";
 
 export interface DialogData {
   idProcesso: string;
@@ -10,29 +12,61 @@ export interface DialogData {
 }
 @Component({
   selector: 'view-inscritos-processo-seletivo',
-  templateUrl: './view-inscritos-processo-seletivo.component.html'
+  templateUrl: './view-inscritos-processo-seletivo.component.html',
+  styleUrls: ['./view-inscritos-processo-seletivo.component.scss'],
 })
 export class ViewInscritosProcessoSeletivoComponent implements OnInit {
-
   constructor(
     public dialogRef: MatDialogRef<ViewInscritosProcessoSeletivoComponent>,
     private siteService: SiteAdminService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private toastr: ToastrService,
   ) { }
   infoUser: any = {};
   infoUserProcesso: any = {};
   flagShowInfoUser: boolean = false;
+  searchText: string = "";
+  page=1;
+  limit=10;
 
   typeOpcaoVagaEnumToSubscription = typeOpcaoVagaEnumToSubscription;
   typeDescricaoCota = typeDescricaoCota;
   typeOpcaoVagaEnum = TypeOpcaoVagaEnum;
   typeGraduateEnum = TypeGraduateEnum;
 
-  ngOnInit(): void {
-    this.data.users.forEach(u => {
-      console.log("1 user -> ", u);
+  ngOnInit(): void {}
 
-    });
+  searchByCPFOrName() {
+    const searchTextTrim = this.searchText.trim();
+    if(searchTextTrim.length > 2) {
+      this.siteService
+        .listProcessoSeletivoInscritos(this.data.idProcesso, searchTextTrim)
+        .subscribe((res: any) => {
+          this.data.users = res.enrolled;
+        }, err => {
+          this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
+        })
+    }
+  }
+  
+
+  onPagination(event) {
+    const searchTextTrim = this.searchText.trim();
+    this.siteService
+      .listProcessoSeletivoInscritos(this.data.idProcesso, searchTextTrim, event.newPage, this.limit)
+      .pipe(
+        catchError(err => {
+          throw err;
+        })
+      )
+      .subscribe((data: any) => {
+        this.data.users = data.enrolled;
+        this.page = event.newPage;
+        window.scroll({
+          top: 0,
+          left: 0
+        })
+      });
   }
 
   getUserInfo(idUser) {

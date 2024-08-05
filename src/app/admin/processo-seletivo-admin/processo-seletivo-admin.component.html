@@ -136,10 +136,17 @@
                     <th>
                       <mat-form-field appearance="fill" st>
                         <mat-label>Selecione a Etapa</mat-label>
-                        <mat-select [value]="di.etapa" (selectionChange)="mudarEtapa($event.value, di._id)">
+                        <mat-select [value]="di.etapa" (selectionChange)="mudarEtapa($event, di._id)">
                           <mat-option value="inscricao">Inscrição</mat-option>
                           <mat-option value="homologacao">Homologação</mat-option>
                           <mat-option value="avaliacao">Avaliação</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <br>
+                      <mat-form-field *ngIf="di.etapa == 'avaliacao' && di.criterio && di.criterio.step" appearance="fill" st>
+                        <mat-label>Selecione a Etapa de Avaliação</mat-label>
+                        <mat-select [value]="di.etapaAvaliacao" (selectionChange)="mudarEtapaAvaliacao($event, di._id)">
+                          <mat-option *ngFor="let step of di.criterio.step; let i = index" [value]="i">Etapa {{i+1}}</mat-option>
                         </mat-select>
                       </mat-form-field>
                     </th>

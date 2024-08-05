@@ -10,7 +10,7 @@
                     <div [ngClass]="{'section-header': menu.length > 2}">
                         <div class="container">
                             <div class="row">
-                                <mat-tab-group style="font-size: 40px !important;">
+                                <mat-tab-group style="font-size: 40px !important;" (selectedTabChange)="changeTab()">
                                     <mat-tab label="Administrar Site"> 
                                         <ul class="nav nav-pills">
                                             <ng-container  *ngFor="let item of menu">

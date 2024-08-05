@@ -139,7 +139,7 @@
       </div>
   
       <div class="row justify-content-around">
-        <div formGroupName="graduacao" class="col-lg-4 mb-3">
+        <div formGroupName="graduacao" class="col-12 mb-5">
           <label><strong>Graduação</strong></label>
           <div class="row mb-3 ml-2">
             <div class="col">
@@ -167,8 +167,7 @@
           </div>
           <div class="row">
             <div class="col">
-              <mat-checkbox style="white-space: normal; text-align: justify;" formControlName="termoNaoColacaoGrau">
-                Declaro que li o edital do Processo Seletivo do Mestrado e que me responsabilizo a
+              <mat-checkbox style="white-space: normal; text-align: justify;" formControlName="termoNaoColacaoGrau">Declaro que li o edital do Processo Seletivo do Mestrado e que me responsabilizo a
                 entregar no ato da matrícula Cópia do diploma de graduação, devidamente registrado,
                 ou revalidado na forma da lei, ou cópia da declaração de conclusão de curso reconhecido
                 pelas IES credenciadas pelo Ministério da Educação (MEC). Poderá ser aceito um termo
@@ -178,35 +177,35 @@
             </div>
           </div>
         </div>
-        <div formGroupName="posGraduacao" class="col-lg-4 mb-3">
+        <div formGroupName="posGraduacao" class="col-12 mb-5">
           <label><strong>Pós-graduação {{type == typeGraduateEnum.DOUTORADO ? "(especialização)" : ""}}</strong></label>
           <div class="row mb-3 ml-2">
             <div class="col">
-              <label><strong>Curso de {{type == typeGraduateEnum.DOUTORADO ? "especialização" : "pós-graduação"}}*</strong></label>
+              <label><strong>Curso de {{type == typeGraduateEnum.DOUTORADO ? "especialização*" : "pós-graduação"}}</strong></label>
               <input type="text" formControlName="nome" class="form-control">
             </div>
           </div>
           <div class="row mb-3 ml-2">
             <div class="col">
-              <label><strong>instituição*</strong></label>
+              <label><strong>instituição{{type == typeGraduateEnum.DOUTORADO ? "*" : ""}}</strong></label>
               <input type="text" formControlName="instituicao" class="form-control">
             </div>
           </div>
           <div class="row mb-3 ml-2">
             <div class="col">
-              <label><strong>Ano de início*</strong></label>
+              <label><strong>Ano de início{{type == typeGraduateEnum.DOUTORADO ? "*" : ""}}</strong></label>
               <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoInicio" class="form-control">
             </div>
           </div>
           <div class="row mb-3 ml-2">
             <div class="col">
-              <label><strong>Ano de conclusão*</strong></label>
+              <label><strong>Ano de conclusão{{type == typeGraduateEnum.DOUTORADO ? "*" : ""}}</strong></label>
               <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoConclusao" class="form-control">
             </div>
           </div>
   
         </div>
-        <div formGroupName="posGraduacaoMestrado" class="col-lg-4" *ngIf="type == typeGraduateEnum.DOUTORADO">
+        <div formGroupName="posGraduacaoMestrado" class="col-12 mb-5" *ngIf="type == typeGraduateEnum.DOUTORADO">
           <label><strong>Pós-graduação (mestrado)</strong></label>
           <div class="row mb-3 ml-2">
             <div class="col">

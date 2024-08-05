@@ -1,4 +1,6 @@
+import { C } from '@angular/cdk/keycodes';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '@app/shared/services';
 
 @Component({
@@ -11,7 +13,7 @@ export class AdminComponent implements OnInit {
   public menu = [];
   type=0; 
 
-  constructor(authService: AuthService) {
+  constructor(authService: AuthService, private router: Router) {
     let user$ = authService.getUser();
     user$.subscribe(user => {
       this.menu = [
@@ -36,6 +38,10 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() { }
 
+  changeTab() {
+    this.router.navigate(['/admin']);
+    
+  }
 
 
 }

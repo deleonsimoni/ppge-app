@@ -23,6 +23,12 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
       required: true,
       default: 'inscricao'
     },
+
+    etapaAvaliacao: {
+      type: Number,
+      required: true,
+      default: 0
+    },
     
     researchLine: [
       {

@@ -25,6 +25,12 @@ export class InscricoesComponent implements OnInit {
     this.authService.getUser()
   );
 
+  page = 1;
+  limit = 1;
+
+  etapa: string;
+  etapaAvaliacao: number;
+
   tableColumsCoordenador = [
     "etapa",
     "avaliador1",
@@ -45,7 +51,7 @@ export class InscricoesComponent implements OnInit {
 
   listPareceristas: any;
   listProcessoSeletivo: any;
-  listInscritos: any;
+  listInscritos: any = [];
   criterioProcessoSelecionado: any;
   criterioHomologacaoProcessoSelecionado: any;
 
@@ -82,28 +88,62 @@ export class InscricoesComponent implements OnInit {
     this.inscricaoSelecionada = null;
     this.idProcessoSelecionado = idProcesso;
 
-    this.siteService.getInscritosProcessoById(idProcesso, this.filtroConsulta).subscribe((data: any) => {
-      data.enrolled.forEach(inscrito => {
-        inscrito.avaliacaoEtapas = this.getNotasByEtapaAndMedia(inscrito, data.criterio);
-        inscrito.mediaFinal = 0;
-        inscrito.avaliacaoEtapas.forEach( avaliacao => {
-          inscrito.mediaFinal += avaliacao.media
-        })
+    this.siteService
+      .getInscritosProcessoById(idProcesso, this.filtroConsulta, this.page, this.limit)
+      .subscribe((data: any) => {
+        data.enrolled.forEach(inscrito => {
+          inscrito.avaliacaoEtapas = this.getNotasByEtapaAndMedia(inscrito, data.criterio);
+          inscrito.mediaFinal = 0;
+          inscrito.avaliacaoEtapas.forEach( avaliacao => {
+            inscrito.mediaFinal += avaliacao.media
+          })
 
-        inscrito.mediaFinal = inscrito.mediaFinal/inscrito.avaliacaoEtapas.length;
-      })
-      this.listInscritos = data.enrolled;
-      this.criterioProcessoSelecionado = data.criterio;
-      this.criterioHomologacaoProcessoSelecionado = data.criterioHomologacao;
-      
-    });
+          inscrito.mediaFinal = inscrito.mediaFinal/inscrito.avaliacaoEtapas.length;
+        })
+        this.etapa = data.etapa;
+        this.etapaAvaliacao = data.etapaAvaliacao;
+        this.listInscritos = data.enrolled;
+        this.criterioProcessoSelecionado = data.criterio;
+        this.criterioHomologacaoProcessoSelecionado = data.criterioHomologacao;
+        
+      });
+  }
+  
+  onPagination(event) {
+    this.siteService
+      .getInscritosProcessoById(this.idProcessoSelecionado, this.filtroConsulta, event.newPage, this.limit)
+      .pipe(
+        catchError(err => {
+          throw err;
+        })
+      )
+      .subscribe((data: any) => {
+        data.enrolled.forEach(inscrito => {
+          inscrito.avaliacaoEtapas = this.getNotasByEtapaAndMedia(inscrito, data.criterio);
+          inscrito.mediaFinal = 0;
+          inscrito.avaliacaoEtapas.forEach( avaliacao => {
+            inscrito.mediaFinal += avaliacao.media
+          })
+          
+          inscrito.mediaFinal = inscrito.mediaFinal/inscrito.avaliacaoEtapas.length;
+        })
+        this.listInscritos = data.enrolled;
+        this.page = event.newPage;
+        window.scroll({
+          top: 0,
+          left: 0
+        })
+      });
   }
 
   getInscricoesByFiltro(filtroConsulta) {
-    if (filtroConsulta)
+    if (filtroConsulta) {
       this.filtroConsulta = filtroConsulta;
+      this.page = 1;
+      this.limit = 1;
+    }
 
-    this.siteService.getInscritosProcessoById(this.idProcessoSelecionado, this.filtroConsulta).subscribe((data: any) => {
+    this.siteService.getInscritosProcessoById(this.idProcessoSelecionado, this.filtroConsulta, this.page, this.limit).subscribe((data: any) => {
       data.enrolled.forEach(inscrito => {
         inscrito.avaliacaoEtapas = this.getNotasByEtapaAndMedia(inscrito, data.criterio);
         inscrito.mediaFinal = 0;
@@ -335,7 +375,11 @@ export class InscricoesComponent implements OnInit {
   verificaIsResponsavelHomologacao(inscricao, myUser) {
     const idMyUser = myUser._id;
     
-    return (inscricao?.parecerista[inscricao?.responsavelHomologacao]?._id == idMyUser || (myUser.isCoordenador && inscricao.coordenadoresLinha?.indexOf(myUser._id) > -1));
+    return ((this.etapa == "homologacao" && inscricao?.parecerista[inscricao?.responsavelHomologacao]?._id == idMyUser) || (myUser.isCoordenador && inscricao.coordenadoresLinha?.indexOf(myUser._id) > -1));
+  }
+
+  verificaIsResponsavelAvaliacao(inscricao, myUser) {
+    return ((myUser.isCoordenador && inscricao.coordenadoresLinha?.indexOf(myUser._id) > -1))|| (this.etapa == 'avaliacao' && (inscricao?.parecerista?.primeiro?._id == myUser._id || inscricao?.parecerista?.segundo?._id == myUser._id))
   }
 
   openModalHomologar(idInscricao) {

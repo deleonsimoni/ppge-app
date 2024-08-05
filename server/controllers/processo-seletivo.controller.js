@@ -31,17 +31,74 @@ module.exports = {
   inscricaoJustificar,
   inscricaoJustificarHomolog,
   mudarEtapa,
+  mudarEtapaAvaliacao,
   salvarVinculoCriterio,
   salvarVinculoCriterioHomologacao,
   changeHomologInscricao,
   changeHomologInscricaoV2,
   getHomologacaoV2,
   consolidarAvaliacao,
+  consolidarAvaliacaoAutomatico,
 };
 
 
 
 /* Processo Seletivo */
+
+async function consolidarAvaliacaoAutomatico(idProcesso, idInscricao) {
+  try {
+    let setUpdate = {};
+    let processoInscricao = await ProcessoSeletivoModel.findOne({ _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } });
+    
+
+    let avaliacoes = processoInscricao.enrolled[0].parecer.avaliacoes
+    let avaliadores = processoInscricao.enrolled[0].parecerista
+    processoInscricao.criterio.step.forEach(step => {
+      let notaEtapa = 0;
+
+      let primeiroAvaliador = avaliacoes[`avaliador-${avaliadores.primeiro}`]
+      let segundoAvaliador = avaliacoes[`avaliador-${avaliadores.segundo}`]
+      if(primeiroAvaliador) {
+        notaEtapa = preciseSum(notaEtapa, primeiroAvaliador?.step[`step-${step._id}`]?.totalNotaEtapa ? primeiroAvaliador?.step[`step-${step._id}`]?.totalNotaEtapa : 0)
+      }
+      if(segundoAvaliador) {
+        notaEtapa = preciseSum(notaEtapa, segundoAvaliador?.step[`step-${step._id}`]?.totalNotaEtapa ? segundoAvaliador?.step[`step-${step._id}`]?.totalNotaEtapa : 0)
+      }
+
+      // let keysAvaliacoes = Object.keys(avaliacoes);
+      // keysAvaliacoes.forEach(ava => {
+      //   notaEtapa = preciseSum(notaEtapa, avaliacoes[ava]?.step[`step-${step._id}`]?.totalNotaEtapa ? avaliacoes[ava]?.step[`step-${step._id}`]?.totalNotaEtapa : 0)
+      // })
+
+      let mediaEtapaAvaliadores = notaEtapa / 2;
+      setUpdate[`enrolled.$.parecer.step.step-${step._id}.mediaStep`] = mediaEtapaAvaliadores;
+      setUpdate[`enrolled.$.parecer.step.step-${step._id}.stepApproval`] = mediaEtapaAvaliadores >= 7;
+    })
+
+
+    let processo = await ProcessoSeletivoModel
+      .findOneAndUpdate(
+        { _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } },
+        { $set: setUpdate },
+        { upsert: false }
+      );
+
+    if (processo)
+      return getSuccessByStatus(200, "Etapa consolidada com sucesso!");
+    else
+      return getErrorByStatus(404, "Processo ou inscrição não encontrado na base!")
+  } catch (error) {
+    console.log("ERROR> ", error)
+    return getErrorByStatus(500)
+
+  }
+
+}
+  
+function preciseSum(...values) {
+  const sum = values.reduce((acc, val) => acc + Math.round(val * 100), 0);
+  return sum / 100;
+}
 
 async function consolidarAvaliacao(idProcesso, idInscricao, body) {
   try {
@@ -336,11 +393,13 @@ function buildTextVaga(qtdVaga, qtdVagaCota) {
 }
 
 async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParecerista, filterByLinha) {
-
+  const searchText = req.query.searchText;
+  const page = req.query.page;
+  const limit = req.query.limit;
 
   let processo = await ProcessoSeletivoModel
     .findOne({ _id: idProcessoSeletivo })
-    .populate({ path: 'enrolled.idUser', select: 'fullname socialname email' })
+    .populate({ path: 'enrolled.idUser', select: 'fullname socialname email cpf' })
     .populate({ path: 'enrolled.parecerista.primeiro', select: 'fullname' })
     .populate({ path: 'enrolled.parecerista.segundo', select: 'fullname' })
     .populate({
@@ -364,10 +423,16 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
     processo.enrolled = processo.enrolled ? processo.enrolled : [];
     const result = {
       _id: processo._id,
+      etapa: processo.etapa,
+      etapaAvaliacao: processo.etapaAvaliacao,
       criterio: processo.criterio,
       criterioHomologacao: processo.criterioHomologacao,
       enrolled: processo.enrolled.filter((e) => {
           flagReturn = true;
+
+          if(searchText && !e.idUser.fullname.toLowerCase().includes(searchText.toLowerCase()) && !e.idUser.cpf.toLowerCase().includes(searchText.toLowerCase())) {
+            return false;
+          }
           
           if(idParecerista) flagReturn = e.parecerista && ((e.parecerista.primeiro && e.parecerista.primeiro.equals(idParecerista)) || (e.parecerista.segundo && e.parecerista.segundo.equals(idParecerista)))
           else if(filterByLinha) flagReturn = !!filterByLinha.find(fbl => fbl.equals(e.linhaPesquisa ? e.linhaPesquisa._id : null));
@@ -375,7 +440,6 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
           
 
           //if (idParecerista) flagReturn = e.parecerista && e.parecerista.equals(idParecerista)
-          console.log("flagReturnflagReturnflagReturnflagReturnflagReturn ", e.parecerista)
           if (req.query.filtroConsulta) {
 
             if (statusRecurso.includes(req.query.filtroConsulta)) {
@@ -463,7 +527,10 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
           }
             
           return flagReturn;
-        }).map(e => (
+        })
+        .sort((ea, eb) => ea.idUser?.fullname.localeCompare(eb.idUser?.fullname))
+        //.slice((page-1)*limit, page*limit)
+        .map(e => (
           {
             _id: e._id,
             idUser: e.idUser,
@@ -476,6 +543,9 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
 
           }
         )),
+    }
+    if(page && limit) {
+      result.enrolled = result.enrolled.slice((page-1)*limit, page*limit);
     }
     return result
   } else {
@@ -583,6 +653,8 @@ async function registrarParecer(req, idUser) {
     { upsert: false }
   );
 
+  await consolidarAvaliacaoAutomatico(idProcesso, idInscricao);
+
   
   let email = templateEmail.atualizacaoParecerProcessoSeletivo;
   emailSender.sendMailAWS(emailInscrito, 'Processo Seletivo', email);
@@ -635,11 +707,10 @@ async function getParecer(req, idUser) {
   const idProcesso = req.query.idProcesso;
   const idInscricao = req.query.idInscricao;
 
-  console.log("idUser: ", idUser)
 
   return ProcessoSeletivoModel.findOne(
     { _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } },
-    {'enrolled.$': 1,}
+    {'enrolled.$': 1, 'etapa': 1, 'etapaAvaliacao': 1}
   );
 }
 
@@ -649,6 +720,16 @@ async function mudarEtapa(body) {
   return await ProcessoSeletivoModel.findOneAndUpdate(
     { _id: idProcesso },
     { etapa: etapa },
+    { upsert: false }
+  );
+}
+
+async function mudarEtapaAvaliacao(body) {
+  const { idProcesso, etapa } = body;
+
+  return await ProcessoSeletivoModel.findOneAndUpdate(
+    { _id: idProcesso },
+    { etapaAvaliacao: etapa },
     { upsert: false }
   );
 }
@@ -693,7 +774,6 @@ async function subscribeProcessoSeletivo(req) {
     );
 
     let email = templateEmail.inscricaoProcessoSeletivo;
-    console.log("VERIFICAR EMAIL: req.user.email ", req.user.email);
     emailSender.sendMailAWS(req.user.email, 'Processo Seletivo', email);
 
   } catch (e) {
@@ -759,7 +839,6 @@ async function uploadFilesProcessoSeletivo(files, idProcesso, idUser, tipoFormul
       retorno.mensagem = 'Servidor momentaneamente inoperante. Tente novamente mais tarde.';
     });
   }
-  console.log("retorno: ", retorno)
   return retorno;
 
 }
