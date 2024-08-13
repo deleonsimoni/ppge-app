@@ -190,6 +190,10 @@
           <button type="button" mat-raised-button color="primary"
             (click)="openModalParecer(inscricoes._id, inscricoes.idUser?.email)">Avaliar</button>
       </div>
+      <div class="row justify-content-center mb-3" *ngIf="myUser.isCoordenador && inscricoes.coordenadoresLinha?.indexOf(myUser._id) > -1">
+          <button type="button" mat-raised-button color="primary"
+            (click)="openModalParecerCoordenador(inscricoes._id, inscricoes.idUser?.email)">Ver Avaliações</button>
+      </div>
       <div class="row justify-content-center mb-3">
         <button (click)="detalharInscricao(inscricoes._id)" style="background-color: gray;" type="button" mat-raised-button color="primary">
           <mat-icon>{{this.flagDetalharInscricao && this.inscricaoSelecionada?._id == inscricoes._id ? 'remove' : 'add'}}</mat-icon>
@@ -329,6 +333,7 @@
               </a>
             </div>
           </div>
+          <button class="mb-3" mat-raised-button color="accent" (click)="abrirPerfilCandidatoModal(inscricaoSelecionada.perfilCandidato)">Ver Perfil do Candidato</button>
 
         </div>
       </div>

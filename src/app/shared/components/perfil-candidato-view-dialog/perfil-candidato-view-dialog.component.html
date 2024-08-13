@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>Perfil do candidato</h1>
+<div mat-dialog-content>
+
+  <div class="container">
+    <div class="row mb-5">
+            
+      <div class="col-12 mb-5" *ngFor="let question of questionsPerfilCandidato">
+        <h3 *ngIf="question.preText">{{question.preText}}</h3>
+        <div *ngIf="question.type == 'text' || question.type == 'radio'">
+          <label><strong>{{question.question}}</strong></label>
+          <p>{{perfilCandidato[question.varName] ?? '-'}}</p>
+        </div>
+        <div *ngIf="question.type == 'checkbox'">
+          <label><strong>{{question.question}}</strong></label>
+          <br>
+          <div *ngFor="let keyAnswerCheckbox of keysObject(perfilCandidato[question.varName]); let i = index">
+            
+            <p *ngIf="perfilCandidato[question.varName][keyAnswerCheckbox]">{{ keyAnswerCheckbox }}</p>
+
+          </div>
+        </div>
+      </div>
+    
+    </div>
+  </div>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="false">Fechar</button>
+</div>

@@ -17,6 +17,7 @@ import { FormProcessoSeletivoService } from './form-processo-seletivo/form-proce
 import { RankViewDialogComponent } from './rank-view-dialog/rank-view-dialog.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { PaginationComponent } from './pagination/pagination.component';
+import { PerfilCandidatoViewDialogComponent } from './perfil-candidato-view-dialog/perfil-candidato-view-dialog.component';
 
 
 
@@ -27,6 +28,7 @@ import { PaginationComponent } from './pagination/pagination.component';
     RankViewDialogComponent,
     ConfirmDialogComponent,
     PaginationComponent,
+    PerfilCandidatoViewDialogComponent,
 
   ],
   imports: [

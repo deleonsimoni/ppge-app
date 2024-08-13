@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit, ViewEncapsulation } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { PerfilCandidatoViewDialogComponent } from "@app/shared/components/perfil-candidato-view-dialog/perfil-candidato-view-dialog.component";
 import { SiteAdminService } from "@app/shared/services/site-admin.service";
 import { typeDescricaoCota, TypeGraduateEnum, TypeOpcaoVagaEnum, typeOpcaoVagaEnumToSubscription } from "@app/shared/shared.model";
 import { ToastrService } from "ngx-toastr";
@@ -21,6 +22,7 @@ export class ViewInscritosProcessoSeletivoComponent implements OnInit {
     private siteService: SiteAdminService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private toastr: ToastrService,
+    public dialog: MatDialog
   ) { }
   infoUser: any = {};
   infoUserProcesso: any = {};
@@ -101,5 +103,11 @@ export class ViewInscritosProcessoSeletivoComponent implements OnInit {
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  abrirPerfilCandidatoModal(perfilCandidato) {
+    this.dialog.open(PerfilCandidatoViewDialogComponent, {
+      data: perfilCandidato
+    })
   }
 }

@@ -1,5 +1,10 @@
 <h1 mat-dialog-title>Avaliação da inscrição</h1>
 <div class="pb-3" mat-dialog-content>
+  
+  <mat-radio-group *ngIf="data.isAnother && myUser.isCoordenador" aria-label="Selecione o avaliador" (change)="changeParecer($event)" [(ngModel)]="avaliadorSelected">
+    <mat-radio-button class="mr-2" [value]="1">Avaliador 1</mat-radio-button>
+    <mat-radio-button [value]="2">Avaliador 2</mat-radio-button>
+  </mat-radio-group>
   <form  role="form" class="reviewer container" [formGroup]="form">
 
     <div formGroupName="step">
@@ -32,22 +37,6 @@
               </div>
             </div>
           </div>
-    
-          <!-- <div class="col-12 mt-3">
-            <div class="row justify-content-center align-items-center">
-              <div class="col-auto">
-                <mat-radio-group class="example-radio-group w-100" formControlName="stepApproval" >
-                  <mat-radio-button class="example-radio-button mr-3" [value]="true">Aprovar etapa</mat-radio-button>
-                  <mat-radio-button class="example-radio-button mr-3" [value]="false">Reprovar etapa</mat-radio-button>
-                </mat-radio-group>
-              </div>
-              <div class="col-auto" *ngIf="this.parecerSelected?.step && this.parecerSelected?.step['step-'+step._id]?.recurso?.justificativa">
-                <button type="button" mat-raised-button color="primary" (click)="responderJustificativa(step._id, this.parecerSelected?.step['step-'+step._id]?.recurso)">
-                  {{this.parecerSelected?.step['step-'+step._id]?.recurso?.respostaJustificativa ? "Visualizar recurso" : "Responder recurso"}}
-                </button>
-              </div>
-            </div>
-          </div> -->
         </div>
       </div>
     </div>
@@ -58,5 +47,5 @@
 <hr class="mt-0">
 <div mat-dialog-actions>
   <button mat-button mat-dialog-close>Fechar</button>
-  <button mat-raised-button color="primary" style="background-color: green;" (click)="register()">Finalizar parecer</button>
+  <button mat-raised-button color="primary" style="background-color: green;" (click)="register()">Salvar parecer</button>
 </div>

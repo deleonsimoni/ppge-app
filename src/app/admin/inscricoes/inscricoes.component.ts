@@ -10,6 +10,7 @@ import { DialogParecerData, ParecerComponent } from './parecer/parecer.component
 import { RecursoComponent } from './recurso/recurso.component';
 import { MatRadioChange } from '@angular/material/radio';
 import { DialogHomologacaoData, HomologacaoDialogComponent } from './homologacao-dialog/homologacao-dialog.component';
+import { PerfilCandidatoViewDialogComponent } from '@app/shared/components/perfil-candidato-view-dialog/perfil-candidato-view-dialog.component';
 
 @Component({
   selector: 'app-inscricoes',
@@ -325,6 +326,25 @@ export class InscricoesComponent implements OnInit {
         idProcesso: this.idProcessoSelecionado,
         criterio: this.criterioProcessoSelecionado,
         emailInscrito,
+        isAnother: false
+      }
+    })
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if (result && result.refresh) {
+        this.getInscricoes(this.idProcessoSelecionado)
+      }
+    })
+  }
+
+  openModalParecerCoordenador(idInscricao, emailInscrito) {
+    const dialogRef = this.dialog.open(ParecerComponent, {
+      width: '80%',
+      data: <DialogParecerData>{
+        idInscricao: idInscricao,
+        idProcesso: this.idProcessoSelecionado,
+        criterio: this.criterioProcessoSelecionado,
+        emailInscrito,
+        isAnother: true
       }
     })
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
@@ -379,7 +399,7 @@ export class InscricoesComponent implements OnInit {
   }
 
   verificaIsResponsavelAvaliacao(inscricao, myUser) {
-    return ((myUser.isCoordenador && inscricao.coordenadoresLinha?.indexOf(myUser._id) > -1))|| (this.etapa == 'avaliacao' && (inscricao?.parecerista?.primeiro?._id == myUser._id || inscricao?.parecerista?.segundo?._id == myUser._id))
+    return (this.etapa == 'avaliacao' && (inscricao?.parecerista?.primeiro?._id == myUser._id || inscricao?.parecerista?.segundo?._id == myUser._id))
   }
 
   openModalHomologar(idInscricao) {
@@ -395,6 +415,13 @@ export class InscricoesComponent implements OnInit {
       if (result && result.refresh) {
         this.getInscricoes(this.idProcessoSelecionado)
       }
+    })
+
+  }
+
+  abrirPerfilCandidatoModal(perfilCandidato) {
+    this.dialog.open(PerfilCandidatoViewDialogComponent, {
+      data: perfilCandidato
     })
 
   }

@@ -6,8 +6,13 @@
     <div class="row justify-content-center align-items-center mb-5">
         <div (click)="passoInscricao = 1" class="col-auto mr-5 progress-step" [ngClass]="{'active': passoInscricao == 1}" >1</div>
         <div (click)="passoInscricao = 2" class="col-auto mr-5 progress-step" [ngClass]="{'active': passoInscricao == 2}" >2</div>
-        <div (click)="passoInscricao = 3" class="col-auto mr-5 progress-step" [ngClass]="{'active': passoInscricao == 3}" >3</div>
+        <div *ngIf="passoInscricao == 3" class="col-auto mr-5 progress-step" [ngClass]="{'active': passoInscricao == 3}" >3</div>
 
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-auto" *ngIf="passoInscricao == 3">
+        <button mat-raised-button color="primary" type="button" (click)="passoAnterior()">Voltar para anexos</button>
+      </div>
     </div>
     <div *ngIf="passoInscricao == 1">
       <div class="row">
@@ -288,45 +293,6 @@
     </div>
 
     <div *ngIf="passoInscricao == 2">
-      <div class="row justify-content-center mb-5">
-        <h2>Perfil do(a) Candidato(a)</h2>
-        <p>Este questionário tem como objetivo traçar um perfil dos (as) candidatos (as) ao curso
-          de Mestrado. Sua participação é muito importante para nossa pesquisa. O
-          preenchimento é obrigatório, mas garantimos o seu anonimato.
-          </p>
-      </div>
-
-      <div class="row mb-5" formGroupName="perfilCandidato">
-        
-        <div class="col-12 mb-5" *ngFor="let question of questionsPerfilCandidato">
-          <div *ngIf="question.type == 'text'">
-            <label><strong>{{question.question}}</strong></label>
-            <input type="text" [formControlName]="question.varName" class="form-control" />
-          </div>
-          <div *ngIf="question.type == 'radio'">
-            <label><strong>{{question.question}}</strong></label>
-            <br>
-            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group w-100 ml-2" [formControlName]="question.varName">
-                <mat-radio-button *ngFor="let optionName of question.options" class="cota-radio-button mr-3" [value]="optionName">{{optionName}}</mat-radio-button>
-            </mat-radio-group>
-          </div>
-          <div *ngIf="question.type == 'checkbox'">
-            <div [formArrayName]="question.varName">
-              <div *ngFor="let optionName of question.options; let i = index">
-                <label>
-                  <input type="checkbox" [formControlName]="optionName" />
-                  {{ optionName }}
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div *ngIf="passoInscricao == 3">
 
       <div class="row mb-5">
         <label><strong>Anexos</strong></label>
@@ -420,7 +386,7 @@
           <label><strong>Comprovante de residência</strong></label><br>
           <input type="file" class="custom-file-input" accept="application/pdf" data-max-size="2048"
              (change)="setFileComprovanteResidencia($event.target.files)" #fileInput>
-          <p class="file-subtitle">* Anexe aqui, em formato PDF, conta de consumo no nome do/da candidato/a ou, caso
+          <p class="file-subtitle">Anexe aqui, em formato PDF, conta de consumo no nome do/da candidato/a ou, caso
             não possua, declaração segundo o modelo disponível no Anexo V do
             edital (exclusivamente para candidatos/as que solicitaram a realização da arguição em
             formato remoto).</p>
@@ -428,12 +394,54 @@
       </div>
     </div>
 
+    <div *ngIf="passoInscricao == 3">
+      <div class="row justify-content-center mb-5">
+        <h2>Perfil do(a) Candidato(a)</h2>
+        <p>Este questionário tem como objetivo traçar um perfil dos (as) candidatos (as) ao curso
+          de Mestrado. Sua participação é muito importante para nossa pesquisa. O
+          preenchimento é obrigatório, mas garantimos o seu anonimato.
+          </p>
+      </div>
+
+      <div class="row mb-5" formGroupName="perfilCandidato">
+        
+        <div class="col-12 mb-5" *ngFor="let question of questionsPerfilCandidato">
+          <h3 *ngIf="question.preText">{{question.preText}}</h3>
+          <div *ngIf="question.type == 'text'">
+            <label><strong>{{question.question}}</strong></label>
+            <input type="text" [formControlName]="question.varName" class="form-control" />
+          </div>
+          <div *ngIf="question.type == 'radio'">
+            <label><strong>{{question.question}}</strong></label>
+            <br>
+            <mat-radio-group aria-labelledby="example-radio-group-label" class="cota-radio-group w-100 ml-2" [formControlName]="question.varName">
+                <mat-radio-button *ngFor="let optionName of question.options" class="cota-radio-button mr-3" [value]="optionName">{{optionName}}</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div *ngIf="question.type == 'checkbox'">
+            <label><strong>{{question.question}}</strong></label>
+            <br>
+            <div [formArrayName]="question.varName">
+              <div *ngFor="let optionName of question.options; let i = index">
+                <label>
+                  <input type="checkbox" [formControlName]="optionName" />
+                  {{ optionName }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
     <div class="row justify-content-center">
       <div class="col-auto" *ngIf="passoInscricao > 1">
         <button mat-raised-button color="primary" type="button" (click)="passoAnterior()">Passo anterior</button>
       </div>
       <div class="col-auto">
-        <button style="background-color: green;" mat-raised-button color="primary">{{passoInscricao != 3 ? "Próximo passo" : "Finalizar Inscrição"}}</button>
+        <button style="background-color: green;" mat-raised-button color="primary">{{passoInscricao < 2 ? "Próximo passo" : "Finalizar Inscrição"}}</button>
       </div>
     </div>
 

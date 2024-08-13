@@ -13,6 +13,7 @@ export interface DialogParecerData {
   idInscricao: string;
   criterio: any;
   emailInscrito: string;
+  isAnother: boolean;
 }
 
 @Component({
@@ -27,8 +28,11 @@ export class ParecerComponent implements OnInit {
     // Update after login/register/logout
     this.authService.getUser()
   );
+  myUser: User = <User>{};
   form: FormGroup;
+  idPareceristaSelected = "";
 
+  avaliadorSelected: number = 1;
   parecerSelected: any;
   parecerConsolidadoSelected: any;
 
@@ -59,6 +63,9 @@ export class ParecerComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.user$.subscribe(user => {
+      this.myUser = user;
+    })
     this.getParecer();
   }
 
@@ -98,6 +105,10 @@ export class ParecerComponent implements OnInit {
 
   }
 
+  changeParecer(event) {
+    this.getParecer();
+  }
+
   getParecer() {
     this.siteAdminService.getParecer(this.data.idInscricao, this.data.idProcesso)
       .subscribe((data: any) => {
@@ -112,7 +123,12 @@ export class ParecerComponent implements OnInit {
             )
             .subscribe(user => {
               this.parecerConsolidadoSelected = data.enrolled[0].parecer;
-              this.parecerSelected = data.enrolled[0].parecer?.avaliacoes[`avaliador-${user._id}`];
+              if(this.data.isAnother && user?.isCoordenador) {
+                this.idPareceristaSelected = data.enrolled[0].parecerista[this.avaliadorSelected == 1 ? 'primeiro' : 'segundo']
+                this.parecerSelected = data.enrolled[0].parecer?.avaliacoes[`avaliador-${this.idPareceristaSelected}`];
+              } else {
+                this.parecerSelected = data.enrolled[0].parecer?.avaliacoes[`avaliador-${user._id}`];
+              }
               this.parecerSelected.step = this.changeNotaNumberToString(this.parecerSelected.step);
             })
         }
@@ -166,7 +182,7 @@ export class ParecerComponent implements OnInit {
     formulario.step = step;
     if (this.form.valid) {
       this.siteAdminService
-        .registrarParecer(this.data.idInscricao, this.data.idProcesso, formulario, this.data.emailInscrito)
+        .registrarParecer(this.data.idInscricao, this.data.idProcesso, formulario, this.data.emailInscrito, this.data.isAnother, this.idPareceristaSelected)
         .subscribe(data => {
           this.dialogRef.close({ refresh: true });
         })

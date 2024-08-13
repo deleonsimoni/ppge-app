@@ -92,7 +92,7 @@ router.get('/processo-seletivo/homologacao', [passport.authenticate('jwt', {
 
 router.get('/processo-seletivo/parecer', [passport.authenticate('jwt', {
   session: false
-}), (req, res, next) => requireAllowedRoles(req, res, next, ['parecerista'])], asyncHandler(getParecer));
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['parecerista', 'coordenador'])], asyncHandler(getParecer));
 
 router.post('/processo-seletivo/ativo/:id', [passport.authenticate('jwt', {
   session: false
@@ -227,7 +227,19 @@ async function insertProcessoSeletivo(req, res) {
 }
 
 async function registrarParecer(req, res) {
-  let response = await processoSeletivoCtrl.registrarParecer(req, req.user._id);
+  console.log("req.user: ", req.user.roles)
+  
+  let idParecerista = req.user._id;
+  if(req.body.isAnother) {
+    console.log("req.user: ", req.user.roles)
+    if(req.user.roles.indexOf('coordenador') > -1) {
+      idParecerista = req.body.idPareceristaSelected;
+    } else {
+      res.status(401).json();
+      return;
+    }
+  }
+  let response = await processoSeletivoCtrl.registrarParecer(req, idParecerista);
   res.json(response);
 }
 

@@ -60,18 +60,18 @@ export class RegisterComponent implements OnInit {
       
       dataNiver: [this.user?._id ? new Date(this.user?.dataNiver) : null, [Validators.required]],
       rg: [this.user?._id ? this.user?.rg : null, [Validators.required]],
-      cpf: [this.user?._id ? this.user?.cpf : null, [Validators.required]],
+      cpf: [this.user?._id ? this.user?.cpf : '', [Validators.required, this.cpfValidator]],
       rgEmissor: [this.user?._id ? this.user?.rgEmissor : null, [Validators.required]],
 
       passaporte: [this.user?._id ? this.user?.passaporte : null, []],
       nacionalidade: [this.user?._id ? this.user?.nacionalidade : null, [Validators.required]],
       endereco: [this.user?._id ? this.user?.endereco : null, [Validators.required]],
       bairro: [this.user?._id ? this.user?.bairro : null, [Validators.required]],
-      cep: [this.user?._id ? this.user?.cep : null, [Validators.required]],
+      cep: [this.user?._id ? this.user?.cep : '', [Validators.required, this.cepValidator]],
       cidade: [this.user?._id ? this.user?.cidade : null, [Validators.required]],
       estado: [this.user?._id ? this.user?.estado : null, [Validators.required]],
-      celular: [this.user?._id ? this.user?.celular : null, [Validators.required]],
-      telefone: [this.user?._id ? this.user?.telefone : null, []],
+      celular: [this.user?._id ? this.user?.celular : '', [Validators.required, this.celularValidator]],
+      telefone: [this.user?._id ? this.user?.telefone : '', [this.telefoneValidator]],
       cargo: [this.user?._id ? this.user?.cargo : null, []],
       
       empresa: [this.user?._id ? this.user?.empresa : null, []],
@@ -87,6 +87,154 @@ export class RegisterComponent implements OnInit {
       this.registerForm.addControl('password', new FormControl(null, [Validators.required, Validators.minLength(6)]))
       this.registerForm.addControl('cfPassword', new FormControl(null, [Validators.required, Validators.minLength(6)]))
       this.registerForm.addControl('icAcceptTerms', new FormControl(false, [Validators.requiredTrue]))
+    }
+  }
+
+  cepValidator(control: FormControl) {
+    let cep = control.value;
+    if (!cep) {
+      return null; // Não valida se o campo estiver vazio, pois outro validador (required) já fará isso
+    }
+  
+    // Remove todos os caracteres que não sejam números
+    cep = cep.replace(/\D/g, '');
+  
+    // Verifica se o cep tem 8 dígitos
+    if (cep.length !== 8) {
+      return { invalidCep: true };
+    }
+
+    // Elimina ceps conhecidos como inválidos
+    if (/^(\d)\1+$/.test(cep)) {
+      return { invalidCep: true };
+    }
+  }
+
+  telefoneValidator(control: FormControl) {
+    let telefone = control.value;
+
+    if (!telefone) {
+      return null; // Não valida se o campo estiver vazio, pois outro validador (required) já fará isso
+    }
+  
+    // Remove todos os caracteres que não sejam números
+    telefone = telefone.replace(/\D/g, '');
+  
+    // Verifica se o telefone tem 11 dígitos
+    if (telefone.length !== 10) {
+      return { invalidTelefone: true };
+    }
+
+    // Elimina telefones conhecidos como inválidos
+    if (/^(\d)\1+$/.test(telefone)) {
+      return { invalidTelefone: true };
+    }
+  }
+
+  celularValidator(control: FormControl) {
+    let celular = control.value;
+
+    if (!celular) {
+      return null; // Não valida se o campo estiver vazio, pois outro validador (required) já fará isso
+    }
+  
+    // Remove todos os caracteres que não sejam números
+    celular = celular.replace(/\D/g, '');
+  
+    // Verifica se o celular tem 11 dígitos
+    if (celular.length !== 11) {
+      return { invalidCelular: true };
+    }
+
+    // Elimina celulars conhecidos como inválidos
+    if (/^(\d)\1+$/.test(celular)) {
+      return { invalidCelular: true };
+    }
+  }
+
+  cpfValidator(control: FormControl) {
+    let cpf = control.value;
+
+    if (!cpf) {
+      return null; // Não valida se o campo estiver vazio, pois outro validador (required) já fará isso
+    }
+  
+    // Remove todos os caracteres que não sejam números
+    cpf = cpf.replace(/\D/g, '');
+  
+    // Verifica se o CPF tem 11 dígitos
+    if (cpf.length !== 11) {
+      return { invalidCpf: true };
+    }
+  
+    // Elimina CPFs conhecidos como inválidos
+    if (/^(\d)\1+$/.test(cpf)) {
+      return { invalidCpf: true };
+    }
+  
+    // Valida os dígitos verificadores
+    let sum = 0;
+    let remainder;
+  
+    for (let i = 1; i <= 9; i++) {
+      sum += parseInt(cpf.substring(i - 1, i), 10) * (11 - i);
+    }
+  
+    remainder = (sum * 10) % 11;
+  
+    if (remainder === 10 || remainder === 11) {
+      remainder = 0;
+    }
+  
+    if (remainder !== parseInt(cpf.substring(9, 10), 10)) {
+      return { invalidCpf: true };
+    }
+  
+    sum = 0;
+    for (let i = 1; i <= 10; i++) {
+      sum += parseInt(cpf.substring(i - 1, i), 10) * (12 - i);
+    }
+  
+    remainder = (sum * 10) % 11;
+  
+    if (remainder === 10 || remainder === 11) {
+      remainder = 0;
+    }
+  
+    if (remainder !== parseInt(cpf.substring(10, 11), 10)) {
+      return { invalidCpf: true };
+    }
+  
+    return null; // CPF é válido
+  }
+
+  formatCpf(cpf: string): string {
+    // Remove todos os caracteres que não são números
+    cpf = cpf.replace(/\D/g, '');
+    
+    // Aplica a máscara CPF (000.000.000-00)
+    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  }
+
+  formatCep(cep: string): string {
+    // Remove todos os caracteres que não são números
+    cep = cep.replace(/\D/g, '');
+    
+    // Aplica a máscara cep (00000-00)
+    return cep.replace(/(\d{5})(\d{3})/, '$1-$2');
+  }
+
+  formatPhoneNumber(phone: string): string {
+    // Remove todos os caracteres que não são números
+    phone = phone.replace(/\D/g, '');
+
+    // Aplica a máscara para o celular (XX) XXXXX-XXXX
+    if (phone.length === 11) { // Número com DDD e 9 dígitos
+        return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    } else if (phone.length === 10) { // Número com DDD e 8 dígitos
+        return phone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+    } else {
+        return phone; // Retorna o número como está se não tiver 10 ou 11 dígitos
     }
   }
 
@@ -110,14 +258,26 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    if (!this.registerForm.value.celular) {
+    if (this.registerForm.get('celular')?.invalid) {
       this.toastr.error('Número de celular inválido.', 'Atenção: ');
       return;
+    } else {
+      form.celular = this.formatPhoneNumber(this.registerForm.get('celular')?.value); 
     }
 
-    if (!this.registerForm.value.cep) {
+    if (this.registerForm.get('telefone')?.invalid) {
+      this.toastr.error('Número de telefone inválido.', 'Atenção: ');
+      return;
+    } else {
+      form.telefone = this.formatPhoneNumber(this.registerForm.get('telefone')?.value); 
+    }
+
+    if (this.registerForm.get('cep')?.invalid) {
       this.toastr.error('CEP inválido.', 'Atenção: ');
       return;
+    } else {
+      form.cep = this.formatCep(this.registerForm.get('cep')?.value); 
+
     }
 
     if (!this.registerForm.value.rg) {
@@ -125,9 +285,11 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    if (!this.registerForm.value.cpf) {
+    if (this.registerForm.get('cpf')?.invalid) {
       this.toastr.error('CPF inválido.', 'Atenção: ');
       return;
+    } else {
+      form.cpf = this.formatCpf(this.registerForm.get('cpf')?.value); 
     }
 
     if (!this.registerForm.value.rgEmissor) {
@@ -141,13 +303,13 @@ export class RegisterComponent implements OnInit {
     }
 
     if (!this.registerForm.value.cor) {
-      this.toastr.error('Cor inválido.', 'Atenção: ');
+      this.toastr.error('Campo "Cor" não preenchido.', 'Atenção: ');
       return;
     }
 
 
     if (!this.registerForm.value.genero) {
-      this.toastr.error('Gênero inválido.', 'Atenção: ');
+      this.toastr.error('Campo "Gênero" não preenchido.', 'Atenção: ');
       return;
     }
 
@@ -173,7 +335,7 @@ export class RegisterComponent implements OnInit {
     if(!this.user || !this.user._id) {
       this.registerForm.value.email = this.registerForm.value.email.toLowerCase().trim();
     }
-    this.registerForm.removeControl('cf-password');
+    this.registerForm.removeControl('cfPassword');
 
     this.authService
       .register(form)
