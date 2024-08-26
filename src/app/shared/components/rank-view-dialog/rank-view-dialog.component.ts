@@ -42,7 +42,6 @@ export class RankViewDialogComponent implements OnInit {
         })
       )
       .subscribe((data: any) => {
-        console.log("RankViewDialogComponent DATA: ", data);
         if(data?.listRank) {
           if(data.type == 2) {
             this.displayedColumns.unshift('orientador');
@@ -59,6 +58,6 @@ export class RankViewDialogComponent implements OnInit {
       return "N/A";
     }
   }
-  toNotRoundedFixed = (nr, fixed) => nr.toFixed(fixed + 3).slice(0, -3)
+  toNotRoundedFixed = (nr, fixed) => nr?.toFixed(fixed + 3).slice(0, -3)
 
 }

@@ -1,7 +1,7 @@
 <div class="container pb-5">
   <div class="row justify-content-between">
     <div class="section-header" mat-dialog-title>
-      <h2>Resultado</h2>
+      <h2>Resultados</h2>
     </div>
   </div>
   
@@ -23,7 +23,7 @@
       </mat-radio-group>
     </div>
 
-    <div class="col-auto" *ngIf="idProcessoSelecionado">
+    <div class="col-auto" *ngIf="idProcessoSelecionado && myUser.isAdmin">
       <button style="background-color: green;" type="button" mat-raised-button color="primary"
         (click)="gerarRank()">Gerar Resultado</button>
     </div>
@@ -47,13 +47,13 @@
                 <th scope="row">{{ rank.title }}</th>
                 <th scope="row">{{ rank.isFinalRank ? "SIM" : "NÃO" }}</th>
                 <th scope="row">
-                  <span matTooltip="Excluir" matTooltipPosition="above" class="material-icons md-18 btn"
+                  <span *ngIf="myUser.isAdmin" matTooltip="Excluir" matTooltipPosition="above" class="material-icons md-18 btn"
                     (click)="apagar(rank._id)">delete</span>
                   <span matTooltip="Visualizar" matTooltipPosition="above" class="material-icons md-18 btn"
                     (click)="visualizar(rank._id)">preview</span>
                 </th>
                 <th>
-                  <mat-slide-toggle (change)="atualizarStatusRankAtivo($event, rank._id)"
+                  <mat-slide-toggle [disabled]="!myUser.isAdmin" (change)="atualizarStatusRankAtivo($event, rank._id)"
                     [checked]="rank.published"></mat-slide-toggle>
                 </th>
               </tr>

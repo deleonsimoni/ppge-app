@@ -103,8 +103,8 @@ export class CriterioAvaliacaoComponent implements OnInit {
   }
 
   onSubmit() {
-    let criterios = this.changeMaxNotaStringToNumber({...this.form.value});
     if (this.form.valid) {
+      let criterios = this.changeMaxNotaStringToNumber({...this.form.value});
       if (this.form.value._id) {
         //FEITO
         this.siteService.atualizarCriterio(criterios)

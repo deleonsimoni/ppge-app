@@ -17,7 +17,10 @@ import { take } from 'rxjs';
 export class FormProcessoSeletivoComponent implements OnInit {
   @Input() type: number;
   @Input() idProcessoSeletivo: string;
+  @Input() isLoadingRegister: boolean;
   @Output() inscrever: EventEmitter<any> = new EventEmitter();
+  @Output() salvarPerfilCandidato: EventEmitter<any> = new EventEmitter();
+  @Output() cancelar: EventEmitter<any> = new EventEmitter();
 
   public passoInscricao = 1;
   public form: FormGroup;
@@ -26,6 +29,7 @@ export class FormProcessoSeletivoComponent implements OnInit {
   public typeGraduateEnum = TypeGraduateEnum;
   public typeOpcaoVagaEnum = TypeOpcaoVagaEnum;
   public listCotas: any;
+  public questionCotas: string;
 
   fileLattes: FileList;
   fileComprovantePagamento: FileList;
@@ -59,13 +63,32 @@ export class FormProcessoSeletivoComponent implements OnInit {
     this.createForm();
   }
 
+  async cancelarProcessoDeInscricao() {
+    const dialogRef = await this.dialog.open(ConfirmDialogComponent, {
+      width: '750px',
+      data: { 
+        title: `Deseja cancelar o processo de inscrição? Os dados preenchidos não serão salvos.`
+      }
+    })
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if (typeof result == 'boolean' && result) {
+        this.cancelar.emit();
+      }
+    })
+  }
+
   clearSegundoOrientador() {
     this.form.get('segundoOrientador')?.setValue(null)
   }
 
   getAllCotas() {
-    this.serviceFormProcesso.getAllCotas().subscribe(listCotas => {
-      this.listCotas = listCotas
+    this.serviceFormProcesso.getAllCotas().subscribe((listCotas: any) => {
+      if(listCotas) {
+        let listCotasSemQuestion = listCotas.filter(cota => !cota.isQuestion);
+        let question = listCotas.filter(cota => cota.isQuestion)[0];
+        this.questionCotas =  question ? question.title : "";
+        this.listCotas = listCotasSemQuestion;
+      }
     })
   }
 
@@ -198,19 +221,6 @@ export class FormProcessoSeletivoComponent implements OnInit {
 
     }
 
-    let questionsPerfilCandidatoForm = {};
-    this.questionsPerfilCandidato.forEach(question => {
-      if(question.type == 'checkbox') {
-        let a = {}
-        for(let i =0; i<question.options.length; i++) {
-          a[question.options[i]] = [null, []]
-        }
-        questionsPerfilCandidatoForm[question.varName] = this.builder.group(a);
-      } else {
-        questionsPerfilCandidatoForm[question.varName] = [null, []];
-      }
-    });
-    groupForm.perfilCandidato = this.builder.group(questionsPerfilCandidatoForm);
     
     this.form = this.builder.group(groupForm);
   }
@@ -238,38 +248,27 @@ export class FormProcessoSeletivoComponent implements OnInit {
   }
 
   async register() {
-    console.log("111111111");
     if(this.passoInscricao == 2) {
       const dialogRef = await this.dialog.open(ConfirmDialogComponent, {
         width: '750px',
         data: { 
-          title: `Ainda falta preencher os dados do perfil do candidato, que é opcional. Deseja finalizar a inscrição?`,
+          title: `Deseja preencher os dados do perfil do candidato?`,
           textIfFalse: 'Não',
           textIfTrue: 'Sim'
         }
       })
-      dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
-        if (typeof result == 'boolean') {
-          if(result) {
-            console.log("VERDADE");
-            this.finalizarInscricao();
-          } else {
-            this.proximoPasso();
-          }
+      dialogRef.afterClosed().pipe(take(1)).subscribe(isPreencherPerfilCandidato => {
+        if (typeof isPreencherPerfilCandidato == 'boolean') {
+          this.finalizarInscricao(isPreencherPerfilCandidato);  
         }
       })
       return;
     }
-    console.log("2222222");
 
     if(this.passoInscricao < 3) {
       this.proximoPasso();
       return;
     }
-    console.log("3333333");
-
-    this.finalizarInscricao();
-
   }
 
   proximoPasso() {
@@ -280,9 +279,7 @@ export class FormProcessoSeletivoComponent implements OnInit {
     });
   }
 
-  finalizarInscricao() {
-    
-    //TODO vai ter limite de tamanho?
+  finalizarInscricao(isPreencherPerfilCandidato = false) {
 
     if (!this.fileLattes) {
       this.toastr.error('É necessário selecionar o Curriculo Lattes', 'Atenção');
@@ -323,6 +320,7 @@ export class FormProcessoSeletivoComponent implements OnInit {
       fileComprovantePagamento: this.fileComprovantePagamento,
 
       formRetorno: this.form,
+      isPreencherPerfilCandidato,
     });
   }
  

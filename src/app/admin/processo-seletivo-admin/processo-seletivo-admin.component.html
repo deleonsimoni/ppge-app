@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row justify-content-between">
     <div class="section-header" mat-dialog-title>
-      <h2>Administrar - Processo Seletivo</h2>
+      <h2>Administrar Processo Seletivo</h2>
     </div>
   </div>
 
@@ -35,10 +35,10 @@
               <p>{{getTitleLinhaById(vaga.value.idLinhaPesquisa)}}</p>
             </div>
             <div class="col-2" *ngIf="form.value.type == typeGraduateEnum.MESTRADO">
-              <input type="number" name="maxVaga" class="form-control" placeholder="AC" formControlName="maxVaga"/>
+              <input matTooltip="Ampla Concorrência" matTooltipPosition="above" type="number" name="maxVaga" class="form-control" placeholder="AC" formControlName="maxVaga"/>
             </div>
             <div class="col-2" *ngIf="form.value.type == typeGraduateEnum.MESTRADO">
-              <input type="number" name="maxVagaCota" class="form-control" placeholder="AA" formControlName="maxVagaCota"/>
+              <input matTooltip="Ações Afirmativas" matTooltipPosition="above" type="number" name="maxVagaCota" class="form-control" placeholder="AA" formControlName="maxVagaCota"/>
             </div>
             <div class="col-12" *ngIf="form.value.type == typeGraduateEnum.DOUTORADO" formArrayName="professors">
               <div class="row align-items-center px-5 mb-3" *ngFor="let professor of getFormProfessor(i).controls; let j = index;" [formGroupName]="j">
@@ -46,10 +46,10 @@
                   {{getProfessorName(vaga.value.idLinhaPesquisa, professor.value.idProfessor)}}
                 </div>
                 <div class="col-2">
-                  <input type="number" name="maxVaga" class="form-control" placeholder="AC" formControlName="maxVaga" />
+                  <input matTooltip="Ampla Concorrência" matTooltipPosition="above" type="number" name="maxVaga" class="form-control" placeholder="AC" formControlName="maxVaga" />
                 </div>
                 <div class="col-2">
-                  <input type="number" name="maxVagaCota" class="form-control" placeholder="AA" formControlName="maxVagaCota" />
+                  <input matTooltip="Ações Afirmativas" matTooltipPosition="above" type="number" name="maxVagaCota" class="form-control" placeholder="AA" formControlName="maxVagaCota" />
                 </div>
               </div>
             </div>

@@ -230,10 +230,12 @@ export class ParecerComponent implements OnInit {
   getPartialScoreByStep(step) {
     let notaSomada = undefined;
     let stepSelected = step;
+    let qtdSection = 0
 
     if(stepSelected) {
       Object.keys(stepSelected).forEach( keySection => {
         if(keySection.startsWith("section-")) {
+          qtdSection++;
           Object.keys(stepSelected[keySection]).forEach( keyQuestion => {
             if(keyQuestion.startsWith("question-")) {
               if(stepSelected[keySection][keyQuestion] != null) {
@@ -250,7 +252,9 @@ export class ParecerComponent implements OnInit {
       })
       
     }
-    
+    if(notaSomada != undefined) {
+      notaSomada = notaSomada/qtdSection;
+    }
     return notaSomada;
   }
   

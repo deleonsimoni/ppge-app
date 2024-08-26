@@ -10,17 +10,19 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let di of datas; let i= index">
-                    <td scope="row">{{ di.autor }}</td>
-                    <td scope="row">{{ di.ano }}</td>
-                    <td scope="row"><a href="{{di.linkTitulo}}" target="_blank">{{ di.titulo }}</a></td>
-                    <td scope="row">
-                        <span matTooltip="Deletar" matTooltipPosition="above" class="material-icons md-18 btn"
-                            (click)="apagarTitulo(di._id, di.autor, di.titulo, di.tipo)">delete</span>
-                        <span matTooltip="Editar" matTooltipPosition="above" class="material-icons md-18 btn" (click)="editarTitulo(di)">edit_square</span>
-                        <span matTooltip="Ver Resumo" matTooltipPosition="above" class="material-icons md-18 btn" (click)="openResumoDialog(di)">preview</span>
-                    </td>
-                </tr>
+                <ng-container *ngFor="let di of datas; let i= index">
+                    <tr *ngIf="i < limit">
+                        <td scope="row">{{ di.autor }}</td>
+                        <td scope="row">{{ di.ano }}</td>
+                        <td scope="row"><a href="{{di.linkTitulo}}" target="_blank">{{ di.titulo }}</a></td>
+                        <td scope="row">
+                            <span matTooltip="Deletar" matTooltipPosition="above" class="material-icons md-18 btn"
+                                (click)="apagarTitulo(di._id, di.autor, di.titulo, di.tipo)">delete</span>
+                            <span matTooltip="Editar" matTooltipPosition="above" class="material-icons md-18 btn" (click)="editarTitulo(di)">edit_square</span>
+                            <span matTooltip="Ver Resumo" matTooltipPosition="above" class="material-icons md-18 btn" (click)="openResumoDialog(di)">preview</span>
+                        </td>
+                    </tr>
+                </ng-container>
             </tbody>
         </table>
     </div>

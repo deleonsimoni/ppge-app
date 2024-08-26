@@ -4,7 +4,8 @@ module.exports = {
   adicionarCota,
   atualizarCota,
   getAllCotas,
-  deleteById
+  deleteById,
+  atualizarQuestionCota
 }
 
 async function adicionarCota(req, idUser) {
@@ -18,6 +19,17 @@ async function atualizarCota(req, idUser) {
   form.user = idUser;
   return await CotaAcaoAfirmativaModel.findOneAndUpdate(
     {_id: form._id},
+    form,
+    {upsert: true}
+  );
+}
+
+async function atualizarQuestionCota(req, idUser) {
+  let form = req.body.formulario;
+  form.user = idUser;
+  form.isQuestion = true;
+  return await CotaAcaoAfirmativaModel.findOneAndUpdate(
+    {isQuestion: true},
     form,
     {upsert: true}
   );

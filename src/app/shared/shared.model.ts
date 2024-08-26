@@ -119,14 +119,14 @@ export const formApprovalTable = {
 
 export const questionsPerfilCandidato = [
   {
-      id: 1,
-      question: "Qual a data do seu nascimento? *",
+      question: "1. Qual a data do seu nascimento? *",
       type: "text",
-      varName: "dataNascimento"
+      varName: "dataNascimento",
+      mask: "00/00/0000",
+      required: true
   },
   {
-      id: 2,
-      question: "Qual é a sua cor/ raça? *",
+      question: "2. Qual é a sua cor/ raça? *",
       options: [
           "Amarelo",
           "Branco",
@@ -139,8 +139,7 @@ export const questionsPerfilCandidato = [
       varName: "corRaca"
   },
   {
-      id: 3,
-      question: "E o seu gênero? *",
+      question: "3. E o seu gênero? *",
       options: [
           "Feminino",
           "Masculino",
@@ -151,22 +150,24 @@ export const questionsPerfilCandidato = [
       varName: "genero"
   },
   {
-      id: 4,
-      question: "Pessoa com deficiência? *",
+      question: "4. Pessoa com deficiência? *",
       options: ["Sim", "Não"],
       type: "radio",
       varName: "pessoaComDeficiencia"
   },
   {
-      id: 5,
-      question: "Em caso de resposta afirmativa na pergunta acima, tem alguma necessidade de tecnologia assistiva ou acessibilidade para realizar o curso?",
-      type: "text",
-      condition: "Sim",
-      varName: "necessidadeTecnologia"
+      question: "5. Em caso de resposta afirmativa na pergunta acima, tem alguma necessidade de tecnologia assistiva ou acessibilidade para realizar o curso?",
+      options: ["Sim", "Não"],
+      type: "radio",
+      varName: "isNecessidadeTecnologia"
   },
   {
-      id: 6,
-      question: "Qual é a sua nacionalidade? *",
+      question: "6. Se respondeu SIM, especifique.",
+      type: "text",
+      varName: "necessidadeTecnologiaDetalhe"
+  },
+  {
+      question: "7. Qual é a sua nacionalidade? *",
       options: [
           "Brasileiro(a)",
           "Outro:"
@@ -175,22 +176,19 @@ export const questionsPerfilCandidato = [
       varName: "nacionalidade"
   },
   {
-      id: 7,
-      question: "Se estrangeiro(a), especifique de qual país.",
+      question: "8. Se estrangeiro(a), especifique de qual país.",
       type: "text",
       condition: "Outro:",
       varName: "paisEstrangeiro"
   },
   {
-      id: 8,
-      question: "Você tem filhos(as)? *",
+      question: "9. Você tem filhos(as)? *",
       options: ["Sim", "Não"],
       type: "radio",
       varName: "temFilhos"
   },
   {
-      id: 9,
-      question: "Caso tenha filhos(as), quantos? *",
+      question: "10. Caso tenha filhos(as), quantos? *",
       options: [
           "1 filho(a)",
           "2 filhos(as)",
@@ -203,15 +201,13 @@ export const questionsPerfilCandidato = [
       varName: "quantosFilhos"
   },
   {
-      id: 10,
-      question: "Tem filhos(as) menores de 5 anos de idade? *",
+      question: "11. Tem filhos(as) menores de 5 anos de idade? *",
       options: ["Sim", "Não"],
       type: "radio",
       varName: "filhosMenores5"
   },
   {
-      id: 11,
-      question: "Quantos filhos(as) menores de 5 anos de idade? *",
+      question: "12. Quantos filhos(as) menores de 5 anos de idade? *",
       options: [
           "1 filho(a)",
           "2 filhos(as)",
@@ -224,15 +220,13 @@ export const questionsPerfilCandidato = [
       varName: "quantosFilhosMenores5"
   },
   {
-      id: 12,
-      question: "Tem filhos(as) menores de 18 anos de idade? *",
+      question: "13. Tem filhos(as) menores de 18 anos de idade? *",
       options: ["Sim", "Não"],
       type: "radio",
       varName: "filhosMenores18"
   },
   {
-      id: 13,
-      question: "Quantos filhos(as) menores de 18 anos de idade? *",
+      question: "14. Quantos filhos(as) menores de 18 anos de idade? *",
       options: [
           "1 filho(a)",
           "2 filhos(as)",
@@ -245,30 +239,26 @@ export const questionsPerfilCandidato = [
       varName: "quantosFilhosMenores18"
   },
   {
-      id: 14,
-      question: "Bairro: *",
+      question: "15. Bairro: *",
       type: "text",
       varName: "bairro",
       preText: "Onde você mora?"
   },
   {
-      id: 15,
-      question: "Cidade: *",
+      question: "16. Cidade: *",
       type: "text",
       varName: "cidade"
   },
   {
-      id: 16,
-      question: "Estado: *",
+      question: "17. Estado: *",
       options: [
           "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"
       ],
-      type: "radio",
+      type: "dropdown",
       varName: "estado"
   },
   {
-      id: 17,
-      question: "Você cursou a maior parte do Ensino Médio em qual rede de ensino? *",
+      question: "18. Você cursou a maior parte do Ensino Médio em qual rede de ensino? *",
       options: [
           "Privada",
           "Pública municipal",
@@ -279,46 +269,41 @@ export const questionsPerfilCandidato = [
       varName: "redeEnsinoMedio"
   },
   {
-      id: 18,
-      question: "Curso:",
+      question: "19. Curso:",
       type: "text",
       varName: "curso1",
       preText: "Em relação à(s) sua(s) graduação(ões), responda:"
   },
   {
-      id: 19,
-      question: "Instituição:",
+      question: "20. Instituição:",
       type: "text",
       varName: "instituicao1"
   },
   {
-      id: 20,
-      question: "Ano de término:",
+      question: "21. Ano de término:",
       type: "text",
-      varName: "anoTermino1"
+      varName: "anoTermino1",
+      mask: "0000"
   },
   {
-      id: 21,
-      question: "Curso:",
+      question: "22. Curso:",
       type: "text",
       varName: "curso2",
       preText: "Preencher caso tenha feito mais de uma graduação"
   },
   {
-      id: 22,
-      question: "Instituição:",
+      question: "23. Instituição:",
       type: "text",
       varName: "instituicao2"
   },
   {
-      id: 23,
-      question: "Ano de término:",
+      question: "24. Ano de término:",
       type: "text",
-      varName: "anoTermino2"
+      varName: "anoTermino2",
+      mask: "0000"
   },
   {
-      id: 24,
-      question: "Na graduação, você atuou em qual ou quais dos programas/atividades acadêmicas abaixo? *",
+      question: "25. Na graduação, você atuou em qual ou quais dos programas/atividades acadêmicas abaixo? *",
       options: [
           "Monitoria",
           "Iniciação Científica - PIBIC (com bolsa)",
@@ -330,24 +315,22 @@ export const questionsPerfilCandidato = [
           "Não participei"
       ],
       type: "checkbox",
-      varName: "programasGraduacao"
+      varName: "programasGraduacao",
+      preText: "Graduação"
   },
   {
-      id: 25,
-      question: "Caso tenha participado de um grupo de pesquisa durante a graduação, por quanto tempo foi sua participação?",
+      question: "26. Caso tenha participado de um grupo de pesquisa durante a graduação, por quanto tempo foi sua participação?",
       type: "text",
       varName: "tempoPesquisaGraduacao"
   },
   {
-      id: 26,
-      question: "Na graduação você recebeu algum tipo de bolsa ou auxílio da assistência estudantil? *",
+      question: "27. Na graduação você recebeu algum tipo de bolsa ou auxílio da assistência estudantil? *",
       options: ["Sim", "Não", "Não sei/ não me lembro"],
       type: "radio",
       varName: "recebeuAuxilioGraduacao"
   },
   {
-      id: 27,
-      question: "Se sim, qual?",
+      question: "28. Se sim, qual?",
       options: [
           "auxílio financeiro/ bolsa auxílio",
           "auxílio transporte/ Riocard/ vale transporte etc.",
@@ -360,15 +343,13 @@ export const questionsPerfilCandidato = [
       varName: "tipoAuxilioGraduacao"
   },
   {
-      id: 28,
-      question: "Quando cursou sua graduação, você ingressou por algum tipo de ação afirmativa ou cota? *",
+      question: "29. Quando cursou sua graduação, você ingressou por algum tipo de ação afirmativa ou cota? *",
       options: ["Sim", "Não"],
       type: "radio",
       varName: "ingressoCota"
   },
   {
-      id: 29,
-      question: "Se sim, qual?",
+      question: "30. Se sim, qual?",
       options: [
           "Renda",
           "Renda + Escola pública",
@@ -383,8 +364,7 @@ export const questionsPerfilCandidato = [
       varName: "tipoCota"
   },
   {
-      id: 30,
-      question: "Você trabalha ou já trabalhou anteriormente? *",
+      question: "31. Você trabalha ou já trabalhou anteriormente? *",
       options: [
           "Nunca trabalhei",
           "Já trabalhei, mas não estou trabalhando no momento",
@@ -395,21 +375,18 @@ export const questionsPerfilCandidato = [
       preText: "Inserção profissional",
   },
   {
-      id: 44,
-      question: "Caso trabalhe, qual/quais a sua ocupação ou ocupações atual/ais?",
+      question: "32. Caso trabalhe, qual/quais a sua ocupação ou ocupações atual/ais?",
       type: "text",
       varName: "ocupacoesAtuaisTrabalho",
   },
   {
-      id: 31,
-      question: "Trabalha ou trabalhou na área da educação? *",
+      question: "33. Trabalha ou trabalhou na área da educação? *",
       options: ["Sim", "Não"],
       type: "radio",
       varName: "trabalhoEducacao"
   },
   {
-      id: 33,
-      question: "Você atua em qual ou quais funções?",
+      question: "34. Você atua em qual ou quais funções?",
       options: [
           "Professor/a",
           "Direção/Coordenação pedagógica",
@@ -422,14 +399,12 @@ export const questionsPerfilCandidato = [
       preText: "Caso trabalhe atualmente na área educacional, responda:"
   },
   {
-      id: 34,
-      question: "Você trabalha em quantas instituições?",
+      question: "35. Você trabalha em quantas instituições?",
       type: "text",
       varName: "quantasInstituicoes"
   },
   {
-      id: 35,
-      question: "Em qual ou quais redes de ensino você trabalha? É possível assinalar mais de uma opção.",
+      question: "36. Em qual ou quais redes de ensino você trabalha? É possível assinalar mais de uma opção.",
       options: [
           "Privada",
           "Pública municipal",
@@ -440,8 +415,7 @@ export const questionsPerfilCandidato = [
       varName: "redesEnsino"
   },
   {
-      id: 36,
-      question: "Em qual ou quais nível/níveis de ensino você trabalha? É possível assinalar mais de uma opção.",
+      question: "37. Em qual ou quais nível/níveis de ensino você trabalha? É possível assinalar mais de uma opção.",
       options: [
           "Educação Infantil (creche e pré-escola)",
           "Educação Fundamental I (1º ao 5º ano)",
@@ -454,8 +428,7 @@ export const questionsPerfilCandidato = [
       varName: "niveisEnsino"
   },
   {
-      id: 37,
-      question: "Qual rendimento da sua FAMÍLIA, somando a renda mensal bruta de todas as pessoas que moram na sua residência? *",
+      question: "38. Qual rendimento da sua FAMÍLIA, somando a renda mensal bruta de todas as pessoas que moram na sua residência? *",
       options: [
           "Não possuo/possuímos rendimento",
           "Até 1 salário mínimo (R$ 1.412)",
@@ -470,15 +443,13 @@ export const questionsPerfilCandidato = [
       preText: "Renda:"
   },
   {
-      id: 38,
-      question: "Você tem dependentes? *",
+      question: "39. Você tem dependentes? *",
       options: ["Não", "Sim"],
       type: "radio",
       varName: "temDependentes"
   },
   {
-      id: 39,
-      question: "Quantos dependentes?",
+      question: "40. Quantos dependentes?",
       options: [
           "1 dependente",
           "2 dependentes",
@@ -491,8 +462,7 @@ export const questionsPerfilCandidato = [
       varName: "quantosDependentes"
   },
   {
-      id: 40,
-      question: "Qual o nível de escolaridade do seu PAI? *",
+      question: "41. Qual o nível de escolaridade do seu PAI? *",
       options: [
           "Não sei",
           "Sem escolaridade",
@@ -509,8 +479,7 @@ export const questionsPerfilCandidato = [
       preText: "Escolaridade"
   },
   {
-      id: 41,
-      question: "Qual o nível de escolaridade da sua MÃE? *",
+      question: "42. Qual o nível de escolaridade da sua MÃE? *",
       options: [
           "Não sei",
           "Sem escolaridade",
@@ -526,15 +495,13 @@ export const questionsPerfilCandidato = [
       varName: "escolaridadeMae"
   },
   {
-      id: 42,
-      question: "Na sua família há alguém que concluiu curso de pós-graduação (Mestrado ou Doutorado)? *",
+      question: "43. Na sua família há alguém que concluiu curso de pós-graduação (Mestrado ou Doutorado)? *",
       options: ["Sim", "Não"],
       type: "radio",
       varName: "posGraduacaoFamilia"
   },
   {
-      id: 43,
-      question: "Se sim, quem?",
+      question: "44. Se sim, quem?",
       options: [
           "Pai/padrasto",
           "Mãe/madrasta",

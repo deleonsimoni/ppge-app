@@ -24,6 +24,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { ComponentsModule } from './components/components.module';
 import { ImagePathComplementPipe } from './pipes/image-path/image-path-complement.pipe';
 import { MatChipsModule } from '@angular/material/chips';
+import { NgxMaskModule } from 'ngx-mask';
 
 
 @NgModule({

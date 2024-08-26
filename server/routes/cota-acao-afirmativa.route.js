@@ -27,6 +27,15 @@ async function atualizarCota(req, res) {
   res.json(response);
 }
 
+router.put('/question', [passport.authenticate('jwt', {
+  session: false
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], asyncHandler(atualizarQuestionCota));
+
+async function atualizarQuestionCota(req, res) {
+  let response = await cotaAcaoAfirmativaCtrl.atualizarQuestionCota(req, req.user._id);
+  res.json(response);
+}
+
 // GET
 router.get('/', [passport.authenticate('jwt', {
   session: false

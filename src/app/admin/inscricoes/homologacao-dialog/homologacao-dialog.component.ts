@@ -57,6 +57,7 @@ export class HomologacaoDialogComponent implements OnInit {
         if(data.enrolled[0].parecer?.homologacao) {
           this.form.patchValue({ questionHomolog: { ...data.enrolled[0].parecer?.homologacao } })
           this.justificaIndeferido = data.enrolled[0].parecer?.recursoHomolog?.justificaIndeferido ?? ''
+          this.verificaIndeferido();
         }
 
       });

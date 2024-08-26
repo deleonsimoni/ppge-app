@@ -176,7 +176,7 @@ async function getAllUsers(req) {
     const limit = parseInt(req.query.limit) || 10; // Limite de documentos por página, padrão é 10
     const skip = (page - 1) * limit;
 
-    query.skip(skip).limit(limit);
+    query.skip(skip).limit(limit+1);
   }
 
   return await query.exec();

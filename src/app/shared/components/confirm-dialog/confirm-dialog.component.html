@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="false">{{data.textIfFalse ? data.textIfFalse : "Não"}}</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>{{data.textIfTrue ? data.textIfTrue : "Não"}}</button>
+  <button mat-raised-button color="accent" [mat-dialog-close]="false">{{data.textIfFalse ? data.textIfFalse : "Não"}}</button>
+  <button mat-raised-button color="primary" style="background-color: green;" [mat-dialog-close]="true" cdkFocusInitial>{{data.textIfTrue ? data.textIfTrue : "Sim"}}</button>
 </div>

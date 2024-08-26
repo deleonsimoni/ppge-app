@@ -16,11 +16,34 @@ export class PerfilCandidatoViewDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { 
     this.perfilCandidato = data;
-    console.log("this.perfilCandidato: ", this.perfilCandidato)
   }
 
   keysObject(object) {
     return Object.keys(object);
+  }
+
+  applyMask(value: string, mask: string): string {
+    // Implemente a lógica para aplicar a máscara.
+    // Por exemplo, para uma máscara de telefone (99) 99999-9999:
+    if (!value) return value;
+    value = value.replace(/\D/g, '');
+  
+    let maskedValue = '';
+    let maskIndex = 0;
+  
+    for (let i = 0; i < value.length; i++) {
+      if (maskIndex >= mask.length) break;
+      if (mask[maskIndex] === '0') {
+        maskedValue += value[i];
+        maskIndex++;
+      } else {
+        maskedValue += mask[maskIndex];
+        maskIndex++;
+        i--; // Retorna um caractere no valor para continuar a iteração no próximo loop
+      }
+    }
+  
+    return maskedValue;
   }
 
 

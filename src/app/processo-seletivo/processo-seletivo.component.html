@@ -2,7 +2,8 @@
 <div class="container">
 
     <div class="section-header">
-        <h2>Processos Seletivos</h2>
+        <h2>Processo Seletivo</h2>
+        <h2 *ngIf="completarInscricao">{{getNomeProcessoSelecionado()}}</h2>
     </div>
 </div>
 <section id="processoSeletivo" class="processoSeletivo" *ngIf="!completarInscricao">
@@ -33,11 +34,72 @@
 
 <section id="processoSeletivo" class="processoSeletivo" *ngIf="completarInscricao">
     <div class="container text-body">
-        <div class="row justify-content-end">
-            <div class="col-auto">
-                <button  mat-raised-button (click)="completarInscricao = false">VOLTAR</button>
+        <app-form-processo-seletivo *ngIf="!isPreencherPerfilCandidato" [type]="typeFormInscricaoSelected" [idProcessoSeletivo]="idProcessoSelected" (inscrever)="inscreverNoProcesso($event)" (cancelar)="cancelarProcessoDeInscricao()"></app-form-processo-seletivo>
+        
+
+        <form *ngIf="isPreencherPerfilCandidato" [formGroup]="formPerfilCandidato" (ngSubmit)="registerPerfilCandidato()" role="form" class="contactForm">
+            <div class="section-header">
+            <h2 mt-2>Perfil do(a) Candidato(a)</h2>
             </div>
-        </div>
-        <app-form-processo-seletivo [type]="typeFormInscricaoSelected" [idProcessoSeletivo]="idProcessoSelected" (inscrever)="inscreverNoProcesso($event)"></app-form-processo-seletivo>
+            <div class="row justify-content-center mb-5">
+            <p>Este questionário tem como objetivo traçar um perfil dos (as) candidatos (as). 
+                Sua participação é muito importante para nossa pesquisa. O
+                preenchimento é obrigatório, mas garantimos o seu anonimato.
+                </p>
+            </div>
+            
+
+            <div class="row mb-5" >
+                
+                <div class="col-12 mb-5" *ngFor="let question of questionsPerfilCandidato">
+                    <h3 *ngIf="question.preText">{{question.preText}}</h3>
+                    <div *ngIf="question.type == 'text'">
+                        <label><strong>{{question.question}}</strong></label>
+                        <input type="text" [formControlName]="question.varName" class="form-control" [mask]="question.mask" />
+                    </div>
+                    <div *ngIf="question.type == 'radio'">
+                        <label><strong>{{question.question}}</strong></label>
+                        <br>
+                        <mat-radio-group aria-labelledby="example-radio-group-label" class="cota-radio-group w-100 ml-2" [formControlName]="question.varName">
+                            <mat-radio-button *ngFor="let optionName of question.options" class="cota-radio-button mr-3" [value]="optionName">{{optionName}}</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div *ngIf="question.type == 'checkbox'">
+                        <label><strong>{{question.question}}</strong></label>
+                        <br>
+                        <div [formArrayName]="question.varName">
+                            <div *ngFor="let optionName of question.options; let i = index">
+                            <label>
+                                <input type="checkbox" [formControlName]="optionName" />
+                                {{ optionName }}
+                            </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="question.type == 'dropdown'">
+                        <label><strong>{{question.question}}</strong></label>
+                        <br>
+                        <div class="col-3">
+                            <mat-form-field appearance="fill" class="mb-3 w-100 py-0" >
+                                <mat-select [formControlName]="question.varName">
+                                    <mat-option *ngFor="let optionName of question.options" [value]="optionName">{{optionName}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-auto" >
+                      <button mat-raised-button color="warn" type="button" (click)="sairProcessoPerfilCandidato()">Sair do Perfil do(a) Candidato(a)</button>
+                    </div>
+                    <div class="col-auto">
+                        <button style="background-color: green;" mat-raised-button color="primary">Finalizar Perfil do(a) Candidato(a)</button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
     </div>
 </section>

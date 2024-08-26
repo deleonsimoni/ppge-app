@@ -15,6 +15,9 @@ export class TeseOuDissertacaoComponent {
     @Input()
     datas: any[];
 
+    @Input()
+    limit: number;
+
     @Output() resposta = new EventEmitter();
 
     constructor(

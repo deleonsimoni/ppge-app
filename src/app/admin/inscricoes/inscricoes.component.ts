@@ -27,7 +27,7 @@ export class InscricoesComponent implements OnInit {
   );
 
   page = 1;
-  limit = 1;
+  limit = 10;
 
   etapa: string;
   etapaAvaliacao: number;
@@ -76,11 +76,11 @@ export class InscricoesComponent implements OnInit {
 
   ngOnInit(): void {
     // this.listarPareceristas();
-    this.siteService.getProcessosSeletivoTitle().subscribe((data: any) => {
-      this.listProcessoSeletivo = data;
-    });
     this.user$.subscribe(user => {
       this.myUser = user;
+      this.siteService.getProcessosSeletivoTitle(!this.myUser.isAdmin).subscribe((data: any) => {
+        this.listProcessoSeletivo = data;
+      });
     })
   }
 
@@ -309,8 +309,24 @@ export class InscricoesComponent implements OnInit {
 
   }
 
-  verificarAprovacao(aprovado) {
-    return typeof aprovado != 'boolean' ? 'Não avaliado' : aprovado ? 'Inscrição Aprovada' : 'Inscrição Reprovada';
+  verificarAprovacao(parecer) {
+    let statusAvaliacao = "";
+
+    
+    this.criterioProcessoSelecionado?.step?.forEach((stepProcesso, index) => {
+      let etapaParecer;
+      if(parecer?.step) {
+        etapaParecer = parecer?.step[`step-${stepProcesso._id}`]
+      }
+
+      if(etapaParecer) {
+        statusAvaliacao += etapaParecer.stepApproval ? `Etapa ${index+1}: Aprovado <br>` : `Etapa ${index+1}: Reprovado <br>`
+      } else {
+        statusAvaliacao += `Etapa ${index+1}: Não avaliado <br>`
+      }
+    })
+
+    return statusAvaliacao;
   }
 
   verificarHomologacao(homologado) {

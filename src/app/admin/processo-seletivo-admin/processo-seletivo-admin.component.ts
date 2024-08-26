@@ -259,6 +259,11 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
   }
 
   public register() {
+    if(!this.form.get("vagas").valid) {
+      this.toastr.error('É necessário informar a quantidade de vagas para Ampla concorrência e Ações Afirmativas!', 'Atenção: ');
+      return;
+    }
+
     if (this.form.valid) {
       if (this.form.value._id) {
         //FEITO

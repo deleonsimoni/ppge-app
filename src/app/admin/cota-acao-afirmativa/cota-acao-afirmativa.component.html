@@ -5,7 +5,17 @@
       <h2>Cotas de Ações Afirmativas</h2>
     </div>
   </div>
-
+  <div class="row mb-5">
+    <div class="col-12">
+      <h4>Pergunta da cota</h4>
+    </div>
+    <div class="col">
+      <textarea matInput class="form-control" placeholder="Pergunta da cota" [(ngModel)]="questionCotas" ></textarea>
+    </div>
+    <div class="col-auto">
+      <button mat-raised-button color="primary" (click)="registerQuestion()">Salvar pergunta</button>
+    </div>
+  </div>
   <div class="row">
     <div class="col-12">
       <form role="form" class="reviewer" [formGroup]="form" (ngSubmit)="register()">
@@ -19,7 +29,7 @@
 
         <div class="row justify-content-end m-4">
           <button type="submit" mat-raised-button color="primary">
-            Submeter
+            Submeter cota
           </button>
         </div>
 

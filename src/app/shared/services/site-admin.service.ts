@@ -273,9 +273,9 @@ export class SiteAdminService {
     return this.http.post(`${this.URL_PROCESSO_SELETIVO}/ativo/${id}`, { isAtivo: checked });
   }
 
-  getProcessosSeletivoTitle() {
-    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/headers`);
-
+  getProcessosSeletivoTitle(onlyActive = true) {
+    let params = new HttpParams().set("onlyActive", onlyActive);
+    return this.http.get(`${this.URL_PROCESSO_SELETIVO}/headers`, {params});
   }
 
   getInscritosProcessoById(idProcesso, filtroConsulta = null, page = null, limit = null) {
@@ -408,6 +408,10 @@ export class SiteAdminService {
 
   atualizarCota(formulario) {
     return this.http.put(`${this.URL_COTA}/${formulario._id}`, { formulario });
+  }
+
+  atualizarQuestionCota(title) {
+    return this.http.put(`${this.URL_COTA}/question`, { formulario: {title, isQuestion: true} });
   }
 
   getAllCotas() {

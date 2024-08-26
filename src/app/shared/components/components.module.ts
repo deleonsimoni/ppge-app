@@ -18,6 +18,7 @@ import { RankViewDialogComponent } from './rank-view-dialog/rank-view-dialog.com
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { PaginationComponent } from './pagination/pagination.component';
 import { PerfilCandidatoViewDialogComponent } from './perfil-candidato-view-dialog/perfil-candidato-view-dialog.component';
+import { NgxMaskModule } from 'ngx-mask';
 
 
 
@@ -42,6 +43,7 @@ import { PerfilCandidatoViewDialogComponent } from './perfil-candidato-view-dial
     MatButtonModule,
     MatDialogModule,
     MatTableModule,
+    NgxMaskModule.forChild()
 
   ],
   exports: [

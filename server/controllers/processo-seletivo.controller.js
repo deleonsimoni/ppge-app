@@ -15,6 +15,7 @@ module.exports = {
   getInscritosByProcessoSelectivo,
   getMinhaInscricoesProcessoSelectivo,
   getMinhaInscricoesDetalhadaProcessoSelectivo,
+  subscribePerfilCandidato,
   subscribeProcessoSeletivo,
   unsubscribeProcessoSeletivo,
   updateProcessoSeletivo,
@@ -48,14 +49,15 @@ module.exports = {
 async function consolidarAvaliacaoAutomatico(idProcesso, idInscricao) {
   try {
     let setUpdate = {};
-    let processoInscricao = await ProcessoSeletivoModel.findOne({ _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } });
-    
+    let processoInscricao = await ProcessoSeletivoModel.findOne(
+      { _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } }, 
+      {criterio: 1, 'enrolled.$': 1}
+    );
 
     let avaliacoes = processoInscricao.enrolled[0].parecer.avaliacoes
     let avaliadores = processoInscricao.enrolled[0].parecerista
     processoInscricao.criterio.step.forEach(step => {
       let notaEtapa = 0;
-
       let primeiroAvaliador = avaliacoes[`avaliador-${avaliadores.primeiro}`]
       let segundoAvaliador = avaliacoes[`avaliador-${avaliadores.segundo}`]
       if(primeiroAvaliador) {
@@ -69,7 +71,6 @@ async function consolidarAvaliacaoAutomatico(idProcesso, idInscricao) {
       // keysAvaliacoes.forEach(ava => {
       //   notaEtapa = preciseSum(notaEtapa, avaliacoes[ava]?.step[`step-${step._id}`]?.totalNotaEtapa ? avaliacoes[ava]?.step[`step-${step._id}`]?.totalNotaEtapa : 0)
       // })
-
       let mediaEtapaAvaliadores = notaEtapa / 2;
       setUpdate[`enrolled.$.parecer.step.step-${step._id}.mediaStep`] = mediaEtapaAvaliadores;
       setUpdate[`enrolled.$.parecer.step.step-${step._id}.stepApproval`] = mediaEtapaAvaliadores >= 7;
@@ -251,14 +252,18 @@ async function getProcessoSeletivo(req) {
   if (req.query.isAtivo != undefined) whereClause.isAtivo = req.query.isAtivo;
   return await ProcessoSeletivoModel.find(whereClause, { enrolled: 0 })
     .sort({
-      createAt: -1
+      createdAt: -1
     });
 }
 
 async function getProcessoSeletivoHeaders(req) {
-  return await ProcessoSeletivoModel.find({}, { title: 1 })
+  let whereClause = {}
+  if(req.query.onlyActive == 'true') {
+    whereClause.isAtivo = true;
+  }
+  return await ProcessoSeletivoModel.find(whereClause, { title: 1 })
     .sort({
-      createAt: -1
+      createdAt: -1
     });
 }
 
@@ -282,7 +287,7 @@ async function getProcessoSeletivoHeaders(req) {
 //       }
 //     )
 //     .sort({
-//       createAt: -1
+//       createdAt: -1
 //     });
 
 //   if (ret) {
@@ -336,7 +341,7 @@ async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, languag
         select: 'fullName',
       },
     })
-    .sort({ createAt: -1 });
+    .sort({ createdAt: -1 });
 
   if (!ret) {
     return ret;
@@ -412,7 +417,7 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
     })
     // .populate({ path: 'enrolled.linhaPesquisa.avaliadores', select: 'email fullname roles' })
     .sort({
-      createAt: -1
+      createdAt: -1
     });
 
   const statusAguardando = ["aguardandoHomolog", "aguardandoAprov"];
@@ -429,8 +434,8 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
       criterioHomologacao: processo.criterioHomologacao,
       enrolled: processo.enrolled.filter((e) => {
           flagReturn = true;
-
-          if(searchText && !e.idUser.fullname.toLowerCase().includes(searchText.toLowerCase()) && !e.idUser.cpf.toLowerCase().includes(searchText.toLowerCase())) {
+          let cpfToTest = e.idUser.cpf.replace(/\D/g, '');
+          if(searchText && !e.idUser.fullname.toLowerCase().includes(searchText.toLowerCase()) && !cpfToTest.toLowerCase().includes(searchText.toLowerCase())) {
             return false;
           }
           
@@ -529,7 +534,6 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
           return flagReturn;
         })
         .sort((ea, eb) => ea.idUser?.fullname.localeCompare(eb.idUser?.fullname))
-        //.slice((page-1)*limit, page*limit)
         .map(e => (
           {
             _id: e._id,
@@ -545,7 +549,7 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
         )),
     }
     if(page && limit) {
-      result.enrolled = result.enrolled.slice((page-1)*limit, page*limit);
+      result.enrolled = result.enrolled.slice((page-1)*limit, (page*limit)+1);
     }
     return result
   } else {
@@ -602,7 +606,7 @@ async function getMinhaInscricoesProcessoSelectivo(idUser) {
   return await ProcessoSeletivoModel
     .find({ enrolled: { $elemMatch: { idUser } } }, { _id: 1 })
     .sort({
-      createAt: -1
+      createdAt: -1
     });
 
 }
@@ -630,7 +634,7 @@ async function getMinhaInscricoesDetalhadaProcessoSelectivo(idUser, language) {
       select: `${language}.title`,
     })
     .sort({
-      createAt: -1
+      createdAt: -1
     });
 
 }
@@ -744,6 +748,18 @@ async function atualizarProcessoSeletivoAtivo(req, idProcesso) {
   );
 }
 
+async function subscribePerfilCandidato(req) {
+   await ProcessoSeletivoModel
+  .findOneAndUpdate(
+    { _id: req.params.idProcesso, enrolled: { $elemMatch: { _id: req.params.idInscricao } } },
+    { $set: { 
+      "enrolled.$.perfilCandidato": req.body.formulario,
+    } },
+    { upsert: false }
+  );
+  return {status: 201}
+}
+
 async function subscribeProcessoSeletivo(req) {
   try {
     const ramdom = Math.random().toString(36).slice(-4);
@@ -773,14 +789,24 @@ async function subscribeProcessoSeletivo(req) {
       { upsert: false }
     );
 
+    let processoInscricao = await ProcessoSeletivoModel.findOne({ 
+        _id: req.params.id,
+        "enrolled.idUser": req.user._id
+      },
+      { "enrolled.$": 1 }
+    );
+
+    // Captura o ID do novo item adicionado
+    let newItemId = processoInscricao.enrolled[0]._id;
+
     let email = templateEmail.inscricaoProcessoSeletivo;
     emailSender.sendMailAWS(req.user.email, 'Processo Seletivo', email);
 
+    return {status: 200, body: {idInscricao: newItemId}};
   } catch (e) {
     console.log(e);
-    return 500;
+    return {status: 500};
   }
-  return 200;
 }
 
 async function uploadFilesProcessoSeletivo(files, idProcesso, idUser, tipoFormulario, filesWithName) {

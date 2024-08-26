@@ -14,7 +14,8 @@ import { ComfirmDeleteProcessoComponent } from '../processo-seletivo-admin/modal
 export class CotaAcaoAfirmativaComponent implements OnInit {
 
   form: any;
-  listCotas: any;
+  listCotas: any = [];
+  questionCotas: string = "";
 
   constructor(
     private builder: FormBuilder,
@@ -38,8 +39,13 @@ export class CotaAcaoAfirmativaComponent implements OnInit {
 
   getAllCotas() {
     //FEITO
-    this.siteService.getAllCotas().subscribe(listCotas => {
-      this.listCotas = listCotas;
+    this.siteService.getAllCotas().subscribe((listCotas: any) => {
+      if(listCotas) {
+        let listCotasSemQuestion = listCotas.filter(cota => !cota.isQuestion);
+        let question = listCotas.filter(cota => cota.isQuestion)[0];
+        this.questionCotas =  question ? question.title : "";
+        this.listCotas = listCotasSemQuestion;
+      }
     });
   }
 
@@ -75,8 +81,25 @@ export class CotaAcaoAfirmativaComponent implements OnInit {
 
   }
 
+  registerQuestion() {
+    if(this.questionCotas.trim() != "") {
+      this.siteService.atualizarQuestionCota(this.questionCotas)
+        .pipe(
+          take(1),
+          catchError(err => {
+            this.toastr.error("Ocorreu um erro ao editar a cota!");
+            throw err;
+          })
+        )
+        .subscribe((data: any) => {
+          this.getAllCotas();
+        })
+    } else {
+      this.toastr.error('Preencha corretamente a pergunta!', 'Atenção: ');
+    }
+  }
+
   register() {
-    console.log("register: ", this.form);
     if(this.form.valid) {
       if (this.form.value._id) {
         this.siteService.atualizarCota(this.form.value)

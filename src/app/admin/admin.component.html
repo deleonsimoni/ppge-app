@@ -11,7 +11,7 @@
                         <div class="container">
                             <div class="row">
                                 <mat-tab-group style="font-size: 40px !important;" (selectedTabChange)="changeTab()">
-                                    <mat-tab label="Administrar Site"> 
+                                    <mat-tab label="Administrar Site" *ngIf="myUser.isAdmin"> 
                                         <ul class="nav nav-pills">
                                             <ng-container  *ngFor="let item of menu">
                                                 <li *ngIf="item.permitido && item.type == 2" class="nav-item mx-2">
@@ -22,7 +22,7 @@
                                             </ng-container>
                                         </ul> 
                                     </mat-tab>
-                                    <mat-tab label="Administrar Processo Seletivo">
+                                    <mat-tab label="Processo Seletivo">
                                         <ul class="nav nav-pills">
                                             <ng-container  *ngFor="let item of menu">
                                                 <li *ngIf="item.permitido && item.type == 1" class="nav-item mx-2">

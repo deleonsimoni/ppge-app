@@ -2,13 +2,16 @@
 <div mat-dialog-content>
 
   <div class="container">
-    <div class="row mb-5">
-            
+    <div *ngIf="!perfilCandidato" class="row mb-5">
+      Não preencheu o "Perfil do Candidato"
+    </div>
+    <div *ngIf="perfilCandidato" class="row mb-5">
+      
       <div class="col-12 mb-5" *ngFor="let question of questionsPerfilCandidato">
         <h3 *ngIf="question.preText">{{question.preText}}</h3>
-        <div *ngIf="question.type == 'text' || question.type == 'radio'">
+        <div *ngIf="question.type == 'text' || question.type == 'radio' || question.type == 'checkbox'">
           <label><strong>{{question.question}}</strong></label>
-          <p>{{perfilCandidato[question.varName] ?? '-'}}</p>
+          <p>{{perfilCandidato[question.varName] ? (question.mask ? applyMask(perfilCandidato[question.varName], question.mask) : perfilCandidato[question.varName]) : '-'}}</p>
         </div>
         <div *ngIf="question.type == 'checkbox'">
           <label><strong>{{question.question}}</strong></label>
@@ -26,5 +29,5 @@
 
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="false">Fechar</button>
+  <button mat-raised-button color="accent" [mat-dialog-close]="false">Fechar</button>
 </div>

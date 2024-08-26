@@ -1,19 +1,13 @@
 <div class="container">
-  <form [formGroup]="form" (ngSubmit)="register()" role="form" class="contactForm">
+  <form *ngIf="passoInscricao < 3" [formGroup]="form" (ngSubmit)="register()" role="form" class="contactForm">
     <div class="section-header">
       <h2 mt-2>Dados para completar a inscrição</h2>
     </div>
     <div class="row justify-content-center align-items-center mb-5">
         <div (click)="passoInscricao = 1" class="col-auto mr-5 progress-step" [ngClass]="{'active': passoInscricao == 1}" >1</div>
         <div (click)="passoInscricao = 2" class="col-auto mr-5 progress-step" [ngClass]="{'active': passoInscricao == 2}" >2</div>
-        <div *ngIf="passoInscricao == 3" class="col-auto mr-5 progress-step" [ngClass]="{'active': passoInscricao == 3}" >3</div>
-
     </div>
-    <div class="row justify-content-center">
-      <div class="col-auto" *ngIf="passoInscricao == 3">
-        <button mat-raised-button color="primary" type="button" (click)="passoAnterior()">Voltar para anexos</button>
-      </div>
-    </div>
+    
     <div *ngIf="passoInscricao == 1">
       <div class="row">
         <div class="col-12">
@@ -65,8 +59,7 @@
       </div>
   
       <div *ngIf="form.value.opcaoVaga == typeOpcaoVagaEnum.COTAS_ACOES_AFIRMATIVAS" class="row mb-3">
-        <label id="example-radio-group-label"><strong>Sobre a política de ação afirmativa para negros(as), indígenas,
-            quilombolas, pessoas com deficiência, pessoas travestis e transexuais, assinale uma das alternativas a seguir:
+        <label id="example-radio-group-label"><strong>{{questionCotas}}
           </strong></label>
         <mat-radio-group aria-labelledby="example-radio-group-label" class="cota-radio-group ml-2"
           formControlName="opcaoVagaCotaSub">
@@ -161,13 +154,13 @@
           <div class="row mb-3 ml-2">
             <div class="col">
               <label><strong>Ano de início*</strong></label>
-              <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoInicio" class="form-control">
+              <input type="text" mask="0000" formControlName="anoInicio" class="form-control">
             </div>
           </div>
           <div class="row mb-3 ml-2">
             <div class="col">
               <label><strong>Ano de conclusão*</strong></label>
-              <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoConclusao" class="form-control">
+              <input type="text" mask="0000" formControlName="anoConclusao" class="form-control">
             </div>
           </div>
           <div class="row">
@@ -186,26 +179,26 @@
           <label><strong>Pós-graduação {{type == typeGraduateEnum.DOUTORADO ? "(especialização)" : ""}}</strong></label>
           <div class="row mb-3 ml-2">
             <div class="col">
-              <label><strong>Curso de {{type == typeGraduateEnum.DOUTORADO ? "especialização*" : "pós-graduação"}}</strong></label>
+              <label><strong>Curso de {{type == typeGraduateEnum.DOUTORADO ? "especialização" : "pós-graduação"}}</strong></label>
               <input type="text" formControlName="nome" class="form-control">
             </div>
           </div>
           <div class="row mb-3 ml-2">
             <div class="col">
-              <label><strong>instituição{{type == typeGraduateEnum.DOUTORADO ? "*" : ""}}</strong></label>
+              <label><strong>Instituição</strong></label>
               <input type="text" formControlName="instituicao" class="form-control">
             </div>
           </div>
           <div class="row mb-3 ml-2">
             <div class="col">
-              <label><strong>Ano de início{{type == typeGraduateEnum.DOUTORADO ? "*" : ""}}</strong></label>
-              <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoInicio" class="form-control">
+              <label><strong>Ano de início</strong></label>
+              <input type="text" mask="0000" formControlName="anoInicio" class="form-control">
             </div>
           </div>
           <div class="row mb-3 ml-2">
             <div class="col">
-              <label><strong>Ano de conclusão{{type == typeGraduateEnum.DOUTORADO ? "*" : ""}}</strong></label>
-              <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoConclusao" class="form-control">
+              <label><strong>Ano de conclusão</strong></label>
+              <input type="text" mask="0000" formControlName="anoConclusao" class="form-control">
             </div>
           </div>
   
@@ -227,24 +220,24 @@
           <div class="row mb-3 ml-2">
             <div class="col">
               <label><strong>Ano de início*</strong></label>
-              <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoInicio" class="form-control">
+              <input type="text" mask="0000" formControlName="anoInicio" class="form-control">
             </div>
           </div>
           <div class="row mb-3 ml-2">
             <div class="col">
               <label><strong>Ano de conclusão*</strong></label>
-              <input type="text" pattern="[0-9]+" maxlength="4" formControlName="anoConclusao" class="form-control">
+              <input type="text" mask="0000" formControlName="anoConclusao" class="form-control">
             </div>
           </div>
           <div class="row mb-3 ml-2">
             <div class="col">
-              <label><strong>Título de dissertação</strong></label>
+              <label><strong>Título de dissertação*</strong></label>
               <input type="text" formControlName="tituloDissertacao" class="form-control">
             </div>
           </div>
           <div class="row mb-3 ml-2">
             <div class="col">
-              <label><strong>Nome do(a) orientador(a)</strong></label>
+              <label><strong>Nome do(a) orientador(a)*</strong></label>
               <input type="text" formControlName="nomeOrientador" class="form-control">
             </div>
           </div>
@@ -258,41 +251,14 @@
             outros cursos de graduação ou de pós-graduação lato ou stricto-sensu
             concluídos ou não.
             </strong></label>
-          <input type="text" formControlName="outrosCursos" class="form-control" />
+            <textarea matInput cdkTextareaAutosize formControlName="outrosCursos" class="form-control" ></textarea>
 
-        </div>
-      </div>
-  
-      <div class="row mb-5">
-        <label><strong>Termos</strong></label>
-        <div *ngIf="type == typeGraduateEnum.MESTRADO" class="col-12 pl-4">
-          <label><strong>Confirmação da Opção</strong></label><br>
-          <mat-checkbox style="white-space: normal;" formControlName="termoLeituraEdital">
-            Declaro que li o Edital de Seleção ao Curso de Mestrado, do Programa de Pós-Graduação
-            em Educação da UFRJ e concordo e aceito os termos relacionados à politica de ação
-            afirmativa.
-          </mat-checkbox>
-        </div>
-        <div class="col-12 pl-4">
-          <label><strong>Concordância com edital</strong></label><br>
-          <mat-checkbox style="white-space: normal;" formControlName="termoConcordanciaEdital">
-            Li e aceito todos os termos e itens do Edital de Seleção ao Curso de Mestrado
-            do Programa de Pós-Graduação em Educação da UFRJ.
-          </mat-checkbox>
-        </div>
-        <div class="col-12 pl-4">
-          <label><strong>Termo de responsabilidade pelas informações inseridas na inscrição</strong></label><br>
-          <mat-checkbox style="white-space: normal;" formControlName="termoResponsabilidadeInfo">
-            Declaro que todas as informações constantes na minha ficha de inscrição são
-            verídicas e sobre elas tenho plena responsabilidade e, caso solicitado,
-            entregarei toda a documentação comprobatória dessas informações.
-          </mat-checkbox>
         </div>
       </div>
 
     </div>
 
-    <div *ngIf="passoInscricao == 2">
+    <div [ngClass]="{'d-none': passoInscricao != 2}">
 
       <div class="row mb-5">
         <label><strong>Anexos</strong></label>
@@ -392,56 +358,44 @@
             formato remoto).</p>
         </div>
       </div>
-    </div>
-
-    <div *ngIf="passoInscricao == 3">
-      <div class="row justify-content-center mb-5">
-        <h2>Perfil do(a) Candidato(a)</h2>
-        <p>Este questionário tem como objetivo traçar um perfil dos (as) candidatos (as) ao curso
-          de Mestrado. Sua participação é muito importante para nossa pesquisa. O
-          preenchimento é obrigatório, mas garantimos o seu anonimato.
-          </p>
-      </div>
-
-      <div class="row mb-5" formGroupName="perfilCandidato">
-        
-        <div class="col-12 mb-5" *ngFor="let question of questionsPerfilCandidato">
-          <h3 *ngIf="question.preText">{{question.preText}}</h3>
-          <div *ngIf="question.type == 'text'">
-            <label><strong>{{question.question}}</strong></label>
-            <input type="text" [formControlName]="question.varName" class="form-control" />
-          </div>
-          <div *ngIf="question.type == 'radio'">
-            <label><strong>{{question.question}}</strong></label>
-            <br>
-            <mat-radio-group aria-labelledby="example-radio-group-label" class="cota-radio-group w-100 ml-2" [formControlName]="question.varName">
-                <mat-radio-button *ngFor="let optionName of question.options" class="cota-radio-button mr-3" [value]="optionName">{{optionName}}</mat-radio-button>
-            </mat-radio-group>
-          </div>
-          <div *ngIf="question.type == 'checkbox'">
-            <label><strong>{{question.question}}</strong></label>
-            <br>
-            <div [formArrayName]="question.varName">
-              <div *ngFor="let optionName of question.options; let i = index">
-                <label>
-                  <input type="checkbox" [formControlName]="optionName" />
-                  {{ optionName }}
-                </label>
-              </div>
-            </div>
-          </div>
+  
+      <div class="row mb-5">
+        <label><strong>Termos</strong></label>
+        <div *ngIf="type == typeGraduateEnum.MESTRADO" class="col-12 pl-4">
+          <label><strong>Confirmação da Opção</strong></label><br>
+          <mat-checkbox style="white-space: normal;" formControlName="termoLeituraEdital">
+            Declaro que li o Edital de Seleção ao Curso de Mestrado, do Programa de Pós-Graduação
+            em Educação da UFRJ e concordo e aceito os termos relacionados à politica de ação
+            afirmativa.
+          </mat-checkbox>
         </div>
-
+        <div class="col-12 pl-4">
+          <label><strong>Concordância com edital</strong></label><br>
+          <mat-checkbox style="white-space: normal;" formControlName="termoConcordanciaEdital">
+            Li e aceito todos os termos e itens do Edital de Seleção ao Curso de Mestrado
+            do Programa de Pós-Graduação em Educação da UFRJ.
+          </mat-checkbox>
+        </div>
+        <div class="col-12 pl-4">
+          <label><strong>Termo de responsabilidade pelas informações inseridas na inscrição</strong></label><br>
+          <mat-checkbox style="white-space: normal;" formControlName="termoResponsabilidadeInfo">
+            Declaro que todas as informações constantes na minha ficha de inscrição são
+            verídicas e sobre elas tenho plena responsabilidade e, caso solicitado,
+            entregarei toda a documentação comprobatória dessas informações.
+          </mat-checkbox>
+        </div>
       </div>
-
     </div>
 
     <div class="row justify-content-center">
+      <div class="col-auto" >
+        <button [disabled]="isLoadingRegister" mat-raised-button color="warn" type="button" (click)="cancelarProcessoDeInscricao()">Cancelar inscrição</button>
+      </div>
       <div class="col-auto" *ngIf="passoInscricao > 1">
-        <button mat-raised-button color="primary" type="button" (click)="passoAnterior()">Passo anterior</button>
+        <button [disabled]="isLoadingRegister" mat-raised-button color="primary" type="button" (click)="passoAnterior()">Passo anterior</button>
       </div>
       <div class="col-auto">
-        <button style="background-color: green;" mat-raised-button color="primary">{{passoInscricao < 2 ? "Próximo passo" : "Finalizar Inscrição"}}</button>
+        <button [disabled]="isLoadingRegister" style="background-color: green;" mat-raised-button color="primary">{{passoInscricao < 2 ? "Próximo passo" : "Finalizar Inscrição"}}</button>
       </div>
     </div>
 

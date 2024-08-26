@@ -2,11 +2,13 @@ import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { merge, Observable, take } from "rxjs";
+import { catchError, merge, Observable, take } from "rxjs";
 import { User } from '../shared/interfaces';
 import { AuthService } from "../shared/services";
 import { ProcessoSeletivoService } from "./processo-seletivo.service";
 import { RanklistDialogComponent } from "./ranklist-dialog/ranklist-dialog.component";
+import { questionsPerfilCandidato } from "@app/shared/shared.model";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-processo-seletivo',
@@ -27,6 +29,11 @@ export class ProcessoSeletivoComponent implements OnInit {
   completarInscricao: boolean = false;
   typeFormInscricaoSelected;
   idProcessoSelected;
+  isLoadingRegister: boolean = false;
+  isPreencherPerfilCandidato: boolean = false;
+  idNovaInscricaoSelected: any;
+  public questionsPerfilCandidato = questionsPerfilCandidato;
+  public formPerfilCandidato: FormGroup;
 
   constructor(
     private processoSeletivoService: ProcessoSeletivoService,
@@ -34,6 +41,7 @@ export class ProcessoSeletivoComponent implements OnInit {
     private toastr: ToastrService,
     private router: Router,
     public dialog: MatDialog,
+    private builder: FormBuilder,
   ) {
     window.scroll({
       top: 0,
@@ -44,6 +52,55 @@ export class ProcessoSeletivoComponent implements OnInit {
   ngOnInit(): void {
     this.getMinhasIncricoes();
     this.getProcessoSeletivo();
+    this.createFormPerfilCandidato();
+  }
+  private limparDadosPerfilCandidato() {
+    this.createFormPerfilCandidato();
+    this.idNovaInscricaoSelected = null;
+  }
+  private createFormPerfilCandidato() {
+    let questionsPerfilCandidatoForm = {};
+    this.questionsPerfilCandidato.forEach(question => {
+      if(question.type == 'checkbox') {
+        let groupCheckbox = {}
+        for(let i =0; i<question.options.length; i++) {
+          groupCheckbox[question.options[i]] = [null, []]
+        }
+        questionsPerfilCandidatoForm[question.varName] = this.builder.group(groupCheckbox);
+      } else {
+        let validator = question.required ? [Validators.required] : [];
+        questionsPerfilCandidatoForm[question.varName] = this.builder.control(null, validator);
+      }
+    });
+    this.formPerfilCandidato = this.builder.group(questionsPerfilCandidatoForm);
+  }
+
+  registerPerfilCandidato() {
+    
+    if(this.formPerfilCandidato.valid) {
+      this.processoSeletivoService.salvarPerfilCandidato(this.idProcessoSelected, this.idNovaInscricaoSelected, this.formPerfilCandidato.value)
+        .pipe(
+          take(1),
+          catchError( err => {
+            throw err;
+          })
+        ).subscribe(data => {
+          this.sairProcessoPerfilCandidato()
+        })
+    } else {
+      this.toastr.error('Preencha o formulário corretamente!', 'Atenção: ');
+    }
+
+  }
+  sairProcessoPerfilCandidato() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.completarInscricao = false;
+    this.limparDadosPerfilCandidato();
+  }
+
+  cancelarProcessoDeInscricao() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.completarInscricao = false
   }
 
   getMinhasIncricoes() {
@@ -57,14 +114,12 @@ export class ProcessoSeletivoComponent implements OnInit {
 
   getProcessoSeletivo() {
     this.processoSeletivoService.getProcessoSeletivo().subscribe(arr => {
-      console.log("PROCESSO: ", arr);
       
       this.processoSeletivo = arr;
     });
   }
 
   listarRank(idProcesso) {
-    console.log("idProcesso: ", idProcesso);
 
     this.dialog.open(RanklistDialogComponent, {
       width: '80%',
@@ -73,6 +128,9 @@ export class ProcessoSeletivoComponent implements OnInit {
       }
     });
 
+  }
+  getNomeProcessoSelecionado() {
+    return this.processoSeletivo.find(p => p._id == this.idProcessoSelected)?.title
   }
 
   iniciarInscricaoNoProcesso(idProcesso, type) {
@@ -99,6 +157,7 @@ export class ProcessoSeletivoComponent implements OnInit {
   }
 
   inscreverNoProcesso(objectReturned) {
+    this.isLoadingRegister = true;
     let { 
       fileLattes, 
       filePreProjeto, 
@@ -111,7 +170,8 @@ export class ProcessoSeletivoComponent implements OnInit {
       fileCertidaoNascimentoFilho,
       fileComprovanteResidencia,
       fileComprovantePagamento,
-      formRetorno 
+      formRetorno,
+      isPreencherPerfilCandidato,
     } = objectReturned;
     const files = {
       fileLattes: fileLattes ? fileLattes[0] : null, 
@@ -131,16 +191,24 @@ export class ProcessoSeletivoComponent implements OnInit {
     if (formRetorno.valid) {
       this.processoSeletivoService.inscreverProcessoSeletivo(formRetorno.value.idProcesso, formRetorno.value, files)
         .subscribe(
-          () => {
+          (data: any) => {
             this.toastr.success('Inscrito com sucesso', 'Sucesso');
-            this.completarInscricao = false;
+            if(!isPreencherPerfilCandidato) {
+              this.completarInscricao = false;
+            } else {
+              this.idNovaInscricaoSelected = data.idInscricao;
+            }
+            this.isPreencherPerfilCandidato = isPreencherPerfilCandidato;
+            this.isLoadingRegister = false;
             this.getMinhasIncricoes();
           },
           erro => {
+            this.isLoadingRegister = false;
             this.toastr.error('Ocorreu um erro inesperado!', 'Atenção: ');
           }
         );
     } else {
+      this.isLoadingRegister = false;
       this.toastr.error('Preencha os campos corretamente', 'Atenção: ')
     }
   }

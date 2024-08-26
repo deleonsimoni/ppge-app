@@ -43,6 +43,7 @@ import { EsqueciSenhaComponent } from './esqueci-senha/esqueci-senha.component';
 import { NoticeModule } from './notice/notice.module';
 import { SanitizeModule } from './shared/pipes/sanitize/sanitize.module';
 import { NormaPosGraduacaoModule } from './corpo-docente/normas-pos-graduacao/normas-pos-graduacao.module';
+import { NgxMaskModule } from 'ngx-mask';
 
 export function appInitializerFactory(authService: AuthService) {
   return () => authService.checkTheUserOnTheFirstLoad();
@@ -57,6 +58,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     HttpClientModule,
     SharedModule,
+    NgxMaskModule.forRoot(),
     AppRoutingModule,
     TeseDissertacaoModule,
     MatriculaModule,

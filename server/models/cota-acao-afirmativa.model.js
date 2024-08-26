@@ -12,6 +12,10 @@ const CotaAcaoAfirmativaSchema = new mongoose.Schema(
       required: true,
     },
 
+    isQuestion: {
+      type: Boolean,
+    },
+
     createdAt: {
       type: Date,
       default: Date.now,

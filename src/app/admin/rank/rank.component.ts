@@ -2,6 +2,8 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { RankViewDialogComponent } from '@app/shared/components/rank-view-dialog/rank-view-dialog.component';
+import { User } from '@app/shared/interfaces';
+import { AuthService } from '@app/shared/services';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, take } from 'rxjs';
@@ -15,6 +17,7 @@ import { catchError, take } from 'rxjs';
 export class RankComponent implements OnInit {
 
   isFinalRank = false;
+  myUser: User = <User>{};
 
   displayedColumns = [
     "nome",
@@ -33,13 +36,18 @@ export class RankComponent implements OnInit {
     private siteService: SiteAdminService,
     private toastr: ToastrService,
     public dialog: MatDialog,
+    public authService: AuthService,
   ) { }
 
   ngOnInit(): void {
+    
+    let user$ = this.authService.getUser();
+    user$.subscribe(user => {this.myUser = user})
     //FEITO
     this.siteService.getProcessosSeletivoTitle().subscribe((data: any) => {
       this.listProcessoSeletivo = data;
     });
+
   }
 
   getAllRanks(idProcesso) {
@@ -52,13 +60,11 @@ export class RankComponent implements OnInit {
         catchError(e => {throw e})
       )
       .subscribe((data: any) => {
-        console.log("data: ", data);
         this.listRanks = data?.listRank;
       })
   }
 
   apagar(idRank) {
-    console.log("apagar() idRank: ", idRank);
     //FEITO
     this.siteService
     .deleteRankById(this.idProcessoSelecionado, idRank).pipe(
@@ -101,7 +107,7 @@ export class RankComponent implements OnInit {
         .pipe(
           take(1),
           catchError(err => {
-            this.toastr.error("Ocorreu um erro ao gerar rank!", "Atenção");
+            this.toastr.error("Ocorreu um erro ao gerar o resultado!", "Atenção");
             throw err;
           })
         )

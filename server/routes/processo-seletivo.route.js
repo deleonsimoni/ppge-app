@@ -102,6 +102,10 @@ router.post('/processo-seletivo/inscrever/:id', [passport.authenticate('jwt', {
   session: false
 }), requireLogin, fileUpload()], asyncHandler(subscribeProcessoSeletivo));
 
+router.post('/processo-seletivo/inscrever/perfil-candidato/:idProcesso/:idInscricao', [passport.authenticate('jwt', {
+  session: false
+}), requireLogin, fileUpload()], asyncHandler(subscribePerfilCandidato));
+
 router.get('/processo-seletivo/inscrever/infos/:id', setLocation, asyncHandler(getProcessoSeletivoInscreverInfosById));
 
 router.delete('/processo-seletivo/inscrever/:id', [passport.authenticate('jwt', {
@@ -227,11 +231,9 @@ async function insertProcessoSeletivo(req, res) {
 }
 
 async function registrarParecer(req, res) {
-  console.log("req.user: ", req.user.roles)
   
   let idParecerista = req.user._id;
   if(req.body.isAnother) {
-    console.log("req.user: ", req.user.roles)
     if(req.user.roles.indexOf('coordenador') > -1) {
       idParecerista = req.body.idPareceristaSelected;
     } else {
@@ -270,7 +272,12 @@ async function atualizarProcessoSeletivoAtivo(req, res) {
 
 async function subscribeProcessoSeletivo(req, res) {
   const statusReturned = await processoSeletivoCtrl.subscribeProcessoSeletivo(req);
-  res.status(statusReturned).json({});
+  res.status(statusReturned.status).json(statusReturned.body);
+}
+
+async function subscribePerfilCandidato(req, res) {
+  const statusReturned = await processoSeletivoCtrl.subscribePerfilCandidato(req);
+  res.status(statusReturned.status).json(statusReturned.body);
 }
 
 async function unsubscribeProcessoSeletivo(req, res) {

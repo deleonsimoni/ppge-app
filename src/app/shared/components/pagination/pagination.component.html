@@ -9,7 +9,7 @@
       Página {{page}}
     </div>
     <div class="col-auto">
-      <span (click)="callPagination(qtdItems >= limit, 1)" class="material-icons arrows-pagination" style="font-size: 40px;" [ngClass]="{'arrow-disabled': qtdItems < limit}">
+      <span (click)="callPagination(qtdItems > limit, 1)" class="material-icons arrows-pagination" style="font-size: 40px;" [ngClass]="{'arrow-disabled': qtdItems <= limit}">
         chevron_right
       </span>
     </div>

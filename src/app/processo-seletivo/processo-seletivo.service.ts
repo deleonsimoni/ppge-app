@@ -18,6 +18,11 @@ export class ProcessoSeletivoService {
     return this.http.get(`${this.URL_PROCESSO_SELETIVO}`, { params });
   }
 
+  public salvarPerfilCandidato(idProcesso, idInscricao, formulario) {
+    
+    return this.http.post(`${this.URL_PROCESSO_SELETIVO}/inscrever/perfil-candidato/${idProcesso}/${idInscricao}`, { formulario });
+  }
+
   public inscreverProcessoSeletivo(idProcesso, formulario, files) {
 
     const formData: FormData = new FormData();
