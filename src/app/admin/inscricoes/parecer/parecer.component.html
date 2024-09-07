@@ -30,7 +30,7 @@
                   </div>
                   <div class="col-3 p-2">
                     <label class="mr-1" style="font-size: 12px;">(até {{formatDecimal(question.maxNota)}} p.)</label>
-                    <input (keyup)="chamouOutro($event, question.maxNota)" (keypress)="validateNumber($event, question.maxNota)" class="input-nota" type="text" [formControlName]="'question-'+question._id">
+                    <input (keypress)="validateNumber($event, question.maxNota, step._id, section._id, question._id)" class="input-nota" type="text" [formControlName]="'question-'+question._id">
                   </div>
                 </div>
         

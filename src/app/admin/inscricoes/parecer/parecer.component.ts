@@ -263,7 +263,7 @@ export class ParecerComponent implements OnInit {
     return sum / 100;
   }
 
-  validateNumber(event, maxNota) {
+  validateNumber(event, maxNota, stepId, sectionId, questionId) {
     const pattern = new RegExp(/^[0-9]+(\,[0-9]{0,2})?$/);
     let inputChar = String.fromCharCode(event.charCode);
     let input = event.target.value+inputChar;
@@ -275,15 +275,7 @@ export class ParecerComponent implements OnInit {
       event.preventDefault();
     } else if(inputNumber > maxNota) {
       event.preventDefault();
-      event.target.value = String(maxNota).replaceAll(".", ",");
-    }
-  }
-
-  chamouOutro(event, maxNota) {
-    let inputNumber = Number(event.target.value.replaceAll(",", "."));
-    if(inputNumber > maxNota) {
-      event.preventDefault();
-      event.target.value = String(maxNota).replaceAll(".", ",");
+      this.form.get('step').get(`step-${stepId}`).get(`section-${sectionId}`).get(`question-${questionId}`).setValue(String(maxNota).replaceAll(".", ","), { emitEvent: false });
     }
   }
 

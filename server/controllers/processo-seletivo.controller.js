@@ -439,7 +439,30 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
             return false;
           }
           
-          if(idParecerista) flagReturn = e.parecerista && ((e.parecerista.primeiro && e.parecerista.primeiro.equals(idParecerista)) || (e.parecerista.segundo && e.parecerista.segundo.equals(idParecerista)))
+          if(idParecerista) {
+            // valida se parecerista da inscricao
+            flagReturn = e.parecerista && 
+              (
+                (e.parecerista.primeiro && e.parecerista.primeiro.equals(idParecerista)) || 
+                (e.parecerista.segundo && e.parecerista.segundo.equals(idParecerista))
+              )
+
+            // valida se disponivel para avaliar
+            if(flagReturn && e.parecer) {
+              if(processo.etapa == 'homologacao') {
+                flagReturn = typeof e.parecer.homologado != 'boolean' && e.parecerista[e.responsavelHomologacao]?.equals(idParecerista)
+
+              } else if(processo.etapa == 'avaliacao') {
+                if(e.parecer.avaliacoes) {
+                  let idEtapaVigente = processo.criterio?.step[processo.etapaAvaliacao]._id;
+                  let etapaAvaliada = e.parecer.avaliacoes['avaliador-'+idParecerista]?.step['step-'+idEtapaVigente]?.totalNotaEtapa;
+                  flagReturn = etapaAvaliada == null || etapaAvaliada == undefined;
+                }
+              } else {
+                flagReturn = false;
+              }
+            }
+          }
           else if(filterByLinha) flagReturn = !!filterByLinha.find(fbl => fbl.equals(e.linhaPesquisa ? e.linhaPesquisa._id : null));
           
           
