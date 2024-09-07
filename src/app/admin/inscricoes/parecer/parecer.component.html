@@ -9,7 +9,7 @@
 
     <div formGroupName="step">
       <div *ngFor="let step of data.criterio?.step; let i = index" >
-        <div *ngIf="etapaAvaliacao >= i && (i == 0 || parecerConsolidadoSelected?.step['step-'+data.criterio?.step[i-1]?._id]?.stepApproval)" class="row mt-5" [formGroupName]="'step-'+step._id">
+        <div *ngIf="(etapaAvaliacao == i || (myUser.isCoordenador && etapaAvaliacao >= i)) && (i == 0 || parecerConsolidadoSelected?.step['step-'+data.criterio?.step[i-1]?._id]?.stepApproval)" class="row mt-5" [formGroupName]="'step-'+step._id">
           <div class="col-12 text-center p-2">
             <h3>
               {{ step.title }}
