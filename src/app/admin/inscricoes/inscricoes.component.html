@@ -80,7 +80,7 @@
               <strong>Situação Avaliação:</strong> <div [innerHTML]="verificarAprovacao(inscricoes.parecer)"></div>
           </div>
         </div>
-        <div *ngIf="!myUser.isAdmin && !myUser.isCoordenador" class="row align-items-center">
+        <div *ngIf="myUser.isAdmin || myUser.isCoordenador" class="row align-items-center">
           <div class="col-10">
             <mat-form-field appearance="fill" class="w-100">
               <mat-label>Avaliador 1</mat-label>
@@ -93,7 +93,7 @@
           </div>
         </div>
         
-        <div *ngIf="!myUser.isAdmin && !myUser.isCoordenador" class="row align-items-center">
+        <div *ngIf="myUser.isAdmin || myUser.isCoordenador" class="row align-items-center">
           <div class="col-10">
             <mat-form-field appearance="fill" class="w-100">
               <mat-label>Avaliador 2</mat-label>
