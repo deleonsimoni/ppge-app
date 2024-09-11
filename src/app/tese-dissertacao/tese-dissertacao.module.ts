@@ -9,6 +9,7 @@ import { SharedModule } from '@app/shared/shared.module';
 import { MatChipsModule } from '@angular/material/chips';
 import { SanitizeModule } from '@app/shared/pipes/sanitize/sanitize.module';
 import { ResumoDialogComponent } from './resumo-dialog/resumo-dialog.component';
+import { ComponentsModule } from '@app/shared/components/components.module';
 
 @NgModule({
     imports: [TeseDissertacaoRoutingModule,
@@ -17,7 +18,9 @@ import { ResumoDialogComponent } from './resumo-dialog/resumo-dialog.component';
         ReactiveFormsModule,
         MatChipsModule,
         SharedModule,
-        SanitizeModule],
+        SanitizeModule,
+        ComponentsModule
+    ],
     declarations: [TeseDissertacaoComponent, FiltroComponent, ResumoDialogComponent],
 })
 export class TeseDissertacaoModule { }

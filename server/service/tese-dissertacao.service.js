@@ -66,8 +66,16 @@ async function getFillTeseDissertacao(req) {
         req.query['palavrasChave'] = { "$in": metadados }
     }
 
-    return await TeseDissertacaoModel.find(req.query)
+    const query = TeseDissertacaoModel.find(req.query)
         .sort({
             createAt: -1
         });
+
+        
+    const page = req && req.query && req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão é 1
+    const limit = req && req.query && req.query.page ? parseInt(req.query.limit) : 10; // Limite de documentos por página, padrão é 10
+    const skip = (page - 1) * limit;
+
+    query.skip(skip).limit(limit+1);
+    return await query.exec();
 }

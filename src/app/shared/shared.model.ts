@@ -123,7 +123,8 @@ export const questionsPerfilCandidato = [
       type: "text",
       varName: "dataNascimento",
       mask: "00/00/0000",
-      required: true
+      required: true,
+      preText: "Identificação"
   },
   {
       question: "2. Qual é a sua cor/ raça? *",
@@ -185,7 +186,8 @@ export const questionsPerfilCandidato = [
       question: "9. Você tem filhos(as)? *",
       options: ["Sim", "Não"],
       type: "radio",
-      varName: "temFilhos"
+      varName: "temFilhos",
+      preText: "Filho(as)"
   },
   {
       question: "10. Caso tenha filhos(as), quantos? *",
@@ -266,7 +268,8 @@ export const questionsPerfilCandidato = [
           "Pública federal"
       ],
       type: "radio",
-      varName: "redeEnsinoMedio"
+      varName: "redeEnsinoMedio",
+      preText: "Trajetória Acadêmica",
   },
   {
       question: "19. Curso:",
@@ -446,19 +449,12 @@ export const questionsPerfilCandidato = [
       question: "39. Você tem dependentes? *",
       options: ["Não", "Sim"],
       type: "radio",
-      varName: "temDependentes"
+      varName: "temDependentes",
+      preText: "Dependentes",
   },
   {
       question: "40. Quantos dependentes?",
-      options: [
-          "1 dependente",
-          "2 dependentes",
-          "3 dependentes",
-          "4 dependentes ou mais",
-          "Não tenho dependentes"
-      ],
-      type: "radio",
-      condition: "Sim",
+      type: "text",
       varName: "quantosDependentes"
   },
   {

@@ -95,6 +95,7 @@ export class ProcessoSeletivoComponent implements OnInit {
   sairProcessoPerfilCandidato() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     this.completarInscricao = false;
+    this.isPreencherPerfilCandidato = false;
     this.limparDadosPerfilCandidato();
   }
 

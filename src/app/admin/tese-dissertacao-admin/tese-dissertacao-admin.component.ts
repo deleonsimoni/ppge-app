@@ -66,9 +66,6 @@ export class TeseDissertacaoAdminComponent implements OnInit {
       autor: [null, [Validators.required]],
       orientador: [null, [Validators.required]],
       titulo: [null, [Validators.required]],
-      dataSala: [null, [Validators.required]],
-      banca: [null, []],
-      ingresso: [null, [Validators.required]],
       linkTitulo: [null, []],
       resumo: [null, []],
       palavrasChave: new FormArray([]),
@@ -117,7 +114,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
       if (this.form.value._id) {
         this.siteService.atualizarTeseDissertacao(this.form.value)
           .subscribe((res: any) => {
-            this.toastr.success('Tese/Dissertação alterado com sucesso', 'Sucesso');
+            this.toastr.success('Tese/Dissertação alterada com sucesso', 'Sucesso');
             this.getPerTipo(res.tipo);
             this.limparForm();
           }, (err: any) => {
@@ -126,7 +123,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
       } else {
         this.siteService.cadastrarTeseDissertacao(this.form.value)
           .subscribe((res: any) => {
-            this.toastr.success('Tese/Dissertação cadastrado', 'Sucesso');
+            this.toastr.success('Tese/Dissertação cadastrada', 'Sucesso');
             this.getPerTipo(res.tipo);
             this.limparForm();
           }, (err: any) => {
@@ -154,6 +151,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   reciverFeedback(resposta) {
     if (resposta.acao === 'atualizar') {
       this.getPerTipo(resposta.tipo);
+      this.limparForm();
     } else if (resposta.acao === 'editar') {
       this.form.patchValue(resposta.obj);
       const formArray = <FormArray>this.form.controls['palavrasChave'];

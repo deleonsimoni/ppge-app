@@ -152,8 +152,14 @@ export class SiteAdminService {
     return this.http.put(`${this.URL_TESE_DISSERTACAO}/${form._id}`, { formulario: form }, { headers });
   }
 
-  getTeseDissertacao(form: any) {
+  getTeseDissertacao(form: any, page = null, limit= null) {
     let params = new HttpParams();
+    
+    if(page && limit) {
+      params = params.set("page", page);
+      params = params.set("limit", limit);
+    }
+    
     if (form.tipo) params = params.set('tipo', form.tipo)
     if (form.ano) params = params.set('ano', form.ano)
     if (form.ingresso) params = params.set('ingresso', form.ingresso)

@@ -13,6 +13,8 @@ export class TeseDissertacaoComponent implements OnInit {
 
   public datas: any[];
 
+  page: number = 1;
+  limit: number = 10;
   // Filtros
   list: any[] | undefined;
   isTipoPresent: boolean | false;
@@ -90,15 +92,20 @@ export class TeseDissertacaoComponent implements OnInit {
     });
   }
 
-  filter() {
+  filter(page = 1, limit = 10) {
     let req = this.form.value;
     if (this.metadados.length > 0) {
       req.metadados = this.metadados;
     }
-    this.siteService.getTeseDissertacao(req).subscribe((res: any) => {
+    this.siteService.getTeseDissertacao(req, page, limit).subscribe((res: any) => {
       this.filtros = res;
+      this.page = page;
     }, err => {
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
     });
+  }
+
+  onPagination(event) {
+    this.filter(event.newPage, this.limit)
   }
 }

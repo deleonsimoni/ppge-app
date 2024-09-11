@@ -11,6 +11,9 @@ import { ResumoDialogComponent } from "../resumo-dialog/resumo-dialog.component"
   
     @Input()
     filtros: any[] | undefined;
+    
+    @Input()
+    limit: number;
   
     constructor(public dialog: MatDialog) { }
 

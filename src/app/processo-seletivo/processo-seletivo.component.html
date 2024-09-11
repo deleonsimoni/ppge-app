@@ -34,7 +34,7 @@
 
 <section id="processoSeletivo" class="processoSeletivo" *ngIf="completarInscricao">
     <div class="container text-body">
-        <app-form-processo-seletivo *ngIf="!isPreencherPerfilCandidato" [type]="typeFormInscricaoSelected" [idProcessoSeletivo]="idProcessoSelected" (inscrever)="inscreverNoProcesso($event)" (cancelar)="cancelarProcessoDeInscricao()"></app-form-processo-seletivo>
+        <app-form-processo-seletivo *ngIf="!isPreencherPerfilCandidato" [type]="typeFormInscricaoSelected" [idProcessoSeletivo]="idProcessoSelected" (inscrever)="inscreverNoProcesso($event)" (cancelar)="cancelarProcessoDeInscricao()" [isLoadingRegister]="isLoadingRegister"></app-form-processo-seletivo>
         
 
         <form *ngIf="isPreencherPerfilCandidato" [formGroup]="formPerfilCandidato" (ngSubmit)="registerPerfilCandidato()" role="form" class="contactForm">

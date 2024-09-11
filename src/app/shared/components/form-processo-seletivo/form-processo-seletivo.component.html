@@ -21,7 +21,7 @@
   
         </div>
         <div class="col-6">
-          <label><strong>{{ type == typeGraduateEnum.MESTRADO ? "Primeira opção para orientação:" : "2- Professores com
+          <label><strong>{{ type == typeGraduateEnum.MESTRADO ? "Primeira opção para orientação:" : "Professores com
               disponibilidade para orientação"}} </strong></label>
           <mat-form-field style="width: 100% !important;" appearance="fill" class="mb-3">
             <mat-label>Selecione o Orientador</mat-label>
@@ -163,7 +163,7 @@
               <input type="text" mask="0000" formControlName="anoConclusao" class="form-control">
             </div>
           </div>
-          <div class="row">
+          <div *ngIf="type == typeGraduateEnum.MESTRADO" class="row">
             <div class="col">
               <mat-checkbox style="white-space: normal; text-align: justify;" formControlName="termoNaoColacaoGrau">Declaro que li o edital do Processo Seletivo do Mestrado e que me responsabilizo a
                 entregar no ato da matrícula Cópia do diploma de graduação, devidamente registrado,
@@ -246,6 +246,9 @@
       </div>
       
       <div class="row mb-5" *ngIf="type == typeGraduateEnum.DOUTORADO">
+        <div class="col-12">
+          <h3>Outros Cursos</h3>
+        </div>
         <div class="col-12">
           <label><strong>Informe aqui os dados (curso, instituição, ano de início e ano de conclusão) de
             outros cursos de graduação ou de pós-graduação lato ou stricto-sensu

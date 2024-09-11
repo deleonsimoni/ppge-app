@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { questionsPerfilCandidato, TypeGraduateEnum, TypeOpcaoVagaEnum } from '@app/shared/shared.model';
 import { ToastrService } from 'ngx-toastr';
 import { FormProcessoSeletivoService } from './form-processo-seletivo.service';
@@ -180,7 +180,6 @@ export class FormProcessoSeletivoComponent implements OnInit {
         instituicao: [null, [Validators.required]],
         anoInicio: [null, [Validators.required]],
         anoConclusao: [null, [Validators.required]],
-        termoNaoColacaoGrau: [null, [Validators.required]]
       }),
       posGraduacao: this.builder.group({
         nome: [null, []],
@@ -207,6 +206,7 @@ export class FormProcessoSeletivoComponent implements OnInit {
         outrosCursos: [null, []],
       };
     } else if (this.type == TypeGraduateEnum.MESTRADO) {
+      groupForm.graduacao.addControl('termoNaoColacaoGrau', new FormControl(null, [Validators.required]));
       groupForm = {
         ...groupForm,
         termoLeituraEdital: [null, [Validators.required]],
