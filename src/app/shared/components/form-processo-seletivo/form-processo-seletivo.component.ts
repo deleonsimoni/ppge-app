@@ -184,7 +184,7 @@ export class FormProcessoSeletivoComponent implements OnInit {
       posGraduacao: this.builder.group({
         nome: [null, []],
         instituicao: [null, []],
-        anoInicio: [null, [Validators.required]],
+        anoInicio: [null, []],
         anoConclusao: [null, []],
       }),
       perfilCandidato: this.builder.group({}),
