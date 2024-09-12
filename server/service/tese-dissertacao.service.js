@@ -60,6 +60,7 @@ async function getFillTeseDissertacao(req) {
     let filtro
     let metadados = [];
 
+    if (req.query.resumo) req.query.resumo = { $regex: req.query.resumo, $options: 'i' }
     if (req.query.ano) req.query.ano = { $regex: req.query.ano, $options: 'i' }
     if (req.query.autor) req.query.autor = { $regex: req.query.autor, $options: 'i' }
     if (req.query.orientador) req.query.orientador = { $regex: req.query.orientador, $options: 'i' }

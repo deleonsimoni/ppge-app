@@ -170,7 +170,7 @@ export class SiteAdminService {
     if (form.autor) params = params.set('autor', form.autor)
     if (form.orientador) params = params.set('orientador', form.orientador)
     if (form.titulo) params = params.set('titulo', form.titulo)
-    if (form.ingresso) params = params.set('resumo', form.resumo)
+    if (form.resumo) params = params.set('resumo', form.resumo)
 
     return this.http.get(`${this.URL_TESE_DISSERTACAO}/get-filter/filter`, { params: params });
   }
