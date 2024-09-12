@@ -3,6 +3,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th scope="col">Orientador</th>
                     <th scope="col">Autor</th>
                     <th scope="col">Ano</th>
                     <th scope="col">Titulo</th>
@@ -12,6 +13,7 @@
             <tbody>
                 <ng-container *ngFor="let di of datas; let i= index">
                     <tr *ngIf="i < limit">
+                        <td scope="row">{{ di.orientador }}</td>
                         <td scope="row">{{ di.autor }}</td>
                         <td scope="row">{{ di.ano }}</td>
                         <td scope="row"><a href="{{di.linkTitulo}}" target="_blank">{{ di.titulo }}</a></td>

@@ -17,6 +17,11 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   limit: number = 10;
   tipo: string = '1';
 
+  searchOrientador: string = "";
+  searchAutor: string = "";
+  searchAno: string = "";
+  searchTitulo: string = "";
+
   public form: FormGroup;
   carregando = false;
   datas: any[] = [];
@@ -77,8 +82,17 @@ export class TeseDissertacaoAdminComponent implements OnInit {
     this.addContentLine();
   }
 
+  limparFiltro() {
+    this.searchOrientador = "";
+    this.searchAutor = "";
+    this.searchAno = "";
+    this.searchTitulo = "";
+  }
+
   getTesesDissertacoes(tipo = '1', page = 1, limit = 10) {
-    this.siteService.listTeseDissertacao(tipo, page, limit).subscribe((res: any) => {
+    
+
+    this.siteService.listTeseDissertacao(tipo, page, limit, this.searchOrientador, this.searchAutor, this.searchAno, this.searchTitulo).subscribe((res: any) => {
       this.tipo = tipo;
       this.page = page;
       this.carregando = false;

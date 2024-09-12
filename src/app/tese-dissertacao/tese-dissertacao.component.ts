@@ -4,6 +4,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
+import * as cloneDeep from 'lodash.clonedeep';
 
 @Component({
   selector: 'app-tese-dissertacao',
@@ -15,7 +16,9 @@ export class TeseDissertacaoComponent implements OnInit {
 
   page: number = 1;
   limit: number = 10;
+  typeTab: string = "1";
   // Filtros
+  typeSelected: string;
   list: any[] | undefined;
   isTipoPresent: boolean | false;
   filtros: any | undefined;
@@ -92,20 +95,32 @@ export class TeseDissertacaoComponent implements OnInit {
     });
   }
 
-  filter(page = 1, limit = 10) {
-    let req = this.form.value;
+  filter({page = 1, limit = 10, type = null}) {
+    let req = cloneDeep(this.form.value);
+    this.typeTab = req.tipo;
+    if(req.tipo == "0") {
+      delete req.tipo;
+      
+      if(type) {
+        req.tipo = type;
+        this.typeTab = req.tipo;
+      } else {
+        this.typeTab = "1"
+      }
+    }
     if (this.metadados.length > 0) {
       req.metadados = this.metadados;
     }
     this.siteService.getTeseDissertacao(req, page, limit).subscribe((res: any) => {
       this.filtros = res;
       this.page = page;
+      this.typeSelected = this.form.value.tipo;
     }, err => {
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
     });
   }
 
   onPagination(event) {
-    this.filter(event.newPage, this.limit)
+    this.filter({page: event.newPage, limit: this.limit, type: this.typeTab})
   }
 }

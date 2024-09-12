@@ -25,7 +25,7 @@
                 </div>
                 <div class="form-row justify-content-center">
                     <div class="form-group col-md-12">
-                        <input type="text" name="autor" class="form-control" id="autor" placeholder="Autor"
+                        <input type="text" name="autor" class="form-control" id="autor" placeholder="Autor(a)"
                             formControlName="autor" />
 
                     </div>
@@ -34,7 +34,7 @@
                 <div class="form-row justify-content-center">
                     <div class="form-group col-md-12">
                         <input type="text" name="orientador" class="form-control" id="orientador"
-                            placeholder="Orientador" formControlName="orientador" />
+                            placeholder="Orientador(a)" formControlName="orientador" />
 
                     </div>
                 </div>
@@ -87,6 +87,21 @@
                     </button>
                 </div>
             </form>
+        </div>
+        <div class="col-md-12 my-5">
+            <div class="row mb-3"><input type="text" class="form-control" placeholder="Orientador(a)" [(ngModel)]="searchOrientador" /></div>
+            <div class="row mb-3"><input type="text" class="form-control" placeholder="Autor(a)" [(ngModel)]="searchAutor" /></div>
+            <div class="row mb-3"><input type="text" class="form-control" placeholder="Ano" [(ngModel)]="searchAno" /></div>
+            <div class="row mb-3"><input type="text" class="form-control" placeholder="Titulo" [(ngModel)]="searchTitulo" /></div>
+            <div class="row">
+                <div class="col-auto mr-md-3">
+                    <button (click)="limparFiltro()" type="button" mat-raised-button color="warn">Limpar filtro</button>
+                </div>
+                <div class="col-auto">
+                    <button (click)="getTesesDissertacoes(tipo)" type="button" mat-raised-button color="primary">Pesquisar</button>                    
+                </div>
+            </div>
+            
         </div>
         <div class="col-md-12" id="teste-2">
             <section id="about" class="about">

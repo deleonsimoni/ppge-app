@@ -28,8 +28,15 @@ async function updateTeseDissertacao(req, idUser) {
 }
 
 async function getAllTeseDissertacao(req) {
+    let {searchOrientador, searchAutor, searchAno, searchTitulo} = req.query;
+    let whereClause = {tipo: req.params.tipo};
+    if(searchOrientador) whereClause.orientador = { $regex: searchOrientador, $options: 'i' }
+    if(searchAutor) whereClause.autor = { $regex: searchAutor, $options: 'i' }
+    if(searchAno) whereClause.ano = { $regex: searchAno, $options: 'i' }
+    if(searchTitulo) whereClause.titulo = { $regex: searchTitulo, $options: 'i' }
+
     const query = TeseDissertacaoModel
-        .find({ tipo: req.params.tipo })
+        .find(whereClause)
         .sort({
             ano: -1
         });
@@ -50,14 +57,14 @@ async function deleteTeseDissertacao(id) {
 }
 
 async function getFillTeseDissertacao(req) {
-
+    let filtro
     let metadados = [];
 
     if (req.query.ano) req.query.ano = { $regex: req.query.ano, $options: 'i' }
-    if (req.query.ingresso) req.query.ingresso = { $regex: req.query.ingresso, $options: 'i' }
-    if (req.query.orientador) req.query.orientador = { $regex: req.query.orientador, $options: 'i' }
     if (req.query.autor) req.query.autor = { $regex: req.query.autor, $options: 'i' }
+    if (req.query.orientador) req.query.orientador = { $regex: req.query.orientador, $options: 'i' }
     if (req.query.titulo) req.query.titulo = { $regex: req.query.titulo, $options: 'i' }
+    if (req.query.ingresso) req.query.ingresso = { $regex: req.query.ingresso, $options: 'i' }
     if (req.query.dataSala) req.query.dataSala = { $regex: req.query.dataSala, $options: 'i' }
     if (req.query.banca) req.query.banca = { $regex: req.query.banca, $options: 'i' }
     if (req.query.metadados) {
