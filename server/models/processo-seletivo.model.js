@@ -18,6 +18,12 @@ const ProcessoSeletivoSchema = new mongoose.Schema(
       default: 1
     },
 
+    recursoHabilitado: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+
     etapa: {
       type: String,
       required: true,

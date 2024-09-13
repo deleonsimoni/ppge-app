@@ -46,6 +46,10 @@ router.put('/processo-seletivo/inscritos/vincular-parecerista', [passport.authen
   session: false
 }), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'coordenador'])], setLocation, asyncHandler(vincularParecerista));
 
+router.put('/processo-seletivo/mudar-recurso-habilitado', [passport.authenticate('jwt', {
+  session: false
+}), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], setLocation, asyncHandler(mudarRecursoHabilitado));
+
 router.put('/processo-seletivo/mudar-etapa', [passport.authenticate('jwt', {
   session: false
 }), (req, res, next) => requireAllowedRoles(req, res, next, ['admin', 'gerenciador'])], setLocation, asyncHandler(mudarEtapa));
@@ -163,6 +167,12 @@ async function vincularParecerista(req, res) {
 async function consolidarAvaliacao(req, res) {
   const response = await processoSeletivoCtrl.consolidarAvaliacao(req.params.idProcesso, req.params.idInscricao, req.body);
   res.status(response.status).json(response);
+}
+
+async function mudarRecursoHabilitado(req, res) {
+  const response = await processoSeletivoCtrl.mudarRecursoHabilitado(req.body);
+  res.json(response);
+
 }
 
 async function mudarEtapa(req, res) {

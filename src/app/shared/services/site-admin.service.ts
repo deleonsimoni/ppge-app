@@ -246,6 +246,11 @@ export class SiteAdminService {
     return this.http.get(this.URL_PROCESSO_SELETIVO);
   }
 
+  mudarRecursoHabilitado(recursoHabilitado, idProcesso) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/mudar-recurso-habilitado`, { idProcesso, recursoHabilitado });
+  }
+
   mudarEtapa(etapa, idProcesso) {
     const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
     return this.http.put(`${this.URL_PROCESSO_SELETIVO}/mudar-etapa`, { idProcesso, etapa });

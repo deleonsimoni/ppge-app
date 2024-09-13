@@ -140,6 +140,43 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
     return this.form.controls['vagas'].controls[stepIndex].controls['professors']
   }
 
+  public mudarRecursoHabilitado(event, idProcesso) {
+    const value = event.value
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '750px',
+      data: { title: `Tem certeza que deseja ${value ? "habilitar" : "desabilitar"} o recurso?` }
+    });
+    
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if (result) {   
+        //FEITO
+        this.siteService
+          .mudarRecursoHabilitado(value, idProcesso)
+          .subscribe(
+            () => {
+              this.datas.forEach(d => {
+                if(d._id == idProcesso) 
+                  d.recursoHabilitado = value
+              })
+              this.toastr.success('Recurso alterado com sucesso', 'Sucesso');
+            },
+            (err) => {
+              this.toastr.error('Ocorreu um erro ao alterar recurso', 'Atenção: ');
+            }
+          );   
+
+      } else {
+        this.datas.forEach(d => {
+          if(d._id == idProcesso) {
+            event.source.writeValue(d.recursoHabilitado)
+            event.source.close();
+          }
+        });
+      }
+    })
+    
+  }
+
   public mudarEtapa(event, idProcesso) {
     const value = event.value
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {

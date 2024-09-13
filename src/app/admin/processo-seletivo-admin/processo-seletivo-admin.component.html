@@ -135,6 +135,14 @@
                     </th>
                     <th>
                       <mat-form-field appearance="fill" st>
+                        <mat-label>Habilitar Recurso</mat-label>
+                        <mat-select [value]="di.recursoHabilitado" (selectionChange)="mudarRecursoHabilitado($event, di._id)">
+                          <mat-option [value]="true">Sim</mat-option>
+                          <mat-option [value]="false">Não</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <br>
+                      <mat-form-field appearance="fill" st>
                         <mat-label>Selecione a Etapa</mat-label>
                         <mat-select [value]="di.etapa" (selectionChange)="mudarEtapa($event, di._id)">
                           <mat-option value="inscricao">Inscrição</mat-option>
