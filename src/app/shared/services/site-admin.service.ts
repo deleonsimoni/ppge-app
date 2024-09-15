@@ -133,6 +133,10 @@ export class SiteAdminService {
 
   /* Fim Corpo Docente */
   /* Tese DISSERTACAO */
+  getAnosCadastrados() {
+    return this.http.get(`${this.URL_TESE_DISSERTACAO}/anos-cadastrados/all`);
+  }
+
   listTeseDissertacao(tipo: string, page = null, limit= null, searchOrientador = null, searchAutor = null, searchAno = null, searchTitulo = null) {
     let params = new HttpParams();
     if(page && limit) {

@@ -5,6 +5,7 @@ import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import * as cloneDeep from 'lodash.clonedeep';
+import { catchError, take } from 'rxjs';
 
 @Component({
   selector: 'app-tese-dissertacao',
@@ -18,6 +19,7 @@ export class TeseDissertacaoComponent implements OnInit {
   limit: number = 10;
   typeTab: string = "1";
   // Filtros
+  listAllAnos: any = [];
   typeSelected: string;
   list: any[] | undefined;
   isTipoPresent: boolean | false;
@@ -55,7 +57,17 @@ export class TeseDissertacaoComponent implements OnInit {
 
   ngOnInit(): void {
     this.isTipoPresent = false;
+    this.getAnosCadastrados();
     this.getTeseDissertacao('1');
+  }
+
+  getAnosCadastrados() {
+    
+    this.siteService
+      .getAnosCadastrados().subscribe((listAnos: any) => {
+        console.log("listAnos", listAnos)
+        this.listAllAnos = listAnos;
+      })
   }
 
   add(event: MatChipInputEvent): void {
@@ -105,6 +117,7 @@ export class TeseDissertacaoComponent implements OnInit {
         req.tipo = type;
         this.typeTab = req.tipo;
       } else {
+        req.tipo = "1";
         this.typeTab = "1"
       }
     }

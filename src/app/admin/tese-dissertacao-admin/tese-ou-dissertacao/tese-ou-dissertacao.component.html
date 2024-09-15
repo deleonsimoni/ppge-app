@@ -3,9 +3,9 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th scope="col">Ano de publicação</th>
                     <th scope="col">Orientador</th>
                     <th scope="col">Autor</th>
-                    <th scope="col">Ano</th>
                     <th scope="col">Titulo</th>
                     <th scope="col">Ação</th>
                 </tr>
@@ -13,10 +13,10 @@
             <tbody>
                 <ng-container *ngFor="let di of datas; let i= index">
                     <tr *ngIf="i < limit">
+                        <td scope="row">{{ di.ano }}</td>
                         <td scope="row">{{ di.orientador }}</td>
                         <td scope="row">{{ di.autor }}</td>
-                        <td scope="row">{{ di.ano }}</td>
-                        <td scope="row"><a href="{{di.linkTitulo}}" target="_blank">{{ di.titulo }}</a></td>
+                        <td scope="row">{{ di.titulo }}</td>
                         <td scope="row">
                             <span matTooltip="Deletar" matTooltipPosition="above" class="material-icons md-18 btn"
                                 (click)="apagarTitulo(di._id, di.autor, di.titulo, di.tipo)">delete</span>

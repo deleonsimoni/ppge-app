@@ -31,7 +31,6 @@ const TeseDissertacaoSchema = new mongoose.Schema({
     },
     dataSala: {
         type: String,
-        required: true,
     },
     banca: {
         type: String,
@@ -39,11 +38,6 @@ const TeseDissertacaoSchema = new mongoose.Schema({
     },
     ingresso: {
         type: String,
-        required: true,
-    },
-    ingresso: {
-        type: String,
-        required: true,
     },
     linkTitulo: {
         type: String,

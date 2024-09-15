@@ -85,6 +85,7 @@ export class ProcessoSeletivoComponent implements OnInit {
             throw err;
           })
         ).subscribe(data => {
+          this.toastr.success("Perfil registrado com sucesso!");
           this.sairProcessoPerfilCandidato()
         })
     } else {

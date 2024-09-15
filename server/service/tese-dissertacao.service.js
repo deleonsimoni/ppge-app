@@ -5,8 +5,15 @@ module.exports = {
     updateTeseDissertacao,
     deleteTeseDissertacao,
     getAllTeseDissertacao,
-    getFillTeseDissertacao
+    getFillTeseDissertacao,
+    getAllYearsTeseDissertacao
 };
+
+async function getAllYearsTeseDissertacao(req) {
+    const anos = await TeseDissertacaoModel.distinct('ano');
+    const anosOrdenados = anos.sort((a, b) => b - a); // Converte para número e ordena em ordem decrescente
+    return anosOrdenados;
+}
 
 async function insertTeseDissertacao(req, idUser) {
     let form = req.body.formulario;
@@ -76,7 +83,7 @@ async function getFillTeseDissertacao(req) {
 
     const query = TeseDissertacaoModel.find(req.query)
         .sort({
-            createAt: -1
+            ano: -1
         });
 
         

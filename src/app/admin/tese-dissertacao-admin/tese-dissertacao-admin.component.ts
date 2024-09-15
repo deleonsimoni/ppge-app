@@ -106,9 +106,9 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   public addContentLine(content = null) {
     const control = <FormArray>this.form.controls['palavrasChave'];
     if (content != null) {
-      control.push(new FormControl(content, Validators.required));
+      control.push(new FormControl(content));
     } else {
-      control.push(new FormControl('', Validators.required));
+      control.push(new FormControl(''));
     }
   }
 

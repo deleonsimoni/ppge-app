@@ -11,6 +11,8 @@ router.get('/tese-dissertacao/:tipo', asyncHandler(getAllTeseDissertacao));
 
 router.get('/tese-dissertacao/get-filter/filter', asyncHandler(getFillTeseDissertacao));
 
+router.get('/tese-dissertacao/anos-cadastrados/all', asyncHandler(getAllYearsTeseDissertacao));
+
 router.post('/tese-dissertacao', [passport.authenticate('jwt', {
     session: false
   }), requireAdmin], asyncHandler(insertTeseDissertacao));
@@ -38,8 +40,17 @@ async function getAllTeseDissertacao(req, res) {
 }
 
 async function getFillTeseDissertacao(req, res) {
+  
+  console.log("AAAAAAAAAAAasdasdasdasdasd");
   let response = await teseDissertacaoCtrl.getFillTeseDissertacao(req);
   res.json(response);
+}
+
+async function getAllYearsTeseDissertacao(req, res) {
+  
+  let response = await teseDissertacaoCtrl.getAllYearsTeseDissertacao(req);
+  res.json(response);
+
 }
 
 async function deleteTeseDissertacao(req, res) {

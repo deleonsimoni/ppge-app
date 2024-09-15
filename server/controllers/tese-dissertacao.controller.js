@@ -5,7 +5,8 @@ module.exports = {
     insertTeseDissertacao,
     deleteTeseDissertacao,
     getAllTeseDissertacao,
-    getFillTeseDissertacao
+    getFillTeseDissertacao,
+    getAllYearsTeseDissertacao,
 }
 
 const functions = {
@@ -14,6 +15,11 @@ const functions = {
       insert: async (req, idUser) => await teseDissertacaoService.insertTeseDissertacao(req, idUser),
       delete: async (id) => await teseDissertacaoService.deleteTeseDissertacao(id),
       getFillTeseDissertacao: async (req) => await teseDissertacaoService.getFillTeseDissertacao(req),
+      getAllYearsTeseDissertacao: async (req) => await teseDissertacaoService.getAllYearsTeseDissertacao(req),
+}
+
+async function getAllYearsTeseDissertacao(req) {
+  return functions.getAllYearsTeseDissertacao(req);
 }
 
 async function updateTeseDissertacao(req, idUser) {

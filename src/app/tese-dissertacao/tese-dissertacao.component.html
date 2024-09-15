@@ -18,10 +18,17 @@
                                 </select>
                             </div>
 
-                            <div class="form-group col-md-5">
+                            <div class="form-group col-md-2">
+                                <select class="form-select" aria-label="Ano de publicação:"
+                                    formControlName="ano">
+                                    <option *ngFor="let ano of listAllAnos" [value]="ano">{{ano}}</option>
+                                </select>
+                            </div>
+
+                            <!-- <div class="form-group col-md-5">
                                 <input type="text" name="ano" class="form-control" id="ano" placeholder="Ano de publicação"
                                     formControlName="ano" />
-                            </div>
+                            </div> -->
                             <div class="form-group col-md-5">
                                 <input type="text" name="autor" class="form-control" id="autor" placeholder="Autor(a)"
                                     formControlName="autor" />
