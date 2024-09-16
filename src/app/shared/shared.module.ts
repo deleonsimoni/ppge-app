@@ -25,6 +25,8 @@ import { ComponentsModule } from './components/components.module';
 import { ImagePathComplementPipe } from './pipes/image-path/image-path-complement.pipe';
 import { MatChipsModule } from '@angular/material/chips';
 import { NgxMaskModule } from 'ngx-mask';
+import { TelefonePipePipe } from './pipes/telefone-pipe.pipe';
+import { CpfRgPipePipe } from './pipes/cpf-rg-pipe.pipe';
 
 
 @NgModule({
@@ -53,13 +55,20 @@ import { NgxMaskModule } from 'ngx-mask';
     MatChipsModule,
     MatTooltipModule,
     ComponentsModule,
-    ImagePathComplementPipe
+    ImagePathComplementPipe,
+    TelefonePipePipe,
+    CpfRgPipePipe
   ],
   declarations: [
-    ImagePathComplementPipe
+    ImagePathComplementPipe,
+    TelefonePipePipe,
+    CpfRgPipePipe
 
   ],
-  providers: [ImagePathComplementPipe]
+  providers: [ImagePathComplementPipe,
+    TelefonePipePipe,
+    CpfRgPipePipe
+  ]
 
 })
 export class SharedModule { }

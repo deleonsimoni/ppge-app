@@ -54,7 +54,7 @@ async function getHeadersNoticias(req) {
 }
 
 async function getHeadersPaginationNoticias(req) {
-  console.log("AQUIIIIIIII: ", req.query)
+
   const pageNumber = req.query.pageNumber;
   const pageSize = req.query.pageSize;
   let ret = await NoticiasModel.find({}, {

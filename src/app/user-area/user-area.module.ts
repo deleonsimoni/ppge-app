@@ -11,6 +11,9 @@ import { AuthModule } from '@app/auth/auth.module';
 import { EditPasswordDialogComponent } from './edit-password-dialog/edit-password-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
+import { PipesModule } from '@app/shared/pipes/pipes.module';
+import { TelefonePipePipe } from '@app/shared/pipes/telefone-pipe.pipe';
+import { CpfRgPipePipe } from '@app/shared/pipes/cpf-rg-pipe.pipe';
 
 
 
@@ -30,6 +33,7 @@ import { NgxMaskModule } from 'ngx-mask';
     MatRadioModule,
     AuthModule,
     FormsModule,
+
   ]
 })
 export class UserAreaModule { }

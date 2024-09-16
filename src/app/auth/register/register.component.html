@@ -219,6 +219,12 @@
 
                     <div *ngIf="!carregando" class="text-center pt-5"><button class="m-4 btn btn-secondary"
                             type="submit">{{user && user._id ? 'Confirmar Edição' : 'Realizar Inscrição' }}</button></div>
+                           
+                    <div *ngIf="!carregando && user && user._id" class="text-center pt-5">
+                        <button mat-raised-button color="primary" (click)="goToMyData()">Voltar</button>
+                    </div>
+
+                        
                     <div *ngIf="carregando" class="text-center pt-5"><button><i
                                 class="fas fa-spinner fa-pulse"></i>Aguarde...</button></div>
                 </div>

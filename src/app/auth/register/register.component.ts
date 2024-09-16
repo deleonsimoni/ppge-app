@@ -362,6 +362,9 @@ export class RegisterComponent implements OnInit {
 
   }
 
+  public goToMyData(){
+    this.router.navigate(['area-usuario']);
+  }
 
   public openRules(): void {
     const dialogRef = this.dialog.open(ModalTermoUsoComponent, {

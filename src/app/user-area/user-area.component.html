@@ -1,34 +1,25 @@
-<section> 
-    <div class="container">
-        <div class="section-header">
-            <h2>Área do Usuário</h2>
-        </div>
-    </div>
-    <div class="container">
-        <div class="section-header">
-            <ul class="nav nav-pills">
-                <li class="nav-item m-2">
-                    <button mat-raised-button class="tab-button-user" (click)="changeTab(userAreaTabEnum.MY_ACCOUNT)">
-                        Minha Conta
-                    </button>
-                </li>
-                <li class="nav-item m-2" *ngIf="myUser && myUser.roles.length == 0">
-                    <button mat-raised-button class="tab-button-user" (click)="changeTab(userAreaTabEnum.MY_SUBSCRIPTIONS)">
-                        Minhas Inscrições
-                    </button>
-                </li>
-            </ul>
-        </div>
-    </div>
-</section>
-
-<section *ngIf="myUser && selectedTab == userAreaTabEnum.MY_ACCOUNT" class="pt-0">
+  
+<section *ngIf="myUser && selectedTab == userAreaTabEnum.MY_ACCOUNT" class="pt-0 mb-2">
     <div *ngIf="!flagEditUser">
         <div class="container">
             <div class="section-header">
-                <h2>Minha Conta</h2>
+                <h2>Minhas Informações</h2>
             </div>
         </div>
+
+        <div  *ngIf="myUser.roles.length == 0 && selectedTab == userAreaTabEnum.MY_ACCOUNT" class="container">
+            <div class="section-header">
+                <ul class="nav nav-pills center-pills">
+                   
+                    <li class="nav-item m-2">
+                        <button mat-raised-button class="tab-button-user" (click)="changeTab(userAreaTabEnum.MY_SUBSCRIPTIONS)">
+                           Meus Processos Seletivos
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
         <div class="container mb-5">
             <div class="row card-inscricoes p-5 mx-1">
                 <div class="col-12">
@@ -36,45 +27,91 @@
                     <div class="row text-center mb-3">
                         <h3>Informações Básicas</h3>
                     </div>
-                    <div class="row justify-content-md-center">
-                        <div class="col-auto">
-                            <p><strong>Nome:</strong> {{myUser.fullname}}</p>
-                            <p><strong>Email:</strong> {{myUser.email}}</p>
-                        </div>
-                        <div class="col-auto">
-                            <p><strong>Celular:</strong> {{myUser.celular}}</p>
-                            <p><strong>Telefone:</strong> {{myUser.telefone}}</p>
+                   
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Nome:</strong> {{myUser.fullname}}</p>
+                                <p><strong>Email:</strong> {{myUser.email}}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Nome Social:</strong> {{myUser.socialname}}</p>
+                            </div>
                         </div>
                     </div>
 
+
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Celular:</strong> {{myUser.celular | telefonePipe}}</p>
+                                <p><strong>CPF:</strong> {{myUser.cpf | cpfRgPipe}}</p>
+                                <p><strong>Órgão emissor:</strong> {{myUser.rgEmissor}}</p>
+
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Telefone:</strong> {{myUser.telefone | telefonePipe}}</p>
+                                <p><strong>Identidade:</strong> {{myUser.rg | cpfRgPipe}}</p>
+                                <p><strong>Passaporte:</strong> {{myUser.passaporte}}</p>
+
+                            </div>
+                        </div>
+                    </div>
+                  
     
                     <div class="row text-center mt-4 mb-3">
-                        <h3>Informações Complementares</h3>
+                        <h3>Mais Informações</h3>
                     </div>
-                    <div class="row justify-content-md-center">
-                        <div class="col-auto">
-                            <p><strong>Nome Social:</strong> {{myUser.socialname}}</p>
-                            <p><strong>CPF:</strong> {{myUser.cpf}}</p>
-                            <p><strong>Identidade:</strong> {{myUser.rg}}</p>
-                            <p><strong>Órgão emissor:</strong> {{myUser.rgEmissor}}</p>
-                            <p><strong>Passaporte:</strong> {{myUser.passaporte}}</p>
-                            <p><strong>Data de Aniversário:</strong> {{myUser.dataNiver | date: 'dd/MM/yyyy'}}</p>
-                            <p><strong>Nacionalidade:</strong> {{myUser.nacionalidade}}</p>
-                            <p><strong>Endereço:</strong> {{myUser.endereco}}</p>
-                            <p><strong>Bairro:</strong> {{myUser.bairro}}</p>
-                            <p><strong>CEP:</strong> {{myUser.cep}}</p>
+                    <div class=" ">
+
+
+
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Data de Aniversário:</strong> {{myUser.dataNiver | date: 'dd/MM/yyyy'}}</p>
+                                    <p><strong>Cor:</strong> {{myUser.cor}}</p>
+                                    <p><strong>Órgão emissor:</strong> {{myUser.rgEmissor}}</p>
+    
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Nacionalidade:</strong> {{myUser.nacionalidade}}</p>
+                                    <p><strong>Gênero:</strong> {{myUser.genero}}</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-auto">
-                            <p><strong>Cidade:</strong> {{myUser.cidade}}</p>
-                            <p><strong>Estado:</strong> {{myUser.estado}}</p>
-                            <p><strong>Celular:</strong> {{myUser.celular}}</p>
-                            <p><strong>Telefone:</strong> {{myUser.telefone}}</p>
-                            <p><strong>Cargo:</strong> {{myUser.cargo}}</p>
-                            <p><strong>Empresa:</strong> {{myUser.empresa}}</p>
-                            <p><strong>Deficiência:</strong> {{myUser.deficiencia}}</p>
-                            <p><strong>Cor:</strong> {{myUser.cor}}</p>
-                            <p><strong>Gênero:</strong> {{myUser.genero}}</p>
+
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Empresa:</strong> {{myUser.empresa}}</p>
+                                    <p><strong>Deficiência:</strong> {{myUser.deficiencia}}</p>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Cargo:</strong> {{myUser.cargo}}</p>
+                                </div>
+                            </div>
                         </div>
+
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Rua:</strong> {{myUser.endereco}}</p>
+                                    <p><strong>Cidade:</strong> {{myUser.cidade}}</p>
+                                    <p><strong>Estado:</strong> {{myUser.estado}}</p>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>CEP:</strong> {{myUser.cep}}</p>
+                                    <p><strong>Bairro:</strong> {{myUser.bairro}}</p>
+                                </div>
+                            </div>
+                        </div>
+                      
+
+
+                      
                     </div>
                     
                     <div class="row justify-content-center mt-5">
@@ -90,11 +127,7 @@
         </div>
     </div>
     <div *ngIf="flagEditUser">
-        <div class="container">
-            <div class="row justify-content-end">
-                <div class="col-auto"><button mat-raised-button color="primary" (click)="toggleEditUser(false)">Voltar</button></div>
-            </div>
-        </div>
+      
         <app-register [user]="myUser" (callBackEdit)="callBackEditUser($event)"></app-register>
     </div>
 </section>
@@ -105,6 +138,19 @@
             <h2>Minhas Inscrições</h2>
         </div>
     </div>
+
+    <div  *ngIf="selectedTab == userAreaTabEnum.MY_SUBSCRIPTIONS" class="container">
+        <div class="section-header">
+            <ul class="nav nav-pills center-pills">
+                <li class="nav-item m-2">
+                    <button mat-raised-button class="tab-button-user" (click)="changeTab(userAreaTabEnum.MY_ACCOUNT)">
+                        Visualizar suas Informações
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     <div class="container mb-5">
     
         <div *ngFor="let processo of minhasInscricoes; let i = index"
@@ -128,7 +174,7 @@
                 <div class="row mb-3 justify-content-center">
                     <span (click)="detalharInscricao(processo?.enrolled[0])" matTooltip="Detalhar"
                         matTooltipPosition="above"
-                        class="material-icons md-18 btn card-icon-action">{{this.flagDetalharInscricao &&
+                        class="material-icons md-18 btn card-icon-action"> {{this.flagDetalharInscricao &&
                         this.inscricaoSelecionada?._id == processo?.enrolled[0]?._id ? 'remove' : 'add'}}</span>
                 </div>
     
