@@ -106,7 +106,9 @@ export class UserAreaComponent implements OnInit {
   }
 
   callBackEditUser(user: any) {
-    this.myUser = user;
+    if(user) {
+      this.myUser = user;
+    }
     this.flagEditUser = false;
   }
 

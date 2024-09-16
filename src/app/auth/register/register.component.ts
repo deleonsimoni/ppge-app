@@ -364,7 +364,7 @@ export class RegisterComponent implements OnInit {
   }
 
   public goToMyData(){
-    this.router.navigate(['area-usuario']);
+    this.callBackEdit.emit();
   }
 
   public openRules(): void {
