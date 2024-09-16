@@ -37,8 +37,8 @@ export class TeseDissertacaoComponent implements OnInit {
     private builder: FormBuilder
   ) {
     this.form = this.builder.group({
-      tipo: ['1'],
-      ano: [null],
+      tipo: ['0'],
+      ano: [''],
       autor: [null],
       orientador: [null],
       titulo: [null],
@@ -65,7 +65,6 @@ export class TeseDissertacaoComponent implements OnInit {
     
     this.siteService
       .getAnosCadastrados().subscribe((listAnos: any) => {
-        console.log("listAnos", listAnos)
         this.listAllAnos = listAnos;
       })
   }
@@ -107,7 +106,15 @@ export class TeseDissertacaoComponent implements OnInit {
     });
   }
 
+  limparFiltro() {
+    this.filtros = null;
+    this.form.reset();
+    this.form.get('tipo').setValue('0');
+    this.form.get('ano').setValue('');
+  }
+
   filter({page = 1, limit = 10, type = null}) {
+    
     let req = cloneDeep(this.form.value);
     this.typeTab = req.tipo;
     if(req.tipo == "0") {

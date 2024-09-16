@@ -7,8 +7,8 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th scope="col">Orientador</th>
                     <th scope="col">Ano de publicação</th>
+                    <th scope="col">Orientador(a)</th>
                     <th scope="col">Autor(a)</th>
                     <th scope="col">Titulo</th>
                     <th scope="col">Resumo</th>
@@ -17,8 +17,8 @@
             <tbody>
                 <ng-container *ngFor="let di of filtros; let i= index">
                     <tr  *ngIf="i < limit">
-                        <td scope="row">{{ di.orientador }}</td>
                         <td scope="row">{{ di.ano }}</td>
+                        <td scope="row">{{ di.orientador }}</td>
                         <td scope="row">{{ di.autor }}</td>
                         <td scope="row">{{ di.titulo }}</td>
                         <td scope="row">

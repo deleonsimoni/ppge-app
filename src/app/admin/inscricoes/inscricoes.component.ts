@@ -138,11 +138,7 @@ export class InscricoesComponent implements OnInit {
   }
 
   getInscricoesByFiltro(filtroConsulta) {
-    if (filtroConsulta) {
-      this.filtroConsulta = filtroConsulta;
-      this.page = 1;
-      this.limit = 1;
-    }
+    this.filtroConsulta = filtroConsulta;
 
     this.siteService.getInscritosProcessoById(this.idProcessoSelecionado, this.filtroConsulta, this.page, this.limit).subscribe((data: any) => {
       data.enrolled.forEach(inscrito => {

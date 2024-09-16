@@ -342,7 +342,8 @@ export class RegisterComponent implements OnInit {
       .subscribe((res: any) => {
         if(!this.user || !this.user._id) {
           this.toastr.success('Cadastro realizado com sucesso.', 'Bem-vindo');
-          this.router.navigate(['']);
+          this.authService.signOut();
+          this.router.navigateByUrl('/auth/login');
         } else {
           this.toastr.success('Dados alterados com sucesso.');
           this.callBackEdit.emit(res);

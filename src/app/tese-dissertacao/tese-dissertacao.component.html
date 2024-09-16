@@ -8,19 +8,24 @@
 
                 <div>
                     <form role="form" class="reviewer" [formGroup]="form">
-                        <div class="form-row justify-content-center">
+                        <div class="form-row justify-content-center align-items-end">
                             <div class="form-group col-md-2">
+                                <div class="row">
+                                    <label><strong class="w-100">Tipo:</strong></label>
+                                </div>
                                 <select class="form-select" aria-label="Selecione o tipo do projeto:"
                                     formControlName="tipo">
+                                    <option value="0" defa>Ambos</option>
                                     <option value="1">Tese</option>
                                     <option value="2">Dissertação</option>
-                                    <option value="0">Ambos</option>
                                 </select>
                             </div>
 
                             <div class="form-group col-md-2">
+                                <label><strong class="w-100">Ano de publicação:</strong></label>
                                 <select class="form-select" aria-label="Ano de publicação:"
                                     formControlName="ano">
+                                    <option value="" defa>Todos</option>
                                     <option *ngFor="let ano of listAllAnos" [value]="ano">{{ano}}</option>
                                 </select>
                             </div>
@@ -38,7 +43,7 @@
                         <div class="form-row justify-content-center">
                             <div class="form-group col-md-6">
                                 <input type="text" name="orientador" class="form-control" id="orientador"
-                                    placeholder="Orientador" formControlName="orientador" />
+                                    placeholder="Orientador(a)" formControlName="orientador" />
 
                             </div>
                             <div class="form-group col-md-6">
@@ -60,7 +65,7 @@
                             <button (click)="filter({})" class="btn btn-primary col-md-2 mr-md-3">
                                 Pesquisar
                             </button>
-                            <button type="reset" (click)="filtros = null" class="btn btn-danger col-md-2">
+                            <button type="button" (click)="limparFiltro()" class="btn btn-danger col-md-2">
                                 Limpar Filtro
                             </button>
                         </div>

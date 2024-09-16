@@ -390,7 +390,19 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
                 flagReturn = typeof e.parecer.homologado != 'boolean' && e.parecerista[e.responsavelHomologacao]?.equals(idParecerista)
 
               } else if(processo.etapa == 'avaliacao') {
-                if(e.parecer.avaliacoes) {
+                // se tiver reprovado em uma etapa antes da processo.etapaAvaliacao, não retornar
+                if(e.parecer && e.parecer.step) {
+                  let estaAprovadoEtapaAnterior = true;
+                  Object.values(e.parecer.step).forEach((etapasAvaliadas, index) => {
+                    if(index < processo.etapaAvaliacao) {
+                      estaAprovadoEtapaAnterior = estaAprovadoEtapaAnterior && etapasAvaliadas.stepApproval
+                    }
+                  })
+                  flagReturn = estaAprovadoEtapaAnterior;
+                }
+
+
+                if(flagReturn && e.parecer.avaliacoes) {
                   let idEtapaVigente = processo.criterio?.step[processo.etapaAvaliacao]._id;
                   let etapaAvaliada = e.parecer.avaliacoes['avaliador-'+idParecerista]?.step['step-'+idEtapaVigente]?.totalNotaEtapa;
                   flagReturn = etapaAvaliada == null || etapaAvaliada == undefined;
