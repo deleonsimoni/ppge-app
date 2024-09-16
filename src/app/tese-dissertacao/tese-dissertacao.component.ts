@@ -4,6 +4,8 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { SiteAdminService } from '@app/shared/services/site-admin.service';
 import { ToastrService } from 'ngx-toastr';
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
+import * as cloneDeep from 'lodash.clonedeep';
+import { catchError, take } from 'rxjs';
 
 @Component({
   selector: 'app-tese-dissertacao',
@@ -15,7 +17,10 @@ export class TeseDissertacaoComponent implements OnInit {
 
   page: number = 1;
   limit: number = 10;
+  typeTab: string = "1";
   // Filtros
+  listAllAnos: any = [];
+  typeSelected: string;
   list: any[] | undefined;
   isTipoPresent: boolean | false;
   filtros: any | undefined;
@@ -32,8 +37,8 @@ export class TeseDissertacaoComponent implements OnInit {
     private builder: FormBuilder
   ) {
     this.form = this.builder.group({
-      tipo: ['1'],
-      ano: [null],
+      tipo: ['0'],
+      ano: [''],
       autor: [null],
       orientador: [null],
       titulo: [null],
@@ -52,7 +57,16 @@ export class TeseDissertacaoComponent implements OnInit {
 
   ngOnInit(): void {
     this.isTipoPresent = false;
+    this.getAnosCadastrados();
     this.getTeseDissertacao('1');
+  }
+
+  getAnosCadastrados() {
+    
+    this.siteService
+      .getAnosCadastrados().subscribe((listAnos: any) => {
+        this.listAllAnos = listAnos;
+      })
   }
 
   add(event: MatChipInputEvent): void {
@@ -92,20 +106,41 @@ export class TeseDissertacaoComponent implements OnInit {
     });
   }
 
-  filter(page = 1, limit = 10) {
-    let req = this.form.value;
+  limparFiltro() {
+    this.filtros = null;
+    this.form.reset();
+    this.form.get('tipo').setValue('0');
+    this.form.get('ano').setValue('');
+  }
+
+  filter({page = 1, limit = 10, type = null}) {
+    
+    let req = cloneDeep(this.form.value);
+    this.typeTab = req.tipo;
+    if(req.tipo == "0") {
+      delete req.tipo;
+      
+      if(type) {
+        req.tipo = type;
+        this.typeTab = req.tipo;
+      } else {
+        req.tipo = "1";
+        this.typeTab = "1"
+      }
+    }
     if (this.metadados.length > 0) {
       req.metadados = this.metadados;
     }
     this.siteService.getTeseDissertacao(req, page, limit).subscribe((res: any) => {
       this.filtros = res;
       this.page = page;
+      this.typeSelected = this.form.value.tipo;
     }, err => {
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
     });
   }
 
   onPagination(event) {
-    this.filter(event.newPage, this.limit)
+    this.filter({page: event.newPage, limit: this.limit, type: this.typeTab})
   }
 }

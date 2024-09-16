@@ -31,6 +31,7 @@ module.exports = {
   getParecer,
   inscricaoJustificar,
   inscricaoJustificarHomolog,
+  mudarRecursoHabilitado,
   mudarEtapa,
   mudarEtapaAvaliacao,
   salvarVinculoCriterio,
@@ -267,70 +268,6 @@ async function getProcessoSeletivoHeaders(req) {
     });
 }
 
-// async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, language) {
-//   let ret = await ProcessoSeletivoModel.findOne(
-//       { _id: idProcessoSeletivo }, 
-//       { 
-//         researchLine: 1, 
-//         vagas: 1,
-//         type: 1
-//       }
-//     )
-//     .populate(
-//       {
-//         path: "researchLine",
-//         select: `${language}.title corpoDocente`,
-//         populate: {
-//           path: "corpoDocente",
-//           select: "fullName"
-//         }
-//       }
-//     )
-//     .sort({
-//       createdAt: -1
-//     });
-
-//   if (ret) {
-//     ret = {
-//       _id: ret._id,
-//       researchLine: ret.researchLine.map((linhaPesquisa, index) => {
-//         const vagalinha = ret.vagas?.find(v => v.idLinhaPesquisa == linhaPesquisa._id)
-//         let corpoAux = [... linhaPesquisa.corpoDocente];
-//         console.log("linhaPesquisa - "+index, corpoAux)
-//         if(vagalinha) {
-
-//           if(ret.type == MESTRADO) {
-//             // Tipo MESTRADO
-//             linhaPesquisa[language].title += buildTextVaga(vagalinha.maxVaga, vagalinha.maxVagaCota)
-//           } else if(ret.type == DOUTORADO) {
-//             // Tipo DOUTORADO
-//             console.log("ENTROU vagalinhavagalinhavagalinhavagalinha: ", vagalinha)
-//             console.log("ENTROU linhaPesquisa.corpoDocentelinhaPesquisa.corpoDocente: ", linhaPesquisa)
-
-//             corpoAux.forEach(prof => {
-//               const vagaProf = vagalinha.professors?.find(p => p.idProfessor == prof.id);
-//               if(vagaProf && linhaPesquisa._id == vagalinha.idLinhaPesquisa) {
-//                 console.log("4444444444444444444444: ", vagaProf)
-//                 prof.fullName += buildTextVaga(vagaProf.maxVaga, vagaProf.maxVagaCota);
-//               }
-//             })
-//             console.log("LINHA FIM >>> ", corpoAux)
-//           }
-//         }
-
-//         return (
-//           {
-//             _id: linhaPesquisa._id,
-//             corpoDocente: corpoAux,
-//             title: linhaPesquisa[language].title,
-//           }
-//         )
-//       }),
-//       vagas: ret.vagas,
-//     }
-//   }
-//   return ret;
-// }
 async function getProcessoSeletivoInscreverInfosById(idProcessoSeletivo, language) {
   const ret = await ProcessoSeletivoModel.findOne({ _id: idProcessoSeletivo }, { researchLine: 1, vagas: 1, type: 1 })
     .populate({
@@ -453,7 +390,19 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
                 flagReturn = typeof e.parecer.homologado != 'boolean' && e.parecerista[e.responsavelHomologacao]?.equals(idParecerista)
 
               } else if(processo.etapa == 'avaliacao') {
-                if(e.parecer.avaliacoes) {
+                // se tiver reprovado em uma etapa antes da processo.etapaAvaliacao, não retornar
+                if(e.parecer && e.parecer.step) {
+                  let estaAprovadoEtapaAnterior = true;
+                  Object.values(e.parecer.step).forEach((etapasAvaliadas, index) => {
+                    if(index < processo.etapaAvaliacao) {
+                      estaAprovadoEtapaAnterior = estaAprovadoEtapaAnterior && etapasAvaliadas.stepApproval
+                    }
+                  })
+                  flagReturn = estaAprovadoEtapaAnterior;
+                }
+
+
+                if(flagReturn && e.parecer.avaliacoes) {
                   let idEtapaVigente = processo.criterio?.step[processo.etapaAvaliacao]._id;
                   let etapaAvaliada = e.parecer.avaliacoes['avaliador-'+idParecerista]?.step['step-'+idEtapaVigente]?.totalNotaEtapa;
                   flagReturn = etapaAvaliada == null || etapaAvaliada == undefined;
@@ -641,6 +590,9 @@ async function getMinhaInscricoesDetalhadaProcessoSelectivo(idUser, language) {
       {
         title: 1,
         criterio: 1,
+        etapa: 1,
+        etapaAvaliacao: 1,
+        recursoHabilitado: 1,
         'enrolled.$': 1,
       }
     )
@@ -738,6 +690,16 @@ async function getParecer(req, idUser) {
   return ProcessoSeletivoModel.findOne(
     { _id: idProcesso, enrolled: { $elemMatch: { _id: idInscricao } } },
     {'enrolled.$': 1, 'etapa': 1, 'etapaAvaliacao': 1}
+  );
+}
+
+async function mudarRecursoHabilitado(body) {
+  const { idProcesso, recursoHabilitado } = body;
+
+  return await ProcessoSeletivoModel.findOneAndUpdate(
+    { _id: idProcesso },
+    { recursoHabilitado: recursoHabilitado },
+    { upsert: false }
   );
 }
 
@@ -929,7 +891,6 @@ async function salvarVinculoCriterio(req) {
   )
 
   if (retorno) {
-    console.log("ACHOU PROCESSO");
     return getSuccessByStatus(200, "Critério vinculado com sucesso!");
   }
   else {

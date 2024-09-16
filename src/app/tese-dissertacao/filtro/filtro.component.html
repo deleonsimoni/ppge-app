@@ -1,13 +1,14 @@
 <div class="card-body">
     <div class="text-center">
         <ul class="nav nav-pills mb-3">
-            <li *ngIf="filtros[0]?.tipo === '1'"><a class="nav-link active">Teses</a></li>
-            <li *ngIf="filtros[0]?.tipo === '2'"><a class="nav-link active">Dissertaões</a></li>
+            <li *ngIf="typeFilter === '1' || typeFilter === '0'"><a (click)="filterByType('1')" style="cursor: pointer;" class="nav-link" [ngClass]="{'active': filtros[0]?.tipo == '1'}">Teses</a></li>
+            <li *ngIf="typeFilter === '2' || typeFilter === '0'"><a (click)="filterByType('2')" style="cursor: pointer;" class="nav-link" [ngClass]="{'active': filtros[0]?.tipo == '2'}">Dissertaões</a></li>
         </ul>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th scope="col">Ano de publicação</th>
+                    <th scope="col">Orientador(a)</th>
                     <th scope="col">Autor(a)</th>
                     <th scope="col">Titulo</th>
                     <th scope="col">Resumo</th>
@@ -17,8 +18,9 @@
                 <ng-container *ngFor="let di of filtros; let i= index">
                     <tr  *ngIf="i < limit">
                         <td scope="row">{{ di.ano }}</td>
+                        <td scope="row">{{ di.orientador }}</td>
                         <td scope="row">{{ di.autor }}</td>
-                        <td scope="row"><a href="{{di.linkTitulo}}" target="_blank">{{ di.titulo }}</a></td>
+                        <td scope="row">{{ di.titulo }}</td>
                         <td scope="row">
                             <span matTooltip="Ver Resumo" matTooltipPosition="above" class="material-icons md-18 btn" (click)="openResumoDialog(di)">preview</span>
                         </td>

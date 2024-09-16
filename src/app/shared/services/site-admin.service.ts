@@ -133,12 +133,21 @@ export class SiteAdminService {
 
   /* Fim Corpo Docente */
   /* Tese DISSERTACAO */
-  listTeseDissertacao(tipo: string, page = null, limit= null) {
+  getAnosCadastrados() {
+    return this.http.get(`${this.URL_TESE_DISSERTACAO}/anos-cadastrados/all`);
+  }
+
+  listTeseDissertacao(tipo: string, page = null, limit= null, searchOrientador = null, searchAutor = null, searchAno = null, searchTitulo = null) {
     let params = new HttpParams();
     if(page && limit) {
       params = params.set("page", page);
       params = params.set("limit", limit);
     }
+    if(searchOrientador && searchOrientador.trim() != "") params = params.set("searchOrientador", searchOrientador);
+    if(searchAutor && searchAutor.trim() != "") params = params.set("searchAutor", searchAutor);
+    if(searchAno && searchAno.trim() != "") params = params.set("searchAno", searchAno);
+    if(searchTitulo && searchTitulo.trim() != "") params = params.set("searchTitulo", searchTitulo);
+    
     return this.http.get(`${this.URL_TESE_DISSERTACAO}/${tipo}`, { params });
   }
 
@@ -162,13 +171,10 @@ export class SiteAdminService {
     
     if (form.tipo) params = params.set('tipo', form.tipo)
     if (form.ano) params = params.set('ano', form.ano)
-    if (form.ingresso) params = params.set('ingresso', form.ingresso)
     if (form.autor) params = params.set('autor', form.autor)
     if (form.orientador) params = params.set('orientador', form.orientador)
     if (form.titulo) params = params.set('titulo', form.titulo)
-    if (form.dataSala) params = params.set('dataSala', form.dataSala)
-    if (form.banca) params = params.set('banca', form.banca)
-    if (form.metadados) params = params.set('metadados', form.metadados)
+    if (form.resumo) params = params.set('resumo', form.resumo)
 
     return this.http.get(`${this.URL_TESE_DISSERTACAO}/get-filter/filter`, { params: params });
   }
@@ -242,6 +248,11 @@ export class SiteAdminService {
 
   listProcessoSeletivo() {
     return this.http.get(this.URL_PROCESSO_SELETIVO);
+  }
+
+  mudarRecursoHabilitado(recursoHabilitado, idProcesso) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+    return this.http.put(`${this.URL_PROCESSO_SELETIVO}/mudar-recurso-habilitado`, { idProcesso, recursoHabilitado });
   }
 
   mudarEtapa(etapa, idProcesso) {

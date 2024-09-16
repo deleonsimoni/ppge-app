@@ -82,7 +82,14 @@ export class ParecerComponent implements OnInit {
       step.section.forEach(section => {
         let formAux = this.builder.group({});
         section.question.forEach(element => {
-          formAux.addControl(String(`question-${element._id}`), new FormControl({value: null, disabled: this.etapaAvaliacao != indexStep}, []))
+          console.log("etapaAvaliacao", this.etapaAvaliacao)
+          console.log("indexStep", indexStep)
+          console.log("-------------------------", );
+          formAux.addControl(
+            String(`question-${element._id}`),
+            new FormControl({value: null, disabled: this.etapaAvaliacao != indexStep}, 
+            indexStep == this.etapaAvaliacao ? [Validators.required] : [])
+          )
         });
         notasAprovacaoForm.addControl(`section-${section._id}`, formAux);
       })
@@ -184,6 +191,7 @@ export class ParecerComponent implements OnInit {
       this.siteAdminService
         .registrarParecer(this.data.idInscricao, this.data.idProcesso, formulario, this.data.emailInscrito, this.data.isAnother, this.idPareceristaSelected)
         .subscribe(data => {
+          this.toastr.success("Parecer salvo com sucesso!")
           this.dialogRef.close({ refresh: true });
         })
     } else {

@@ -57,11 +57,11 @@ export class UserAreaComponent implements OnInit {
     })
   }
 
-  openModalDetalharAvaliacao(parecer, criterio, idInscricao, idProcesso) {
+  openModalDetalharAvaliacao(parecer, criterio, idInscricao, idProcesso, etapa, etapaAvaliacao, recursoHabilitado) {
 
     const dialogRef = this.dialog.open(ParecerUserComponent, {
       width: '80%',
-      data: { parecer, criterio, idInscricao, idProcesso }
+      data: { parecer, criterio, idInscricao, idProcesso, etapa, etapaAvaliacao, recursoHabilitado }
     })
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       if (result && result.refresh) {

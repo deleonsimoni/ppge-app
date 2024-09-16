@@ -18,14 +18,14 @@
                     </div>
 
                     <div class="form-group col-md-5">
-                        <input type="text" name="ano" class="form-control" id="ano" placeholder="Ano"
+                        <input type="text" name="ano" class="form-control" id="ano" placeholder="Ano de publicação"
                             formControlName="ano" />
                     </div>
 
                 </div>
                 <div class="form-row justify-content-center">
                     <div class="form-group col-md-12">
-                        <input type="text" name="autor" class="form-control" id="autor" placeholder="Autor"
+                        <input type="text" name="autor" class="form-control" id="autor" placeholder="Autor(a)"
                             formControlName="autor" />
 
                     </div>
@@ -34,7 +34,7 @@
                 <div class="form-row justify-content-center">
                     <div class="form-group col-md-12">
                         <input type="text" name="orientador" class="form-control" id="orientador"
-                            placeholder="Orientador" formControlName="orientador" />
+                            placeholder="Orientador(a)" formControlName="orientador" />
 
                     </div>
                 </div>
@@ -45,13 +45,13 @@
 
                     </div>
                 </div>
-                <div class="form-row justify-content-center">
+                <!-- <div class="form-row justify-content-center">
                     <div class="form-group col-md-12">
                         <input type="text" name="linkTitulo" class="form-control" id="linkTitulo"
                             placeholder="Link do Título" formControlName="linkTitulo" />
 
                     </div>
-                </div>
+                </div> -->
                 <div class="form-row justify-content-center">
                     <div class="form-group col-md-12">
                         <angular-editor [placeholder]="'Resumo...'" formControlName="resumo" [(ngModel)]="resumo"
@@ -59,7 +59,7 @@
                     </div>
                 </div>
 
-                <h4>Palavras-chave</h4>
+                <!-- <h4>Palavras-chave</h4>
                 <div formArrayName="palavrasChave">
                     <div *ngFor="let contentLine of form.controls['palavrasChave']['controls']; let i = index;">
                         <div class="form-row justify-content-center">
@@ -79,7 +79,7 @@
                         <button class="add-button" type="button" (click)="addContentLine()" mat-raised-button>Adicionar
                             palavra</button>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="row justify-content-end m-4">
                     <button type="submit" mat-raised-button color="primary">
@@ -87,6 +87,22 @@
                     </button>
                 </div>
             </form>
+        </div>
+        <hr>
+        <div class="col-md-12 my-5">
+            <div class="row mb-3"><input type="text" class="form-control" placeholder="Ano de publicação" [(ngModel)]="searchAno" /></div>
+            <div class="row mb-3"><input type="text" class="form-control" placeholder="Orientador(a)" [(ngModel)]="searchOrientador" /></div>
+            <div class="row mb-3"><input type="text" class="form-control" placeholder="Autor(a)" [(ngModel)]="searchAutor" /></div>
+            <div class="row mb-3"><input type="text" class="form-control" placeholder="Titulo" [(ngModel)]="searchTitulo" /></div>
+            <div class="row">
+                <div class="col-auto mr-md-3">
+                    <button (click)="limparFiltro()" type="button" mat-raised-button color="warn">Limpar filtro</button>
+                </div>
+                <div class="col-auto">
+                    <button (click)="getTesesDissertacoes(tipo)" type="button" mat-raised-button color="primary">Pesquisar</button>                    
+                </div>
+            </div>
+            
         </div>
         <div class="col-md-12" id="teste-2">
             <section id="about" class="about">

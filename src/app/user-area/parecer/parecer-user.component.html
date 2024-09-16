@@ -15,7 +15,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr *ngIf="data.etapa == 'avaliacao' || (data.etapa == 'homologacao' && data.recursoHabilitado)">
                 <td scope="row">-</td>
                 <td scope="row">Homologação</td>
                 <td scope="row">-</td>
@@ -37,28 +37,30 @@
                 </td>
               </tr>
 
-              <tr *ngFor="let criterioStep of criterioStepList; let i= index">
-                <td scope="row">{{ i+1 }}</td>
-                <td scope="row">{{ criterioStep.title }}</td>
-                <td>{{ getPartialScoreByStep(criterioStep._id) }}</td>
-                <td>{{ getApproveStep(criterioStep._id) }}</td>
-                <td scope="row">
-                  <div *ngIf="verificaTemJustificativa(criterioStep._id); else blockJustificar">
-                    <p *ngIf="verificaTemResposta(criterioStep._id); else blockVerResposta">Recurso solicitado</p>
-                    <ng-template #blockVerResposta>
-                      <p>Recurso respondido</p>
-                      <button (click)="abrirModalResposta(criterioStep._id)" type="button" mat-raised-button
-                        color="primary">Ver resposta</button>
+              <ng-container *ngFor="let criterioStep of criterioStepList; let i= index">
+                <tr *ngIf="i < data.etapaAvaliacao || (i == data.etapaAvaliacao && data.recursoHabilitado)">
+                  <td scope="row">{{ i+1 }}</td>
+                  <td scope="row">{{ criterioStep.title }}</td>
+                  <td>{{ getPartialScoreByStep(criterioStep._id) }}</td>
+                  <td>{{ getApproveStep(criterioStep._id) }}</td>
+                  <td scope="row">
+                    <div *ngIf="verificaTemJustificativa(criterioStep._id); else blockJustificar">
+                      <p *ngIf="verificaTemResposta(criterioStep._id); else blockVerResposta">Recurso solicitado</p>
+                      <ng-template #blockVerResposta>
+                        <p>Recurso respondido</p>
+                        <button (click)="abrirModalResposta(criterioStep._id)" type="button" mat-raised-button
+                          color="primary">Ver resposta</button>
+                      </ng-template>
+                    </div>
+                    <ng-template #blockJustificar>
+                      <button (click)="abrirModalJustificar(criterioStep._id)"
+                        *ngIf="getApproveStep(criterioStep._id) == 'NÃO'" type="button" mat-raised-button
+                        color="primary">Solicitar recurso</button>
                     </ng-template>
-                  </div>
-                  <ng-template #blockJustificar>
-                    <button (click)="abrirModalJustificar(criterioStep._id)"
-                      *ngIf="getApproveStep(criterioStep._id) == 'NÃO'" type="button" mat-raised-button
-                      color="primary">Solicitar recurso</button>
-                  </ng-template>
-
-                </td>
-              </tr>
+  
+                  </td>
+                </tr>
+              </ng-container>
             </tbody>
           </table>
         </div>
