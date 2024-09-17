@@ -61,11 +61,24 @@ async function consolidarAvaliacaoAutomatico(idProcesso, idInscricao) {
       let notaEtapa = 0;
       let primeiroAvaliador = avaliacoes[`avaliador-${avaliadores.primeiro}`]
       let segundoAvaliador = avaliacoes[`avaliador-${avaliadores.segundo}`]
+      let prenota = 0;
+
+
       if(primeiroAvaliador) {
-        notaEtapa = preciseSum(notaEtapa, primeiroAvaliador?.step[`step-${step._id}`]?.totalNotaEtapa ? primeiroAvaliador?.step[`step-${step._id}`]?.totalNotaEtapa : 0)
+
+        if(primeiroAvaliador && primeiroAvaliador.step[`step-${step._id}`] && primeiroAvaliador.step[`step-${step._id}`].totalNotaEtapa){
+          prenota = primeiroAvaliador.step[`step-${step._id}`].totalNotaEtapa;
+        } 
+
+        notaEtapa = preciseSum(notaEtapa, prenota)
       }
       if(segundoAvaliador) {
-        notaEtapa = preciseSum(notaEtapa, segundoAvaliador?.step[`step-${step._id}`]?.totalNotaEtapa ? segundoAvaliador?.step[`step-${step._id}`]?.totalNotaEtapa : 0)
+
+        if(segundoAvaliador && segundoAvaliador.step[`step-${step._id}`] && segundoAvaliador.step[`step-${step._id}`].totalNotaEtapa){
+          prenota = segundoAvaliador.step[`step-${step._id}`].totalNotaEtapa;
+        } 
+
+        notaEtapa = preciseSum(notaEtapa, prenota)
       }
 
       // let keysAvaliacoes = Object.keys(avaliacoes);
@@ -387,7 +400,7 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
             // valida se disponivel para avaliar
             if(flagReturn && e.parecer) {
               if(processo.etapa == 'homologacao') {
-                flagReturn = typeof e.parecer.homologado != 'boolean' && e.parecerista[e.responsavelHomologacao]?.equals(idParecerista)
+                flagReturn = typeof e.parecer.homologado != 'boolean' && e.parecerista[e.responsavelHomologacao].equals(idParecerista)
 
               } else if(processo.etapa == 'avaliacao') {
                 // se tiver reprovado em uma etapa antes da processo.etapaAvaliacao, não retornar
@@ -403,8 +416,8 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
 
 
                 if(flagReturn && e.parecer.avaliacoes) {
-                  let idEtapaVigente = processo.criterio?.step[processo.etapaAvaliacao]._id;
-                  let etapaAvaliada = e.parecer.avaliacoes['avaliador-'+idParecerista]?.step['step-'+idEtapaVigente]?.totalNotaEtapa;
+                  let idEtapaVigente = processo.criterio && processo.criterio.step[processo.etapaAvaliacao]._id;
+                  let etapaAvaliada = e.parecer.avaliacoes['avaliador-'+idParecerista] && e.parecer.avaliacoes['avaliador-'+idParecerista].step['step-'+idEtapaVigente].totalNotaEtapa;
                   flagReturn = etapaAvaliada == null || etapaAvaliada == undefined;
                 }
               } else {
@@ -505,7 +518,7 @@ async function getInscritosByProcessoSelectivo(req, idProcessoSeletivo, idParece
             
           return flagReturn;
         })
-        .sort((ea, eb) => ea.idUser?.fullname.localeCompare(eb.idUser?.fullname))
+        .sort((ea, eb) => ea.idUser.fullname.localeCompare(eb.idUser.fullname))
         .map(e => (
           {
             _id: e._id,
