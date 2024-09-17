@@ -21,8 +21,8 @@
                 Cancelar inscrição
             </button>
             <ng-template #btnInsc>
-                <h4 *ngIf="ps.etapa != 'inscricao' && ps.etapa != 'finalizado'" class="mt-3 p-2 bg-green text-white rounded-3" style="width: fit-content;">Etapa de inscrição finalizada</h4>
-                <h4 *ngIf="ps.etapa != 'finalizado'" class="mt-3 p-2 bg-green text-white rounded-3" style="width: fit-content;">Processo seletivo finalizado</h4>
+                <h4 *ngIf="ps.etapa != 'inscricao' && ps.etapa != 'finalizado'" class="mt-3 p-2 bg-green text-white rounded-3" style="width: fit-content;">Inscrição finalizada</h4>
+                <h4 *ngIf="ps.etapa == 'finalizado'" class="mt-3 p-2 bg-green text-white rounded-3" style="width: fit-content;">Processo seletivo finalizado</h4>
                 <button *ngIf="ps.etapa == 'inscricao'" class="mt-2" type="button" (click)="iniciarInscricaoNoProcesso(ps._id, ps.type)" mat-raised-button color="primary">
                     Inscrever-se
                 </button>
