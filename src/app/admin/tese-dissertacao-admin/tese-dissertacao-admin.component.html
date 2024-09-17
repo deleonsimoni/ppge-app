@@ -9,7 +9,7 @@
 
         <div class="col-md-12">
             <form role="form" class="reviewer" [formGroup]="form" (ngSubmit)="register()">
-                <div class="form-row justify-content-center">
+                <div class="form-row justify-content-start">
                     <div class="form-group col-md-2">
                         <select class="form-select" aria-label="Selecione o tipo do projeto:" formControlName="tipo">
                             <option value="1">Tese</option>
@@ -90,6 +90,7 @@
         </div>
         <hr>
         <div class="col-md-12 my-5">
+            <div class="row mb-5"><h2>Filtro para consulta</h2></div>
             <div class="row mb-3"><input type="text" class="form-control" placeholder="Ano de publicação" [(ngModel)]="searchAno" /></div>
             <div class="row mb-3"><input type="text" class="form-control" placeholder="Orientador(a)" [(ngModel)]="searchOrientador" /></div>
             <div class="row mb-3"><input type="text" class="form-control" placeholder="Autor(a)" [(ngModel)]="searchAutor" /></div>

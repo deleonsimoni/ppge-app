@@ -40,15 +40,13 @@ export class ViewInscritosProcessoSeletivoComponent implements OnInit {
 
   searchByCPFOrName() {
     const searchTextTrim = this.searchText.trim();
-    if(searchTextTrim.length > 2) {
-      this.siteService
-        .listProcessoSeletivoInscritos(this.data.idProcesso, searchTextTrim)
-        .subscribe((res: any) => {
-          this.data.users = res.enrolled;
-        }, err => {
-          this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
-        })
-    }
+    this.siteService
+      .listProcessoSeletivoInscritos(this.data.idProcesso, searchTextTrim)
+      .subscribe((res: any) => {
+        this.data.users = res.enrolled;
+      }, err => {
+        this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
+      })
   }
   
 

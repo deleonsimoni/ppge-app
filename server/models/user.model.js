@@ -22,6 +22,7 @@ const UserSchema = new mongoose.Schema(
     cpf: {
       type: String,
       required: true,
+      unique: true,
     },
     rg: {
       type: String,
