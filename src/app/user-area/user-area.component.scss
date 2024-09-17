@@ -15,6 +15,13 @@
 
 .center-pills { display: inline-block; }
 
+.text-start-custom {
+  text-align: left; /* Alinha o texto à esquerda dentro da coluna */
+}
+.text-center-container {
+  display: flex;
+  justify-content: center; /* Centraliza a coluna dentro do container */
+}
 
 
 
