@@ -1,8 +1,8 @@
 <div class="card-body">
     <div class="text-center">
         <ul class="nav nav-pills mb-3">
-            <li *ngIf="typeFilter === '1' || typeFilter === '0'"><a (click)="filterByType('1')" style="cursor: pointer;" class="nav-link" [ngClass]="{'active': filtros[0]?.tipo == '1'}">Teses</a></li>
-            <li *ngIf="typeFilter === '2' || typeFilter === '0'"><a (click)="filterByType('2')" style="cursor: pointer;" class="nav-link" [ngClass]="{'active': filtros[0]?.tipo == '2'}">Dissertaões</a></li>
+            <li *ngIf="typeFilter === '1' || typeFilter === '0'"><a id="teseFilter" (click)="filterByType('1');type=1" style="cursor: pointer;" class="nav-link" [ngClass]="{'active': type == '1'}">Teses</a></li>
+            <li *ngIf="typeFilter === '2' || typeFilter === '0'"><a (click)="filterByType('2');type=2" style="cursor: pointer;" class="nav-link" [ngClass]="{'active': type == '2'}">Dissertações</a></li>
         </ul>
         <table class="table table-striped">
             <thead>
