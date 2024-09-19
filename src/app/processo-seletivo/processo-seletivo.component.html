@@ -12,17 +12,22 @@
     <div *ngFor="let ps of processoSeletivo" class="container mb-5">
 
         <div class="text-body">
-
-            <h3>{{ps.title}}</h3>
+            <div class="row justify-content-between">
+                <div class="col-auto order-sm-2">
+                    <span *ngIf="ps.etapa != 'inscricao' && ps.etapa != 'finalizado'" class="mt-3 px-2 p-1] bg-green text-white rounded-3" style="font-size: 25px; width: fit-content;">Inscrição finalizada</span>
+                    <span *ngIf="ps.etapa == 'finalizado'" class="mt-3 px-2 p-1] bg-green text-white rounded-3" style="font-size: 25px; width: fit-content;">Processo seletivo finalizado</span>
+                </div>
+                <div class="col-auto order-sm-1">
+                    <h3>{{ps.title}}</h3>
+                </div>
+            </div>
             <div *ngFor="let content of ps.content">
-                <a  href="{{content.contentLink}}">{{content.contentTitle}}</a>
+                <a  href="{{content.contentLink}}" target="_blank">{{content.contentTitle}}</a>
             </div>
             <button *ngIf="ps.etapa == 'inscricao' && minhasInscricoes?.includes(ps._id); else btnInsc" class="mt-2" type="button" (click)="cancelarInscricao(ps._id)" mat-raised-button color="warn">
                 Cancelar inscrição
             </button>
             <ng-template #btnInsc>
-                <h4 *ngIf="ps.etapa != 'inscricao' && ps.etapa != 'finalizado'" class="mt-3 p-2 bg-green text-white rounded-3" style="width: fit-content;">Inscrição finalizada</h4>
-                <h4 *ngIf="ps.etapa == 'finalizado'" class="mt-3 p-2 bg-green text-white rounded-3" style="width: fit-content;">Processo seletivo finalizado</h4>
                 <button *ngIf="ps.etapa == 'inscricao'" class="mt-2" type="button" (click)="iniciarInscricaoNoProcesso(ps._id, ps.type)" mat-raised-button color="primary">
                     Inscrever-se
                 </button>

@@ -13,14 +13,16 @@
     <table *ngIf="!flagShowInfoUser; else infoUserBlock" class="table">
         <thead>
             <tr>
-                <th scope="col" style="width: 75%;">Nome</th>
+                <th scope="col">CPF</th>
+                <th scope="col" style="width: 50%;">Nome</th>
                 <th scope="col">Ficha de inscrição</th>
             </tr>
         </thead>
         <tbody>
             <ng-container *ngFor="let di of data.users; let i = index">
                 <tr *ngIf="i < limit">
-                    <th scope="row" style="width: 75%;">{{ di.idUser.fullname?.toUpperCase()}}</th>
+                    <th scope="row">{{ di.idUser.cpf}}</th>
+                    <th scope="row" style="width: 50%;">{{ di.idUser.fullname?.toUpperCase()}}</th>
                     <th scope="row">
                         <span class="material-icons md-18 btn" (click)="getUserInfo(di.idUser._id)">description</span>
                     </th>

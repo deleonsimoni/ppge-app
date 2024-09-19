@@ -363,6 +363,10 @@ export class ProcessoSeletivoAdminComponent implements OnInit {
   }
 
   editar(obj) {
+    window.scroll({
+      top: 300,
+      left: 0
+    })
     this.getTitleLinhaPesquisa();
 
     this.form.patchValue({ ...obj, type: String(obj.type) });

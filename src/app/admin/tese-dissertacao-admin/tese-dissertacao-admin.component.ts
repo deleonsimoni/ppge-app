@@ -167,6 +167,10 @@ export class TeseDissertacaoAdminComponent implements OnInit {
       this.getPerTipo(resposta.tipo);
       this.limparForm();
     } else if (resposta.acao === 'editar') {
+      window.scroll({
+        top: 0,
+        left: 0
+      })
       this.form.patchValue(resposta.obj);
       const formArray = <FormArray>this.form.controls['palavrasChave'];
       formArray.clear();
