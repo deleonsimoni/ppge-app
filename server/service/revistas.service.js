@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const RevistasModel = require("../models/revista.model");
+const S3Uploader = require('../controllers/aws.controller');
 
 module.exports = {
   getRevistas,
@@ -30,6 +31,7 @@ async function getRevistas(req) {
       }
     ));
   }
+
   return ret;
 }
 
@@ -53,21 +55,61 @@ async function getHeadersRevistas(req) {
 
 async function updateRevistas(req, idUser) {
 
-  let form = req.body.formulario;
+  let form = JSON.parse(req.body.formulario);
   form.user = idUser;
-  return await RevistasModel.findOneAndUpdate({
-    _id: form._id
-  },
-    form, {
-    upsert: true
-  });
+  let retorno = { temErro: true };
+
+  if (req.files) {
+    let fileName = 'images/revistas/' + req.files.fileArray.name;
+    await S3Uploader.uploadBase64(fileName, req.files.fileArray.data).then(async fileData => {
+      console.log('Arquivo submetido para AWS ' + fileName);
+      form.imagePathS3 = "https://ppge-public.s3.sa-east-1.amazonaws.com/"+fileName;
+      retorno.temErro = false;
+
+      return await RevistasModel.findOneAndUpdate({
+        _id: form._id
+      },
+        form, {
+        upsert: true
+      });
+    }, err => {
+      console.log('Erro ao enviar imagem para AWS: ' + fileName);
+      retorno.temErro = true;
+      retorno.mensagem = 'Servidor momentaneamente inoperante. Tente novamente mais tarde.';
+    });
+
+  } else {
+    return await RevistasModel.findOneAndUpdate({
+      _id: form._id
+    },
+      form, {
+      upsert: true
+    });
+  }
 
 }
 
 async function insertRevistas(req, idUser) {
-  let form = req.body.formulario;
+  let form = JSON.parse(req.body.formulario);
   form.user = idUser;
-  return await new RevistasModel(form).save();
+  let retorno = { temErro: true };
+
+  if (req.files) {
+    let fileName = 'images/revistas/' + req.files.fileArray.name;
+    await S3Uploader.uploadBase64(fileName, req.files.fileArray.data).then(async fileData => {
+      console.log('Arquivo submetido para AWS ' + fileName);
+      form.imagePathS3 = "https://ppge-public.s3.sa-east-1.amazonaws.com/"+fileName;
+      retorno.temErro = false;
+      return await new RevistasModel(form).save();
+    }, err => {
+      console.log('Erro ao enviar imagem para AWS: ' + fileName);
+      retorno.temErro = true;
+      retorno.mensagem = 'Servidor momentaneamente inoperante. Tente novamente mais tarde.';
+    });
+
+  } else {
+    return await new RevistasModel(form).save();
+  }
 }
 
 async function deleteRevistas(id) {

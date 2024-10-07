@@ -16,7 +16,7 @@ import { TypeBlocoEnum, TypeGraduateEnum } from '@app/shared/shared.model';
 })
 export class PagesAdminComponent implements OnInit {
   @ViewChild('imageRender', { static: false }) imageRender: ElementRef;
-  
+
   typeGraduateEnum = TypeGraduateEnum;
   typeBlocoEnum = TypeBlocoEnum;
 
@@ -64,6 +64,9 @@ export class PagesAdminComponent implements OnInit {
       }
     ]
   };
+
+  public logo: any;
+  public imagePathS3: any;
 
   constructor(
     private builder: FormBuilder,
@@ -133,6 +136,12 @@ export class PagesAdminComponent implements OnInit {
         this.dataExpansivel = res;
         this.data = res[0];
         if (this.data) this.data.index = 0;
+        if (this.data.imagePathS3) {
+          this.logo = this.data.imagePathS3.imagePathS3;
+        } else {
+          this.logo = null;
+        }
+
         this.form.reset();
         this.form.patchValue({ ...res[0], selectPage: pageSelected, language: languageSelected });
       } else {
@@ -158,6 +167,8 @@ export class PagesAdminComponent implements OnInit {
   selecionarPagina(index) {
     const pageSelected = this.form.value.selectPage;
     const languageSelected = this.form.value.language;
+    if (this.dataExpansivel[index].imagePathS3) this.logo = this.dataExpansivel[index].imagePathS3;
+    
     this.form.reset();
     this.form.patchValue({ ...this.dataExpansivel[index], selectPage: pageSelected, language: languageSelected });
     this.data = this.dataExpansivel[index];
@@ -171,31 +182,68 @@ export class PagesAdminComponent implements OnInit {
 
     if (this.form.valid) {
 
-      if (this.form.value._id) {
+      if (this.form.value.selectPage === 'revistas') {
 
-        this.siteService.atualizarPage(this.form.value, pageSelected)
-          .subscribe((res: any) => {
-            this.getInfoPage();
-            this.toastr.success(`Página alterada com sucesso`, 'Sucesso');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }, (err: any) => {
-            this.toastr.error('Ocorreu um erro ao atualizar', 'Atenção: ');
-          });
+        if (this.form.value._id) {
+
+          this.siteService.atualizarPageWithImage(this.imagePathS3, this.form.value, pageSelected)
+            .subscribe((res: any) => {
+              this.getInfoPage();
+              this.toastr.success(`Página alterada com sucesso`, 'Sucesso');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, (err: any) => {
+              this.toastr.error('Ocorreu um erro ao atualizar', 'Atenção: ');
+            });
+
+        } else {
+
+          this.siteService.cadastrarPageWithImage(this.imagePathS3, this.form.value, pageSelected)
+            .pipe(
+              catchError(err => {
+                this.toastr.error('Ocorreu um erro ao cadastrar', 'Atenção: ');
+                throw err;
+              })
+            )
+            .subscribe((res: any) => {
+              this.getInfoPage();
+              this.toastr.success(`Página cadastrada`, 'Sucesso');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            
+        }
 
       } else {
-        this.siteService.cadastrarPage(this.form.value, pageSelected)
-          .pipe(
-            catchError( err => {
-              this.toastr.error('Ocorreu um erro ao cadastrar', 'Atenção: ');
-              throw err;
-            })
-          )
-          .subscribe((res: any) => {
-            this.getInfoPage();
-            this.toastr.success(`Página cadastrada`, 'Sucesso');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          });
+
+        if (this.form.value._id) {
+
+          this.siteService.atualizarPage(this.form.value, pageSelected)
+            .subscribe((res: any) => {
+              this.getInfoPage();
+              this.toastr.success(`Página alterada com sucesso`, 'Sucesso');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, (err: any) => {
+              this.toastr.error('Ocorreu um erro ao atualizar', 'Atenção: ');
+            });
+
+        } else {
+
+          this.siteService.cadastrarPage(this.form.value, pageSelected)
+            .pipe(
+              catchError(err => {
+                this.toastr.error('Ocorreu um erro ao cadastrar', 'Atenção: ');
+                throw err;
+              })
+            )
+            .subscribe((res: any) => {
+              this.getInfoPage();
+              this.toastr.success(`Página cadastrada`, 'Sucesso');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+        }
+
       }
+
 
     } else
       this.toastr.error('Preencha corretamente o formulário!', 'Atenção: ');
@@ -214,6 +262,10 @@ export class PagesAdminComponent implements OnInit {
     reader.onloadend = (e) => { // function call once readAsDataUrl is completed
       this.imageRender.nativeElement.src = e.target['result']; // Set image in element
     };
+  }
+
+  getImagePath(imgUrl) {
+    return imgUrl?.includes('https:') || imgUrl?.startsWith("data:image") ? imgUrl : 'https://ppge-public.s3.sa-east-1.amazonaws.com/' + imgUrl
   }
 
   public excluirPaginaExpansivel() {
@@ -244,6 +296,24 @@ export class PagesAdminComponent implements OnInit {
 
       }
     });
+  }
+
+  public getProfileImageCode(event: any): void {
+    const that = this;
+    const FR = new FileReader();
+    const files = event.target.files;
+
+    FR.addEventListener("load", function (e) {
+      that.logo = e.target.result;
+    });
+
+    if (files && files[0]) {
+      that.imagePathS3 = files[0];
+      FR.readAsDataURL(files[0]);
+    } else {
+      that.logo = null;
+      that.imagePathS3 = null;
+    }
   }
 
 }

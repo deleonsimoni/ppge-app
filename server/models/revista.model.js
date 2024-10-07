@@ -7,6 +7,10 @@ const RevistaSchema = new mongoose.Schema(
           required: true
         },
     
+        img: {
+          type: String,
+        },
+
         "pt-br": {
           navTitle: {
             type: String,
@@ -22,6 +26,7 @@ const RevistaSchema = new mongoose.Schema(
             type: String,
             required: true,
           },
+
     
         },
     
@@ -40,6 +45,7 @@ const RevistaSchema = new mongoose.Schema(
             type: String,
             required: true,
           },
+
     
         },
         
@@ -58,6 +64,7 @@ const RevistaSchema = new mongoose.Schema(
             type: String,
             required: true,
           },
+         
     
         },
     

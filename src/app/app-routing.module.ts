@@ -46,6 +46,11 @@ const routes: Routes = [
     //canActivate: [AuthGuard],
   },
   {
+    path: 'revista/:idRevista',
+    component: NoticeComponent,
+    //canActivate: [AuthGuard],
+  },
+  {
     path: 'objetivo',
     component: ObjectiveComponent,
     //canActivate: [AuthGuard],

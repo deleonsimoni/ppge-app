@@ -133,6 +133,18 @@
 
       <div *ngIf="!!dataExpansivel && dataExpansivel.length > 0">
 
+        <div *ngIf="form.value.selectPage === 'revistas'">
+          <h3 class="text-center">Capa da Revista</h3>
+          
+          <div class="col-8 col-md-4 order-1 order-md-2 mb-3">
+            <div class="profile">
+              <img height="250px" width="150px" [src]="logo ? getImagePath(logo) : '../../../assets/placeholder-profile.png'" class="profile__image">
+              <input type="file" name="logo" class="profile__input" id="logo" placeholder="Logo"
+                (change)="getProfileImageCode($event)" />
+            </div>
+          </div>
+
+        </div>
         <div class="mb-5" formGroupName="pt-br">
           <h3 class="text-center">PT-BR</h3>
           <div class="form-row justify-content-center">

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { SiteUserService } from '@app/shared/services/site-user.service';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, take } from 'rxjs';
@@ -18,19 +19,21 @@ export class HomeComponent implements OnInit {
   pageNumber = 1;
   pageSize = 4;
   isLoadingNews = false;
-
+  isLoadingRevista = false;
   news = [];
   revistas;
 
   constructor(
     private siteService: SiteUserService,
     private toastr: ToastrService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.getNoticias();
     this.getHomeApresentacao();
-    
+    this.getRevistas();
+
     // this.siteService.getHome()
     //   .subscribe((res: any) => {
     //     this.news = res.news;
@@ -77,9 +80,40 @@ export class HomeComponent implements OnInit {
         });
   }
 
+  getRevistas() {
+    this.isLoadingNews = true;
+    const languageStorage = localStorage.getItem('language');
+    const languageParsed = languageStorage ? this.fromInitialsToLanguageCode[languageStorage] : this.fromInitialsToLanguageCode.br;
+    
+    this.siteService
+        .getRevistas(this.pageNumber, this.pageSize)
+        .pipe(
+          take(1),
+          catchError(err => {
+            this.isLoadingRevista = false;
+            this.toastr.error("Ocorreu um erro ao carregar revistas!", "Atenção");
+            throw err;
+          })
+        )
+        .subscribe(data => {
+          this.revistas = data.map(revista => ({
+            navTitle: revista[languageParsed]?.navTitle,
+            title: revista[languageParsed]?.title,
+            content: revista[languageParsed]?.content,
+            img: revista.imagePathS3,
+            _id: revista._id
+          }));
+          this.isLoadingRevista = false;
+        });
+  }
+
   nextPage() {
     this.pageNumber++;
     this.getNoticias();
+  }
+
+  viewDetail(item: any) {
+    this.router.navigate(['/revista', item._id], { queryParams: { title: item.title, img: item.img, navTitle: item.navTitle, content: item.content } });
   }
 
   previousPage() {

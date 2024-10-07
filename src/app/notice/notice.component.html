@@ -1,16 +1,33 @@
 <section id="notice" class="notice">
-  <div class="container">
+    <div class="container">
 
-      <div class="section-header">
-          <h2>{{notice.title}}</h2>
-          <p class="text-right text-black mr-3 subtitle-data">{{notice.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</p>
-      </div>
+        <div class="section-header">
+            <h2>{{notice.title}}</h2>
+            <p class="text-right text-black mr-3 subtitle-data">{{notice.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</p>
+        </div>
 
-  </div>
+    </div>
 
-  <div class="container">
+    <div *ngIf="notice.img" class="container">
 
-      <div class="text-body" [innerHtml]="notice.content | sanitizer"></div>
+        <div class="container mt-3">
+            <div class="d-flex align-items-center">
+                <!-- Imagem à esquerda -->
+                <div class="me-3">
+                    <img [src]="notice.img" class="img-fluid" style="max-width: 150px;">
+                </div>
+                <!-- Descritivo à direita -->
+                <div>
+                    <div class="text-body" [innerHtml]="notice.content | sanitizer"></div>
 
-  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!notice.img" class="container">
+
+        <div class="text-body" [innerHtml]="notice.content | sanitizer"></div>
+
+    </div>
 </section>
