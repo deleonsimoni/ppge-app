@@ -41,7 +41,6 @@ async function getAllTeseDissertacao(req, res) {
 
 async function getFillTeseDissertacao(req, res) {
   
-  console.log("AAAAAAAAAAAasdasdasdasdasd");
   let response = await teseDissertacaoCtrl.getFillTeseDissertacao(req);
   res.json(response);
 }

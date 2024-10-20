@@ -24,6 +24,7 @@ export class TeseDissertacaoComponent implements OnInit {
   list: any[] | undefined;
   isTipoPresent: boolean | false;
   filtros: any | undefined;
+  qtdTotalItems: number | undefined;
   metadados = [];
   selectable = true;
   addOnBlur = true;
@@ -58,7 +59,6 @@ export class TeseDissertacaoComponent implements OnInit {
   ngOnInit(): void {
     this.isTipoPresent = false;
     this.getAnosCadastrados();
-    this.getTeseDissertacao('1');
   }
 
   getAnosCadastrados() {
@@ -91,23 +91,10 @@ export class TeseDissertacaoComponent implements OnInit {
     }
   }
 
-  private getTeseDissertacao(tipo) {
-    this.siteService.listTeseDissertacao(tipo).subscribe((res: any) => {
-      var data = new Array;
-      res.filter(r => {
-        data.push(r.ano);
-      });
-
-      this.datas = data.filter(function (este, i) {
-        return data.indexOf(este) === i;
-      });
-    }, err => {
-      this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');
-    });
-  }
 
   limparFiltro() {
     this.filtros = null;
+    this.qtdTotalItems = null;
     this.form.reset();
     this.form.get('tipo').setValue('0');
     this.form.get('ano').setValue('');
@@ -132,7 +119,8 @@ export class TeseDissertacaoComponent implements OnInit {
       req.metadados = this.metadados;
     }
     this.siteService.getTeseDissertacao(req, page, limit).subscribe((res: any) => {
-      this.filtros = res;
+      this.filtros = res.data;
+      this.qtdTotalItems = res.qtdTotalItems;
       this.page = page;
       this.typeSelected = this.form.value.tipo;
     }, err => {
