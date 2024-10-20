@@ -61,6 +61,30 @@ export class SiteAdminService {
     const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
     return this.http.put(`${this.URL_PAGE}/${pageSelected}/${form._id}`, { formulario: form }, { headers });
   }
+
+  cadastrarPageWithImage(file: any, form: any, pageSelected: string) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+
+    const formData: FormData = new FormData();
+    formData.append('formulario', JSON.stringify(form));
+
+    if (file) {
+      formData.append('fileArray', file, `${file.name}`);
+    }
+    return this.http.post(`${this.URL_PAGE}-img/${pageSelected}`, formData );
+  }
+
+  atualizarPageWithImage(file: any, form: any, pageSelected: string) {
+    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf-8");
+
+    const formData: FormData = new FormData();
+    formData.append('formulario', JSON.stringify(form));
+
+    if (file) {
+      formData.append('fileArray', file, `${file.name}`);
+    }
+    return this.http.put(`${this.URL_PAGE}-img/${pageSelected}/${form._id}`, formData);
+  }
   /* Fim Page */
 
 

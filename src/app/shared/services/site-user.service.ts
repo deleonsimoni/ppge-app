@@ -13,10 +13,6 @@ export class SiteUserService {
     private http: HttpClient
   ) { }
 
-  getHome() {
-    return this.http.get(`/api/leped/noticiaCarrossel`);
-  }
-
   getNoticias(
     pageNumber: number = 1,
     pageSize: number = 4,
@@ -27,6 +23,18 @@ export class SiteUserService {
       .set('pageSize', pageSize);
       
     return this.http.get(`/api/ppge/page/noticias/paginated/headers`, {params});
+  }
+
+  getRevistas(
+    pageNumber: number = 1,
+    pageSize: number = 4,
+  ): Observable<any> {
+    
+    let params = new HttpParams()
+      .set('pageNumber', pageNumber)
+      .set('pageSize', pageSize);
+      
+    return this.http.get(`/api/ppge/page/revistas`, {params});
   }
 
   getInfoHomeApresentacao() {

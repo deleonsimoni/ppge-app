@@ -31,11 +31,19 @@ router.get('/page/:selectedPage/all-titles', asyncHandler(getAllTitlesPage));
 
 router.post('/page/:selectedPage', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], asyncHandler(insertPage));
+}), requireAdmin, fileUpload()], asyncHandler(insertPage));
 
 router.put('/page/:selectedPage/:id', [passport.authenticate('jwt', {
   session: false
-}), requireAdmin], asyncHandler(updatePage));
+}), requireAdmin, fileUpload()], asyncHandler(updatePage));
+
+router.post('/page-img/:selectedPage', [passport.authenticate('jwt', {
+  session: false
+}), requireAdmin, fileUpload()], asyncHandler(insertPage));
+
+router.put('/page-img/:selectedPage/:id', [passport.authenticate('jwt', {
+  session: false
+}), requireAdmin, fileUpload()], asyncHandler(updatePage));
 
 router.delete('/page/:selectedPage/:id', [passport.authenticate('jwt', {
   session: false
@@ -61,6 +69,7 @@ async function getAllTitlesPage(req, res) {
 }
 
 async function insertPage(req, res) {
+  console.log('aaaaaaaaaaaaaaaaaaaaaaaaaa')
   let response = await siteCtrl.insertPage(req, req.user._id);
   res.json(response);
 }

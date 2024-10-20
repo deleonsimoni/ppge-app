@@ -70,54 +70,29 @@
                 <ngb-carousel [showNavigationIndicators]="true" interval="5000" [keyboard]="true" [pauseOnHover]="true"
                     [wrap]="true">
 
-                    <ng-template ngbSlide class="imageSlider">
+                    <ng-template *ngFor="let revista of revistas" ngbSlide class="imageSlider">
                         <div class="row g-5">
 
                             <div
                                 class="col-lg-8 col-md-6 content d-flex flex-column justify-content-center order-last order-md-first">
-                                <h3>DEBATES CONTEMPORÂNEOS</h3>
-                                <p>EVASÃO E RETENÇÃO NO ENSINO SUPERIOR: ABORDAGEM BASEADA EM TAXAS QUANTITATIVAS</p>
-                                <a href="https://revistas.ufrj.br/index.php/rce/issue/view/1866" target="_blank"
+                                <h3>{{revista.title}} </h3>
+                                <p>{{revista.navTitle}}</p>
+                                <a  (click)="viewDetail(revista)" target="_blank"
                                     class="cta-btn align-self-start"><i class="bi bi-book-half"></i> Conheça a
                                     revista</a>
-                                <a href="https://www.facebook.com/revistacontemporaneadeeducacao/" target="_blank"
-                                    class="cta-btn align-self-start"><i class="bi bi-facebook"></i> Facebook Revista</a>
+                               
                             </div>
 
                             <div class="col-lg-4 col-md-6 order-first order-md-last d-flex align-items-center">
                                 <div class="img">
-                                    <img src="assets/img/revista/revista-RCE.png" alt="" class="img-fluid">
+                                    <img [src]="revista.img" alt="" class="img-fluid">
                                 </div>
                             </div>
 
                         </div>
                     </ng-template>
 
-                    <ng-template ngbSlide class="imageSlider">
-                        <div class="row g-5">
-
-                            <div
-                                class="col-lg-8 col-md-6 content d-flex flex-column justify-content-center order-last order-md-first">
-                                <h3>DEBATES CONTEMPORÂNEOS</h3>
-                                <p>EVASÃO E RETENÇÃO NO ENSINO SUPERIOR: ABORDAGEM BASEADA EM TAXAS QUANTITATIVAS</p>
-                                <a href="https://revistas.ufrj.br/index.php/rce/issue/view/1866" target="_blank"
-                                    class="cta-btn align-self-start"><i class="bi bi-book-half"></i> Conheça a
-                                    revista</a>
-                                <a href="https://www.facebook.com/revistacontemporaneadeeducacao/" target="_blank"
-                                    class="cta-btn align-self-start"><i class="bi bi-facebook"></i> Facebook Revista</a>
-                            </div>
-
-                            <div class="col-lg-4 col-md-6 order-first order-md-last d-flex align-items-center">
-                                <div class="img">
-                                    <img src="assets/img/revista/revista-RCE.png" alt="" class="img-fluid">
-                                </div>
-                            </div>
-
-                        </div>
-                    </ng-template>
-
-
-
+                    
                 </ngb-carousel>
 
 
