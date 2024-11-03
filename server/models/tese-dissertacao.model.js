@@ -54,6 +54,21 @@ const TeseDissertacaoSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
+    },
+    orientadorSemAcento: {
+        type: String,
+        required: true,
+    },
+    autorSemAcento: {
+        type: String,
+        required: true,
+    },
+    tituloSemAcento: {
+        type: String,
+        required: true,
+    },
+    resumoSemAcento: {
+        type: String,
     }
 }
 );
