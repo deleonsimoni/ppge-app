@@ -9,6 +9,7 @@ export class PaginationComponent implements OnInit {
   @Input() page: number;
   @Input() qtdItems: number;
   @Input() limit: number;
+  @Input() qtdTotalItems: number | undefined | null;
   @Output() onPagination: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
@@ -22,6 +23,14 @@ export class PaginationComponent implements OnInit {
       this.onPagination.emit({newPage});
     }
     
+  }
+
+  getTextTotalPaginas() {
+    if(this.qtdTotalItems == null || this.qtdTotalItems == undefined) {
+      return "";
+    }
+
+    return `de ${Math.ceil(this.qtdTotalItems / this.limit)}`;
   }
 
 

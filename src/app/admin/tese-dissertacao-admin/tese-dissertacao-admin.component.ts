@@ -16,6 +16,7 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   page: number = 1;
   limit: number = 10;
   tipo: string = '1';
+  qtdTotalItems: number | undefined | null;
 
   searchOrientador: string = "";
   searchAutor: string = "";
@@ -92,11 +93,13 @@ export class TeseDissertacaoAdminComponent implements OnInit {
   getTesesDissertacoes(tipo = '1', page = 1, limit = 10) {
     
 
-    this.siteService.listTeseDissertacao(tipo, page, limit, this.searchOrientador, this.searchAutor, this.searchAno, this.searchTitulo).subscribe((res: any) => {
+    this.siteService.listTeseDissertacao(tipo, page, limit, this.searchOrientador, this.searchAutor, this.searchAno, this.searchTitulo)
+    .subscribe((res: any) => {
       this.tipo = tipo;
       this.page = page;
       this.carregando = false;
-      this.datas = res ? res : [];
+      this.datas = res && res.data ? res.data : [];
+      this.qtdTotalItems = res.qtdTotalItems;
     }, err => {
       this.carregando = false;
       this.toastr.error('Ocorreu um erro ao listar', 'Atenção: ');

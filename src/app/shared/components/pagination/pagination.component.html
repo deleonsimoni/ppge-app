@@ -5,8 +5,13 @@
         chevron_left
       </span>
     </div>
-    <div class="col-auto">
-      Página {{page}}
+    <div class="col-auto text-center">
+      <div class="row justify-content-center">
+        Página {{page}} {{getTextTotalPaginas()}}
+      </div>
+      <div class="row justify-content-center">
+        Total: {{qtdTotalItems}}
+      </div>
     </div>
     <div class="col-auto">
       <span (click)="callPagination(qtdItems > limit, 1)" class="material-icons arrows-pagination" style="font-size: 40px;" [ngClass]="{'arrow-disabled': qtdItems <= limit}">

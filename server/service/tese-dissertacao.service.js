@@ -42,6 +42,7 @@ async function getAllTeseDissertacao(req) {
     if(searchAno) whereClause.ano = { $regex: searchAno, $options: 'i' }
     if(searchTitulo) whereClause.titulo = { $regex: searchTitulo, $options: 'i' }
 
+    const totalItems = await TeseDissertacaoModel.countDocuments(whereClause);
     const query = TeseDissertacaoModel
         .find(whereClause)
         .sort({
@@ -53,8 +54,8 @@ async function getAllTeseDissertacao(req) {
     const skip = (page - 1) * limit;
 
     query.skip(skip).limit(limit+1);
-
-    return await query.exec();
+    let list = await query.exec();
+    return {qtdTotalItems: totalItems, data: list};
 }
 
 async function deleteTeseDissertacao(id) {
@@ -81,6 +82,8 @@ async function getFillTeseDissertacao(req) {
         req.query['palavrasChave'] = { "$in": metadados }
     }
 
+    const totalItems = await TeseDissertacaoModel.countDocuments(req.query);
+
     const query = TeseDissertacaoModel.find(req.query)
         .sort({
             ano: -1
@@ -92,5 +95,6 @@ async function getFillTeseDissertacao(req) {
     const skip = (page - 1) * limit;
 
     query.skip(skip).limit(limit+1);
-    return await query.exec();
+    let list = await query.exec();
+    return {qtdTotalItems: totalItems, data: list};
 }
