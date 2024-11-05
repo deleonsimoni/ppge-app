@@ -35,12 +35,12 @@ async function updateTeseDissertacao(req, idUser) {
 }
 
 async function getAllTeseDissertacao(req) {
-    let {searchOrientador, searchAutor, searchAno, searchTitulo} = req.query;
-    let whereClause = {tipo: req.params.tipo};
-    if(searchOrientador) whereClause.orientador = { $regex: searchOrientador, $options: 'i' }
-    if(searchAutor) whereClause.autor = { $regex: searchAutor, $options: 'i' }
-    if(searchAno) whereClause.ano = { $regex: searchAno, $options: 'i' }
-    if(searchTitulo) whereClause.titulo = { $regex: searchTitulo, $options: 'i' }
+    let { searchOrientador, searchAutor, searchAno, searchTitulo } = req.query;
+    let whereClause = { tipo: req.params.tipo };
+    if (searchOrientador) whereClause.orientador = { $regex: searchOrientador, $options: 'i' }
+    if (searchAutor) whereClause.autor = { $regex: searchAutor, $options: 'i' }
+    if (searchAno) whereClause.ano = { $regex: searchAno, $options: 'i' }
+    if (searchTitulo) whereClause.titulo = { $regex: searchTitulo, $options: 'i' }
 
     const totalItems = await TeseDissertacaoModel.countDocuments(whereClause);
     const query = TeseDissertacaoModel
@@ -53,9 +53,9 @@ async function getAllTeseDissertacao(req) {
     const limit = req && req.query && req.query.page ? parseInt(req.query.limit) : 10; // Limite de documentos por página, padrão é 10
     const skip = (page - 1) * limit;
 
-    query.skip(skip).limit(limit+1);
+    query.skip(skip).limit(limit + 1);
     let list = await query.exec();
-    return {qtdTotalItems: totalItems, data: list};
+    return { qtdTotalItems: totalItems, data: list };
 }
 
 async function deleteTeseDissertacao(id) {
@@ -65,14 +65,43 @@ async function deleteTeseDissertacao(id) {
 }
 
 async function getFillTeseDissertacao(req) {
-    let filtro
+    let filtro = {};
     let metadados = [];
 
-    if (req.query.resumo) req.query.resumo = { $regex: req.query.resumo, $options: 'i' }
+    if (req.query.resumo) {
+        req.query.$or = [
+            { resumo: { $regex: req.query.resumo, $options: 'i' } },
+            { resumoSemAcento: { $regex: req.query.resumo, $options: 'i' } }
+        ];
+        delete req.query.resumo;
+    }
+    
     if (req.query.ano) req.query.ano = { $regex: req.query.ano, $options: 'i' }
-    if (req.query.autor) req.query.autor = { $regex: req.query.autor, $options: 'i' }
-    if (req.query.orientador) req.query.orientador = { $regex: req.query.orientador, $options: 'i' }
-    if (req.query.titulo) req.query.titulo = { $regex: req.query.titulo, $options: 'i' }
+    
+    if (req.query.autor) {
+        req.query.$or = [
+            { autor: { $regex: req.query.autor, $options: 'i' } },
+            { autorSemAcento: { $regex: req.query.autor, $options: 'i' } }
+        ];
+        delete req.query.autor;
+    }
+
+    if (req.query.orientador) {
+        req.query.$or = [
+            { orientador: { $regex: req.query.orientador, $options: 'i' } },
+            { orientadorSemAcento: { $regex: req.query.orientador, $options: 'i' } }
+        ];
+        delete req.query.orientador;
+    }
+
+    if (req.query.titulo) {
+        req.query.$or = [
+            { titulo: { $regex: req.query.titulo, $options: 'i' } },
+            { tituloSemAcento: { $regex: req.query.titulo, $options: 'i' } }
+        ];
+        delete req.query.titulo;
+    }
+
     if (req.query.ingresso) req.query.ingresso = { $regex: req.query.ingresso, $options: 'i' }
     if (req.query.dataSala) req.query.dataSala = { $regex: req.query.dataSala, $options: 'i' }
     if (req.query.banca) req.query.banca = { $regex: req.query.banca, $options: 'i' }
@@ -89,12 +118,12 @@ async function getFillTeseDissertacao(req) {
             ano: -1
         });
 
-        
+
     const page = req && req.query && req.query.page ? parseInt(req.query.page) : 1; // Página atual, padrão é 1
     const limit = req && req.query && req.query.page ? parseInt(req.query.limit) : 10; // Limite de documentos por página, padrão é 10
     const skip = (page - 1) * limit;
 
-    query.skip(skip).limit(limit+1);
+    query.skip(skip).limit(limit + 1);
     let list = await query.exec();
-    return {qtdTotalItems: totalItems, data: list};
+    return { qtdTotalItems: totalItems, data: list };
 }
